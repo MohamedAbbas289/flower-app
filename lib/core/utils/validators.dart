@@ -1,15 +1,15 @@
+import '../strings/validators_string.dart';
+
 class Validators {
   static String? emailValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'This Email is not valid';
+      return ValidatorsString.emailRequired;
     }
 
-    final emailRegex = RegExp(
-      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-    );
+    final emailRegex = RegExp(ValidatorsString.emailPattern);
 
     if (!emailRegex.hasMatch(value)) {
-      return 'Enter a valid email';
+      return ValidatorsString.emailInvalid;
     }
 
     return null;
@@ -17,16 +17,13 @@ class Validators {
 
   static String? passwordValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Enter Your Password';
+      return ValidatorsString.passwordRequired;
     }
 
-    final passwordRegex = RegExp(r'^(?=.*[A-Z])(?=.*[0-9]).{8,}$');
+    final passwordRegex = RegExp(ValidatorsString.passwordPattern);
 
     if (!passwordRegex.hasMatch(value)) {
-      return 'Password must contain:\n'
-          '• At least 8 characters\n'
-          '• One uppercase letter\n'
-          '• One number';
+      return ValidatorsString.passwordWeak;
     }
 
     return null;
@@ -34,11 +31,11 @@ class Validators {
 
   static String? confirmPasswordValidator(String? value, String password) {
     if (value == null || value.isEmpty) {
-      return 'Confirm your password';
+      return ValidatorsString.confirmPasswordRequired;
     }
 
     if (value != password) {
-      return 'Passwords do not match';
+      return ValidatorsString.passwordDontMatch;
     }
 
     return null;
@@ -46,25 +43,29 @@ class Validators {
 
   static String? userNameValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Enter your username';
+      return ValidatorsString.usernameRequired;
     }
 
     if (value.length < 3) {
-      return 'Username must be at least 3 characters';
+      return ValidatorsString.usernameShort;
     }
 
     return null;
   }
+
   static String? otpValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return "Code cannot be empty";
+      return ValidatorsString.otpEmpty;
     }
+
     if (value.length < 4) {
-      return "Please enter the full 4-digit code";
+      return ValidatorsString.otpLength;
     }
-    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-      return "Invalid code format";
+
+    if (!RegExp(ValidatorsString.otpPattern).hasMatch(value)) {
+      return ValidatorsString.otpInvalid;
     }
+
     return null;
   }
 }
