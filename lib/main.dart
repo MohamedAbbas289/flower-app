@@ -1,3 +1,4 @@
+import 'package:flower_app/core/theme/app_theme.dart';
 import 'package:flower_app/core/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: HomeScreen.routeName,
       routes: AppRoutes.routes,
+      theme: AppTheme.lightTheme,
     );
   }
 }
