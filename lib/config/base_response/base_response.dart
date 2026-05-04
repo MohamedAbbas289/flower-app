@@ -1,13 +1,12 @@
-import 'dart:async';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 
 sealed class BaseResponse<T> {}
 
 class SuccessResponse<T> extends BaseResponse<T> {
-  SuccessResponse({required this.data});
+  final T? data;
 
-  T? data;
+   SuccessResponse({this.data});
 }
 
 class FailedResponse<T> extends BaseResponse<T> {
@@ -25,16 +24,16 @@ String extractErrorMessage(Object? e) {
   log("error type is ${e.runtimeType}");
 
   if (e is DioException) {
-    final data = e.response?.data;
-
-    if (data is Map && data["message"] != null) {
-      return data["message"].toString();
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+        return "Connection timeout";
+      case DioExceptionType.receiveTimeout:
+        return "Server took too long to respond";
+      case DioExceptionType.badResponse:
+        return e.response?.data["message"] ?? "Server error";
+      default:
+        return e.message ?? "Network error";
     }
-
-    return e.message ?? "Some Thing Went Wrong";
-  } else if (e is TimeoutException) {
-    return "Connection Time Out";
-  } else {
-    return "Some Thing Went Wrong";
   }
+  return "Unknown error";
 }
