@@ -1,21 +1,18 @@
+import 'package:flower_app/core/values/app_routes_name.dart';
+import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/features/splash/presentation/splash_view.dart';
 import 'package:flutter/material.dart';
-import '../../features/home_screen/home_screen.dart';
 
 class AppRoutes {
-  static const String home = HomeScreen.routeName;
-
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case home:
-        return MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
-          settings: settings,
-        );
-
+      case AppRoutesName.splash:
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
       default:
         return MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
-          settings: settings,
+          builder: (_) => const Scaffold(
+            body: Center(child: Text(AppStrings.routeNotFound)),
+          ),
         );
     }
   }

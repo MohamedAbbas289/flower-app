@@ -1,0 +1,72 @@
+abstract class AppStrings {
+  // general
+  static const String appName = 'Flowery';
+  // validation messages
+  static const String requiredField = 'This field is required';
+  static const String invalidInput = 'Please enter a valid value';
+  static const String firstNameRequired = 'First name is required';
+  static const String lastNameRequired = 'Last name is required';
+  static const String nameInvalid = 'Name can only contain letters and spaces';
+  static const String nameTooShort = 'Name must be at least 2 characters';
+  static const String nameTooLong = 'Name must not exceed 20 characters';
+  static const String emailRequired = 'Email is required';
+  static const String emailInvalid =
+      'Please enter a valid email address (example@domain.com)';
+  static const String passwordRequired = 'Password is required';
+  static const String passwordWeak =
+      'Password is too weak. It must include:\n'
+      '• At least 8 characters\n'
+      '• One uppercase letter\n'
+      '• One lowercase letter\n'
+      '• One number\n'
+      '• One special character';
+  static const String confirmPasswordRequired = 'Please confirm your password';
+  static const String passwordDoNotMatch =
+      'Passwords do not match. Please make sure both passwords are identical';
+  static const String phoneRequired = 'Phone number is required';
+  static const String phoneInvalid =
+      'Please enter a valid Egyptian phone number (e.g. 010xxxxxxxx)';
+  static const String otpEmpty = 'Verification code is required';
+  static const String otpLength = 'Verification code must be exactly 4 digits';
+  static const String otpInvalid =
+      'Verification code must contain numbers only';
+
+  // auth error messages
+  static const String tokenEmpty = 'Authentication token is missing';
+  static const String tokenWriteFailed = 'Failed to save authentication token';
+  static const String tokenReadFailed = 'Failed to read authentication token';
+  static const String tokenDeleteFailed =
+      'Failed to delete authentication token';
+  static const String userIdEmpty = 'User ID is missing';
+  static const String userIdReadFailed = 'Failed to read user ID';
+  static const String userIdWriteFailed = 'Failed to save user ID';
+  static const String userIdDeleteFailed = 'Failed to delete user ID';
+  static const String rememberMeWriteFailed =
+      'Failed to save remember me preference';
+  static const String rememberMeReadFailed =
+      'Failed to read remember me preference';
+  static const String rememberMeDeleteFailed =
+      'Failed to delete remember me preference';
+  static const String clearStorageFailed = 'Failed to clear storage';
+
+  // dio error messages
+  static const String connectionTimeout =
+      'Connection timed out. Please check your internet connection and try again';
+  static const String requestTimeout =
+      'Request timed out. Please check your internet connection and try again';
+  static const String serverTookTooLongToRespond =
+      'Server took too long to respond. Please try again later';
+  static const String badcertificate =
+      'Bad certificate. Please check your connection and try again';
+  static const String noInternetConnection =
+      'No internet connection. Please check your connection and try again';
+  static const String cancel = 'Request canceled. Please try again later';
+  static const String unexpectederroroccurred =
+      'An unexpected error occurred. Please try again later';
+  static const String servererroroccurred =
+      'A server error occurred. Please try again later';
+  static const String somethingWentWrong =
+      'Something went wrong. Please try again later';
+  // app error messages
+  static const String routeNotFound = 'Route not found';
+}

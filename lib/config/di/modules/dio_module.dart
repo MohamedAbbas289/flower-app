@@ -1,14 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:flower_app/config/auth/auth_interceptor.dart';
+import 'package:flower_app/core/values/endpoints.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-import '../../../core/values/endpoints.dart';
-
 @module
 abstract class DioModule {
   @lazySingleton
-  Dio dio() {
+  Dio dio(AuthInterceptor authInterceptor) {
     final dio = Dio(
       BaseOptions(
         contentType: 'application/json',
@@ -18,6 +18,8 @@ abstract class DioModule {
         sendTimeout: const Duration(seconds: 30),
       ),
     );
+
+    dio.interceptors.add(authInterceptor);
 
     if (kDebugMode) {
       dio.interceptors.add(
