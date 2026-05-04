@@ -1,5 +1,6 @@
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/features/app_section/presentation/view/app_section_view.dart';
 import 'package:flower_app/features/splash/presentation/splash_view.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,26 @@ class AppRoutes {
     switch (settings.name) {
       case AppRoutesName.splash:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+      case AppRoutesName.home:
+        return MaterialPageRoute(
+          builder: (_) => const AppSectionView(currentTab: 0),
+          settings: settings,
+        );
+      case AppRoutesName.category:
+        return MaterialPageRoute(
+          builder: (_) => const AppSectionView(currentTab: 1),
+          settings: settings,
+        );
+      case AppRoutesName.cart:
+        return MaterialPageRoute(
+          builder: (_) => const AppSectionView(currentTab: 2),
+          settings: settings,
+        );
+      case AppRoutesName.profile:
+        return MaterialPageRoute(
+          builder: (_) => const AppSectionView(currentTab: 3),
+          settings: settings,
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

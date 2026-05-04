@@ -69,4 +69,9 @@ abstract class AppStrings {
       'Something went wrong. Please try again later';
   // app error messages
   static const String routeNotFound = 'Route not found';
+  // bottom navigation labels
+  static const String homeView = 'Home';
+  static const String categoryView = 'Categories';
+  static const String cartView = 'Cart';
+  static const String profileView = 'Profile';
 }
