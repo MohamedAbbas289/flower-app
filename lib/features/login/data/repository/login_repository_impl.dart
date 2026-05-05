@@ -26,17 +26,12 @@ class LoginRepositoryImpl implements LoginRepository {
       final entity = LoginEntity.fromModel(model);
       return SuccessBaseResponse(data: entity);
     } on DioException catch (e) {
-      // The login endpoint returns {"error":"..."} on failure instead of
-      // {"message":"..."}. The global ErrorHandler only reads "message", so
-      // we normalise the response here — without touching any core file.
       return ErrorBaseResponse(exception: _normalizeDioError(e));
     } on Exception catch (e) {
       return ErrorBaseResponse(exception: e);
     }
   }
 
-  /// If the server responded with an `"error"` key, rebuild the [DioException]
-  /// with a `"message"` key so the shared [ErrorHandler] can extract it.
   DioException _normalizeDioError(DioException e) {
     final data = e.response?.data;
     if (data is Map && data['error'] != null && data['message'] == null) {

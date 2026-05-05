@@ -10,14 +10,6 @@ class LoginValidationResult {
   bool get isValid => emailError == null && passwordError == null;
 }
 
-/// Validates login form inputs for the email and password fields.
-///
-/// Errors are only meant to be surfaced on login-button tap, not on text
-/// change — the ViewModel is responsible for triggering this at the right time.
-///
-/// Error messages follow the spec:
-/// - Email   → "This Email is not valid"
-/// - Password → "Invalid password"
 @injectable
 class ValidateLoginInputsUseCase {
   const ValidateLoginInputsUseCase();
