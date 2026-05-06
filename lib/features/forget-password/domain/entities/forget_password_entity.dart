@@ -14,4 +14,12 @@ class ForgetPasswordEntity extends Equatable {
     this.info,
     this.status,
   });
+
+  @override
+  List<Object?> get props => [
+    forgetPasswordRecoveryStep,
+    message,
+    info,
+    status,
+  ];
 }
