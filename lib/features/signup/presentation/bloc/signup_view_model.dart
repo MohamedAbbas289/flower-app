@@ -1,6 +1,6 @@
 import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/features/signup/api/request_models/signup_request_model.dart';
-import 'package:flower_app/features/signup/domain/entities/auth_response_entity.dart';
 import 'package:flower_app/features/signup/domain/usecases/signup_user_use_case.dart';
 import 'package:flower_app/features/signup/presentation/bloc/signup_events.dart';
 import 'package:flower_app/features/signup/presentation/bloc/signup_states.dart';
