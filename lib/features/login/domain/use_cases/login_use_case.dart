@@ -1,5 +1,5 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/login/domain/model/login_entity.dart';
+import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/features/login/domain/repository/login_repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -9,7 +9,7 @@ class LoginUseCase {
 
   LoginUseCase(this._loginRepository);
 
-  Future<BaseResponse<LoginEntity>> call({
+  Future<BaseResponse<AuthResponseEntity>> call({
     required String email,
     required String password,
   }) {

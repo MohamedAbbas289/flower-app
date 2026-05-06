@@ -5,12 +5,14 @@ import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/core/values/images_paths.dart';
 import 'package:flower_app/features/login/presentation/view_model/login_cubit.dart';
 import 'package:flower_app/features/login/presentation/view_model/login_state.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -35,6 +37,7 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _rememberMe = false;
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -107,7 +110,7 @@ class _LoginViewState extends State<LoginView> {
                   const SizedBox(height: 24),
                   TextFormField(
                     controller: _passwordController,
-                    obscureText: true,
+                    obscureText: _obscurePassword,
                     style: TextStyles.textFieldTextStyle,
                     decoration: InputDecoration(
                       labelText: AppStrings.passwordLabel,
@@ -116,6 +119,24 @@ class _LoginViewState extends State<LoginView> {
                       hintStyle: TextStyles.hintTextFieldStyle,
                       errorText: passwordError,
                       errorStyle: TextStyles.errorTextFieldStyle,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                        icon: SvgPicture.asset(
+                          _obscurePassword
+                              ? Assets.assetsIconsVisibilityOff
+                              : Assets.assetsIconsVisibilityOn,
+                          width: 22,
+                          height: 22,
+                          colorFilter: const ColorFilter.mode(
+                            AppColors.gray,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),

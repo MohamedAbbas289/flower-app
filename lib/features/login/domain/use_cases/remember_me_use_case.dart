@@ -1,5 +1,5 @@
 import 'package:flower_app/config/auth/auth_manager.dart';
-import 'package:flower_app/features/login/domain/model/login_entity.dart';
+import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -9,11 +9,11 @@ class RememberMeUseCase {
   RememberMeUseCase(this._authManager);
 
   Future<void> call({
-    required LoginEntity loginEntity,
+    required AuthResponseEntity authResponseEntity,
     required bool rememberMe,
   }) async {
-    final token = loginEntity.token ?? '';
-    final userId = loginEntity.user?.id;
+    final token = authResponseEntity.token ?? '';
+    final userId = authResponseEntity.user?.id;
 
     await _authManager.setAuthData(
       token: token,

@@ -1,7 +1,7 @@
-import 'package:flower_app/features/login/api/responses/login_response.dart';
+import 'package:flower_app/core/models/auth_response.dart';
 
 abstract class LoginRemoteDataSource {
-  Future<LoginResponse> login({
+  Future<AuthResponse> login({
     required String email,
     required String password,
   });

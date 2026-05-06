@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/features/login/data/data_sources/login_remote_data_source.dart';
-import 'package:flower_app/features/login/data/model/login_model.dart';
-import 'package:flower_app/features/login/domain/model/login_entity.dart';
 import 'package:flower_app/features/login/domain/repository/login_repository.dart';
 import 'package:injectable/injectable.dart';
+
+import '../../../../core/models/auth_response.dart';
 
 @LazySingleton(as: LoginRepository)
 class LoginRepositoryImpl implements LoginRepository {
@@ -13,7 +14,7 @@ class LoginRepositoryImpl implements LoginRepository {
   LoginRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<BaseResponse<LoginEntity>> login({
+  Future<BaseResponse<AuthResponseEntity>> login({
     required String email,
     required String password,
   }) async {
@@ -22,9 +23,7 @@ class LoginRepositoryImpl implements LoginRepository {
         email: email,
         password: password,
       );
-      final model = LoginModel.fromResponse(response);
-      final entity = LoginEntity.fromModel(model);
-      return SuccessBaseResponse(data: entity);
+      return SuccessBaseResponse(data: response.toEntity());
     } on DioException catch (e) {
       return ErrorBaseResponse(exception: _normalizeDioError(e));
     } on Exception catch (e) {
