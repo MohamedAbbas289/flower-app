@@ -1,3 +1,4 @@
+import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ProfileTestView extends StatelessWidget {
@@ -6,11 +7,11 @@ class ProfileTestView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.purple,
-      child: const Center(
+      color: AppColors.pink,
+      child: Center(
         child: Text(
           "Profile View",
-          style: TextStyle(fontSize: 24, color: Colors.white),
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),
     );

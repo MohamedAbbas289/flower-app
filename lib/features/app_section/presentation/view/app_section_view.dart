@@ -1,7 +1,7 @@
-import 'package:flower_app/core/values/app_routes_name.dart';
+import 'package:flutter/material.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
-import 'package:flutter/material.dart';
+import 'package:flower_app/features/app_section/domain/entity/bottom_nav_item_entity.dart';
 import '../widgets/bottom_nav_icon.dart';
 import '../widgets/cart_test_view.dart';
 import '../widgets/categories_test_view.dart';
@@ -9,78 +9,64 @@ import '../widgets/home_test_view.dart';
 import '../widgets/profile_test_view.dart';
 
 class AppSectionView extends StatefulWidget {
-  const AppSectionView({super.key, required this.currentTab});
-  final int currentTab;
+  const AppSectionView({super.key,});
 
   @override
   State<AppSectionView> createState() => _AppSectionViewState();
 }
 
 class _AppSectionViewState extends State<AppSectionView> {
-  late int _currentTabIndex;
+  int _currentTabIndex = 0;
   final List<Widget> _tabs = [
     HomeTestView(),
     CategoriesTestView(),
     CartTestView(),
     ProfileTestView(),
   ];
-  @override
-  initState() {
-    super.initState();
-    _currentTabIndex = widget.currentTab;
-  }
 
   void _onTabTapped(int index) {
-    if (index == _currentTabIndex) return;
-    final routes = [
-      AppRoutesName.home,
-      AppRoutesName.category,
-      AppRoutesName.cart,
-      AppRoutesName.profile,
-    ];
-    Navigator.pushReplacementNamed(context, routes[index]);
+    setState(() {
+      _currentTabIndex = index;
+    });
   }
 
+  final List<BottomNavItemEntity> bottomNavItems = [
+    BottomNavItemEntity(
+      assetName: Assets.assetsIconsHome,
+      label: AppStrings.homeView,
+    ),
+    BottomNavItemEntity(
+      assetName: Assets.assetsIconsCategories,
+      label: AppStrings.categoryView,
+    ),
+    BottomNavItemEntity(
+      assetName: Assets.assetsIconsShoppingCart,
+      label: AppStrings.cartView,
+    ),
+    BottomNavItemEntity(
+      assetName: Assets.assetsIconsPerson,
+      label: AppStrings.profileView,
+    ),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(title: const Text("App Section")),
-      body: IndexedStack(index: _currentTabIndex, children: _tabs),
+      body: _tabs[_currentTabIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentTabIndex,
         onTap: _onTabTapped,
-        items: [
-          BottomNavigationBarItem(
+        items: bottomNavItems.map((item) {
+          final index = bottomNavItems.indexOf(item);
+          return BottomNavigationBarItem(
             icon: BottomNavIcon(
-              isSelected: _currentTabIndex == 0,
-              assetName: Assets.assetsIconsHome,
+              isSelected: _currentTabIndex == index,
+              assetName: item.assetName,
             ),
-            label: AppStrings.homeView,
-          ),
-          BottomNavigationBarItem(
-            icon: BottomNavIcon(
-              isSelected: _currentTabIndex == 1,
-              assetName: Assets.assetsIconsCategories,
-            ),
-            label: AppStrings.categoryView,
-          ),
-          BottomNavigationBarItem(
-            icon: BottomNavIcon(
-              isSelected: _currentTabIndex == 2,
-              assetName: Assets.assetsIconsShoppingCart,
-            ),
-            label: AppStrings.cartView,
-          ),
-          BottomNavigationBarItem(
-            icon: BottomNavIcon(
-              isSelected: _currentTabIndex == 3,
-              assetName: Assets.assetsIconsPerson,
-            ),
-            label: AppStrings.profileView,
-          ),
-        ],
+            label: item.label,
+          );
+        }).toList(),
       ),
     );
   }
 }
-

@@ -1,3 +1,4 @@
+import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class HomeTestView extends StatelessWidget {
@@ -6,11 +7,11 @@ class HomeTestView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.red,
-      child: const Center(
+      color: AppColors.red,
+      child: Center(
         child: Text(
           "Home View",
-          style: TextStyle(fontSize: 24, color: Colors.white),
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),
     );

@@ -9,7 +9,6 @@ class BottomNavIcon extends StatelessWidget {
     required this.isSelected,
   });
   final String assetName;
-
   final bool isSelected;
 
   @override

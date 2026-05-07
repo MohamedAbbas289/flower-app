@@ -11,23 +11,7 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case AppRoutesName.home:
         return MaterialPageRoute(
-          builder: (_) => const AppSectionView(currentTab: 0),
-          settings: settings,
-        );
-      case AppRoutesName.category:
-        return MaterialPageRoute(
-          builder: (_) => const AppSectionView(currentTab: 1),
-          settings: settings,
-        );
-      case AppRoutesName.cart:
-        return MaterialPageRoute(
-          builder: (_) => const AppSectionView(currentTab: 2),
-          settings: settings,
-        );
-      case AppRoutesName.profile:
-        return MaterialPageRoute(
-          builder: (_) => const AppSectionView(currentTab: 3),
-          settings: settings,
+          builder: (_) => const AppSectionView(),
         );
       default:
         return MaterialPageRoute(
