@@ -10,8 +10,8 @@ class ErrorHandler {
 
         if (response?.data != null &&
             response!.data is Map &&
-            response.data[ApiParam.message] != null) {
-          return response.data[ApiParam.message];
+            response.data[ApiParam.error] != null) {
+          return response.data[ApiParam.error];
         }
       }
 
