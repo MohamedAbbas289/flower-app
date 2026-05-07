@@ -2,7 +2,7 @@ import 'package:flower_app/features/forget-password/data/data_source/forget_pass
 import 'package:flower_app/features/forget-password/domain/entities/forget_password_entity.dart';
 import 'package:injectable/injectable.dart';
 
-@LazySingleton(as: ForgetPasswordRemoteDataSource)
+@Injectable(as: ForgetPasswordRemoteDataSource)
 class ForgetPasswordRemoteDataSourceImpl
     implements ForgetPasswordRemoteDataSource {
   @override

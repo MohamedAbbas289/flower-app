@@ -69,4 +69,24 @@ abstract class AppStrings {
       'Something went wrong. Please try again later';
   // app error messages
   static const String routeNotFound = 'Route not found';
+
+  // UI strings (feature forget pasword)
+  static const String password = "Password";
+  static const String forgetPassword = "Forget password";
+  static const String pleaseEnterYourEmailAssociatedToYourAccount =
+      "Please enter your email associated to\nyour account";
+  static const String email = "Email";
+  static const String enterYourEmail = "Enter Your Email";
+  static const String confirm = "Confirm";
+  static const String emailVerification = "Email verification";
+  static const String didntReciveCode = "Didn't receive code? ";
+  static const String resend = "Resend";
+  static const String newPassword = "New password";
+  static const String enterYourPassword = "Enter Your Password";
+  static const String confirmPassword = "Confirm password";
+  static const String hitTextForResetPassword =
+      "Password must not be empty and must contain 6 characters with upper case letter and one number at least";
+  static const String exampleEmail = "example@email.com";
+  static const String invalidCode = "Invalid code";
+  static const String resetPassword = "Reset password";
 }

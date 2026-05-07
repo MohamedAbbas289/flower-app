@@ -1,18 +1,38 @@
-sealed class ForgetPasswordEvent {}
+import 'package:equatable/equatable.dart';
+
+sealed class ForgetPasswordEvent extends Equatable {
+  const ForgetPasswordEvent();
+
+  @override
+  List<Object?> get props => [];
+}
 
 class ForgotPasswordEvent extends ForgetPasswordEvent {
   final String email;
-  ForgotPasswordEvent(this.email);
+
+  const ForgotPasswordEvent(this.email);
+
+  @override
+  List<Object?> get props => [email];
 }
 
 class VerifyCodeEvent extends ForgetPasswordEvent {
   final String code;
-  VerifyCodeEvent(this.code);
+
+  const VerifyCodeEvent(this.code);
+
+  @override
+  List<Object?> get props => [code];
 }
 
 class ResetPasswordEvent extends ForgetPasswordEvent {
   final String email;
   final String password;
 
-  ResetPasswordEvent(this.email, this.password);
+  const ResetPasswordEvent(this.email, this.password);
+
+  @override
+  List<Object?> get props => [email, password];
 }
+
+class ResendCodeEvent extends ForgetPasswordEvent {}

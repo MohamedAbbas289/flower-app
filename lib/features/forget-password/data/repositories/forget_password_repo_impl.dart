@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/forget-password/api/data_source/forget_password_remote_data_source_impl.dart';
+import 'package:flower_app/features/forget-password/data/data_source/forget_password_remote_data_source.dart';
 import 'package:flower_app/features/forget-password/domain/entities/forget_password_entity.dart';
 import 'package:flower_app/features/forget-password/domain/repositories/forget_password_repo.dart';
 import 'package:injectable/injectable.dart';
 
-@LazySingleton(as: ForgetPasswordRepo)
+@Injectable(as: ForgetPasswordRepo)
 class ForgetPasswordRepoImpl implements ForgetPasswordRepo {
-  final ForgetPasswordRemoteDataSourceImpl remote;
+  final ForgetPasswordRemoteDataSource remote;
 
   ForgetPasswordRepoImpl(this.remote);
 

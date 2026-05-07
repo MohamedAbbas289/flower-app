@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:flower_app/features/forget-password/domain/entities/forget_password_entity.dart';
 
-class ForgetPasswordState {
+class ForgetPasswordState extends Equatable {
   final bool isLoading;
   final ForgetPasswordEntity? data;
   final String? error;
@@ -11,11 +12,16 @@ class ForgetPasswordState {
     bool? isLoading,
     ForgetPasswordEntity? data,
     String? error,
+    bool clearError = false,
+    bool clearData = false,
   }) {
     return ForgetPasswordState(
       isLoading: isLoading ?? this.isLoading,
-      data: data ?? this.data,
-      error: error ?? this.error,
+      data: clearData ? null : (data ?? this.data),
+      error: clearError ? null : (error ?? this.error),
     );
   }
+
+  @override
+  List<Object?> get props => [isLoading, data, error];
 }
