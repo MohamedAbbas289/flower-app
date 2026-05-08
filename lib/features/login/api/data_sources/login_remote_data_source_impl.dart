@@ -4,7 +4,7 @@ import 'package:flower_app/features/login/api/login_api_client/login_api_client.
 import 'package:flower_app/features/login/data/data_sources/login_remote_data_source.dart';
 import 'package:injectable/injectable.dart';
 
-@LazySingleton(as: LoginRemoteDataSource)
+@Injectable(as: LoginRemoteDataSource)
 class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
   final LoginApiClient _loginApiClient;
 

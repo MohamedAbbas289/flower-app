@@ -1,39 +1,30 @@
 import 'package:equatable/equatable.dart';
+import 'package:flower_app/config/base_state/base_state.dart';
+import 'package:flower_app/core/entities/auth_response_entity.dart';
 
-abstract class LoginState extends Equatable {
-  const LoginState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class LoginInitial extends LoginState {
-  const LoginInitial();
-}
-
-class LoginLoading extends LoginState {
-  const LoginLoading();
-}
-
-class LoginSuccess extends LoginState {
-  const LoginSuccess();
-}
-
-class LoginError extends LoginState {
-  final String message;
-
-  const LoginError(this.message);
-
-  @override
-  List<Object?> get props => [message];
-}
-
-class LoginValidationError extends LoginState {
+class LoginStates extends Equatable {
+  final BaseState<AuthResponseEntity> loginState;
   final String? emailError;
   final String? passwordError;
 
-  const LoginValidationError({this.emailError, this.passwordError});
+  const LoginStates({
+    this.loginState = const BaseState(),
+    this.emailError,
+    this.passwordError,
+  });
+
+  LoginStates copyWith({
+    BaseState<AuthResponseEntity>? loginState,
+    String? emailError,
+    String? passwordError,
+  }) {
+    return LoginStates(
+      loginState: loginState ?? this.loginState,
+      emailError: emailError,
+      passwordError: passwordError,
+    );
+  }
 
   @override
-  List<Object?> get props => [emailError, passwordError];
+  List<Object?> get props => [loginState, emailError, passwordError];
 }
