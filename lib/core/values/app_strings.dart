@@ -103,6 +103,7 @@ Thank you for choosing Flowery 💐
       'A server error occurred. Please try again later';
   static const String somethingWentWrong =
       'Something went wrong. Please try again later';
+  static const String dataParsingError = 'Data parsing error. Please try again later';
   // app error messages
   static const String routeNotFound = 'Route not found';
   //snackbar messages

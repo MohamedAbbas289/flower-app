@@ -18,7 +18,7 @@ class SignupRemoteDatasourceImpl implements SignupRemoteDatasourceContract {
         requestModel: requestModel,
       );
       return SuccessBaseResponse<AuthResponse>(data: response);
-    } on Exception catch (e) {
+    } catch (e) {
       return ErrorBaseResponse<AuthResponse>(exception: e);
     }
   }

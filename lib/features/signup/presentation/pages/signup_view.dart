@@ -4,8 +4,8 @@ import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
 import 'package:flower_app/features/signup/api/request_models/signup_request_model.dart';
-import 'package:flower_app/features/signup/presentation/signup_view_model/signup_events.dart';
-import 'package:flower_app/features/signup/presentation/signup_view_model/signup_states.dart';
+import 'package:flower_app/features/signup/presentation/signup_view_model/signup_event.dart';
+import 'package:flower_app/features/signup/presentation/signup_view_model/signup_state.dart';
 import 'package:flower_app/features/signup/presentation/signup_view_model/signup_view_model.dart';
 import 'package:flower_app/core/utils/validation/app_validations.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +69,7 @@ class _SignupViewState extends State<SignupView> {
       appBar: const _SignupAppBar(),
       body: BlocProvider(
         create: (_) => getIt<SignupViewModel>(),
-        child: BlocConsumer<SignupViewModel, SignupStates>(
+        child: BlocConsumer<SignupViewModel, SignupState>(
           listener: _SignupListener.onStateChange,
           builder: (context, state) {
             return _SignupForm(
@@ -122,7 +122,7 @@ class _SignupAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class _SignupListener {
-  static void onStateChange(BuildContext context, SignupStates state) {
+  static void onStateChange(BuildContext context, SignupState state) {
     if (!state.signupState.isLoading && state.signupState.data != null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(
@@ -168,7 +168,7 @@ class _SignupForm extends StatelessWidget {
   });
 
   final GlobalKey<FormState> formKey;
-  final SignupStates state;
+  final SignupState state;
 
   final TextEditingController firstNameController;
   final TextEditingController lastNameController;
