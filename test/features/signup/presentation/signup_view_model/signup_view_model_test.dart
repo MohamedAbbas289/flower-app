@@ -31,7 +31,7 @@ void main() {
 
   group('SignupViewModel', () {
     test('initial state should be const SignupStates()', () {
-      expect(viewModel.state, equals(const SignupStates()));
+      expect(viewModel.state, equals(const SignupState()));
     });
     final request = SignupRequestModel(
       firstName: "AbdElRahman",
@@ -42,7 +42,7 @@ void main() {
       phone: "01000000000",
       gender: "male",
     );
-    blocTest<SignupViewModel, SignupStates>(
+    blocTest<SignupViewModel, SignupState>(
       'should emit loading then success when signup succeeds',
 
       build: () {
@@ -65,9 +65,9 @@ void main() {
       },
 
       expect: () => [
-        SignupStates(signupState: BaseState.loading()),
+        SignupState(signupState: BaseState.loading()),
 
-        SignupStates(
+        SignupState(
           signupState: BaseState.success(
             const AuthResponseEntity(
               message: 'Signup successful',
@@ -83,7 +83,7 @@ void main() {
       },
     );
 
-    blocTest<SignupViewModel, SignupStates>(
+    blocTest<SignupViewModel, SignupState>(
       'should emit loading then error when signup fails',
 
       build: () {
@@ -103,8 +103,8 @@ void main() {
       },
 
       expect: () => [
-        SignupStates(signupState: BaseState.loading()),
-        SignupStates(
+        SignupState(signupState: BaseState.loading()),
+        SignupState(
           signupState: BaseState.error(
             'Something went wrong. Please try again later',
           ),
