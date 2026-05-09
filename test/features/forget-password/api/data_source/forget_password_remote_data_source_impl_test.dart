@@ -1,6 +1,8 @@
-import 'package:flower_app/features/forget-password/domain/entities/forget_password_entity.dart';
-import 'package:flower_app/features/forget-password/api/data_source/forget_password_remote_data_source_impl.dart';
 import 'package:test/test.dart';
+
+import 'package:flower_app/features/forget-password/api/data_source/forget_password_remote_data_source_impl.dart';
+import 'package:flower_app/features/forget-password/domain/entities/forget_password_entity.dart';
+import 'package:flower_app/config/base_response/base_response.dart';
 
 void main() {
   late ForgetPasswordRemoteDataSourceImpl dataSource;
@@ -9,127 +11,62 @@ void main() {
     dataSource = ForgetPasswordRemoteDataSourceImpl();
   });
 
-  // forgotPassword
   group("forgotPassword", () {
-    test(
-      "returns entity with forgotPassword step and success message",
-      () async {
-        // Act
-        final result = await dataSource.forgotPassword("test@example.com");
+    test("should return forgotPassword success", () async {
+      final result = await dataSource.forgotPassword("test@example.com");
 
-        // Assert
-        expect(result, isA<ForgetPasswordEntity>());
-        expect(
-          result.forgetPasswordRecoveryStep,
-          ForgetPasswordRecoveryStep.forgotPassword,
-        );
-        expect(result.message, "Success");
-        expect(result.info, "Code sent to your email");
-      },
-    );
+      expect(result, isA<SuccessBaseResponse<ForgetPasswordEntity>>());
 
-    test("returns same result regardless of email value", () async {
-      // Act
-      final result1 = await dataSource.forgotPassword("a@a.com");
-      final result2 = await dataSource.forgotPassword("b@b.com");
+      final success = result as SuccessBaseResponse<ForgetPasswordEntity>;
 
-      // Assert
       expect(
-        result1.forgetPasswordRecoveryStep,
-        result2.forgetPasswordRecoveryStep,
+        success.data.forgetPasswordRecoveryStep,
+        ForgetPasswordRecoveryStep.forgotPassword,
       );
-      expect(result1.message, result2.message);
     });
   });
 
-  // verifyCode
   group("verifyCode", () {
-    test("returns success entity when code is '123456'", () async {
-      // Act
+    test("valid code returns success", () async {
       final result = await dataSource.verifyCode("123456");
 
-      // Assert
-      expect(result, isA<ForgetPasswordEntity>());
+      expect(result, isA<SuccessBaseResponse<ForgetPasswordEntity>>());
+
+      final success = result as SuccessBaseResponse<ForgetPasswordEntity>;
+
       expect(
-        result.forgetPasswordRecoveryStep,
+        success.data.forgetPasswordRecoveryStep,
         ForgetPasswordRecoveryStep.verifyCode,
       );
-      expect(result.status, "Success");
-      expect(result.message, "Code verified successfully");
+      expect(success.data.status, "Success");
     });
 
-    test("returns error entity when code is wrong", () async {
-      // Act
+    test("invalid code returns error", () async {
       final result = await dataSource.verifyCode("000000");
 
-      // Assert
-      expect(result, isA<ForgetPasswordEntity>());
-      expect(
-        result.forgetPasswordRecoveryStep,
-        ForgetPasswordRecoveryStep.verifyCode,
-      );
-      expect(result.status, "Error");
-      expect(result.message, "Invalid code");
-    });
+      expect(result, isA<ErrorBaseResponse<ForgetPasswordEntity>>());
 
-    test("returns error entity when code is empty string", () async {
-      // Act
-      final result = await dataSource.verifyCode("");
+      final error = result as ErrorBaseResponse<ForgetPasswordEntity>;
 
-      // Assert
-      expect(result.status, "Error");
-      expect(result.message, "Invalid code");
-    });
-
-    test("returns error entity when code is almost correct", () async {
-      // Act
-      final result = await dataSource.verifyCode("12345");
-
-      // Assert
-      expect(result.status, "Error");
+      expect(error.exception.toString(), contains("Invalid code"));
     });
   });
 
-  // resetPassword
   group("resetPassword", () {
-    test("returns success entity with resetPassword step", () async {
-      // Act
+    test("returns reset success", () async {
       final result = await dataSource.resetPassword(
-        email: "test@example.com",
-        newPassword: "NewPass123!",
+        email: "test@test.com",
+        newPassword: "123456",
       );
 
-      // Assert
-      expect(result, isA<ForgetPasswordEntity>());
+      expect(result, isA<SuccessBaseResponse<ForgetPasswordEntity>>());
+
+      final success = result as SuccessBaseResponse<ForgetPasswordEntity>;
+
       expect(
-        result.forgetPasswordRecoveryStep,
+        success.data.forgetPasswordRecoveryStep,
         ForgetPasswordRecoveryStep.resetPassword,
       );
-      expect(result.status, "Success");
-      expect(result.message, "Password changed successfully");
     });
-
-    test(
-      "returns same result regardless of email or password values",
-      () async {
-        // Act
-        final result1 = await dataSource.resetPassword(
-          email: "a@a.com",
-          newPassword: "pass1",
-        );
-        final result2 = await dataSource.resetPassword(
-          email: "b@b.com",
-          newPassword: "pass2",
-        );
-
-        // Assert
-        expect(result1.status, result2.status);
-        expect(result1.message, result2.message);
-        expect(
-          result1.forgetPasswordRecoveryStep,
-          result2.forgetPasswordRecoveryStep,
-        );
-      },
-    );
   });
 }

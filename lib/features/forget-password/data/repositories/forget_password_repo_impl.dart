@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/forget-password/data/data_source/forget_password_remote_data_source.dart';
 import 'package:flower_app/features/forget-password/domain/entities/forget_password_entity.dart';
@@ -7,19 +6,17 @@ import 'package:injectable/injectable.dart';
 
 @Injectable(as: ForgetPasswordRepo)
 class ForgetPasswordRepoImpl implements ForgetPasswordRepo {
-  final ForgetPasswordRemoteDataSource remote;
+  final ForgetPasswordRemoteDataSource _remote;
 
-  ForgetPasswordRepoImpl(this.remote);
+  ForgetPasswordRepoImpl(this._remote);
 
   @override
   Future<BaseResponse<ForgetPasswordEntity>> forgotPassword(
     String email,
   ) async {
     try {
-      final response = await remote.forgotPassword(email);
-      return SuccessBaseResponse(data: response);
-    } on DioException catch (e) {
-      return ErrorBaseResponse(exception: e);
+      final response = await _remote.forgotPassword(email);
+      return response;
     } on Exception catch (e) {
       return ErrorBaseResponse(exception: e);
     }
@@ -28,10 +25,8 @@ class ForgetPasswordRepoImpl implements ForgetPasswordRepo {
   @override
   Future<BaseResponse<ForgetPasswordEntity>> verifyCode(String code) async {
     try {
-      final response = await remote.verifyCode(code);
-      return SuccessBaseResponse(data: response);
-    } on DioException catch (e) {
-      return ErrorBaseResponse(exception: e);
+      final response = await _remote.verifyCode(code);
+      return response;
     } on Exception catch (e) {
       return ErrorBaseResponse(exception: e);
     }
@@ -43,13 +38,11 @@ class ForgetPasswordRepoImpl implements ForgetPasswordRepo {
     required String newPassword,
   }) async {
     try {
-      final response = await remote.resetPassword(
+      final response = await _remote.resetPassword(
         email: email,
         newPassword: newPassword,
       );
-      return SuccessBaseResponse(data: response);
-    } on DioException catch (e) {
-      return ErrorBaseResponse(exception: e);
+      return response;
     } on Exception catch (e) {
       return ErrorBaseResponse(exception: e);
     }

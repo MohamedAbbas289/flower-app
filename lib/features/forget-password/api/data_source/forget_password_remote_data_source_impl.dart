@@ -1,3 +1,4 @@
+import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/forget-password/data/data_source/forget_password_remote_data_source.dart';
 import 'package:flower_app/features/forget-password/domain/entities/forget_password_entity.dart';
 import 'package:injectable/injectable.dart';
@@ -6,46 +7,62 @@ import 'package:injectable/injectable.dart';
 class ForgetPasswordRemoteDataSourceImpl
     implements ForgetPasswordRemoteDataSource {
   @override
-  Future<ForgetPasswordEntity> forgotPassword(String email) async {
-    await Future.delayed(const Duration(seconds: 1));
+  Future<BaseResponse<ForgetPasswordEntity>> forgotPassword(
+    String email,
+  ) async {
+    try {
+      await Future.delayed(const Duration(seconds: 1));
 
-    return ForgetPasswordEntity(
-      forgetPasswordRecoveryStep: ForgetPasswordRecoveryStep.forgotPassword,
-      message: "Success",
-      info: "Code sent to your email",
-    );
-  }
-
-  @override
-  Future<ForgetPasswordEntity> verifyCode(String code) async {
-    await Future.delayed(const Duration(seconds: 1));
-
-    if (code == "123456") {
-      return ForgetPasswordEntity(
-        forgetPasswordRecoveryStep: ForgetPasswordRecoveryStep.verifyCode,
-        status: "Success",
-        message: "Code verified successfully",
+      return SuccessBaseResponse(
+        data: ForgetPasswordEntity(
+          forgetPasswordRecoveryStep: ForgetPasswordRecoveryStep.forgotPassword,
+          message: "Success",
+          info: "Code sent to your email",
+        ),
       );
+    } on Exception catch (e) {
+      return ErrorBaseResponse(exception: e);
     }
-
-    return ForgetPasswordEntity(
-      forgetPasswordRecoveryStep: ForgetPasswordRecoveryStep.verifyCode,
-      status: "Error",
-      message: "Invalid code",
-    );
   }
 
   @override
-  Future<ForgetPasswordEntity> resetPassword({
+  Future<BaseResponse<ForgetPasswordEntity>> verifyCode(String code) async {
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+
+      if (code == "1234") {
+        return SuccessBaseResponse(
+          data: ForgetPasswordEntity(
+            forgetPasswordRecoveryStep: ForgetPasswordRecoveryStep.verifyCode,
+            status: "Success",
+            message: "Code verified successfully",
+          ),
+        );
+      }
+
+      return ErrorBaseResponse(exception: Exception("Invalid code"));
+    } on Exception catch (e) {
+      return ErrorBaseResponse(exception: e);
+    }
+  }
+
+  @override
+  Future<BaseResponse<ForgetPasswordEntity>> resetPassword({
     required String email,
     required String newPassword,
   }) async {
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      await Future.delayed(const Duration(seconds: 1));
 
-    return ForgetPasswordEntity(
-      forgetPasswordRecoveryStep: ForgetPasswordRecoveryStep.resetPassword,
-      status: "Success",
-      message: "Password changed successfully",
-    );
+      return SuccessBaseResponse(
+        data: ForgetPasswordEntity(
+          forgetPasswordRecoveryStep: ForgetPasswordRecoveryStep.resetPassword,
+          status: "Success",
+          message: "Password changed successfully",
+        ),
+      );
+    } on Exception catch (e) {
+      return ErrorBaseResponse(exception: e);
+    }
   }
 }
