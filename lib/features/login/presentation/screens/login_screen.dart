@@ -177,7 +177,10 @@ class _LoginViewState extends State<LoginView> {
                       },
                       child: Text(
                         AppStrings.forgetPassword,
-                        style: TextStyles.bodyRegularUnderLine12,
+                        style: TextStyles.bodyRegularUnderLine13.copyWith(
+                          color: AppColors.pink,
+                          decorationColor: AppColors.pink,
+                        ),
                       ),
                     ),
                   ],
@@ -212,7 +215,7 @@ class _LoginViewState extends State<LoginView> {
                                 strokeWidth: 2.5,
                               ),
                             )
-                          : const Text(
+                          : Text(
                               AppStrings.loginButton,
                               style: TextStyles.buttonTextStyle,
                             ),
@@ -246,7 +249,7 @@ class _LoginViewState extends State<LoginView> {
                       children: [
                         TextSpan(
                           text: AppStrings.signUp,
-                          style: TextStyles.bodyRegularUnderLine12.copyWith(
+                          style: TextStyles.bodyRegularUnderLine13.copyWith(
                             color: AppColors.pink,
                             decorationColor: AppColors.pink,
                           ),

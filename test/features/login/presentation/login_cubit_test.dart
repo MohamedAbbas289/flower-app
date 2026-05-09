@@ -43,11 +43,6 @@ void main() {
     user: const UserEntity(id: 'uid-1'),
   );
 
-  final validRequestModel = LoginRequestModel(
-    email: validEmail,
-    password: validPassword,
-    rememberMe: false,
-  );
 
   LoginRequestEvent loginEvent({bool rememberMe = false}) =>
       LoginRequestEvent(

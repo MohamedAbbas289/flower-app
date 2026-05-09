@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flower_app/core/values/api_param.dart';
 import 'package:flower_app/core/values/app_strings.dart';
@@ -44,7 +46,7 @@ class ErrorHandler {
         return AppStrings.serverTookTooLongToRespond;
 
       case DioExceptionType.badCertificate:
-        return AppStrings.badcertificate;
+        return AppStrings.badCertificate;
 
       case DioExceptionType.cancel:
         return AppStrings.cancel;
@@ -53,10 +55,10 @@ class ErrorHandler {
         return AppStrings.noInternetConnection;
 
       case DioExceptionType.badResponse:
-        return AppStrings.servererroroccurred;
+        return AppStrings.serverErrorOccurred;
 
       case DioExceptionType.unknown:
-        return AppStrings.unexpectederroroccurred;
+        return AppStrings.unexpectedErrorOccurred;
     }
   }
 

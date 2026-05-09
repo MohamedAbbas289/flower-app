@@ -111,11 +111,6 @@ Thank you for choosing Flowery 💐
       'Account created successfully! , please login to continue';
 
   // login screen
-  static const String loginTitle = 'Login';
-  static const String emailLabel = 'Email';
-  static const String emailHint = 'Enter your email';
-  static const String passwordLabel = 'Password';
-  static const String passwordHint = 'Enter your password';
   static const String rememberMe = 'Remember me';
   static const String forgetPassword = 'Forget password?';
   static const String loginButton = 'Login';
