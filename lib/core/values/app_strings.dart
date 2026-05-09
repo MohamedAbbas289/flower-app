@@ -82,4 +82,9 @@ abstract class AppStrings {
   static const String continueAsGuest = 'Continue as guest';
   static const String dontHaveAccount = "Don't have an account? ";
   static const String signUp = 'Sign up';
+  // bottom navigation labels
+  static const String homeView = 'Home';
+  static const String categoryView = 'Categories';
+  static const String cartView = 'Cart';
+  static const String profileView = 'Profile';
 }
