@@ -29,7 +29,7 @@ abstract class TextStyles {
     letterSpacing: 0.5,
   );
 
-  static TextStyle bodyRegularUnderLine12 = GoogleFonts.inter(
+  static TextStyle bodyRegularUnderLine13 = GoogleFonts.inter(
     fontSize: 13,
     fontWeight: FontWeight.w400,
     color: AppColors.black,
@@ -49,7 +49,7 @@ abstract class TextStyles {
     color: AppColors.red,
   );
 
-  static const TextStyle buttonTextStyle = TextStyle(
+  static TextStyle buttonTextStyle = GoogleFonts.inter(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     color: AppColors.white,
@@ -59,12 +59,11 @@ abstract class TextStyles {
     fontWeight: FontWeight.w400,
     color: AppColors.black,
   );
-  static TextStyle bodyRegular13grey = GoogleFonts.inter(
-    fontSize: 13,
+  static TextStyle bodyRegular14 = GoogleFonts.inter(
+    fontSize: 14,
     fontWeight: FontWeight.w400,
-    color: AppColors.gray,
+    color: AppColors.black,
   );
-
   static TextStyle bodyRegular16 = GoogleFonts.inter(
     fontSize: 16,
     fontWeight: FontWeight.w400,

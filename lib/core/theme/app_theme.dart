@@ -1,3 +1,4 @@
+import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
@@ -9,34 +10,53 @@ class AppTheme {
       primary: AppColors.pink,
     ),
     progressIndicatorTheme: ProgressIndicatorThemeData(color: AppColors.pink),
+    appBarTheme: AppBarTheme(
+      titleTextStyle: TextStyles.appBarTextStyle,
+      titleSpacing: 0,
+      backgroundColor: AppColors.white,
+      surfaceTintColor: AppColors.white,
+      iconTheme: IconThemeData(color: AppColors.black, size: 24),
+      leadingWidth: 40,
+    ),
+    textTheme: TextTheme(bodyMedium: TextStyles.bodyRegular14),
     inputDecorationTheme: InputDecorationTheme(
+      prefixIconConstraints: const BoxConstraints(minHeight: 24, maxHeight: 24),
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      floatingLabelStyle: WidgetStateTextStyle.resolveWith((states) {
+        if (states.contains(WidgetState.error)) {
+          return TextStyles.labelTextFieldStyle.copyWith(color: AppColors.red);
+        }
+        if (states.contains(WidgetState.focused)) {
+          return TextStyles.labelTextFieldStyle.copyWith(
+            color: AppColors.black,
+          );
+        }
+        return TextStyles.labelTextFieldStyle;
+      }),
       filled: false,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide.none,
       ),
+      labelStyle: TextStyles.labelTextFieldStyle,
+      errorStyle: TextStyles.errorTextFieldStyle,
+      hintStyle: TextStyles.hintTextFieldStyle,
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-
+        borderRadius: BorderRadius.circular(4),
         borderSide: const BorderSide(color: AppColors.gray, width: 1),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-
+        borderRadius: BorderRadius.circular(4),
         borderSide: const BorderSide(color: AppColors.gray, width: 2),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-
+        borderRadius: BorderRadius.circular(4),
         borderSide: const BorderSide(color: AppColors.red, width: 1.5),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-
+        borderRadius: BorderRadius.circular(4),
         borderSide: const BorderSide(color: AppColors.red, width: 2),
       ),
-      hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-      errorStyle: TextStyle(color: AppColors.red, fontSize: 14),
       contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -48,10 +68,11 @@ class AppTheme {
         ),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(30),
             side: BorderSide(color: AppColors.pink),
           ),
         ),
+        textStyle: WidgetStateProperty.all(TextStyles.buttonTextStyle),
       ),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -59,26 +80,10 @@ class AppTheme {
       showUnselectedLabels: true,
       showSelectedLabels: true,
       type: BottomNavigationBarType.fixed,
-      selectedIconTheme: IconThemeData(
-        color: AppColors.gray,
-      ),
-      unselectedIconTheme: IconThemeData(
-        color: AppColors.gray,
-      ),
-      selectedLabelStyle: TextStyle(
-        color: AppColors.pink,
-      ),
-      unselectedLabelStyle: TextStyle(
-        color: AppColors.gray,
-      ),
-    ),
-    textTheme: TextTheme(
-      bodyLarge: TextStyle(
-        fontWeight: FontWeight.w500,
-        fontSize: 20,
-        color: AppColors.black,
-      ),
-
+      selectedIconTheme: IconThemeData(color: AppColors.gray),
+      unselectedIconTheme: IconThemeData(color: AppColors.gray),
+      selectedLabelStyle: TextStyle(color: AppColors.pink),
+      unselectedLabelStyle: TextStyle(color: AppColors.gray),
     ),
   );
 }
