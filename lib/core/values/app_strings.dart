@@ -1,6 +1,48 @@
 abstract class AppStrings {
   // general
   static const String appName = 'Flowery';
+  static const String terms = '''
+Welcome to Flowery 🌸
+
+1. By creating an account, you agree to use the app for personal shopping only.
+2. All flower products are subject to availability.
+3. Prices may change without prior notice.
+4. Delivery times may vary depending on location.
+5. Refunds are applicable only in case of damaged or incorrect orders.
+6. Misuse of the platform may result in account suspension.
+
+Thank you for choosing Flowery 💐
+''';
+  static const String close = 'Close';
+
+  // titles
+  static const String loginTitle = 'Login';
+  static const String signupTitle = 'Sign up';
+  // labels
+  static const String genderLabel = 'Gender';
+  static const String maleLabel = 'Male';
+  static const String femaleLabel = 'Female';
+  // text fileds labels
+  static const String firstNameLabel = 'First name';
+  static const String lastNameLabel = 'Last name';
+  static const String emailLabel = 'Email';
+  static const String passwordLabel = 'Password';
+  static const String confirmPasswordLabel = 'Confirm password';
+  static const String phoneLabel = 'Phone number';
+
+  // text fields hints
+  static const String firstNameHint = 'Enter first name';
+  static const String lastNameHint = 'Enter last name';
+  static const String emailHint = 'Enter your email';
+  static const String passwordHint = 'Enter password';
+  static const String confirmPasswordHint = 'Confirm password';
+  static const String phoneHint = 'Enter phone number';
+  // texts on body
+  static const String alreadyHaveAccount = 'Already have an account? ';
+  static const String creatingAccount =
+      'Creating an account, you agree to our ';
+  static const String termsAndConditions = 'Terms&Conditions';
+
   // validation messages
   static const String requiredField = 'This field is required';
   static const String invalidInput = 'Please enter a valid value';
@@ -13,13 +55,7 @@ abstract class AppStrings {
   static const String emailInvalid =
       'Please enter a valid email address (example@domain.com)';
   static const String passwordRequired = 'Password is required';
-  static const String passwordWeak =
-      'Password is too weak. It must include:\n'
-      '• At least 8 characters\n'
-      '• One uppercase letter\n'
-      '• One lowercase letter\n'
-      '• One number\n'
-      '• One special character';
+  static const String passwordWeak = 'Password is too weak.';
   static const String confirmPasswordRequired = 'Please confirm your password';
   static const String passwordDoNotMatch =
       'Passwords do not match. Please make sure both passwords are identical';
@@ -56,19 +92,23 @@ abstract class AppStrings {
       'Request timed out. Please check your internet connection and try again';
   static const String serverTookTooLongToRespond =
       'Server took too long to respond. Please try again later';
-  static const String badcertificate =
+  static const String badCertificate =
       'Bad certificate. Please check your connection and try again';
   static const String noInternetConnection =
       'No internet connection. Please check your connection and try again';
   static const String cancel = 'Request canceled. Please try again later';
-  static const String unexpectederroroccurred =
+  static const String unexpectedErrorOccurred =
       'An unexpected error occurred. Please try again later';
-  static const String servererroroccurred =
+  static const String serverErrorOccurred =
       'A server error occurred. Please try again later';
   static const String somethingWentWrong =
       'Something went wrong. Please try again later';
+  static const String dataParsingError = 'Data parsing error. Please try again later';
   // app error messages
   static const String routeNotFound = 'Route not found';
+  //snackbar messages
+  static const String accountCreatedSuccessfully =
+      'Account created successfully! , please login to continue';
 
   // login screen
   static const String loginTitle = 'Login';

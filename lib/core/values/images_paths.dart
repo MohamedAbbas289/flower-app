@@ -70,8 +70,7 @@ class Assets {
 
   static const String assetsIconsVisibilityOff = "assets/icons/visibility_off.svg";
 
-  static const String assetsIconsVisibilityOn =
-      "assets/icons/visibility_on.svg";
+  static const String assetsIconsVisibilityOn = "assets/icons/visibility_on.svg";
 
   static const String assetsImagesAppIcon = "assets/images/app_icon.png";
 }

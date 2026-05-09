@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
       initialRoute: AppRoutesName.home,
       onGenerateRoute: AppRoutes.onGenerateRoute,
       theme: AppTheme.lightTheme,
+      themeMode: ThemeMode.system,
     );
   }
 }
