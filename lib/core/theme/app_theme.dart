@@ -75,6 +75,25 @@ class AppTheme {
         textStyle: WidgetStateProperty.all(TextStyles.buttonTextStyle),
       ),
     ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.all(AppColors.white),
+        foregroundColor: WidgetStateProperty.all(AppColors.gray),
+        overlayColor: WidgetStateProperty.all(AppColors.lightPink),
+        side: WidgetStateProperty.all(BorderSide(color: AppColors.gray)),
+        padding: WidgetStateProperty.all(
+          EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+        ),
+        minimumSize: WidgetStateProperty.all(Size(double.infinity, 48)),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+            side: BorderSide(color: AppColors.gray),
+          ),
+        ),
+        textStyle: WidgetStateProperty.all(TextStyles.buttonTextStyle),
+      ),
+    ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColors.lightPink,
       showUnselectedLabels: true,
