@@ -410,10 +410,9 @@ class _PhoneField extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("+20", style: TextStyles.bodyRegular13),
-
-              SizedBox(width: 6),
               SvgPicture.asset(Assets.assetsIconsEgypt),
+              SizedBox(width: 6),
+              Text("+20", style: TextStyles.bodyRegular16),
             ],
           ),
         ),

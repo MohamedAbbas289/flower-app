@@ -1,4 +1,5 @@
 import 'package:flower_app/core/theme/app_colors.dart';
+import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -22,10 +23,10 @@ class AppDialog {
     bool buttonsVertical = false,
 
     Color confirmButtonColor = Colors.black,
-    Color cancelButtonColor = const Color(0xFFF3F3F3),
+    Color cancelButtonColor = AppColors.red,
 
-    Color confirmTextColor = Colors.white,
-    Color cancelTextColor = Colors.black,
+    Color confirmTextColor = AppColors.white,
+    Color cancelTextColor = Colors.white,
   }) {
     return showDialog(
       context: context,
@@ -173,14 +174,7 @@ class _DialogButton extends StatelessWidget {
           ),
         ),
 
-        child: Text(
-          text,
-          style: TextStyle(
-            color: textColor,
-            fontWeight: FontWeight.w600,
-            fontSize: 15,
-          ),
-        ),
+        child: Text(text, style: TextStyles.bodyRegular14),
       ),
     );
   }
