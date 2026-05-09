@@ -92,14 +92,14 @@ Thank you for choosing Flowery 💐
       'Request timed out. Please check your internet connection and try again';
   static const String serverTookTooLongToRespond =
       'Server took too long to respond. Please try again later';
-  static const String badcertificate =
+  static const String badCertificate =
       'Bad certificate. Please check your connection and try again';
   static const String noInternetConnection =
       'No internet connection. Please check your connection and try again';
   static const String cancel = 'Request canceled. Please try again later';
-  static const String unexpectederroroccurred =
+  static const String unexpectedErrorOccurred =
       'An unexpected error occurred. Please try again later';
-  static const String servererroroccurred =
+  static const String serverErrorOccurred =
       'A server error occurred. Please try again later';
   static const String somethingWentWrong =
       'Something went wrong. Please try again later';
@@ -109,4 +109,22 @@ Thank you for choosing Flowery 💐
   //snackbar messages
   static const String accountCreatedSuccessfully =
       'Account created successfully! , please login to continue';
+
+  // login screen
+  static const String loginTitle = 'Login';
+  static const String emailLabel = 'Email';
+  static const String emailHint = 'Enter your email';
+  static const String passwordLabel = 'Password';
+  static const String passwordHint = 'Enter your password';
+  static const String rememberMe = 'Remember me';
+  static const String forgetPassword = 'Forget password?';
+  static const String loginButton = 'Login';
+  static const String continueAsGuest = 'Continue as guest';
+  static const String dontHaveAccount = "Don't have an account? ";
+  static const String signUp = 'Sign up';
+  // bottom navigation labels
+  static const String homeView = 'Home';
+  static const String categoryView = 'Categories';
+  static const String cartView = 'Cart';
+  static const String profileView = 'Profile';
 }
