@@ -9,7 +9,9 @@ class AppTheme {
       seedColor: AppColors.pink,
       primary: AppColors.pink,
     ),
-    progressIndicatorTheme: ProgressIndicatorThemeData(color: AppColors.pink),
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: AppColors.lightPink,
+    ),
     appBarTheme: AppBarTheme(
       titleTextStyle: TextStyles.appBarTextStyle,
       titleSpacing: 0,

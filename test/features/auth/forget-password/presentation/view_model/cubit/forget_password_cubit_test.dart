@@ -11,6 +11,7 @@ import 'package:test/test.dart';
 
 import 'forget_password_cubit_test.mocks.dart';
 
+
 @GenerateMocks([ForgetPasswordUseCase])
 void main() {
   late ForgetPasswordCubit cubit;

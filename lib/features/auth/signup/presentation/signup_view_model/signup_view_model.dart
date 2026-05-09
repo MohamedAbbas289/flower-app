@@ -19,6 +19,9 @@ class SignupViewModel extends Cubit<SignupState> {
       case SignupRequestEvent():
         _signupUser(requestModel: event.requestModel);
         break;
+      case EnableAutoValidateEvent():
+        emit(state.copyWith(autoValidate: true));
+        break;
     }
   }
 

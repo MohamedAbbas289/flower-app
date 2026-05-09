@@ -4,11 +4,22 @@ import 'package:flower_app/core/entities/auth_response_entity.dart';
 
 class SignupState extends Equatable {
   final BaseState<AuthResponseEntity> signupState;
-  const SignupState({this.signupState = const BaseState()});
-  SignupState copyWith({BaseState<AuthResponseEntity>? signupState}) {
-    return SignupState(signupState: signupState ?? this.signupState);
+  final bool autoValidate;
+
+  const SignupState({
+    this.signupState = const BaseState(),
+    this.autoValidate = false,
+  });
+  SignupState copyWith({
+    BaseState<AuthResponseEntity>? signupState,
+    bool? autoValidate,
+  }) {
+    return SignupState(
+      signupState: signupState ?? this.signupState,
+      autoValidate: autoValidate ?? this.autoValidate,
+    );
   }
 
   @override
-  List<Object> get props => [signupState];
+  List<Object> get props => [signupState, autoValidate];
 }

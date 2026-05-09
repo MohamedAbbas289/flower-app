@@ -3,12 +3,14 @@ import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/utils/validation/app_validations.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/core/values/images_paths.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../view_model/cubit/forget_password_cubit.dart';
 import '../view_model/states/forget_password_states.dart';
-import '../widgets/app_snack_bar.dart';
+import '../../../../../core/reusable_widgets/app_snack_bar.dart';
 
 // BlocProvider is created in app_routes.dart — this widget just uses the
 // existing instance via context.read / BlocConsumer.
@@ -22,7 +24,19 @@ class ForgetPasswordView extends StatelessWidget {
           current is ForgotPasswordSuccess || current is ForgotPasswordFailure,
       listener: (context, state) {
         if (state is ForgotPasswordFailure) {
-          AppSnackBar.showError(context, state.error);
+          AppSnackBar.showError(
+            context,
+            state.error,
+            icon: SvgPicture.asset(
+              Assets.assetsIconsError,
+              width: 22,
+              height: 22,
+              colorFilter: const ColorFilter.mode(
+                Colors.white,
+                BlendMode.srcIn,
+              ),
+            ),
+          );
         }
 
         if (state is ForgotPasswordSuccess) {

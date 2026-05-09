@@ -1,4 +1,5 @@
 import 'package:flower_app/config/di/di.dart';
+import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/utils/validation/app_validations.dart';
@@ -135,9 +136,16 @@ class _LoginListener {
     if (state.loginState.data != null) {
       Navigator.pushReplacementNamed(context, AppRoutesName.home);
     } else if (state.loginState.msg != null) {
-      ScaffoldMessenger.of(
+      AppSnackBar.showError(
         context,
-      ).showSnackBar(SnackBar(content: Text(state.loginState.msg!)));
+        state.loginState.msg!,
+        icon: SvgPicture.asset(
+          Assets.assetsIconsError,
+          width: 22,
+          height: 22,
+          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+        ),
+      );
     }
   }
 }

@@ -42,7 +42,7 @@ void main() {
     });
 
     test("invalid code returns error", () async {
-      final result = await dataSource.verifyCode("000000");
+      final result = await dataSource.verifyCode("123456");
 
       expect(result, isA<ErrorBaseResponse<ForgetPasswordEntity>>());
 

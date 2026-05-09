@@ -1,4 +1,6 @@
 import 'package:flower_app/config/di/di.dart';
+import 'package:flower_app/core/reusable_widgets/app_dialog.dart';
+import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_strings.dart';
@@ -47,21 +49,23 @@ class _SignupViewState extends State<SignupView> {
   }
 
   void _onSignup(BuildContext context) {
-    if (_formKey.currentState?.validate() ?? false) {
-      final requestModel = SignupRequestModel(
-        firstName: _firstNameController.text.trim(),
-        lastName: _lastNameController.text.trim(),
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-        rePassword: _confirmPasswordController.text,
-        phone: _phoneController.text.trim(),
-        gender: _selectedGender,
-      );
+    context.read<SignupViewModel>().doEvent(EnableAutoValidateEvent());
 
-      context.read<SignupViewModel>().doEvent(
-        SignupRequestEvent(requestModel: requestModel),
-      );
-    }
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    final requestModel = SignupRequestModel(
+      firstName: _firstNameController.text.trim(),
+      lastName: _lastNameController.text.trim(),
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+      rePassword: _confirmPasswordController.text,
+      phone: '+20${_phoneController.text.trim()}',
+      gender: _selectedGender,
+    );
+
+    context.read<SignupViewModel>().doEvent(
+      SignupRequestEvent(requestModel: requestModel),
+    );
   }
 
   @override
@@ -76,6 +80,7 @@ class _SignupViewState extends State<SignupView> {
             return _SignupForm(
               formKey: _formKey,
               state: state,
+              autoValidate: state.autoValidate,
               firstNameController: _firstNameController,
               lastNameController: _lastNameController,
               emailController: _emailController,
@@ -125,24 +130,29 @@ class _SignupAppBar extends StatelessWidget implements PreferredSizeWidget {
 class _SignupListener {
   static void onStateChange(BuildContext context, SignupState state) {
     if (!state.signupState.isLoading && state.signupState.data != null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(
-            const SnackBar(
-              content: Text(AppStrings.accountCreatedSuccessfully),
-              backgroundColor: AppColors.pink,
-              duration: Duration(seconds: 2),
-            ),
-          )
-          .closed
-          .then((_) {
-            if (!context.mounted) return;
-            Navigator.pop(context);
-          });
+      AppSnackBar.showSuccess(
+        context,
+        AppStrings.accountCreatedSuccessfully,
+        icon: SvgPicture.asset(
+          Assets.assetsIconsCheckCircle,
+          width: 22,
+          height: 22,
+          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+        ),
+      ).closed.then((_) {
+        if (!context.mounted) return;
+
+        Navigator.pop(context);
+      });
     } else if (!state.signupState.isLoading && state.signupState.msg != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.signupState.msg!),
-          backgroundColor: AppColors.red,
+      AppSnackBar.showError(
+        context,
+        state.signupState.msg!,
+        icon: SvgPicture.asset(
+          Assets.assetsIconsError,
+          width: 22,
+          height: 22,
+          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
         ),
       );
     }
@@ -153,6 +163,7 @@ class _SignupForm extends StatelessWidget {
   const _SignupForm({
     required this.formKey,
     required this.state,
+    required this.autoValidate,
     required this.firstNameController,
     required this.lastNameController,
     required this.emailController,
@@ -170,7 +181,7 @@ class _SignupForm extends StatelessWidget {
 
   final GlobalKey<FormState> formKey;
   final SignupState state;
-
+  final bool autoValidate;
   final TextEditingController firstNameController;
   final TextEditingController lastNameController;
   final TextEditingController emailController;
@@ -193,6 +204,9 @@ class _SignupForm extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Form(
         key: formKey,
+        autovalidateMode: autoValidate
+            ? AutovalidateMode.onUserInteraction
+            : AutovalidateMode.disabled,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -388,13 +402,27 @@ class _PhoneField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         labelText: AppStrings.phoneLabel,
         hintText: AppStrings.phoneHint,
+        prefixIcon: Padding(
+          padding: EdgeInsets.only(left: 12, right: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("+20", style: TextStyles.bodyRegular13),
+
+              SizedBox(width: 6),
+              SvgPicture.asset(Assets.assetsIconsEgypt),
+            ],
+          ),
+        ),
+
+        prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
       ),
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp(r'[0-9+]')),
-        LengthLimitingTextInputFormatter(13),
+        LengthLimitingTextInputFormatter(11),
       ],
       keyboardType: TextInputType.phone,
       validator: (value) {
@@ -478,20 +506,11 @@ class _TermsText extends StatelessWidget {
 }
 
 void _showTermsDialog(BuildContext context) {
-  showDialog(
+  AppDialog.show(
     context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text(AppStrings.termsAndConditions),
-        content: const SingleChildScrollView(child: Text(AppStrings.terms)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(AppStrings.close),
-          ),
-        ],
-      );
-    },
+    title: AppStrings.termsAndConditions,
+    description: AppStrings.terms,
+    confirmText: AppStrings.close,
   );
 }
 

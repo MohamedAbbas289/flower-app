@@ -10,6 +10,7 @@ import 'package:test/test.dart';
 
 import 'signup_user_use_case_test.mocks.dart';
 
+
 @GenerateMocks([SignupRepositoryContract])
 void main() {
   late MockSignupRepositoryContract mockSignupRepository;

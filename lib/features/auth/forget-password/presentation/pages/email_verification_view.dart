@@ -2,13 +2,15 @@ import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/core/values/images_paths.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pinput/pinput.dart';
 
 import '../view_model/cubit/forget_password_cubit.dart';
 import '../view_model/states/forget_password_states.dart';
-import '../widgets/app_snack_bar.dart';
+import '../../../../../core/reusable_widgets/app_snack_bar.dart';
 
 // BlocProvider.value is provided in app_routes.dart — reuses the same cubit
 // instance created on the forgotPassword route.
@@ -22,7 +24,19 @@ class EmailVerificationView extends StatelessWidget {
           current is VerifyCodeSuccess || current is VerifyCodeFailure,
       listener: (context, state) {
         if (state is VerifyCodeFailure) {
-          AppSnackBar.showError(context, state.error);
+          AppSnackBar.showError(
+            context,
+            state.error,
+            icon: SvgPicture.asset(
+              Assets.assetsIconsError,
+              width: 22,
+              height: 22,
+              colorFilter: const ColorFilter.mode(
+                Colors.white,
+                BlendMode.srcIn,
+              ),
+            ),
+          );
         }
 
         if (state is VerifyCodeSuccess) {
