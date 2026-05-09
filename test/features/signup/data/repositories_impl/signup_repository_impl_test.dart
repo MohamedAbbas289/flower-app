@@ -2,9 +2,10 @@ import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/core/models/auth_response.dart';
 import 'package:flower_app/core/models/user_model.dart';
-import 'package:flower_app/features/signup/api/request_models/signup_request_model.dart';
-import 'package:flower_app/features/signup/data/datasources_contract/signup_remote_datasource_contract.dart';
-import 'package:flower_app/features/signup/data/repositories_impl/signup_repository_impl.dart';
+import 'package:flower_app/features/auth/signup/api/request_models/signup_request_model.dart';
+import 'package:flower_app/features/auth/signup/data/datasources_contract/signup_remote_datasource_contract.dart';
+import 'package:flower_app/features/auth/signup/data/repositories_impl/signup_repository_impl.dart';
+
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

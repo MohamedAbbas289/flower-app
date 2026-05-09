@@ -2,11 +2,12 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/core/entities/user_entity.dart';
-import 'package:flower_app/features/login/api/request_models/login_request_model.dart';
-import 'package:flower_app/features/login/domain/use_cases/login_use_case.dart';
-import 'package:flower_app/features/login/presentation/view_model/login_events.dart';
-import 'package:flower_app/features/login/presentation/view_model/login_state.dart';
-import 'package:flower_app/features/login/presentation/view_model/login_view_model.dart';
+import 'package:flower_app/features/auth/login/api/request_models/login_request_model.dart';
+import 'package:flower_app/features/auth/login/domain/use_cases/login_use_case.dart';
+import 'package:flower_app/features/auth/login/presentation/view_model/login_events.dart';
+import 'package:flower_app/features/auth/login/presentation/view_model/login_state.dart';
+import 'package:flower_app/features/auth/login/presentation/view_model/login_view_model.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

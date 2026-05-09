@@ -1,7 +1,7 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/forget-password/domain/entities/forget_password_entity.dart';
-import 'package:flower_app/features/forget-password/domain/repositories/forget_password_repo.dart';
-import 'package:flower_app/features/forget-password/domain/usecase/forget_password_use_case.dart';
+import 'package:flower_app/features/auth/forget-password/domain/entities/forget_password_entity.dart';
+import 'package:flower_app/features/auth/forget-password/domain/repositories/forget_password_repo.dart';
+import 'package:flower_app/features/auth/forget-password/domain/usecase/forget_password_use_case.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

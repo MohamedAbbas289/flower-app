@@ -1,11 +1,13 @@
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/app_section/presentation/view/app_section_view.dart';
-import 'package:flower_app/features/forget-password/presentation/flow/forget_password_routes.dart';
-import 'package:flower_app/features/login/presentation/screens/login_screen.dart';
-import 'package:flower_app/features/signup/presentation/pages/signup_view.dart';
+
 import 'package:flower_app/features/splash/presentation/splash_view.dart';
 import 'package:flutter/material.dart';
+
+import '../../features/auth/forget-password/presentation/flow/forget_password_routes.dart';
+import '../../features/auth/login/presentation/screens/login_screen.dart';
+import '../../features/auth/signup/presentation/pages/signup_view.dart';
 
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {

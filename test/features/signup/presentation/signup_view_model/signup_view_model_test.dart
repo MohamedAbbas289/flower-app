@@ -2,11 +2,12 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
-import 'package:flower_app/features/signup/api/request_models/signup_request_model.dart';
-import 'package:flower_app/features/signup/domain/usecases/signup_user_use_case.dart';
-import 'package:flower_app/features/signup/presentation/signup_view_model/signup_event.dart';
-import 'package:flower_app/features/signup/presentation/signup_view_model/signup_state.dart';
-import 'package:flower_app/features/signup/presentation/signup_view_model/signup_view_model.dart';
+import 'package:flower_app/features/auth/signup/api/request_models/signup_request_model.dart';
+import 'package:flower_app/features/auth/signup/domain/usecases/signup_user_use_case.dart';
+import 'package:flower_app/features/auth/signup/presentation/signup_view_model/signup_event.dart';
+import 'package:flower_app/features/auth/signup/presentation/signup_view_model/signup_state.dart';
+import 'package:flower_app/features/auth/signup/presentation/signup_view_model/signup_view_model.dart';
+
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

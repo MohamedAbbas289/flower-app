@@ -1,9 +1,10 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/forget-password/domain/entities/forget_password_entity.dart';
-import 'package:flower_app/features/forget-password/domain/usecase/forget_password_use_case.dart';
-import 'package:flower_app/features/forget-password/presentation/view_model/cubit/forget_password_cubit.dart';
-import 'package:flower_app/features/forget-password/presentation/view_model/states/forget_password_states.dart';
+import 'package:flower_app/features/auth/forget-password/domain/entities/forget_password_entity.dart';
+import 'package:flower_app/features/auth/forget-password/domain/usecase/forget_password_use_case.dart';
+import 'package:flower_app/features/auth/forget-password/presentation/view_model/cubit/forget_password_cubit.dart';
+import 'package:flower_app/features/auth/forget-password/presentation/view_model/states/forget_password_states.dart';
+
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
