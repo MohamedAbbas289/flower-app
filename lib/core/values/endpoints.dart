@@ -6,7 +6,7 @@ abstract class Endpoints {
   static const String forgotPassword = "$baseUrl/auth/forgotPassword";
   static const String verifyResetCode = "$baseUrl/auth/verifyResetCode";
   static const String resetPassword = "$baseUrl/auth/resetPassword";
-  static const String bestSeller = "$baseUrl/best-seller";
+  static const String getBestSeller = "$baseUrl/best-seller";
   static const String getCategories = "$baseUrl/categories";
   static const String getOccasions = "$baseUrl/occasions";
   static const String getProducts = "$baseUrl/products";
