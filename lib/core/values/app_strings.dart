@@ -132,7 +132,7 @@ Thank you for choosing Flowery 💐
 
   // login screen
   static const String rememberMe = 'Remember me';
-  static const String forgetPassword = 'Forget password?';
+  static const String doYouForgetPassword = 'Forget password?';
   static const String loginButton = 'Login';
   static const String continueAsGuest = 'Continue as guest';
   static const String dontHaveAccount = "Don't have an account? ";

@@ -214,7 +214,7 @@ class _RememberMeRow extends StatelessWidget {
           onTap: () =>
               Navigator.pushNamed(context, AppRoutesName.forgotPassword),
           child: Text(
-            AppStrings.forgetPassword,
+            AppStrings.doYouForgetPassword,
             style: TextStyles.bodyRegularUnderLine13,
           ),
         ),
