@@ -69,4 +69,17 @@ abstract class AppStrings {
       'Something went wrong. Please try again later';
   // app error messages
   static const String routeNotFound = 'Route not found';
+
+  // login screen
+  static const String loginTitle = 'Login';
+  static const String emailLabel = 'Email';
+  static const String emailHint = 'Enter your email';
+  static const String passwordLabel = 'Password';
+  static const String passwordHint = 'Enter your password';
+  static const String rememberMe = 'Remember me';
+  static const String forgetPassword = 'Forget password?';
+  static const String loginButton = 'Login';
+  static const String continueAsGuest = 'Continue as guest';
+  static const String dontHaveAccount = "Don't have an account? ";
+  static const String signUp = 'Sign up';
 }

@@ -1,0 +1,43 @@
+import 'package:flower_app/core/utils/validation/app_regex.dart';
+import 'package:injectable/injectable.dart';
+
+class LoginValidationResult {
+  final String? emailError;
+  final String? passwordError;
+
+  const LoginValidationResult({this.emailError, this.passwordError});
+
+  bool get isValid => emailError == null && passwordError == null;
+}
+
+@injectable
+class ValidateLoginInputsUseCase {
+  const ValidateLoginInputsUseCase();
+
+  LoginValidationResult call({
+    required String email,
+    required String password,
+  }) {
+    final emailError = _validateEmail(email);
+    final passwordError = _validatePassword(password);
+
+    return LoginValidationResult(
+      emailError: emailError,
+      passwordError: passwordError,
+    );
+  }
+
+  String? _validateEmail(String email) {
+    if (!AppRegex.isNotEmpty(email) || !AppRegex.isValidEmail(email)) {
+      return 'This Email is not valid';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String password) {
+    if (!AppRegex.isNotEmpty(password)) {
+      return 'Invalid password';
+    }
+    return null;
+  }
+}

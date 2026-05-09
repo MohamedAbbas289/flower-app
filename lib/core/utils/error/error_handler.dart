@@ -44,4 +44,27 @@ class ErrorHandler {
 
     return AppStrings.somethingWentWrong;
   }
+
+  static DioException normalizeDioError(DioException e) {
+    final data = e.response?.data;
+    if (data is Map && data['error'] != null && data['message'] == null) {
+      final normalizedData = {ApiParam.message: data['error'].toString()};
+      final normalizedResponse = Response<Map<String, dynamic>>(
+        requestOptions: e.requestOptions,
+        data: normalizedData,
+        statusCode: e.response?.statusCode,
+        statusMessage: e.response?.statusMessage,
+        headers: e.response?.headers,
+      );
+      return DioException(
+        requestOptions: e.requestOptions,
+        response: normalizedResponse,
+        type: e.type,
+        error: e.error,
+        message: e.message,
+        stackTrace: e.stackTrace,
+      );
+    }
+    return e;
+  }
 }
