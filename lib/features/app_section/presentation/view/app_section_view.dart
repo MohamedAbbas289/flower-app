@@ -5,7 +5,7 @@ import 'package:flower_app/features/app_section/domain/entity/bottom_nav_item_en
 import '../widgets/bottom_nav_icon.dart';
 import '../widgets/cart_test_view.dart';
 import '../widgets/categories_test_view.dart';
-import '../widgets/home_test_view.dart';
+import '../../../home_screen/presentation/screens/home_test_view.dart';
 import '../widgets/profile_test_view.dart';
 
 class AppSectionView extends StatefulWidget {
@@ -18,7 +18,7 @@ class AppSectionView extends StatefulWidget {
 class _AppSectionViewState extends State<AppSectionView> {
   int _currentTabIndex = 0;
   final List<Widget> _tabs = [
-    HomeTestView(),
+    HomeScreen(),
     CategoriesTestView(),
     CartTestView(),
     ProfileTestView(),

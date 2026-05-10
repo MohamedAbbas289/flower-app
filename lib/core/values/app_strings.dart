@@ -145,4 +145,10 @@ Thank you for choosing Flowery 💐
   static const String categoryView = 'Categories';
   static const String cartView = 'Cart';
   static const String profileView = 'Profile';
+
+
+  static const String location = 'Deliver to 2XVP+XC - Sheikh Zayed ';
+  static const String viewAll = 'View all';
+  static const String bestSellers = 'Best Sellers';
+  static const String occasion = 'Occasion';
 }
