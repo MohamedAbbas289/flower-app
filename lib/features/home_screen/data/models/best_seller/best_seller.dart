@@ -1,3 +1,4 @@
+import 'package:flower_app/features/home_screen/domain/entities/best_seller_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../category/category.dart';
@@ -73,4 +74,29 @@ class BestSeller {
   factory BestSeller.fromJson(Map<String, dynamic> json) => _$BestSellerFromJson(json);
 
   Map<String, dynamic> toJson() => _$BestSellerToJson(this);
+
+  BestSellerModel toDomain() {
+    return BestSellerModel(
+      id: id,
+      title: title,
+      slug: slug,
+      description: description,
+      imgCover: imgCover,
+      images: images,
+      price: price,
+      priceAfterDiscount: priceAfterDiscount,
+      discount: discount,
+      rateAvg: rateAvg,
+      rateCount: rateCount,
+      sold: sold,
+      quantity: quantity,
+      category: category?.toDomain(),
+      occasion: occasion,
+      isSuperAdmin: isSuperAdmin,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      v: v,
+      bestSellerId: bestSellerId,
+    );
+  }
 }

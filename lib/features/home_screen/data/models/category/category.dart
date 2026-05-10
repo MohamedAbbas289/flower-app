@@ -1,5 +1,8 @@
+import 'package:flower_app/features/home_screen/domain/entities/category_model.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 part 'category.g.dart';
+
 @JsonSerializable()
 class Category {
   @JsonKey(name: "_id")
@@ -33,4 +36,17 @@ class Category {
   factory Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
 
   Map<String, dynamic> toJson() => _$CategoryToJson(this);
+
+  CategoryModel toDomain() {
+    return CategoryModel(
+      id: id,
+      name: name,
+      slug: slug,
+      image: image,
+      isSuperAdmin: isSuperAdmin,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      productsCount: productsCount,
+    );
+  }
 }
