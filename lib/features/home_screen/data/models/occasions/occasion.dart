@@ -1,4 +1,6 @@
+import 'package:flower_app/features/home_screen/domain/entities/occasion_model.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 part 'occasion.g.dart';
 
 @JsonSerializable()
@@ -34,4 +36,17 @@ class Occasion {
   factory Occasion.fromJson(Map<String, dynamic> json) => _$OccasionFromJson(json);
 
   Map<String, dynamic> toJson() => _$OccasionToJson(this);
+
+  OccasionModel toDomain() {
+    return OccasionModel(
+      id: id,
+      name: name,
+      slug: slug,
+      image: image,
+      isSuperAdmin: isSuperAdmin,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      productsCount: productsCount,
+    );
+  }
 }
