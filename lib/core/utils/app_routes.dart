@@ -1,9 +1,13 @@
+import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/app_section/presentation/view/app_section_view.dart';
+import 'package:flower_app/features/product_details/presentation/pages/product_details_view.dart';
+import 'package:flower_app/features/product_details/presentation/view_model/product_details_cubit.dart';
 
 import 'package:flower_app/features/splash/presentation/splash_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../features/auth/forget-password/presentation/flow/forget_password_routes.dart';
 import '../../features/auth/login/presentation/screens/login_screen.dart';
@@ -24,7 +28,13 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const AppSectionView());
       case AppRoutesName.signUp:
         return MaterialPageRoute(builder: (_) => const SignupView());
-      
+      case AppRoutesName.productDetails:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<ProductDetailsCubit>()..getProductDetails(),
+            child: Builder(builder: (context) => const ProductDetailsView()),
+          ),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(
