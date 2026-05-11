@@ -1,19 +1,3 @@
-// // CachedNetworkImage(
-// //   imageUrl: imageUrl,
-// //   fit: BoxFit.cover,
-// //   memCacheWidth: 600, // resize in memory → saves RAM
-// //   placeholder: (context, url) => const Center(
-// //     child: CircularProgressIndicator(),
-// //   ),
-// //   errorWidget: (context, url, _) => const Icon(Icons.broken_image),
-// // )
-// Hero(
-//   tag: 'product-${entity.id}',
-//   child: CachedNetworkImage(
-//     imageUrl: entity.imgCover,
-//     // ...
-//   ),
-// )
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
@@ -47,9 +31,6 @@ class ProductDetailsView extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Scaffold
-// ---------------------------------------------------------------------------
 class _ProductDetailsScaffold extends StatelessWidget {
   const _ProductDetailsScaffold();
 
@@ -87,9 +68,6 @@ class _ProductDetailsScaffold extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Body
-// ---------------------------------------------------------------------------
 class _ProductDetailsBody extends StatelessWidget {
   const _ProductDetailsBody({required this.entity});
 
@@ -125,9 +103,6 @@ class _ProductDetailsBody extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Image Slider
-// ---------------------------------------------------------------------------
 class _ImageSlider extends StatefulWidget {
   const _ImageSlider({required this.entity});
 
@@ -162,10 +137,10 @@ class _ImageSliderState extends State<_ImageSlider> {
                   height: 400,
                   fit: BoxFit.cover,
                   memCacheWidth: 600,
-                  placeholder: (_, __) => const Center(
+                  placeholder: (_, _) => const Center(
                     child: CircularProgressIndicator(color: AppColors.pink),
                   ),
-                  errorWidget: (_, __, ___) =>
+                  errorWidget: (_, _, _) =>
                       const Icon(Icons.broken_image, color: AppColors.gray),
                 ),
               );
@@ -224,9 +199,6 @@ class _DotsIndicator extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Price and Status
-// ---------------------------------------------------------------------------
 class _PriceAndStatus extends StatelessWidget {
   const _PriceAndStatus({required this.entity});
 
@@ -272,9 +244,6 @@ class _PriceAndStatus extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Product Title
-// ---------------------------------------------------------------------------
 class _ProductTitle extends StatelessWidget {
   const _ProductTitle({required this.title});
 
@@ -289,9 +258,6 @@ class _ProductTitle extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Description Section
-// ---------------------------------------------------------------------------
 class _DescriptionSection extends StatelessWidget {
   const _DescriptionSection({required this.description});
 
@@ -313,9 +279,6 @@ class _DescriptionSection extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Bouquet Include Section
-// ---------------------------------------------------------------------------
 class _BouquetIncludeSection extends StatelessWidget {
   const _BouquetIncludeSection({required this.entity});
 
@@ -341,9 +304,6 @@ class _BouquetIncludeSection extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Add to Cart Button
-// ---------------------------------------------------------------------------
 class _AddToCartButton extends StatelessWidget {
   const _AddToCartButton();
 
