@@ -14,6 +14,7 @@ Welcome to Flowery 🌸
 Thank you for choosing Flowery 💐
 ''';
   static const String close = 'Close';
+  static const String addToCart = 'Add to cart';
 
   // titles
   static const String loginTitle = 'Login';
@@ -106,6 +107,7 @@ Thank you for choosing Flowery 💐
   static const String dataParsingError = 'Data parsing error. Please try again later';
   // app error messages
   static const String routeNotFound = 'Route not found';
+  static const String imageNotAvailable = 'Image not available';
 
   // UI strings (feature forget pasword)
   static const String password = "Password";
