@@ -27,7 +27,7 @@ class ProductCardWidget extends StatelessWidget {
       enabled: isLoading,
       effect: ShimmerEffect(
         baseColor: AppColors.placeHolder.withAlpha(102),
-        highlightColor: Colors.white.withAlpha(204),
+        highlightColor: AppColors.white.withAlpha(204),
       ),
       child: _ProductCardContent(
         product: data,
