@@ -1,59 +1,30 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flower_app/core/entities/product_card_data.dart';
+import 'package:flower_app/core/reusable_widgets/product_image.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
-import 'package:flower_app/core/utils/app_responsive.dart';
-import 'package:flower_app/core/utils/responsive_text_style.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductCardWidget extends StatelessWidget {
   const ProductCardWidget({super.key, required this.product, this.onAddToCart});
 
-  final ProductCardData? product;
+  final ProductCardData product;
   final VoidCallback? onAddToCart;
-
-  static final _skeleton = _SkeletonProduct();
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = product == null;
-    final data = product ?? _skeleton;
     final size = MediaQuery.sizeOf(context);
     final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
-    return Skeletonizer(
-      enabled: isLoading,
-      effect: ShimmerEffect(
-        baseColor: AppColors.placeHolder.withAlpha(102),
-        highlightColor: AppColors.white.withAlpha(204),
-      ),
-      child: _ProductCardContent(
-        size: size,
-        devicePixelRatio: devicePixelRatio,
-        product: data,
-        onAddToCart: isLoading ? null : onAddToCart,
-        enableHero: !isLoading,
-      ),
+
+    return _ProductCardContent(
+      size: size,
+      devicePixelRatio: devicePixelRatio,
+      product: product,
+      onAddToCart: onAddToCart,
     );
   }
-}
-
-final class _SkeletonProduct implements ProductCardData {
-  @override
-  String get id => 'skeleton';
-  @override
-  String get name => 'Product name';
-  @override
-  String get imageUrl => '';
-  @override
-  int get price => 300;
-  @override
-  int? get originalPrice => 400;
-  @override
-  int? get discountPercent => 60;
 }
 
 class _ProductCardContent extends StatelessWidget {
@@ -62,14 +33,13 @@ class _ProductCardContent extends StatelessWidget {
     required this.size,
     required this.devicePixelRatio,
     this.onAddToCart,
-    this.enableHero = true,
   });
 
   final ProductCardData product;
   final VoidCallback? onAddToCart;
-  final bool enableHero;
   final Size size;
   final double devicePixelRatio;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -85,11 +55,11 @@ class _ProductCardContent extends StatelessWidget {
         children: [
           AspectRatio(
             aspectRatio: 1 / 0.78,
-            child: _ProductImage(
+            child: ProductImage(
               size: size,
               devicePixelRatio: devicePixelRatio,
               imageUrl: product.imageUrl,
-              heroTag: enableHero ? 'product-image-${product.id}' : null,
+              heroTag: 'product-image-${product.id}',
             ),
           ),
           const SizedBox(height: 8),
@@ -100,100 +70,6 @@ class _ProductCardContent extends StatelessWidget {
           const SizedBox(height: 8),
           _AddToCartButton(onPressed: onAddToCart, size: size),
         ],
-      ),
-    );
-  }
-}
-
-class _ProductImage extends StatelessWidget {
-  const _ProductImage({
-    required this.imageUrl,
-    this.heroTag,
-    required this.size,
-    required this.devicePixelRatio,
-  });
-
-  final String imageUrl;
-  final String? heroTag;
-  final Size size;
-  final double devicePixelRatio;
-  @override
-  Widget build(BuildContext context) {
-    final image = ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        width: double.infinity,
-        fit: BoxFit.cover,
-        fadeInDuration: const Duration(milliseconds: 300),
-        fadeOutDuration: const Duration(milliseconds: 300),
-        memCacheWidth: AppResponsive.cardCacheWidth(size, devicePixelRatio),
-        placeholder: (context, url) => const _ImagePlaceholder(),
-        errorWidget: (context, url, error) => _ImageError(imageUrl: imageUrl),
-      ),
-    );
-
-    if (heroTag == null) return image;
-
-    return Hero(tag: heroTag!, child: image);
-  }
-}
-
-class _ImagePlaceholder extends StatelessWidget {
-  const _ImagePlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: AppColors.placeHolder.withAlpha(77),
-      child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-    );
-  }
-}
-
-class _ImageError extends StatefulWidget {
-  const _ImageError({required this.imageUrl});
-  final String imageUrl;
-
-  @override
-  State<_ImageError> createState() => _ImageErrorState();
-}
-
-class _ImageErrorState extends State<_ImageError> {
-  int _retryKey = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      key: ValueKey(_retryKey), // ← بيتغير عشان يعمل retry
-      imageUrl: widget.imageUrl,
-      width: double.infinity,
-      fit: BoxFit.cover,
-      placeholder: (context, url) => const _ImagePlaceholder(),
-      errorWidget: (context, url, error) => Container(
-        width: double.infinity,
-        color: AppColors.placeHolder.withAlpha(51),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.image_not_supported_outlined,
-              size: 28,
-              color: AppColors.gray,
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              AppStrings.imageNotAvailable,
-              style: TextStyle(fontSize: 10, color: AppColors.gray),
-            ),
-            const SizedBox(height: 6),
-            IconButton(
-              onPressed: () => setState(() => _retryKey++),
-              icon: const Icon(Icons.refresh, color: AppColors.gray),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -211,11 +87,7 @@ class _ProductInfo extends StatelessWidget {
       children: [
         Text(
           product.name,
-          style: TextStyles.bodyRegular12.responsive(
-            size,
-            mobile: 12,
-            tablet: 13,
-          ),
+          style: TextStyles.bodyRegular12,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -239,10 +111,10 @@ class _PriceRow extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            'EGP ${product.price}',
-            style: TextStyles.bodyRegular14
-                .responsive(size, mobile: 14, tablet: 15)
-                .copyWith(fontWeight: FontWeight.w600),
+            AppStrings.priceText(product.price),
+            style: TextStyles.bodyRegular14.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
           ),
 
           if (product.originalPrice != null &&
@@ -252,25 +124,21 @@ class _PriceRow extends StatelessWidget {
 
             Text(
               '${product.originalPrice}',
-              style: TextStyles.bodyRegular12
-                  .responsive(size, mobile: 12, tablet: 13)
-                  .copyWith(
-                    color: Colors.grey,
-                    decoration: TextDecoration.lineThrough,
-                    decorationColor: Colors.grey,
-                  ),
+              style: TextStyles.bodyRegular12.copyWith(
+                color: AppColors.gray,
+                decoration: TextDecoration.lineThrough,
+                decorationColor: AppColors.gray,
+              ),
             ),
 
             const SizedBox(width: 4),
 
             Text(
               '${product.discountPercent}%',
-              style: TextStyles.bodyRegular12
-                  .responsive(size, mobile: 12, tablet: 13)
-                  .copyWith(
-                    color: AppColors.green,
-                    fontWeight: FontWeight.w600,
-                  ),
+              style: TextStyles.bodyRegular12.copyWith(
+                color: AppColors.green,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ],
@@ -310,11 +178,7 @@ class _AddToCartButton extends StatelessWidget {
               child: Text(
                 AppStrings.addToCart,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyles.buttonTextStyle.responsive(
-                  size,
-                  mobile: 13,
-                  tablet: 14,
-                ),
+                style: TextStyles.buttonTextStyle,
               ),
             ),
           ],

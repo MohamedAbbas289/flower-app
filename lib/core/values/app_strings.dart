@@ -43,6 +43,7 @@ Thank you for choosing Flowery 💐
   static const String creatingAccount =
       'Creating an account, you agree to our ';
   static const String termsAndConditions = 'Terms&Conditions';
+  static String priceText (int price) =>'EGP $price';
 
   // validation messages
   static const String requiredField = 'This field is required';

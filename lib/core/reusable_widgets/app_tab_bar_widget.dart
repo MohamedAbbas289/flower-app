@@ -1,7 +1,6 @@
 import 'package:flower_app/core/entities/tab_item_data.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
-import 'package:flower_app/core/utils/responsive_text_style.dart';
 import 'package:flutter/material.dart';
 
 class AppTabBarWidget extends StatefulWidget {
@@ -23,10 +22,49 @@ class AppTabBarWidget extends StatefulWidget {
 class _AppTabBarWidgetState extends State<AppTabBarWidget> {
   late int _selectedIndex;
 
+  final ScrollController _scrollController = ScrollController();
+
+  late final List<GlobalKey> _tabKeys;
+
   @override
   void initState() {
     super.initState();
+
     _selectedIndex = widget.initialIndex;
+
+    _tabKeys = List.generate(widget.tabs.length, (_) => GlobalKey());
+  }
+
+  @override
+  void didUpdateWidget(covariant AppTabBarWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.initialIndex != widget.initialIndex) {
+      setState(() {
+        _selectedIndex = widget.initialIndex;
+      });
+
+      _scrollToTab(widget.initialIndex);
+    }
+  }
+
+  void _scrollToTab(int index) {
+    final BuildContext? context = _tabKeys[index].currentContext;
+
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        alignment: 0.5,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -34,6 +72,7 @@ class _AppTabBarWidgetState extends State<AppTabBarWidget> {
     return SizedBox(
       height: 40,
       child: ListView.separated(
+        controller: _scrollController,
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: widget.tabs.length,
@@ -43,9 +82,16 @@ class _AppTabBarWidgetState extends State<AppTabBarWidget> {
           final isSelected = index == _selectedIndex;
 
           return GestureDetector(
+            key: _tabKeys[index],
             onTap: () {
               if (_selectedIndex == index) return;
-              setState(() => _selectedIndex = index);
+
+              setState(() {
+                _selectedIndex = index;
+              });
+
+              _scrollToTab(index);
+
               widget.onTabChanged(tab);
             },
             child: _TabItem(label: tab.name, isSelected: isSelected),
@@ -64,9 +110,8 @@ class _TabItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-
-    return IntrinsicWidth(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -75,12 +120,10 @@ class _TabItem extends StatelessWidget {
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyles.bodyRegular14
-                .responsive(size, mobile: 14, tablet: 15)
-                .copyWith(
-                  color: isSelected ? AppColors.pink : AppColors.gray,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                ),
+            style: TextStyles.bodyRegular14.copyWith(
+              color: isSelected ? AppColors.pink : AppColors.gray,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+            ),
           ),
           const SizedBox(height: 4),
           AnimatedContainer(

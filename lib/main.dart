@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flower_app/config/auth/auth_manager.dart';
 import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/my_app.dart';
@@ -11,15 +9,6 @@ Future<void> main() async {
   configureDependencies();
   final authManager = getIt<AuthManager>();
   await authManager.init();
-  final FlutterView view =
-      WidgetsBinding.instance.platformDispatcher.views.first;
-  final Size size = view.physicalSize / view.devicePixelRatio;
-  final bool isTablet = size.shortestSide >= 600;
-  if (!isTablet) {
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-  }
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
 }
