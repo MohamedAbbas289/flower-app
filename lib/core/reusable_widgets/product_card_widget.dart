@@ -32,6 +32,7 @@ class ProductCardWidget extends StatelessWidget {
       child: _ProductCardContent(
         product: data,
         onAddToCart: isLoading ? null : onAddToCart,
+        enableHero: !isLoading,
       ),
     );
   }
@@ -53,10 +54,15 @@ final class _SkeletonProduct implements ProductCardData {
 }
 
 class _ProductCardContent extends StatelessWidget {
-  const _ProductCardContent({required this.product, this.onAddToCart});
+  const _ProductCardContent({
+    required this.product,
+    this.onAddToCart,
+    this.enableHero = true,
+  });
 
   final ProductCardData product;
   final VoidCallback? onAddToCart;
+  final bool enableHero;
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +81,7 @@ class _ProductCardContent extends StatelessWidget {
             aspectRatio: 1 / 0.78,
             child: _ProductImage(
               imageUrl: product.imageUrl,
-              heroTag: 'product-image-${product.id}',
+              heroTag: enableHero ? 'product-image-${product.id}' : null,
             ),
           ),
           const SizedBox(height: 8),
@@ -92,27 +98,28 @@ class _ProductCardContent extends StatelessWidget {
 }
 
 class _ProductImage extends StatelessWidget {
-  const _ProductImage({required this.imageUrl, required this.heroTag});
+  const _ProductImage({required this.imageUrl, this.heroTag});
 
   final String imageUrl;
-  final String heroTag;
+  final String? heroTag;
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: heroTag,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: CachedNetworkImage(
-          imageUrl: imageUrl,
-          width: double.infinity,
-          fit: BoxFit.cover,
-          fadeInDuration: const Duration(milliseconds: 300),
-          placeholder: (context, url) => const _ImagePlaceholder(),
-          errorWidget: (context, url, error) => const _ImageError(),
-        ),
+    final image = ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        width: double.infinity,
+        fit: BoxFit.cover,
+        fadeInDuration: const Duration(milliseconds: 300),
+        placeholder: (context, url) => const _ImagePlaceholder(),
+        errorWidget: (context, url, error) => const _ImageError(),
       ),
     );
+
+    if (heroTag == null) return image;
+
+    return Hero(tag: heroTag!, child: image);
   }
 }
 
