@@ -5,14 +5,12 @@ extension ResponsiveTextStyle on TextStyle {
   TextStyle responsive(
     Size size, {
     required double mobile,
-    double? landscape,
     double? tablet,
   }) {
     return copyWith(
       fontSize: AppResponsive.responsiveFont(
         size,
         mobile: mobile,
-        landscape: landscape,
         tablet: tablet,
       ),
     );

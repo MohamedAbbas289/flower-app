@@ -76,7 +76,7 @@ class _TabItem extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyles.bodyRegular14
-                .responsive(size, mobile: 14, landscape: 11, tablet: 15)
+                .responsive(size, mobile: 14, tablet: 15)
                 .copyWith(
                   color: isSelected ? AppColors.pink : AppColors.gray,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,

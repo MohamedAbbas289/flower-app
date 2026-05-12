@@ -22,7 +22,8 @@ class ProductCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final isLoading = product == null;
     final data = product ?? _skeleton;
-
+    final size = MediaQuery.sizeOf(context);
+    final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
     return Skeletonizer(
       enabled: isLoading,
       effect: ShimmerEffect(
@@ -30,6 +31,8 @@ class ProductCardWidget extends StatelessWidget {
         highlightColor: AppColors.white.withAlpha(204),
       ),
       child: _ProductCardContent(
+        size: size,
+        devicePixelRatio: devicePixelRatio,
         product: data,
         onAddToCart: isLoading ? null : onAddToCart,
         enableHero: !isLoading,
@@ -56,6 +59,8 @@ final class _SkeletonProduct implements ProductCardData {
 class _ProductCardContent extends StatelessWidget {
   const _ProductCardContent({
     required this.product,
+    required this.size,
+    required this.devicePixelRatio,
     this.onAddToCart,
     this.enableHero = true,
   });
@@ -63,7 +68,8 @@ class _ProductCardContent extends StatelessWidget {
   final ProductCardData product;
   final VoidCallback? onAddToCart;
   final bool enableHero;
-
+  final Size size;
+  final double devicePixelRatio;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -80,6 +86,8 @@ class _ProductCardContent extends StatelessWidget {
           AspectRatio(
             aspectRatio: 1 / 0.78,
             child: _ProductImage(
+              size: size,
+              devicePixelRatio: devicePixelRatio,
               imageUrl: product.imageUrl,
               heroTag: enableHero ? 'product-image-${product.id}' : null,
             ),
@@ -87,10 +95,10 @@ class _ProductCardContent extends StatelessWidget {
           const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: _ProductInfo(product: product),
+            child: _ProductInfo(product: product, size: size),
           ),
           const SizedBox(height: 8),
-          _AddToCartButton(onPressed: onAddToCart),
+          _AddToCartButton(onPressed: onAddToCart, size: size),
         ],
       ),
     );
@@ -98,11 +106,17 @@ class _ProductCardContent extends StatelessWidget {
 }
 
 class _ProductImage extends StatelessWidget {
-  const _ProductImage({required this.imageUrl, this.heroTag});
+  const _ProductImage({
+    required this.imageUrl,
+    this.heroTag,
+    required this.size,
+    required this.devicePixelRatio,
+  });
 
   final String imageUrl;
   final String? heroTag;
-
+  final Size size;
+  final double devicePixelRatio;
   @override
   Widget build(BuildContext context) {
     final image = ClipRRect(
@@ -112,8 +126,10 @@ class _ProductImage extends StatelessWidget {
         width: double.infinity,
         fit: BoxFit.cover,
         fadeInDuration: const Duration(milliseconds: 300),
+        fadeOutDuration: const Duration(milliseconds: 300),
+        memCacheWidth: AppResponsive.cardCacheWidth(size, devicePixelRatio),
         placeholder: (context, url) => const _ImagePlaceholder(),
-        errorWidget: (context, url, error) => const _ImageError(),
+        errorWidget: (context, url, error) => _ImageError(imageUrl: imageUrl),
       ),
     );
 
@@ -136,41 +152,60 @@ class _ImagePlaceholder extends StatelessWidget {
   }
 }
 
-class _ImageError extends StatelessWidget {
-  const _ImageError();
+class _ImageError extends StatefulWidget {
+  const _ImageError({required this.imageUrl});
+  final String imageUrl;
+
+  @override
+  State<_ImageError> createState() => _ImageErrorState();
+}
+
+class _ImageErrorState extends State<_ImageError> {
+  int _retryKey = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CachedNetworkImage(
+      key: ValueKey(_retryKey), // ← بيتغير عشان يعمل retry
+      imageUrl: widget.imageUrl,
       width: double.infinity,
-      color: AppColors.placeHolder.withAlpha(51),
-      child: const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.image_not_supported_outlined,
-            size: 28,
-            color: AppColors.gray,
-          ),
-          SizedBox(height: 4),
-          Text(
-            AppStrings.imageNotAvailable,
-            style: TextStyle(fontSize: 10, color: AppColors.gray),
-          ),
-        ],
+      fit: BoxFit.cover,
+      placeholder: (context, url) => const _ImagePlaceholder(),
+      errorWidget: (context, url, error) => Container(
+        width: double.infinity,
+        color: AppColors.placeHolder.withAlpha(51),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.image_not_supported_outlined,
+              size: 28,
+              color: AppColors.gray,
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              AppStrings.imageNotAvailable,
+              style: TextStyle(fontSize: 10, color: AppColors.gray),
+            ),
+            const SizedBox(height: 6),
+            IconButton(
+              onPressed: () => setState(() => _retryKey++),
+              icon: const Icon(Icons.refresh, color: AppColors.gray),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class _ProductInfo extends StatelessWidget {
-  const _ProductInfo({required this.product});
+  const _ProductInfo({required this.product, required this.size});
   final ProductCardData product;
+  final Size size;
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -179,28 +214,25 @@ class _ProductInfo extends StatelessWidget {
           style: TextStyles.bodyRegular12.responsive(
             size,
             mobile: 12,
-            landscape: 10,
             tablet: 13,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: 2),
-        _PriceRow(product: product),
+        _PriceRow(product: product, size: size),
       ],
     );
   }
 }
 
 class _PriceRow extends StatelessWidget {
-  const _PriceRow({required this.product});
+  const _PriceRow({required this.product, required this.size});
 
   final ProductCardData product;
-
+  final Size size;
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-
     return FittedBox(
       fit: BoxFit.scaleDown,
       alignment: AlignmentDirectional.centerStart,
@@ -209,7 +241,7 @@ class _PriceRow extends StatelessWidget {
           Text(
             'EGP ${product.price}',
             style: TextStyles.bodyRegular14
-                .responsive(size, mobile: 14, landscape: 11, tablet: 15)
+                .responsive(size, mobile: 14, tablet: 15)
                 .copyWith(fontWeight: FontWeight.w600),
           ),
 
@@ -221,7 +253,7 @@ class _PriceRow extends StatelessWidget {
             Text(
               '${product.originalPrice}',
               style: TextStyles.bodyRegular12
-                  .responsive(size, mobile: 12, landscape: 9, tablet: 13)
+                  .responsive(size, mobile: 12, tablet: 13)
                   .copyWith(
                     color: Colors.grey,
                     decoration: TextDecoration.lineThrough,
@@ -234,7 +266,7 @@ class _PriceRow extends StatelessWidget {
             Text(
               '${product.discountPercent}%',
               style: TextStyles.bodyRegular12
-                  .responsive(size, mobile: 12, landscape: 9, tablet: 13)
+                  .responsive(size, mobile: 12, tablet: 13)
                   .copyWith(
                     color: AppColors.green,
                     fontWeight: FontWeight.w600,
@@ -248,18 +280,15 @@ class _PriceRow extends StatelessWidget {
 }
 
 class _AddToCartButton extends StatelessWidget {
-  const _AddToCartButton({this.onPressed});
+  const _AddToCartButton({this.onPressed, required this.size});
 
   final VoidCallback? onPressed;
-
+  final Size size;
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-    final isLandscape = AppResponsive.isMobileLandscape(size);
-
     return SizedBox(
       width: double.infinity,
-      height: isLandscape ? 34 : 38,
+      height: 38,
       child: FilledButton(
         onPressed: onPressed,
         child: Row(
@@ -267,8 +296,8 @@ class _AddToCartButton extends StatelessWidget {
           children: [
             SvgPicture.asset(
               Assets.assetsIconsShoppingCart,
-              height: isLandscape ? 16 : 18,
-              width: isLandscape ? 16 : 18,
+              height: 18,
+              width: 18,
               colorFilter: const ColorFilter.mode(
                 AppColors.white,
                 BlendMode.srcIn,
@@ -284,7 +313,6 @@ class _AddToCartButton extends StatelessWidget {
                 style: TextStyles.buttonTextStyle.responsive(
                   size,
                   mobile: 13,
-                  landscape: 10,
                   tablet: 14,
                 ),
               ),
