@@ -17,27 +17,30 @@ class BestSellerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height:151 ,
-          width:131 ,
-          child: Image.network( image,
-            fit: BoxFit.cover,
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        children: [
+          SizedBox(
+            height:151 ,
+            width:131 ,
+            child: Image.network( image,
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        Text(name,
-          style: TextStyles.bodyRegular12.copyWith(
-            fontWeight: FontWeight.w400,
-            color: AppColors.black,
+          Text(name,
+            style: TextStyles.bodyRegular12.copyWith(
+              fontWeight: FontWeight.w400,
+              color: AppColors.black,
+            ),
           ),
-        ),
-        Text('$price EGP',
-          style: TextStyles.bodyRegular14,
-        ),
+          Text('$price EGP',
+            style: TextStyles.bodyRegular14,
+          ),
 
 
-      ],
+        ],
+      ),
     );
   }
 }

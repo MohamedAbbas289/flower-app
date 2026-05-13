@@ -4,7 +4,9 @@ import 'package:flower_app/features/home_screen/domain/entities/occasion_model.d
 
 import '../../../domain/entities/category_model.dart';
 
+
 class HomeState {
+
   final bool categoriesLoading;
   final bool occasionsLoading;
   final bool bestSellersLoading;

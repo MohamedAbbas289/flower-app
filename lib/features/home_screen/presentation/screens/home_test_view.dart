@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/values/app_strings.dart';
 import '../../../../core/values/images_paths.dart';
 import '../view_model/cubit/home_view_model.dart';
+import '../view_model/states/home_events.dart';
 import '../view_model/states/home_state.dart';
 import '../widgets/best_seller_item.dart';
 import '../widgets/category_item.dart';
@@ -22,8 +23,8 @@ class HomeScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return BlocProvider(
-      create: (context) => homeViewModel
-        ..init(),
+      create: (context) => homeViewModel..doEvent(GetAllDataEvent())
+        ,
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -124,6 +125,9 @@ class HomeScreen extends StatelessWidget {
                     }
                     return const SizedBox.shrink();
                   },
+                  buildWhen: (previous, current) {
+                    return previous.categories != current.categories;
+                  },
                 ),
 
                 const SizedBox(height: 15),
@@ -170,6 +174,9 @@ class HomeScreen extends StatelessWidget {
                     }
                     return const SizedBox.shrink();
                   },
+                  buildWhen: (previous, current) {
+                    return previous.bestSellers != current.bestSellers;
+                  },
                 ),
 
                 const SizedBox(height: 15),
@@ -213,6 +220,9 @@ class HomeScreen extends StatelessWidget {
                       );
                     }
                     return const SizedBox.shrink();
+                  },
+                  buildWhen: (previous, current) {
+                    return previous.occasions != current.occasions;
                   },
                 ),
               ],

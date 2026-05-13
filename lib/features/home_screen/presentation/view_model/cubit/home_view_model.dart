@@ -8,29 +8,45 @@ import '../../../domain/entities/occasion_model.dart';
 import '../../../domain/use_cases/get_best_seller_use_case.dart';
 import '../../../domain/use_cases/get_category_use_cases.dart';
 import '../../../domain/use_cases/get_occasion_use_case.dart';
+import '../states/home_events.dart';
 import '../states/home_state.dart';
 
 @injectable
 class HomeViewModel extends Cubit<HomeState> {
+
+  final GetCategoryUseCases _getCategoriesUseCase;
+  final GetOccasionUseCase _getOccasionUseCase;
+  final GetBestSellerUseCase _getBestSellerUseCase;
   HomeViewModel(
-    this.getCategoriesUseCase,
-    this.getOccasionUseCase,
-    this.getBestSellerUseCase,
+    this._getCategoriesUseCase,
+    this._getOccasionUseCase,
+    this._getBestSellerUseCase,
   ) : super(HomeState());
-  final GetCategoryUseCases getCategoriesUseCase;
-  final GetOccasionUseCase getOccasionUseCase;
-  final GetBestSellerUseCase getBestSellerUseCase;
 
 
-  Future<void> init() async {
-     getCategories();
-     getOccasion();
-     getBestSeller();
+
+  Future<void> doEvent(HomeEvents event) async {
+    if (event is GetAllDataEvent) {
+      await _getAllData();
+    } else if (event is GetBestSellerEvent) {
+      await _getBestSeller();
+    } else if (event is GetCategoryEvent) {
+      await _getCategories();
+    } else if (event is GetOccasionEvent) {
+      await _getOccasion();
+    }
   }
 
-  Future<void> getCategories() async {
+
+  Future<void> _getAllData() async {
+     _getCategories();
+     _getOccasion();
+     _getBestSeller();
+  }
+
+  Future<void> _getCategories() async {
     emit(state.copyWith(categoriesLoading: true, categoriesError: ''));
-    final result = await getCategoriesUseCase();
+    final result = await _getCategoriesUseCase();
     switch (result) {
       case SuccessBaseResponse<List<CategoryModel>>():
         emit(
@@ -51,9 +67,9 @@ class HomeViewModel extends Cubit<HomeState> {
     }
   }
 
-  Future<void> getOccasion() async {
+  Future<void> _getOccasion() async {
     emit(state.copyWith(occasionsLoading: true, occasionsError: ''));
-    final result = await getOccasionUseCase();
+    final result = await _getOccasionUseCase();
     switch (result) {
       case SuccessBaseResponse<List<OccasionModel>>():
         emit(
@@ -74,9 +90,9 @@ class HomeViewModel extends Cubit<HomeState> {
     }
   }
 
-  Future<void> getBestSeller() async {
+  Future<void> _getBestSeller() async {
     emit(state.copyWith(bestSellersLoading: true, bestSellersError: ''));
-    final result = await getBestSellerUseCase();
+    final result = await _getBestSellerUseCase();
     switch (result) {
       case SuccessBaseResponse<List<BestSellerModel>>():
         emit(

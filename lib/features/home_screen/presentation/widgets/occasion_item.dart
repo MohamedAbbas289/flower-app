@@ -17,22 +17,25 @@ class OccasionItem extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
-    return Column(
-      children: [
-        SizedBox(
-          height: 151,
-          width: 131,
-          child: Image.network(
-            '${Endpoints.imageBaseUrl}$image',
-            fit: BoxFit.contain,
-          )
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 151,
+            width: 131,
+            child: Image.network(
+              '${Endpoints.imageBaseUrl}$image',
+              fit: BoxFit.contain,
+            )
 
-        ),
-        Text(
-          name,
-          style: TextStyles.bodyRegular14,
-        ),
-      ],
+          ),
+          Text(
+            name,
+            style: TextStyles.bodyRegular14,
+          ),
+        ],
+      ),
     );
   }
 }
