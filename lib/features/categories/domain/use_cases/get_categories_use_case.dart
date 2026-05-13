@@ -1,5 +1,5 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/categories/domain/entities/category_entity.dart';
+import 'package:flower_app/features/categories/domain/entities/categories_response_entity.dart';
 import 'package:flower_app/features/categories/domain/repository/categories_repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -9,7 +9,10 @@ class GetCategoriesUseCase {
 
   GetCategoriesUseCase(this._categoriesRepository);
 
-  Future<BaseResponse<List<CategoryEntity>>> execute() {
-    return _categoriesRepository.getCategories();
+  Future<BaseResponse<CategoriesResponseEntity>> execute({
+    int? page,
+    int? limit,
+  }) {
+    return _categoriesRepository.getCategories(page: page, limit: limit);
   }
 }

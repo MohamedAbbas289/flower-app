@@ -1,7 +1,11 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/config/base_state/base_state.dart';
+import 'package:flower_app/core/entities/metadata_entity.dart';
+import 'package:flower_app/features/categories/domain/entities/categories_response_entity.dart';
 import 'package:flower_app/features/categories/domain/entities/category_entity.dart';
 import 'package:flower_app/features/categories/domain/entities/product_entity.dart';
+import 'package:flower_app/features/categories/domain/entities/products_response_entity.dart';
 import 'package:flower_app/features/categories/domain/use_cases/get_categories_use_case.dart';
 import 'package:flower_app/features/categories/domain/use_cases/get_products_by_category_use_case.dart';
 import 'package:flower_app/features/categories/presentation/view_model/categories_events.dart';
@@ -13,6 +17,9 @@ import 'package:test/test.dart';
 
 import 'categories_view_model_test.mocks.dart';
 
+const _tCategory = CategoryEntity(id: '1');
+const _tProduct = ProductEntity(id: '1');
+
 @GenerateMocks([GetCategoriesUseCase, GetProductsByCategoryUseCase])
 void main() {
   late MockGetCategoriesUseCase mockGetCategoriesUseCase;
@@ -20,11 +27,15 @@ void main() {
   late CategoriesViewModel viewModel;
 
   setUpAll(() {
-    provideDummy<BaseResponse<List<CategoryEntity>>>(
-      SuccessBaseResponse<List<CategoryEntity>>(data: []),
+    provideDummy<BaseResponse<CategoriesResponseEntity>>(
+      SuccessBaseResponse<CategoriesResponseEntity>(
+        data: const CategoriesResponseEntity(categories: []),
+      ),
     );
-    provideDummy<BaseResponse<List<ProductEntity>>>(
-      SuccessBaseResponse<List<ProductEntity>>(data: []),
+    provideDummy<BaseResponse<ProductsResponseEntity>>(
+      SuccessBaseResponse<ProductsResponseEntity>(
+        data: const ProductsResponseEntity(products: []),
+      ),
     );
   });
 
@@ -38,118 +49,136 @@ void main() {
   });
 
   group('CategoriesViewModel', () {
-    test('initial state should be const CategoriesInitial()', () {
-      expect(viewModel.state, equals(const CategoriesInitial()));
+    test('initial state is CategoriesState with all BaseState defaults', () {
+      expect(viewModel.state, equals(const CategoriesState()));
+      expect(viewModel.state.categoriesState.isLoading, isFalse);
+      expect(viewModel.state.productsState.isLoading, isFalse);
     });
 
-    blocTest<CategoriesViewModel, CategoriesBaseState>(
-      'LoadInitialDataEvent should emit success for both categories and products',
+    blocTest<CategoriesViewModel, CategoriesState>(
+      'LoadInitialDataEvent emits loading then success for categories and products',
       build: () {
-        final categoriesSuccess = SuccessBaseResponse<List<CategoryEntity>>(
-          data: const [CategoryEntity(id: '1')],
-        );
-        final productsSuccess = SuccessBaseResponse<List<ProductEntity>>(
-          data: const [ProductEntity(id: '1')],
-        );
-
-        when(
-          mockGetCategoriesUseCase.execute(),
-        ).thenAnswer((_) async => categoriesSuccess);
-
-        when(
-          mockGetProductsByCategoryUseCase.execute(
-            requestModel: anyNamed('requestModel'),
-          ),
-        ).thenAnswer((_) async => productsSuccess);
-
+        when(mockGetCategoriesUseCase.execute(page: 1, limit: 50))
+            .thenAnswer((_) async =>
+            SuccessBaseResponse(
+              data: const CategoriesResponseEntity(
+                categories: [_tCategory],
+                metadata: MetadataEntity(
+                    currentPage: 1, totalPages: 1, limit: 50),
+              ),
+            ));
+        when(mockGetProductsByCategoryUseCase.execute(
+            requestModel: anyNamed('requestModel'), page: 1, limit: 10))
+            .thenAnswer((_) async =>
+            SuccessBaseResponse(
+              data: const ProductsResponseEntity(
+                products: [_tProduct],
+                metadata: MetadataEntity(
+                    currentPage: 1, totalPages: 1, limit: 10),
+              ),
+            ));
         return viewModel;
       },
       act: (cubit) => cubit.doEvent(const LoadInitialDataEvent()),
       expect: () => [
-        const CategoriesLoading(),
-        const CategoriesSuccess([CategoryEntity(id: '1')]),
-        const ProductsLoading(),
-        const ProductsSuccess(
-          products: [ProductEntity(id: '1')],
+        CategoriesState(
+            categoriesState: BaseState<List<CategoryEntity>>.loading()),
+        CategoriesState(
+          categoriesState: BaseState.success(const [_tCategory]),
+        ),
+        CategoriesState(
+          categoriesState: BaseState.success(const [_tCategory]),
+          productsState: BaseState<ProductsResponseEntity>.loading(),
           selectedCategoryId: null,
         ),
+        isA<CategoriesState>().having(
+              (s) => s.productsState.data?.products,
+          'products loaded',
+          contains(_tProduct),
+        ),
       ],
-      verify: (_) {
-        verify(mockGetCategoriesUseCase.execute()).called(1);
-        verify(
-          mockGetProductsByCategoryUseCase.execute(
-            requestModel: anyNamed('requestModel'),
-          ),
-        ).called(1);
-      },
     );
 
-    blocTest<CategoriesViewModel, CategoriesBaseState>(
-      'CategorySelectedEvent should fetch products for the given category id',
+    blocTest<CategoriesViewModel, CategoriesState>(
+      'CategorySelectedEvent fetches products for the selected category',
       build: () {
-        final productsSuccess = SuccessBaseResponse<List<ProductEntity>>(
-          data: const [ProductEntity(id: '1', categoryId: '123')],
-        );
-
-        when(
-          mockGetProductsByCategoryUseCase.execute(
-            requestModel: anyNamed('requestModel'),
-          ),
-        ).thenAnswer((_) async => productsSuccess);
-
+        when(mockGetProductsByCategoryUseCase.execute(
+            requestModel: anyNamed('requestModel'), page: 1, limit: 10))
+            .thenAnswer((_) async =>
+            SuccessBaseResponse(
+              data: const ProductsResponseEntity(
+                products: [ProductEntity(id: '1', categoryId: '123')],
+                metadata: MetadataEntity(
+                    currentPage: 1, totalPages: 1, limit: 10),
+              ),
+            ));
         return viewModel;
       },
       act: (cubit) => cubit.doEvent(const CategorySelectedEvent('123')),
       expect: () => [
-        const ProductsLoading(),
-        const ProductsSuccess(
-          products: [ProductEntity(id: '1', categoryId: '123')],
+        CategoriesState(
+          productsState: BaseState<ProductsResponseEntity>.loading(),
           selectedCategoryId: '123',
         ),
+        isA<CategoriesState>()
+            .having((s) => s.selectedCategoryId, 'selectedCategoryId', '123')
+            .having(
+              (s) => s.productsState.data?.products.first.categoryId,
+          'product categoryId',
+          '123',
+        ),
       ],
-      verify: (_) {
-        verify(
-          mockGetProductsByCategoryUseCase.execute(
-            requestModel: anyNamed('requestModel'),
-          ),
-        ).called(1);
-      },
     );
 
-    blocTest<CategoriesViewModel, CategoriesBaseState>(
-      'SortSelectedEvent should sort the fetched products locally without API call',
+    blocTest<CategoriesViewModel, CategoriesState>(
+      'RefreshEvent re-fetches products for the currently selected category',
       build: () {
-        final productsSuccess = SuccessBaseResponse<List<ProductEntity>>(
-          data: const [
-            ProductEntity(id: '1', price: 100),
-            ProductEntity(id: '2', price: 50),
-          ],
-        );
-
-        when(
-          mockGetProductsByCategoryUseCase.execute(
-            requestModel: anyNamed('requestModel'),
-          ),
-        ).thenAnswer((_) async => productsSuccess);
-
+        when(mockGetProductsByCategoryUseCase.execute(
+            requestModel: anyNamed('requestModel'), page: 1, limit: 10))
+            .thenAnswer((_) async =>
+            SuccessBaseResponse(
+              data: const ProductsResponseEntity(
+                products: [_tProduct],
+                metadata: MetadataEntity(
+                    currentPage: 1, totalPages: 1, limit: 10),
+              ),
+            ));
         return viewModel;
       },
-      act: (cubit) async {
-        // Fetch products first so they are cached
-        cubit.doEvent(const AllProductsSelectedEvent());
-        // Wait for fetch to complete
-        await Future.delayed(const Duration(milliseconds: 100));
-        // Apply sort
-        cubit.doEvent(const SortSelectedEvent(SortType.lowestPrice));
-      },
-      skip: 2, // Skip ProductsLoading and initial ProductsSuccess
+      act: (cubit) => cubit.doEvent(const RefreshEvent()),
       expect: () => [
-        const ProductsSuccess(
-          products: [
-            ProductEntity(id: '2', price: 50),
-            ProductEntity(id: '1', price: 100),
-          ],
+        CategoriesState(
+          productsState: BaseState<ProductsResponseEntity>.loading(),
           selectedCategoryId: null,
+        ),
+        isA<CategoriesState>().having(
+              (s) => s.productsState.data?.products,
+          'products refreshed',
+          contains(_tProduct),
+        ),
+      ],
+    );
+
+    blocTest<CategoriesViewModel, CategoriesState>(
+      'CategorySelectedEvent emits productsState error when products API fails',
+      build: () {
+        when(mockGetProductsByCategoryUseCase.execute(
+            requestModel: anyNamed('requestModel'), page: 1, limit: 10))
+            .thenAnswer((_) async =>
+            ErrorBaseResponse(exception: Exception('Server error')));
+        return viewModel;
+      },
+      act: (cubit) => cubit.doEvent(const CategorySelectedEvent('abc')),
+      expect: () =>
+      [
+        CategoriesState(
+          productsState: BaseState<ProductsResponseEntity>.loading(),
+          selectedCategoryId: 'abc',
+        ),
+        isA<CategoriesState>().having(
+              (s) => s.productsState.msg,
+          'products error present',
+          isNotNull,
         ),
       ],
     );

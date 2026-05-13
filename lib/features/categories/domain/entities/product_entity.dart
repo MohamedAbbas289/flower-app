@@ -1,13 +1,14 @@
 import 'package:equatable/equatable.dart';
+import 'package:flower_app/core/entities/product_card_data.dart';
 
-class ProductEntity extends Equatable {
-  final String? id;
+class ProductEntity extends Equatable implements ProductCardData {
+  final String? rawId;
   final String? title;
   final String? slug;
   final String? description;
   final String? imgCover;
   final List<String>? images;
-  final num? price;
+  final num? rawPrice;
   final num? priceAfterDiscount;
   final num? discount;
   final num? rateAvg;
@@ -20,13 +21,13 @@ class ProductEntity extends Equatable {
   final String? favoriteId;
 
   const ProductEntity({
-    this.id,
+    String? id,
     this.title,
     this.slug,
     this.description,
     this.imgCover,
     this.images,
-    this.price,
+    num? price,
     this.priceAfterDiscount,
     this.discount,
     this.rateAvg,
@@ -37,17 +38,38 @@ class ProductEntity extends Equatable {
     this.occasionId,
     this.isInWishlist,
     this.favoriteId,
-  });
+  }) : rawId = id,
+       rawPrice = price;
+
+  // ProductCardData implementation
+  @override
+  String get id => rawId ?? '';
+
+  @override
+  String get name => title ?? '';
+
+  @override
+  String get imageUrl => imgCover ?? '';
+
+  @override
+  int get price => (priceAfterDiscount ?? rawPrice ?? 0).toInt();
+
+  @override
+  int? get originalPrice =>
+      priceAfterDiscount != null ? rawPrice?.toInt() : null;
+
+  @override
+  int? get discountPercent => discount?.toInt();
 
   @override
   List<Object?> get props => [
-    id,
+    rawId,
     title,
     slug,
     description,
     imgCover,
     images,
-    price,
+    rawPrice,
     priceAfterDiscount,
     discount,
     rateAvg,

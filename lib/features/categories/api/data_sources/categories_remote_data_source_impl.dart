@@ -12,12 +12,20 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
   CategoriesRemoteDataSourceImpl(this._categoriesApiClient);
 
   @override
-  Future<CategoriesResponse> getCategories() {
-    return _categoriesApiClient.getCategories();
+  Future<CategoriesResponse> getCategories({int? page, int? limit}) {
+    return _categoriesApiClient.getCategories(page: page, limit: limit);
   }
 
   @override
-  Future<ProductsResponse> getProductsByCategory({String? categoryId}) {
-    return _categoriesApiClient.getProductsByCategory(categoryId: categoryId);
+  Future<ProductsResponse> getProductsByCategory({
+    String? categoryId,
+    int? page,
+    int? limit,
+  }) {
+    return _categoriesApiClient.getProductsByCategory(
+      categoryId: categoryId,
+      page: page,
+      limit: limit,
+    );
   }
 }

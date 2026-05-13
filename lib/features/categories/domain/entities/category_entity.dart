@@ -1,8 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:flower_app/core/entities/tab_item_data.dart';
 
-class CategoryEntity extends Equatable {
-  final String? id;
-  final String? name;
+class CategoryEntity extends Equatable implements TabItem {
+  final String? rawId;
+  final String? rawName;
   final String? slug;
   final String? image;
   final bool? isSuperAdmin;
@@ -11,20 +12,28 @@ class CategoryEntity extends Equatable {
   final num? productsCount;
 
   const CategoryEntity({
-    this.id,
-    this.name,
+    String? id,
+    String? name,
     this.slug,
     this.image,
     this.isSuperAdmin,
     this.createdAt,
     this.updatedAt,
     this.productsCount,
-  });
+  }) : rawId = id,
+       rawName = name;
+
+  // TabItem implementation
+  @override
+  String get id => rawId ?? '';
+
+  @override
+  String get name => rawName ?? '';
 
   @override
   List<Object?> get props => [
-    id,
-    name,
+    rawId,
+    rawName,
     slug,
     image,
     isSuperAdmin,

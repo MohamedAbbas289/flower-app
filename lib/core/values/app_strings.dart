@@ -145,4 +145,15 @@ Thank you for choosing Flowery 💐
   static const String categoryView = 'Categories';
   static const String cartView = 'Cart';
   static const String profileView = 'Profile';
+
+  // categories screen
+  static const String search = 'Search';
+  static const String all = 'All';
+  static const String filter = 'Filter';
+  static const String sortBy = 'Sort by';
+  static const String lowestPrice = 'Lowest Price';
+  static const String highestPrice = 'Highest Price';
+  static const String newSort = 'New';
+  static const String oldSort = 'Old';
+  static const String discount = 'Discount';
 }

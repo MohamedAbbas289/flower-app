@@ -1,4 +1,5 @@
 import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/features/categories/domain/entities/categories_response_entity.dart';
 import 'package:flower_app/features/categories/domain/entities/category_entity.dart';
 import 'package:flower_app/features/categories/domain/repository/categories_repository.dart';
 import 'package:flower_app/features/categories/domain/use_cases/get_categories_use_case.dart';
@@ -14,8 +15,10 @@ void main() {
   late GetCategoriesUseCase getCategoriesUseCase;
 
   setUpAll(() {
-    provideDummy<BaseResponse<List<CategoryEntity>>>(
-      SuccessBaseResponse<List<CategoryEntity>>(data: []),
+    provideDummy<BaseResponse<CategoriesResponseEntity>>(
+      SuccessBaseResponse<CategoriesResponseEntity>(
+        data: const CategoriesResponseEntity(categories: []),
+      ),
     );
   });
 
@@ -26,45 +29,46 @@ void main() {
 
   group('GetCategoriesUseCase', () {
     test(
-      'should return SuccessBaseResponse<List<CategoryEntity>> when repository succeeds',
+      'should return SuccessBaseResponse<CategoriesResponseEntity> when repository succeeds',
       () async {
-        final successResponse = SuccessBaseResponse<List<CategoryEntity>>(
-          data: const [CategoryEntity(id: "1")],
+        final successResponse = SuccessBaseResponse<CategoriesResponseEntity>(
+          data: const CategoriesResponseEntity(
+              categories: [CategoryEntity(id: "1")]),
         );
 
-        when(
-          mockCategoriesRepository.getCategories(),
-        ).thenAnswer((_) async => successResponse);
+        when(mockCategoriesRepository.getCategories(page: 1, limit: 10))
+            .thenAnswer((_) async => successResponse);
 
-        final result = await getCategoriesUseCase.execute();
+        final result = await getCategoriesUseCase.execute(page: 1, limit: 10);
 
-        expect(result, isA<SuccessBaseResponse<List<CategoryEntity>>>());
-        final success = result as SuccessBaseResponse<List<CategoryEntity>>;
-        expect(success.data.length, 1);
-        expect(success.data.first.id, "1");
-        verify(mockCategoriesRepository.getCategories()).called(1);
+        expect(result, isA<SuccessBaseResponse<CategoriesResponseEntity>>());
+        final success = result as SuccessBaseResponse<CategoriesResponseEntity>;
+        expect(success.data.categories.length, 1);
+        expect(success.data.categories.first.id, "1");
+        verify(mockCategoriesRepository.getCategories(page: 1, limit: 10))
+            .called(1);
         verifyNoMoreInteractions(mockCategoriesRepository);
       },
     );
 
     test(
-      'should return ErrorBaseResponse<List<CategoryEntity>> when repository fails',
+      'should return ErrorBaseResponse<CategoriesResponseEntity> when repository fails',
       () async {
         final exception = Exception("network error");
-        final errorResponse = ErrorBaseResponse<List<CategoryEntity>>(
+        final errorResponse = ErrorBaseResponse<CategoriesResponseEntity>(
           exception: exception,
         );
 
-        when(
-          mockCategoriesRepository.getCategories(),
-        ).thenAnswer((_) async => errorResponse);
+        when(mockCategoriesRepository.getCategories(page: null, limit: null))
+            .thenAnswer((_) async => errorResponse);
 
         final result = await getCategoriesUseCase.execute();
 
-        expect(result, isA<ErrorBaseResponse<List<CategoryEntity>>>());
-        final error = result as ErrorBaseResponse<List<CategoryEntity>>;
+        expect(result, isA<ErrorBaseResponse<CategoriesResponseEntity>>());
+        final error = result as ErrorBaseResponse<CategoriesResponseEntity>;
         expect(error.exception, exception);
-        verify(mockCategoriesRepository.getCategories()).called(1);
+        verify(mockCategoriesRepository.getCategories(page: null, limit: null))
+            .called(1);
         verifyNoMoreInteractions(mockCategoriesRepository);
       },
     );

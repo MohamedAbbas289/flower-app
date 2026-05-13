@@ -34,3 +34,11 @@ class SortSelectedEvent extends CategoriesEvents {
   @override
   List<Object?> get props => [sortType];
 }
+
+class LoadMoreProductsEvent extends CategoriesEvents {
+  const LoadMoreProductsEvent();
+}
+
+class RefreshEvent extends CategoriesEvents {
+  const RefreshEvent();
+}

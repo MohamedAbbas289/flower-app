@@ -15,10 +15,15 @@ abstract class CategoriesApiClient {
   factory CategoriesApiClient(Dio dio) = _CategoriesApiClient;
 
   @GET(Endpoints.getCategories)
-  Future<CategoriesResponse> getCategories();
+  Future<CategoriesResponse> getCategories({
+    @Query('page') int? page,
+    @Query('limit') int? limit,
+  });
 
   @GET(Endpoints.getProducts)
   Future<ProductsResponse> getProductsByCategory({
     @Query('category') String? categoryId,
+    @Query('page') int? page,
+    @Query('limit') int? limit,
   });
 }

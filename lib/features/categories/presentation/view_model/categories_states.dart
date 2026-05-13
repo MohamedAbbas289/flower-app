@@ -1,59 +1,32 @@
 import 'package:equatable/equatable.dart';
+import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flower_app/features/categories/domain/entities/category_entity.dart';
-import 'package:flower_app/features/categories/domain/entities/product_entity.dart';
+import 'package:flower_app/features/categories/domain/entities/products_response_entity.dart';
 
-abstract class CategoriesBaseState extends Equatable {
-  const CategoriesBaseState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class CategoriesInitial extends CategoriesBaseState {
-  const CategoriesInitial();
-}
-
-class CategoriesLoading extends CategoriesBaseState {
-  const CategoriesLoading();
-}
-
-class CategoriesSuccess extends CategoriesBaseState {
-  final List<CategoryEntity> categories;
-
-  const CategoriesSuccess(this.categories);
-
-  @override
-  List<Object?> get props => [categories];
-}
-
-class CategoriesError extends CategoriesBaseState {
-  final String error;
-
-  const CategoriesError(this.error);
-
-  @override
-  List<Object?> get props => [error];
-}
-
-class ProductsLoading extends CategoriesBaseState {
-  const ProductsLoading();
-}
-
-class ProductsSuccess extends CategoriesBaseState {
-  final List<ProductEntity> products;
+class CategoriesState extends Equatable {
+  final BaseState<List<CategoryEntity>> categoriesState;
+  final BaseState<ProductsResponseEntity> productsState;
   final String? selectedCategoryId;
 
-  const ProductsSuccess({required this.products, this.selectedCategoryId});
+  const CategoriesState({
+    this.categoriesState = const BaseState(),
+    this.productsState = const BaseState(),
+    this.selectedCategoryId,
+  });
+
+  CategoriesState copyWith({
+    BaseState<List<CategoryEntity>>? categoriesState,
+    BaseState<ProductsResponseEntity>? productsState,
+    String? selectedCategoryId,
+  }) {
+    return CategoriesState(
+      categoriesState: categoriesState ?? this.categoriesState,
+      productsState: productsState ?? this.productsState,
+      selectedCategoryId: selectedCategoryId ?? this.selectedCategoryId,
+    );
+  }
 
   @override
-  List<Object?> get props => [products, selectedCategoryId];
-}
-
-class ProductsError extends CategoriesBaseState {
-  final String error;
-
-  const ProductsError(this.error);
-
-  @override
-  List<Object?> get props => [error];
+  List<Object?> get props =>
+      [categoriesState, productsState, selectedCategoryId];
 }

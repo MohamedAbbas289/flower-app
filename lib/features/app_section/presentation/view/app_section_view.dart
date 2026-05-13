@@ -1,15 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
 import 'package:flower_app/features/app_section/domain/entity/bottom_nav_item_entity.dart';
+import 'package:flower_app/features/categories/presentation/screens/categories_screen.dart';
+import 'package:flutter/material.dart';
+
 import '../widgets/bottom_nav_icon.dart';
 import '../widgets/cart_test_view.dart';
-import '../widgets/categories_test_view.dart';
 import '../widgets/home_test_view.dart';
 import '../widgets/profile_test_view.dart';
 
 class AppSectionView extends StatefulWidget {
-  const AppSectionView({super.key,});
+  const AppSectionView({super.key});
 
   @override
   State<AppSectionView> createState() => _AppSectionViewState();
@@ -17,9 +18,11 @@ class AppSectionView extends StatefulWidget {
 
 class _AppSectionViewState extends State<AppSectionView> {
   int _currentTabIndex = 0;
+
+  // Using a static list means each screen is kept alive when switching tabs
   final List<Widget> _tabs = [
     HomeTestView(),
-    CategoriesTestView(),
+    const CategoriesScreen(),
     CartTestView(),
     ProfileTestView(),
   ];
@@ -48,6 +51,7 @@ class _AppSectionViewState extends State<AppSectionView> {
       label: AppStrings.profileView,
     ),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
