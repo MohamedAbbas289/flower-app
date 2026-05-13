@@ -11,7 +11,7 @@ class OccasionsResponse {
   @JsonKey(name: "metadata")
   Metadata? metadata;
   @JsonKey(name: "occasions")
-  List<Occasion>? occasions;
+  List<OccasionDto>? occasions;
 
   OccasionsResponse({
     this.message,

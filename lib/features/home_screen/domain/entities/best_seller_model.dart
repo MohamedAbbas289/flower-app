@@ -1,5 +1,3 @@
-import 'category_model.dart';
-
 class BestSellerModel {
   String? id;
   String? title;
@@ -14,7 +12,7 @@ class BestSellerModel {
   int? rateCount;
   int? sold;
   int? quantity;
-  CategoryModel? category;
+  String? category;
   String? occasion;
   bool? isSuperAdmin;
   DateTime? createdAt;

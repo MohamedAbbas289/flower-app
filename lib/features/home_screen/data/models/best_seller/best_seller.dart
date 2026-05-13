@@ -1,12 +1,10 @@
 import 'package:flower_app/features/home_screen/domain/entities/best_seller_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import '../category/category.dart';
-
 part 'best_seller.g.dart';
 
 @JsonSerializable()
-class BestSeller {
+class BestSellerDto {
   @JsonKey(name: "_id")
   String? id;
   @JsonKey(name: "title")
@@ -34,7 +32,7 @@ class BestSeller {
   @JsonKey(name: "quantity")
   int? quantity;
   @JsonKey(name: "category")
-  Category? category;
+  String? category;
   @JsonKey(name: "occasion")
   String? occasion;
   @JsonKey(name: "isSuperAdmin")
@@ -48,7 +46,7 @@ class BestSeller {
   @JsonKey(name: "id")
   String? bestSellerId;
 
-  BestSeller({
+  BestSellerDto({
     this.id,
     this.title,
     this.slug,
@@ -71,9 +69,9 @@ class BestSeller {
     this.bestSellerId,
   });
 
-  factory BestSeller.fromJson(Map<String, dynamic> json) => _$BestSellerFromJson(json);
+  factory BestSellerDto.fromJson(Map<String, dynamic> json) => _$BestSellerDtoFromJson(json);
 
-  Map<String, dynamic> toJson() => _$BestSellerToJson(this);
+  Map<String, dynamic> toJson() => _$BestSellerDtoToJson(this);
 
   BestSellerModel toDomain() {
     return BestSellerModel(
@@ -90,7 +88,7 @@ class BestSeller {
       rateCount: rateCount,
       sold: sold,
       quantity: quantity,
-      category: category?.toDomain(),
+      category: category,
       occasion: occasion,
       isSuperAdmin: isSuperAdmin,
       createdAt: createdAt,

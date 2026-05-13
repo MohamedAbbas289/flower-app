@@ -10,7 +10,7 @@ class CategoryResponse {
   @JsonKey(name: "metadata")
   Metadata? metadata;
   @JsonKey(name: "categories")
-  List<Category>? categories;
+  List<CategoryDto>? categories;
 
   CategoryResponse({
     this.message,

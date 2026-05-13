@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'occasion.g.dart';
 
 @JsonSerializable()
-class Occasion {
+class OccasionDto {
   @JsonKey(name: "_id")
   String? id;
   @JsonKey(name: "name")
@@ -22,7 +22,7 @@ class Occasion {
   @JsonKey(name: "productsCount")
   int? productsCount;
 
-  Occasion({
+  OccasionDto({
     this.id,
     this.name,
     this.slug,
@@ -33,9 +33,9 @@ class Occasion {
     this.productsCount,
   });
 
-  factory Occasion.fromJson(Map<String, dynamic> json) => _$OccasionFromJson(json);
+  factory OccasionDto.fromJson(Map<String, dynamic> json) => _$OccasionDtoFromJson(json);
 
-  Map<String, dynamic> toJson() => _$OccasionToJson(this);
+  Map<String, dynamic> toJson() => _$OccasionDtoToJson(this);
 
   OccasionModel toDomain() {
     return OccasionModel(

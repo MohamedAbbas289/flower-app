@@ -5,9 +5,9 @@ import '../../../../core/theme/text_styles.dart';
 
 class BestSellerItem extends StatelessWidget {
   final String name;
-  final ImageProvider image;
+  final String image;
   final VoidCallback onTap;
-  final String price;
+  final int price;
   const BestSellerItem({
     required this.name,
     required this.image,
@@ -22,7 +22,7 @@ class BestSellerItem extends StatelessWidget {
         SizedBox(
           height:151 ,
           width:131 ,
-          child: Image(image: image,
+          child: Image.network( image,
             fit: BoxFit.cover,
           ),
         ),

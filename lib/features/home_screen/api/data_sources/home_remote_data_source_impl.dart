@@ -18,49 +18,49 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSourceContract {
   HomeRemoteDataSourceImpl(this.homeScreenApiClient);
 
   @override
-  Future<BaseResponse<List<BestSeller>>> getAllBestSeller() async{
+  Future<BaseResponse<List<BestSellerDto>>> getAllBestSeller() async{
       try{
     final response = await homeScreenApiClient.getBestSellers();
-    return SuccessBaseResponse<List<BestSeller>>(data: response.bestSeller??[]);
+    return SuccessBaseResponse<List<BestSellerDto>>(data: response.bestSeller??[]);
   }catch (e){
     if (e is DioException) {
-      return ErrorBaseResponse<List<BestSeller>>( exception: e );
+      return ErrorBaseResponse<List<BestSellerDto>>( exception: e );
     } else if (e is TimeoutException) {
-      return ErrorBaseResponse<List<BestSeller>>(exception: e );
+      return ErrorBaseResponse<List<BestSellerDto>>(exception: e );
     }
-      return ErrorBaseResponse<List<BestSeller>>(exception: e );
+      return ErrorBaseResponse<List<BestSellerDto>>(exception: e );
   }
 
   }
 
   @override
-  Future<BaseResponse<List<Category>>> getAllCategory() async{
+  Future<BaseResponse<List<CategoryDto>>> getAllCategory() async{
     try{
       final response = await homeScreenApiClient.getCategories();
-      return SuccessBaseResponse<List<Category>>(data: response.categories??[]);
+      return SuccessBaseResponse<List<CategoryDto>>(data: response.categories??[]);
     }catch (e){
       if (e is DioException) {
-        return ErrorBaseResponse<List<Category>>( exception: e );
+        return ErrorBaseResponse<List<CategoryDto>>( exception: e );
       } else if (e is TimeoutException) {
-        return ErrorBaseResponse<List<Category>>(exception: e );
+        return ErrorBaseResponse<List<CategoryDto>>(exception: e );
       }
-      return ErrorBaseResponse<List<Category>>(exception: e );
+      return ErrorBaseResponse<List<CategoryDto>>(exception: e );
     }
 
   }
 
   @override
-  Future<BaseResponse<List<Occasion>>> getAllOccasion() async{
+  Future<BaseResponse<List<OccasionDto>>> getAllOccasion() async{
     try{
       final response = await homeScreenApiClient.getOccasions();
-      return SuccessBaseResponse<List<Occasion>>(data: response.occasions??[]);
+      return SuccessBaseResponse<List<OccasionDto>>(data: response.occasions??[]);
     }catch (e){
       if (e is DioException) {
-        return ErrorBaseResponse<List<Occasion>>( exception: e );
+        return ErrorBaseResponse<List<OccasionDto>>( exception: e );
       } else if (e is TimeoutException) {
-        return ErrorBaseResponse<List<Occasion>>(exception: e );
+        return ErrorBaseResponse<List<OccasionDto>>(exception: e );
       }
-      return ErrorBaseResponse<List<Occasion>>(exception: e );
+      return ErrorBaseResponse<List<OccasionDto>>(exception: e );
     }
   }
 
