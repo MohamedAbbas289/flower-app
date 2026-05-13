@@ -11,6 +11,7 @@ abstract class Endpoints {
   static const String getCategories = "$baseUrl/categories";
   static const String getOccasions = "$baseUrl/occasions";
   static const String getProducts = "$baseUrl/products";
+  static const String home = "$baseUrl/home";
 
 
 }
