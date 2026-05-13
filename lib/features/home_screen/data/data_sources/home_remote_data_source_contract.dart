@@ -10,8 +10,8 @@ import '../models/occasions/occasion.dart';
 
 abstract class HomeRemoteDataSourceContract {
 
-  Future<BaseResponse<List<Category>>> getAllCategory();
-  Future<BaseResponse<List<BestSeller>>> getAllBestSeller();
-  Future<BaseResponse<List<Occasion>>> getAllOccasion();
+  Future<BaseResponse<List<CategoryDto>>> getAllCategory();
+  Future<BaseResponse<List<BestSellerDto>>> getAllBestSeller();
+  Future<BaseResponse<List<OccasionDto>>> getAllOccasion();
 
 }

@@ -22,11 +22,11 @@ class HomeRepoImpl implements HomeRepoContract {
   Future<BaseResponse<List<BestSellerModel>>> getAllBestSeller() async {
     final response = await homeRemoteDataSourceContract.getAllBestSeller();
     switch (response) {
-      case SuccessBaseResponse<List<BestSeller>>():
+      case SuccessBaseResponse<List<BestSellerDto>>():
         return SuccessBaseResponse<List<BestSellerModel>>(
           data: response.data.map((e) => e.toDomain()).toList(),
         );
-      case ErrorBaseResponse<List<BestSeller>>():
+      case ErrorBaseResponse<List<BestSellerDto>>():
         return ErrorBaseResponse<List<BestSellerModel>>(
           exception: response.exception,
         );
@@ -37,11 +37,11 @@ class HomeRepoImpl implements HomeRepoContract {
   Future<BaseResponse<List<CategoryModel>>> getAllCategory() async {
     final response = await homeRemoteDataSourceContract.getAllCategory();
     switch (response) {
-      case SuccessBaseResponse<List<Category>>():
+      case SuccessBaseResponse<List<CategoryDto>>():
         return SuccessBaseResponse<List<CategoryModel>>(
           data: response.data.map((e) => e.toDomain()).toList(),
         );
-      case ErrorBaseResponse<List<Category>>():
+      case ErrorBaseResponse<List<CategoryDto>>():
         return ErrorBaseResponse<List<CategoryModel>>(
           exception: response.exception,
         );
@@ -52,11 +52,11 @@ class HomeRepoImpl implements HomeRepoContract {
   Future<BaseResponse<List<OccasionModel>>> getAllOccasion() async {
     final response = await homeRemoteDataSourceContract.getAllOccasion();
     switch (response) {
-      case SuccessBaseResponse<List<Occasion>>():
+      case SuccessBaseResponse<List<OccasionDto>>():
         return SuccessBaseResponse<List<OccasionModel>>(
           data: response.data.map((e) => e.toDomain()).toList(),
         );
-      case ErrorBaseResponse<List<Occasion>>():
+      case ErrorBaseResponse<List<OccasionDto>>():
         return ErrorBaseResponse<List<OccasionModel>>(
           exception: response.exception,
         );

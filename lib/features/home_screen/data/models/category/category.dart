@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'category.g.dart';
 
 @JsonSerializable()
-class Category {
+class CategoryDto {
   @JsonKey(name: "_id")
   String? id;
   @JsonKey(name: "name")
@@ -22,7 +22,7 @@ class Category {
   @JsonKey(name: "productsCount")
   int? productsCount;
 
-  Category({
+  CategoryDto({
     this.id,
     this.name,
     this.slug,
@@ -33,9 +33,9 @@ class Category {
     this.productsCount,
   });
 
-  factory Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
+  factory CategoryDto.fromJson(Map<String, dynamic> json) => _$CategoryDtoFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CategoryToJson(this);
+  Map<String, dynamic> toJson() => _$CategoryDtoToJson(this);
 
   CategoryModel toDomain() {
     return CategoryModel(
