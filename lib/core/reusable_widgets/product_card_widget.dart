@@ -54,7 +54,7 @@ class _ProductCardContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AspectRatio(
-            aspectRatio: 1 / 0.78,
+            aspectRatio: 1 / 0.68,
             child: ProductImage(
               size: size,
               devicePixelRatio: devicePixelRatio,
@@ -91,7 +91,7 @@ class _ProductInfo extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        const SizedBox(height: 2),
+        const SizedBox(height: 4),
         _PriceRow(product: product, size: size),
       ],
     );
@@ -156,7 +156,7 @@ class _AddToCartButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 38,
+      height: 30,
       child: FilledButton(
         onPressed: onPressed,
         child: Row(
@@ -178,6 +178,7 @@ class _AddToCartButton extends StatelessWidget {
               child: Text(
                 AppStrings.addToCart,
                 overflow: TextOverflow.ellipsis,
+                maxLines: 1,
                 style: TextStyles.buttonTextStyle,
               ),
             ),
