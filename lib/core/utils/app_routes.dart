@@ -1,6 +1,7 @@
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/app_section/presentation/view/app_section_view.dart';
+import 'package:flower_app/features/best_seller/presentation/view/best_seller_view.dart';
 
 import 'package:flower_app/features/splash/presentation/splash_view.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,9 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const AppSectionView());
       case AppRoutesName.signUp:
         return MaterialPageRoute(builder: (_) => const SignupView());
-      
+      case AppRoutesName.bestSeller:
+        return MaterialPageRoute(builder: (_) =>const BestSellerView());
+
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

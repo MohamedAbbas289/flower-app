@@ -43,7 +43,7 @@ Thank you for choosing Flowery 💐
   static const String creatingAccount =
       'Creating an account, you agree to our ';
   static const String termsAndConditions = 'Terms&Conditions';
-  static String priceText (int price) =>'EGP $price';
+  static String priceText(int price) => 'EGP $price';
 
   // validation messages
   static const String requiredField = 'This field is required';
@@ -105,7 +105,8 @@ Thank you for choosing Flowery 💐
       'A server error occurred. Please try again later';
   static const String somethingWentWrong =
       'Something went wrong. Please try again later';
-  static const String dataParsingError = 'Data parsing error. Please try again later';
+  static const String dataParsingError =
+      'Data parsing error. Please try again later';
   // app error messages
   static const String routeNotFound = 'Route not found';
   static const String imageNotAvailable = 'Image not available';
@@ -145,4 +146,7 @@ Thank you for choosing Flowery 💐
   static const String categoryView = 'Categories';
   static const String cartView = 'Cart';
   static const String profileView = 'Profile';
+  // best seller screen
+  static const String bestSellerTitle = 'Best Seller';
+  static const String bestSellerSubTitle = 'Bloom with our exquisite best sellers';
 }
