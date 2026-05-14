@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
+  await configureDependencies();
   final authManager = getIt<AuthManager>();
   await authManager.init();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
