@@ -76,13 +76,13 @@ class BestSellerProductModelDTO {
 
   BestSellerProductEntity toEntity() {
     return BestSellerProductEntity(
-      id: id,
+      productId: id,
       title: title,
       slug: slug,
       description: description,
       imgCover: imgCover,
       images: images,
-      price: price,
+      productPrice: price,
       priceAfterDiscount: priceAfterDiscount,
       discount: discount,
       sold: sold,
