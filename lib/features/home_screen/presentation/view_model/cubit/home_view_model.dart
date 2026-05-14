@@ -23,8 +23,6 @@ class HomeViewModel extends Cubit<HomeState> {
     this._getBestSellerUseCase,
   ) : super(HomeState());
 
-
-
   Future<void> doEvent(HomeEvents event) async {
     if (event is GetAllDataEvent) {
       await _getAllData();
