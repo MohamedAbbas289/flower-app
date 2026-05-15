@@ -24,10 +24,17 @@ class ErrorHandler {
   static String _handleDioError(DioException exception) {
     final data = exception.response?.data;
 
-    if (data is Map<String, dynamic> &&
-        data[ApiParam.error] != null &&
-        data[ApiParam.error] is String) {
-      return data[ApiParam.error];
+    if (data is Map<String, dynamic>) {
+      final error = data[ApiParam.error];
+      final message = data[ApiParam.message];
+
+      if (error is String && error.isNotEmpty) {
+        return error;
+      }
+
+      if (message is String && message.isNotEmpty) {
+        return message;
+      }
     }
 
     switch (exception.type) {
@@ -50,10 +57,34 @@ class ErrorHandler {
         return AppStrings.noInternetConnection;
 
       case DioExceptionType.badResponse:
-        return AppStrings.serverErrorOccurred;
+        return _handleStatusCode(exception);
 
       case DioExceptionType.unknown:
         return AppStrings.unexpectedErrorOccurred;
+    }
+  }
+
+  static String _handleStatusCode(DioException exception) {
+    final code = exception.response?.statusCode;
+
+    switch (code) {
+      case 400:
+        return AppStrings.badRequest;
+
+      case 401:
+        return AppStrings.unauthorized;
+
+      case 403:
+        return AppStrings.forbidden;
+
+      case 404:
+        return AppStrings.notFound;
+
+      case 500:
+        return AppStrings.internalServerError;
+
+      default:
+        return AppStrings.serverErrorOccurred;
     }
   }
 }

@@ -14,11 +14,16 @@ Welcome to Flowery 🌸
 Thank you for choosing Flowery 💐
 ''';
   static const String close = 'Close';
+  static const String retry = 'Retry';
+  static const String loadingMore = 'loadingMore';
   static const String addToCart = 'Add to cart';
 
   // titles
   static const String loginTitle = 'Login';
   static const String signupTitle = 'Sign up';
+  static const String occasionTitle = 'Occasion';
+  static const String occasionSubtitle =
+      'Bloom with our exquisite best sellers';
   // labels
   static const String genderLabel = 'Gender';
   static const String maleLabel = 'Male';
@@ -43,7 +48,7 @@ Thank you for choosing Flowery 💐
   static const String creatingAccount =
       'Creating an account, you agree to our ';
   static const String termsAndConditions = 'Terms&Conditions';
-  static String priceText (int price) =>'EGP $price';
+  static String priceText(int price) => 'EGP $price';
 
   // validation messages
   static const String requiredField = 'This field is required';
@@ -87,7 +92,7 @@ Thank you for choosing Flowery 💐
       'Failed to delete remember me preference';
   static const String clearStorageFailed = 'Failed to clear storage';
 
-  // dio error messages
+  // api error messages
   static const String connectionTimeout =
       'Connection timed out. Please check your internet connection and try again';
   static const String requestTimeout =
@@ -105,10 +110,18 @@ Thank you for choosing Flowery 💐
       'A server error occurred. Please try again later';
   static const String somethingWentWrong =
       'Something went wrong. Please try again later';
-  static const String dataParsingError = 'Data parsing error. Please try again later';
+  static const String dataParsingError =
+      'Data parsing error. Please try again later';
+  static const String badRequest = 'Bad request. Please try again later';
+  static const String forbidden = 'Forbidden. Please try again later';
+  static const String unauthorized = 'Unauthorized. Please try again later';
+  static const String notFound = 'Not found. Please try again later';
+  static const String internalServerError =
+      'Internal server error. Please try again later';
   // app error messages
   static const String routeNotFound = 'Route not found';
   static const String imageNotAvailable = 'Image not available';
+  static const String noProductsFound = 'No products found';
 
   // UI strings (feature forget pasword)
   static const String password = "Password";

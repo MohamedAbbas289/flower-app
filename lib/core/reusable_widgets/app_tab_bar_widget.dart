@@ -9,11 +9,15 @@ class AppTabBarWidget extends StatefulWidget {
     required this.tabs,
     required this.onTabChanged,
     this.initialIndex = 0,
+    this.onLoadMore,
+    this.isLoadingMore = false,
   });
 
-  final List<TabItem> tabs;
-  final void Function(TabItem tab) onTabChanged;
+  final List<TabItemData> tabs;
+  final void Function(TabItemData tab) onTabChanged;
   final int initialIndex;
+  final VoidCallback? onLoadMore;
+  final bool isLoadingMore;
 
   @override
   State<AppTabBarWidget> createState() => _AppTabBarWidgetState();
@@ -21,36 +25,50 @@ class AppTabBarWidget extends StatefulWidget {
 
 class _AppTabBarWidgetState extends State<AppTabBarWidget> {
   late int _selectedIndex;
-
   final ScrollController _scrollController = ScrollController();
-
   late final List<GlobalKey> _tabKeys;
 
   @override
   void initState() {
     super.initState();
-
     _selectedIndex = widget.initialIndex;
-
     _tabKeys = List.generate(widget.tabs.length, (_) => GlobalKey());
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+
+    final position = _scrollController.position;
+    final reachedEnd = position.pixels >= position.maxScrollExtent - 50;
+
+    if (reachedEnd && !widget.isLoadingMore) {
+      widget.onLoadMore?.call();
+    }
   }
 
   @override
   void didUpdateWidget(covariant AppTabBarWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
+    if (oldWidget.tabs.length != widget.tabs.length) {
+      final newKeys = List.generate(
+        widget.tabs.length - oldWidget.tabs.length,
+        (_) => GlobalKey(),
+      );
+      _tabKeys.addAll(newKeys);
+    }
+
     if (oldWidget.initialIndex != widget.initialIndex) {
       setState(() {
         _selectedIndex = widget.initialIndex;
       });
-
       _scrollToTab(widget.initialIndex);
     }
   }
 
   void _scrollToTab(int index) {
     final BuildContext? context = _tabKeys[index].currentContext;
-
     if (context != null) {
       Scrollable.ensureVisible(
         context,
@@ -75,9 +93,25 @@ class _AppTabBarWidgetState extends State<AppTabBarWidget> {
         controller: _scrollController,
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: widget.tabs.length,
+        itemCount: widget.tabs.length + (widget.isLoadingMore ? 1 : 0),
         separatorBuilder: (_, _) => const SizedBox(width: 24),
         itemBuilder: (context, index) {
+          if (index == widget.tabs.length) {
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.pink,
+                  ),
+                ),
+              ),
+            );
+          }
+
           final tab = widget.tabs[index];
           final isSelected = index == _selectedIndex;
 
@@ -85,13 +119,8 @@ class _AppTabBarWidgetState extends State<AppTabBarWidget> {
             key: _tabKeys[index],
             onTap: () {
               if (_selectedIndex == index) return;
-
-              setState(() {
-                _selectedIndex = index;
-              });
-
+              setState(() => _selectedIndex = index);
               _scrollToTab(index);
-
               widget.onTabChanged(tab);
             },
             child: _TabItem(label: tab.name, isSelected: isSelected),
@@ -112,26 +141,28 @@ class _TabItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyles.bodyRegular14.copyWith(
-              color: isSelected ? AppColors.pink : AppColors.gray,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+      child: IntrinsicWidth(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyles.bodyRegular14.copyWith(
+                color: isSelected ? AppColors.pink : AppColors.gray,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            height: 2,
-            color: isSelected ? AppColors.pink : AppColors.placeHolder,
-          ),
-        ],
+            const SizedBox(height: 4),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              height: 2,
+              color: isSelected ? AppColors.pink : AppColors.placeHolder,
+            ),
+          ],
+        ),
       ),
     );
   }

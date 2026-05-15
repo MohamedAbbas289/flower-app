@@ -1,9 +1,10 @@
-import 'package:flower_app/core/entities/product_card_data.dart';
-import 'package:flower_app/core/reusable_widgets/product_card_widget.dart';
-import 'package:flower_app/core/utils/app_responsive.dart';
-import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+
+import 'package:flower_app/core/entities/product_card_data.dart';
+import 'package:flower_app/core/reusable_widgets/product_card_widget.dart';
+import 'package:flower_app/core/theme/app_colors.dart';
+import 'package:flower_app/core/utils/app_responsive.dart';
 
 final class _FakeProduct implements ProductCardData {
   const _FakeProduct();
@@ -32,17 +33,22 @@ class ProductsGridView extends StatefulWidget {
     super.key,
     required this.products,
     required this.onAddToCart,
+    required this.onCardClicked,
     required this.currentPage,
     required this.totalPages,
+    required this.paginationResetKey,
     this.isLoading = false,
     this.onLoadMore,
   });
 
   final List<ProductCardData> products;
   final void Function(String productId) onAddToCart;
+  final void Function(String productId) onCardClicked;
 
   final int currentPage;
   final int totalPages;
+
+  final int paginationResetKey;
 
   final bool isLoading;
   final VoidCallback? onLoadMore;
@@ -53,7 +59,6 @@ class ProductsGridView extends StatefulWidget {
 
 class _ProductsGridViewState extends State<ProductsGridView> {
   final ScrollController _controller = ScrollController();
-
   bool _isLoadingMore = false;
 
   @override
@@ -65,13 +70,11 @@ class _ProductsGridViewState extends State<ProductsGridView> {
   void _onScroll() {
     if (!_controller.hasClients) return;
 
-    final reachedEnd =
-        _controller.position.pixels >=
-        _controller.position.maxScrollExtent - 200;
-
+    final position = _controller.position;
+    final reachedEnd = position.pixels >= position.maxScrollExtent - 200;
     final hasMorePages = widget.currentPage < widget.totalPages;
 
-    if (reachedEnd && hasMorePages && !_isLoadingMore) {
+    if (reachedEnd && hasMorePages && !_isLoadingMore && !widget.isLoading) {
       _isLoadingMore = true;
       widget.onLoadMore?.call();
     }
@@ -81,7 +84,12 @@ class _ProductsGridViewState extends State<ProductsGridView> {
   void didUpdateWidget(covariant ProductsGridView oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.currentPage != widget.currentPage) {
+    final resetPagination =
+        oldWidget.paginationResetKey != widget.paginationResetKey;
+
+    final pageChanged = oldWidget.currentPage != widget.currentPage;
+
+    if (resetPagination || pageChanged) {
       _isLoadingMore = false;
     }
   }
@@ -96,9 +104,12 @@ class _ProductsGridViewState extends State<ProductsGridView> {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
 
+    final hasMorePages =
+        widget.products.isNotEmpty && widget.currentPage < widget.totalPages;
+
     final itemCount = widget.isLoading
         ? AppResponsive.gridSkeletonCount(size)
-        : widget.products.length;
+        : widget.products.length + (hasMorePages ? 1 : 0);
 
     return Skeletonizer(
       enabled: widget.isLoading,
@@ -121,11 +132,26 @@ class _ProductsGridViewState extends State<ProductsGridView> {
             return const ProductCardWidget(product: _FakeProduct());
           }
 
+          final isPaginationLoader = index == widget.products.length;
+
+          if (isPaginationLoader) {
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            );
+          }
+
           final product = widget.products[index];
 
-          return ProductCardWidget(
-            product: product,
-            onAddToCart: () => widget.onAddToCart(product.id),
+          return InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: () => widget.onCardClicked(product.id),
+            child: ProductCardWidget(
+              product: product,
+              onAddToCart: () => widget.onAddToCart(product.id),
+            ),
           );
         },
       ),

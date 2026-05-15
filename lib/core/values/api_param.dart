@@ -12,4 +12,7 @@ class ApiParam {
   static const String error = "error";
   static const String authorization = "Authorization";
   static const String requiresAuth = "requiresAuth";
+  static const String occasions = "occasions";
+  static const String page = "page";
+  static const String limit = "limit";
 }
