@@ -5,16 +5,17 @@ import 'package:flower_app/features/best_seller/data/model/best_seller_response.
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: BestSellerRemoteDataSourceContract)
-class BestSellerRemoteDataSourceImpl implements BestSellerRemoteDataSourceContract{
+class BestSellerRemoteDataSourceImpl
+    implements BestSellerRemoteDataSourceContract {
   final BestSellerApiClient _apiClient;
   BestSellerRemoteDataSourceImpl(this._apiClient);
   @override
-  Future<BaseResponse<BestSellerResponse>> fetchBestSellers()async {
-    try{
-      final response =await _apiClient.fetchBestSellers();
+  Future<BaseResponse<BestSellerResponse>> fetchBestSellers() async {
+    try {
+      final response = await _apiClient.fetchBestSellers();
       return SuccessBaseResponse<BestSellerResponse>(data: response);
     } catch (e) {
       return ErrorBaseResponse<BestSellerResponse>(exception: e);
     }
   }
-} 
+}

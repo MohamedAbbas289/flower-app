@@ -4,8 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'best_seller_response.g.dart';
 
 @JsonSerializable()
-class BestSellerResponse
- {
+class BestSellerResponse {
   @JsonKey(name: "message")
   String? message;
   @JsonKey(name: "bestSeller")

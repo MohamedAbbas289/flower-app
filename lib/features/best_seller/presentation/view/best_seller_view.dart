@@ -19,16 +19,19 @@ class BestSellerView extends StatelessWidget {
           getIt<BestSellerCubit>()..doEvent(FetchBestSellerProductsEvent()),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppStrings.bestSellerTitle),
-          // add sub title as text
-          bottom: PreferredSize(
-            preferredSize: Size(double.infinity, 20),
-            child: Text(
-              AppStrings.bestSellerSubTitle,
-              style: TextStyles.bodyRegular13,
-            ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(AppStrings.bestSellerTitle),
+              Text(
+                AppStrings.bestSellerSubTitle,
+                style: TextStyles.bodyRegular13,
+              ),
+            ],
           ),
         ),
+
+        // add sub title as text
         body: BlocConsumer<BestSellerCubit, BestSellerState>(
           listenWhen: (previous, current) =>
               previous.bestSellerState != current.bestSellerState,
