@@ -12,7 +12,7 @@ class CategoriesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-          getIt<CategoriesViewModel>()..doEvent(const LoadInitialDataEvent()),
+          getIt<CategoriesViewModel>()..doEvent(LoadInitialDataEvent()),
       child: const CategoriesView(),
     );
   }

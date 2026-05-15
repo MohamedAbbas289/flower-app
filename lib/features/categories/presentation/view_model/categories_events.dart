@@ -1,44 +1,23 @@
-import 'package:equatable/equatable.dart';
-
 enum SortType { lowestPrice, highestPrice, newest, oldest, discount }
 
-sealed class CategoriesEvents extends Equatable {
-  const CategoriesEvents();
+sealed class CategoriesEvents {}
 
-  @override
-  List<Object?> get props => [];
-}
-
-class LoadInitialDataEvent extends CategoriesEvents {
-  const LoadInitialDataEvent();
-}
+class LoadInitialDataEvent extends CategoriesEvents {}
 
 class CategorySelectedEvent extends CategoriesEvents {
   final String categoryId;
 
-  const CategorySelectedEvent(this.categoryId);
-
-  @override
-  List<Object?> get props => [categoryId];
+  CategorySelectedEvent(this.categoryId);
 }
 
-class AllProductsSelectedEvent extends CategoriesEvents {
-  const AllProductsSelectedEvent();
-}
+class AllProductsSelectedEvent extends CategoriesEvents {}
 
 class SortSelectedEvent extends CategoriesEvents {
   final SortType sortType;
 
-  const SortSelectedEvent(this.sortType);
-
-  @override
-  List<Object?> get props => [sortType];
+  SortSelectedEvent(this.sortType);
 }
 
-class LoadMoreProductsEvent extends CategoriesEvents {
-  const LoadMoreProductsEvent();
-}
+class LoadMoreProductsEvent extends CategoriesEvents {}
 
-class RefreshEvent extends CategoriesEvents {
-  const RefreshEvent();
-}
+class RefreshEvent extends CategoriesEvents {}

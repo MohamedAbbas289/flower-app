@@ -5,14 +5,14 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class GetCategoriesUseCase {
-  final CategoriesRepository _categoriesRepository;
+  GetCategoriesUseCase(this._repository);
 
-  GetCategoriesUseCase(this._categoriesRepository);
+  final CategoriesRepository _repository;
 
   Future<BaseResponse<CategoriesResponseEntity>> execute({
-    int? page,
-    int? limit,
-  }) {
-    return _categoriesRepository.getCategories(page: page, limit: limit);
+    required int page,
+    required int limit,
+  }) async {
+    return await _repository.getCategories(page: page, limit: limit);
   }
 }

@@ -11,8 +11,8 @@ class AppTabBarWidget extends StatefulWidget {
     this.initialIndex = 0,
   });
 
-  final List<TabItem> tabs;
-  final void Function(TabItem tab) onTabChanged;
+  final List<TabItemData> tabs;
+  final void Function(TabItemData tab) onTabChanged;
   final int initialIndex;
 
   @override

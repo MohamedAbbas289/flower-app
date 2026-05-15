@@ -4,9 +4,9 @@ import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/reusable_widgets/app_tab_bar_widget.dart';
 import 'package:flower_app/core/reusable_widgets/products_grid_view.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
+import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
-import 'package:flower_app/features/categories/domain/entities/products_response_entity.dart';
 import 'package:flower_app/features/categories/presentation/view/categories_filter_bottom_sheet.dart';
 import 'package:flower_app/features/categories/presentation/view_model/categories_events.dart';
 import 'package:flower_app/features/categories/presentation/view_model/categories_states.dart';
@@ -37,7 +37,7 @@ class _CategoriesViewState extends State<CategoriesView> {
 
   Future<void> _onRefresh() async {
     final vm = context.read<CategoriesViewModel>();
-    vm.doEvent(const RefreshEvent());
+    vm.doEvent(RefreshEvent());
     await vm.stream.firstWhere((s) => !s.productsState.isLoading);
   }
 
@@ -54,6 +54,7 @@ class _CategoriesViewState extends State<CategoriesView> {
           },
           child: NotificationListener<UserScrollNotification>(
             onNotification: (n) {
+              if (n.metrics.axis != Axis.vertical) return false;
               if (n.direction == ScrollDirection.forward && !_showFab) {
                 setState(() => _showFab = true);
               } else if (n.direction == ScrollDirection.reverse && _showFab) {
@@ -77,19 +78,33 @@ class _CategoriesViewState extends State<CategoriesView> {
                       return const SizedBox(
                         height: 40,
                         child: Center(
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                          child: LinearProgressIndicator(
+                            color: AppColors.pink,
+                            backgroundColor: AppColors.placeHolder,
+                          ),
+                        ),
+                      );
+                    }
+                    if (state.categoriesState.msg != null) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        child: Text(
+                          state.categoriesState.msg!,
+                          style: TextStyles.bodyRegular12.copyWith(
+                              color: AppColors.red),
                         ),
                       );
                     }
                     final cats = state.categoriesState.data ?? [];
-                    if (cats.isEmpty) return const SizedBox(height: 40);
+                    if (cats.isEmpty) return const SizedBox.shrink();
                     return AppTabBarWidget(
                       key: ValueKey(cats.length),
-                      tabs: <TabItem>[const _AllTab(), ...cats],
+                      tabs: <TabItemData>[const _AllTab(), ...cats],
                       onTabChanged: (tab) {
                         if (tab is _AllTab) {
                           context.read<CategoriesViewModel>().doEvent(
-                            const AllProductsSelectedEvent(),
+                            AllProductsSelectedEvent(),
                           );
                         } else {
                           context.read<CategoriesViewModel>().doEvent(
@@ -109,25 +124,43 @@ class _CategoriesViewState extends State<CategoriesView> {
                           prev.productsState != curr.productsState,
                       builder: (context, state) {
                         final ps = state.productsState;
-                        if (ps.data != null) {
-                          final data = ps.data as ProductsResponseEntity;
-                          return ProductsGridView(
-                            products: data.products,
-                            onAddToCart: (_) {},
-                            currentPage: data.metadata?.currentPage ?? 1,
-                            totalPages: data.metadata?.totalPages ?? 1,
-                            isLoading: false,
-                            onLoadMore: () => context
-                                .read<CategoriesViewModel>()
-                                .doEvent(const LoadMoreProductsEvent()),
+
+                        if (ps.msg != null && ps.data == null) {
+                          return _ErrorView(
+                            message: ps.msg!,
+                            onRetry: () {
+                              final vm = context.read<CategoriesViewModel>();
+                              if (state.selectedCategoryId != null) {
+                                vm.doEvent(CategorySelectedEvent(
+                                    state.selectedCategoryId!));
+                              } else {
+                                vm.doEvent(AllProductsSelectedEvent());
+                              }
+                            },
                           );
                         }
+
+                        final products = ps.data?.products ?? [];
+
+                        if (!ps.isLoading && ps.data != null &&
+                            products.isEmpty) {
+                          return const _ErrorView(
+                            message: AppStrings.noProductsAvailable,
+                            onRetry: null,
+                          );
+                        }
+
+                        final vm = context.read<CategoriesViewModel>();
                         return ProductsGridView(
-                          products: const [],
+                          products: products,
                           onAddToCart: (_) {},
-                          currentPage: 1,
-                          totalPages: 1,
-                          isLoading: ps.isLoading || ps.msg == null,
+                          onCardClicked: (_) {},
+                          // TODO: navigate to product details
+                          currentPage: ps.data?.metadata?.currentPage ?? 1,
+                          totalPages: ps.data?.metadata?.totalPages ?? 1,
+                          paginationResetKey: vm.paginationResetKey,
+                          isLoading: ps.isLoading && products.isEmpty,
+                          onLoadMore: () => vm.doEvent(LoadMoreProductsEvent()),
                         );
                       },
                     ),
@@ -166,7 +199,7 @@ class _CategoriesViewState extends State<CategoriesView> {
   }
 }
 
-class _AllTab implements TabItem {
+class _AllTab implements TabItemData {
   const _AllTab();
 
   @override
@@ -250,6 +283,41 @@ class _SearchBar extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ErrorView extends StatelessWidget {
+  const _ErrorView({required this.message, required this.onRetry});
+
+  final String message;
+  final VoidCallback? onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: AppColors.gray),
+            const SizedBox(height: 12),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: TextStyles.bodyRegular14.copyWith(color: AppColors.gray),
+            ),
+            if (onRetry != null) ...[
+              const SizedBox(height: 16),
+              FilledButton(
+                onPressed: onRetry,
+                child: const Text(AppStrings.retry),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

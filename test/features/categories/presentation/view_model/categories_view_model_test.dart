@@ -79,7 +79,7 @@ void main() {
             ));
         return viewModel;
       },
-      act: (cubit) => cubit.doEvent(const LoadInitialDataEvent()),
+      act: (cubit) => cubit.doEvent(LoadInitialDataEvent()),
       expect: () => [
         CategoriesState(
             categoriesState: BaseState<List<CategoryEntity>>.loading()),
@@ -114,7 +114,7 @@ void main() {
             ));
         return viewModel;
       },
-      act: (cubit) => cubit.doEvent(const CategorySelectedEvent('123')),
+      act: (cubit) => cubit.doEvent(CategorySelectedEvent('123')),
       expect: () => [
         CategoriesState(
           productsState: BaseState<ProductsResponseEntity>.loading(),
@@ -145,7 +145,7 @@ void main() {
             ));
         return viewModel;
       },
-      act: (cubit) => cubit.doEvent(const RefreshEvent()),
+      act: (cubit) => cubit.doEvent(RefreshEvent()),
       expect: () => [
         CategoriesState(
           productsState: BaseState<ProductsResponseEntity>.loading(),
@@ -168,7 +168,7 @@ void main() {
             ErrorBaseResponse(exception: Exception('Server error')));
         return viewModel;
       },
-      act: (cubit) => cubit.doEvent(const CategorySelectedEvent('abc')),
+      act: (cubit) => cubit.doEvent(CategorySelectedEvent('abc')),
       expect: () =>
       [
         CategoriesState(

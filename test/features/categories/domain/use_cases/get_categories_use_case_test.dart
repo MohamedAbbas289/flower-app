@@ -11,7 +11,7 @@ import 'get_categories_use_case_test.mocks.dart';
 
 @GenerateMocks([CategoriesRepository])
 void main() {
-  late MockCategoriesRepository mockCategoriesRepository;
+  late MockCategoriesRepository mockRepository;
   late GetCategoriesUseCase getCategoriesUseCase;
 
   setUpAll(() {
@@ -23,53 +23,51 @@ void main() {
   });
 
   setUp(() {
-    mockCategoriesRepository = MockCategoriesRepository();
-    getCategoriesUseCase = GetCategoriesUseCase(mockCategoriesRepository);
+    mockRepository = MockCategoriesRepository();
+    getCategoriesUseCase = GetCategoriesUseCase(mockRepository);
   });
 
   group('GetCategoriesUseCase', () {
     test(
-      'should return SuccessBaseResponse<CategoriesResponseEntity> when repository succeeds',
+      'execute returns SuccessBaseResponse<CategoriesResponseEntity> when repository succeeds',
       () async {
         final successResponse = SuccessBaseResponse<CategoriesResponseEntity>(
           data: const CategoriesResponseEntity(
-              categories: [CategoryEntity(id: "1")]),
+              categories: [CategoryEntity(id: '1')]),
         );
 
-        when(mockCategoriesRepository.getCategories(page: 1, limit: 10))
+        when(mockRepository.getCategories(page: 1, limit: 50))
             .thenAnswer((_) async => successResponse);
 
-        final result = await getCategoriesUseCase.execute(page: 1, limit: 10);
+        final result = await getCategoriesUseCase.execute(page: 1, limit: 50);
 
         expect(result, isA<SuccessBaseResponse<CategoriesResponseEntity>>());
         final success = result as SuccessBaseResponse<CategoriesResponseEntity>;
         expect(success.data.categories.length, 1);
-        expect(success.data.categories.first.id, "1");
-        verify(mockCategoriesRepository.getCategories(page: 1, limit: 10))
-            .called(1);
-        verifyNoMoreInteractions(mockCategoriesRepository);
+        expect(success.data.categories.first.id, '1');
+        verify(mockRepository.getCategories(page: 1, limit: 50)).called(1);
+        verifyNoMoreInteractions(mockRepository);
       },
     );
 
     test(
-      'should return ErrorBaseResponse<CategoriesResponseEntity> when repository fails',
+      'execute returns ErrorBaseResponse<CategoriesResponseEntity> when repository fails',
       () async {
-        final exception = Exception("network error");
+        final exception = Exception('network error');
         final errorResponse = ErrorBaseResponse<CategoriesResponseEntity>(
           exception: exception,
         );
 
-        when(mockCategoriesRepository.getCategories(page: null, limit: null))
+        when(mockRepository.getCategories(page: 1, limit: 50))
             .thenAnswer((_) async => errorResponse);
 
-        final result = await getCategoriesUseCase.execute();
+        final result = await getCategoriesUseCase.execute(page: 1, limit: 50);
 
         expect(result, isA<ErrorBaseResponse<CategoriesResponseEntity>>());
         final error = result as ErrorBaseResponse<CategoriesResponseEntity>;
         expect(error.exception, exception);
-        verify(mockCategoriesRepository.getCategories(page: null, limit: null))
-            .called(1);
-        verifyNoMoreInteractions(mockCategoriesRepository);
+        verify(mockRepository.getCategories(page: 1, limit: 50)).called(1);
+        verifyNoMoreInteractions(mockRepository);
       },
     );
   });

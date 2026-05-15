@@ -1,3 +1,4 @@
+import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/categories/api/categories_api_client/categories_api_client.dart';
 import 'package:flower_app/features/categories/api/data_sources/categories_remote_data_source_impl.dart';
 import 'package:flower_app/features/categories/api/responses/categories_response.dart';
@@ -10,88 +11,82 @@ import 'categories_remote_data_source_impl_test.mocks.dart';
 
 @GenerateMocks([CategoriesApiClient])
 void main() {
-  late MockCategoriesApiClient mockCategoriesApiClient;
-  late CategoriesRemoteDataSourceImpl categoriesRemoteDataSourceImpl;
+  late MockCategoriesApiClient mockApiClient;
+  late CategoriesRemoteDataSourceImpl dataSource;
 
   setUp(() {
-    mockCategoriesApiClient = MockCategoriesApiClient();
-    categoriesRemoteDataSourceImpl = CategoriesRemoteDataSourceImpl(
-      mockCategoriesApiClient,
-    );
+    mockApiClient = MockCategoriesApiClient();
+    dataSource = CategoriesRemoteDataSourceImpl(mockApiClient);
   });
 
   group('CategoriesRemoteDataSourceImpl', () {
-    test(
-      'getCategories should return CategoriesResponse when api call succeeds',
-      () async {
-        const response = CategoriesResponse(message: "Success");
+    test('getCategories returns SuccessBaseResponse when api call succeeds',
+            () async {
+          const response = CategoriesResponse(message: 'Success');
 
-        when(
-          mockCategoriesApiClient.getCategories(),
-        ).thenAnswer((_) async => response);
+          when(mockApiClient.getCategories(page: 1, limit: 50))
+              .thenAnswer((_) async => response);
 
-        final result = await categoriesRemoteDataSourceImpl.getCategories();
+          final result = await dataSource.getCategories(page: 1, limit: 50);
 
-        expect(result, isA<CategoriesResponse>());
-        expect(result, response);
-        verify(mockCategoriesApiClient.getCategories()).called(1);
-      },
-    );
+          expect(result, isA<SuccessBaseResponse<CategoriesResponse>>());
+          expect(
+            (result as SuccessBaseResponse<CategoriesResponse>).data,
+            response,
+          );
+          verify(mockApiClient.getCategories(page: 1, limit: 50)).called(1);
+        });
 
-    test(
-      'getCategories should throw exception when api throws exception',
-      () async {
-        final exception = Exception('network error');
+    test('getCategories returns ErrorBaseResponse when api throws exception',
+            () async {
+          when(mockApiClient.getCategories(page: 1, limit: 50))
+              .thenThrow(Exception('network error'));
 
-        when(mockCategoriesApiClient.getCategories()).thenThrow(exception);
+          final result = await dataSource.getCategories(page: 1, limit: 50);
 
-        expect(
-          () => categoriesRemoteDataSourceImpl.getCategories(),
-          throwsException,
-        );
-        verify(mockCategoriesApiClient.getCategories()).called(1);
-      },
-    );
+          expect(result, isA<ErrorBaseResponse<CategoriesResponse>>());
+        });
 
     test(
-      'getProductsByCategory should return ProductsResponse when api call succeeds',
-      () async {
-        const response = ProductsResponse(message: "Success");
+        'getProductsByCategory returns SuccessBaseResponse when api call succeeds',
+            () async {
+          const response = ProductsResponse(message: 'Success');
 
-        when(
-          mockCategoriesApiClient.getProductsByCategory(categoryId: "123"),
-        ).thenAnswer((_) async => response);
+          when(mockApiClient.getProductsByCategory(
+              categoryId: '123', page: 1, limit: 10))
+              .thenAnswer((_) async => response);
 
-        final result = await categoriesRemoteDataSourceImpl
-            .getProductsByCategory(categoryId: "123");
+          final result = await dataSource.getProductsByCategory(
+            categoryId: '123',
+            page: 1,
+            limit: 10,
+          );
 
-        expect(result, isA<ProductsResponse>());
-        expect(result, response);
-        verify(
-          mockCategoriesApiClient.getProductsByCategory(categoryId: "123"),
-        ).called(1);
-      },
-    );
+          expect(result, isA<SuccessBaseResponse<ProductsResponse>>());
+          expect(
+            (result as SuccessBaseResponse<ProductsResponse>).data,
+            response,
+          );
+          verify(
+            mockApiClient.getProductsByCategory(
+                categoryId: '123', page: 1, limit: 10),
+          ).called(1);
+        });
 
     test(
-      'getProductsByCategory should throw exception when api throws exception',
-      () async {
-        final exception = Exception('network error');
+        'getProductsByCategory returns ErrorBaseResponse when api throws exception',
+            () async {
+          when(mockApiClient.getProductsByCategory(
+              categoryId: '123', page: 1, limit: 10))
+              .thenThrow(Exception('network error'));
 
-        when(
-          mockCategoriesApiClient.getProductsByCategory(categoryId: "123"),
-        ).thenThrow(exception);
+          final result = await dataSource.getProductsByCategory(
+            categoryId: '123',
+            page: 1,
+            limit: 10,
+          );
 
-        expect(
-          () => categoriesRemoteDataSourceImpl.getProductsByCategory(
-            categoryId: "123",
-          ),
-          throwsException,
-        );
-        verify(
-          mockCategoriesApiClient.getProductsByCategory(categoryId: "123"),
-        ).called(1);
-      },
-    );
+          expect(result, isA<ErrorBaseResponse<ProductsResponse>>());
+        });
   });
 }

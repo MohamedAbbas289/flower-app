@@ -74,21 +74,24 @@ void main() {
         );
 
         when(mockCategoriesRepository.getProductsByCategory(
-          categoryId: "123",
-          page: null,
-          limit: null,
+          categoryId: '123',
+          page: 1,
+          limit: 10,
         )).thenAnswer((_) async => errorResponse);
 
         final result = await getProductsByCategoryUseCase.execute(
-            requestModel: request);
+          requestModel: request,
+          page: 1,
+          limit: 10,
+        );
 
         expect(result, isA<ErrorBaseResponse<ProductsResponseEntity>>());
         final error = result as ErrorBaseResponse<ProductsResponseEntity>;
         expect(error.exception, exception);
         verify(mockCategoriesRepository.getProductsByCategory(
-          categoryId: "123",
-          page: null,
-          limit: null,
+          categoryId: '123',
+          page: 1,
+          limit: 10,
         )).called(1);
         verifyNoMoreInteractions(mockCategoriesRepository);
       },

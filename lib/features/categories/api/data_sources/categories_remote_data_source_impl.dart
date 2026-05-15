@@ -1,31 +1,44 @@
+import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/categories/api/categories_api_client/categories_api_client.dart';
+import 'package:flower_app/features/categories/api/responses/categories_response.dart';
 import 'package:flower_app/features/categories/api/responses/products_response.dart';
 import 'package:flower_app/features/categories/data/data_sources/categories_remote_data_source.dart';
 import 'package:injectable/injectable.dart';
 
-import '../responses/categories_response.dart';
-
 @Injectable(as: CategoriesRemoteDataSource)
 class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
-  final CategoriesApiClient _categoriesApiClient;
+  CategoriesRemoteDataSourceImpl(this._apiClient);
 
-  CategoriesRemoteDataSourceImpl(this._categoriesApiClient);
+  final CategoriesApiClient _apiClient;
 
   @override
-  Future<CategoriesResponse> getCategories({int? page, int? limit}) {
-    return _categoriesApiClient.getCategories(page: page, limit: limit);
+  Future<BaseResponse<CategoriesResponse>> getCategories({
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final response = await _apiClient.getCategories(page: page, limit: limit);
+      return SuccessBaseResponse<CategoriesResponse>(data: response);
+    } catch (e) {
+      return ErrorBaseResponse<CategoriesResponse>(exception: e);
+    }
   }
 
   @override
-  Future<ProductsResponse> getProductsByCategory({
+  Future<BaseResponse<ProductsResponse>> getProductsByCategory({
     String? categoryId,
-    int? page,
-    int? limit,
-  }) {
-    return _categoriesApiClient.getProductsByCategory(
-      categoryId: categoryId,
-      page: page,
-      limit: limit,
-    );
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final response = await _apiClient.getProductsByCategory(
+        categoryId: categoryId,
+        page: page,
+        limit: limit,
+      );
+      return SuccessBaseResponse<ProductsResponse>(data: response);
+    } catch (e) {
+      return ErrorBaseResponse<ProductsResponse>(exception: e);
+    }
   }
 }

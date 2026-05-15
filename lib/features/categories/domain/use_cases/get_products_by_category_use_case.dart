@@ -6,16 +6,16 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class GetProductsByCategoryUseCase {
-  final CategoriesRepository _categoriesRepository;
+  GetProductsByCategoryUseCase(this._repository);
 
-  GetProductsByCategoryUseCase(this._categoriesRepository);
+  final CategoriesRepository _repository;
 
   Future<BaseResponse<ProductsResponseEntity>> execute({
     required GetProductsByCategoryRequestModel requestModel,
-    int? page,
-    int? limit,
-  }) {
-    return _categoriesRepository.getProductsByCategory(
+    required int page,
+    required int limit,
+  }) async {
+    return await _repository.getProductsByCategory(
       categoryId: requestModel.categoryId,
       page: page,
       limit: limit,

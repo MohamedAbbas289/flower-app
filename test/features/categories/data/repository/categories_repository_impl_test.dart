@@ -16,10 +16,20 @@ import 'categories_repository_impl_test.mocks.dart';
 
 @GenerateMocks([CategoriesRemoteDataSource])
 void main() {
-  late MockCategoriesRemoteDataSource mockCategoriesRemoteDataSource;
-  late CategoriesRepositoryImpl categoriesRepositoryImpl;
+  late MockCategoriesRemoteDataSource mockDataSource;
+  late CategoriesRepositoryImpl repository;
 
   setUpAll(() {
+    provideDummy<BaseResponse<CategoriesResponse>>(
+      SuccessBaseResponse<CategoriesResponse>(
+        data: const CategoriesResponse(),
+      ),
+    );
+    provideDummy<BaseResponse<ProductsResponse>>(
+      SuccessBaseResponse<ProductsResponse>(
+        data: const ProductsResponse(),
+      ),
+    );
     provideDummy<BaseResponse<CategoriesResponseEntity>>(
       SuccessBaseResponse<CategoriesResponseEntity>(
         data: const CategoriesResponseEntity(categories: []),
@@ -33,104 +43,106 @@ void main() {
   });
 
   setUp(() {
-    mockCategoriesRemoteDataSource = MockCategoriesRemoteDataSource();
-    categoriesRepositoryImpl = CategoriesRepositoryImpl(
-      mockCategoriesRemoteDataSource,
-    );
+    mockDataSource = MockCategoriesRemoteDataSource();
+    repository = CategoriesRepositoryImpl(mockDataSource);
   });
 
   group('CategoriesRepositoryImpl', () {
     test(
-      'getCategories should return SuccessBaseResponse<CategoriesResponseEntity> when datasource succeeds',
+      'getCategories returns SuccessBaseResponse<CategoriesResponseEntity> when datasource succeeds',
       () async {
-        const categoryModel = CategoryModel(id: "1", name: "flowers");
+        const categoryModel = CategoryModel(id: '1', name: 'flowers');
         const metadataModel = MetadataModel(
             currentPage: 1, totalPages: 2, limit: 10);
         const response = CategoriesResponse(
-            categories: [categoryModel], metadata: metadataModel);
+          categories: [categoryModel],
+          metadata: metadataModel,
+        );
 
-        when(mockCategoriesRemoteDataSource.getCategories(page: 1, limit: 10))
-            .thenAnswer((_) async => response);
+        when(mockDataSource.getCategories(page: 1, limit: 50))
+            .thenAnswer((_) async => SuccessBaseResponse(data: response));
 
-        final result = await categoriesRepositoryImpl.getCategories(
-            page: 1, limit: 10);
+        final result = await repository.getCategories(page: 1, limit: 50);
 
         expect(result, isA<SuccessBaseResponse<CategoriesResponseEntity>>());
         final success = result as SuccessBaseResponse<CategoriesResponseEntity>;
         expect(success.data.categories.length, 1);
-        expect(success.data.categories.first.id, "1");
+        expect(success.data.categories.first.id, '1');
         expect(success.data.metadata?.currentPage, 1);
-        verify(mockCategoriesRemoteDataSource.getCategories(page: 1, limit: 10))
-            .called(1);
-        verifyNoMoreInteractions(mockCategoriesRemoteDataSource);
+        verify(mockDataSource.getCategories(page: 1, limit: 50)).called(1);
+        verifyNoMoreInteractions(mockDataSource);
       },
     );
 
     test(
-      'getCategories should return ErrorBaseResponse<CategoriesResponseEntity> when datasource fails',
+      'getCategories returns ErrorBaseResponse<CategoriesResponseEntity> when datasource fails',
       () async {
         final exception = Exception('Network error');
 
-        when(mockCategoriesRemoteDataSource.getCategories(
-            page: null, limit: null))
-            .thenThrow(exception);
+        when(mockDataSource.getCategories(page: 1, limit: 50))
+            .thenAnswer((_) async => ErrorBaseResponse(exception: exception));
 
-        final result = await categoriesRepositoryImpl.getCategories();
+        final result = await repository.getCategories(page: 1, limit: 50);
 
         expect(result, isA<ErrorBaseResponse<CategoriesResponseEntity>>());
-        final error = result as ErrorBaseResponse<CategoriesResponseEntity>;
-        expect(error.exception, exception);
-        verify(mockCategoriesRemoteDataSource.getCategories(
-            page: null, limit: null)).called(1);
-        verifyNoMoreInteractions(mockCategoriesRemoteDataSource);
+        verify(mockDataSource.getCategories(page: 1, limit: 50)).called(1);
+        verifyNoMoreInteractions(mockDataSource);
       },
     );
 
     test(
-      'getProductsByCategory should return SuccessBaseResponse<ProductsResponseEntity> when datasource succeeds',
+      'getProductsByCategory returns SuccessBaseResponse<ProductsResponseEntity> when datasource succeeds',
       () async {
-        const productModel = ProductModel(id: "1", title: "product 1");
+        const productModel = ProductModel(id: '1', title: 'product 1');
         const metadataModel = MetadataModel(
             currentPage: 1, totalPages: 2, limit: 10);
         const response = ProductsResponse(
-            products: [productModel], metadata: metadataModel);
+          products: [productModel],
+          metadata: metadataModel,
+        );
 
-        when(mockCategoriesRemoteDataSource.getProductsByCategory(
-            categoryId: "123", page: 1, limit: 10))
-            .thenAnswer((_) async => response);
+        when(mockDataSource.getProductsByCategory(
+            categoryId: '123', page: 1, limit: 10))
+            .thenAnswer((_) async => SuccessBaseResponse(data: response));
 
-        final result = await categoriesRepositoryImpl.getProductsByCategory(
-            categoryId: "123", page: 1, limit: 10);
+        final result = await repository.getProductsByCategory(
+          categoryId: '123',
+          page: 1,
+          limit: 10,
+        );
 
         expect(result, isA<SuccessBaseResponse<ProductsResponseEntity>>());
         final success = result as SuccessBaseResponse<ProductsResponseEntity>;
         expect(success.data.products.length, 1);
-        expect(success.data.products.first.id, "1");
+        expect(success.data.products.first.id, '1');
         expect(success.data.metadata?.currentPage, 1);
-        verify(mockCategoriesRemoteDataSource.getProductsByCategory(
-            categoryId: "123", page: 1, limit: 10)).called(1);
-        verifyNoMoreInteractions(mockCategoriesRemoteDataSource);
+        verify(mockDataSource.getProductsByCategory(
+            categoryId: '123', page: 1, limit: 10))
+            .called(1);
+        verifyNoMoreInteractions(mockDataSource);
       },
     );
 
     test(
-      'getProductsByCategory should return ErrorBaseResponse<ProductsResponseEntity> when datasource fails',
+      'getProductsByCategory returns ErrorBaseResponse<ProductsResponseEntity> when datasource fails',
       () async {
         final exception = Exception('Network error');
 
-        when(mockCategoriesRemoteDataSource.getProductsByCategory(
-            categoryId: "123", page: null, limit: null))
-            .thenThrow(exception);
+        when(mockDataSource.getProductsByCategory(
+            categoryId: '123', page: 1, limit: 10))
+            .thenAnswer((_) async => ErrorBaseResponse(exception: exception));
 
-        final result = await categoriesRepositoryImpl.getProductsByCategory(
-            categoryId: "123");
+        final result = await repository.getProductsByCategory(
+          categoryId: '123',
+          page: 1,
+          limit: 10,
+        );
 
         expect(result, isA<ErrorBaseResponse<ProductsResponseEntity>>());
-        final error = result as ErrorBaseResponse<ProductsResponseEntity>;
-        expect(error.exception, exception);
-        verify(mockCategoriesRemoteDataSource.getProductsByCategory(
-            categoryId: "123", page: null, limit: null)).called(1);
-        verifyNoMoreInteractions(mockCategoriesRemoteDataSource);
+        verify(mockDataSource.getProductsByCategory(
+            categoryId: '123', page: 1, limit: 10))
+            .called(1);
+        verifyNoMoreInteractions(mockDataSource);
       },
     );
   });

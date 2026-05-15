@@ -18,11 +18,14 @@ class CategoriesState extends Equatable {
     BaseState<List<CategoryEntity>>? categoriesState,
     BaseState<ProductsResponseEntity>? productsState,
     String? selectedCategoryId,
+    bool clearSelectedCategoryId = false,
   }) {
     return CategoriesState(
       categoriesState: categoriesState ?? this.categoriesState,
       productsState: productsState ?? this.productsState,
-      selectedCategoryId: selectedCategoryId ?? this.selectedCategoryId,
+      selectedCategoryId: clearSelectedCategoryId
+          ? null
+          : (selectedCategoryId ?? this.selectedCategoryId),
     );
   }
 

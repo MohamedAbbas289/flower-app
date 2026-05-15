@@ -16,16 +16,19 @@ import 'package:injectable/injectable.dart';
 class CategoriesViewModel extends Cubit<CategoriesState> {
   CategoriesViewModel(
     this._getCategoriesUseCase,
-    this._getProductsByCategoryUseCase,) : super(const CategoriesState());
+      this._getProductsByCategoryUseCase,) : super(const CategoriesState());
 
   final GetCategoriesUseCase _getCategoriesUseCase;
   final GetProductsByCategoryUseCase _getProductsByCategoryUseCase;
 
   final List<CategoryEntity> _categories = [];
-  final List<ProductEntity> _allProducts = [];
 
   int _productsPage = 1;
   int _productsTotalPages = 1;
+  int _paginationResetKey = 0;
+  int _fetchVersion = 0;
+
+  int get paginationResetKey => _paginationResetKey;
 
   void doEvent(CategoriesEvents event) {
     switch (event) {
@@ -61,7 +64,8 @@ class CategoriesViewModel extends Cubit<CategoriesState> {
 
     const maxRetries = 3;
     for (var attempt = 0; attempt < maxRetries; attempt++) {
-      final response = await _getCategoriesUseCase.execute(page: 1, limit: 50);
+      final response =
+      await _getCategoriesUseCase.execute(page: 1, limit: 50);
       switch (response) {
         case SuccessBaseResponse<CategoriesResponseEntity>():
           _categories.addAll(response.data.categories);
@@ -89,18 +93,19 @@ class CategoriesViewModel extends Cubit<CategoriesState> {
     if (isLoadMore) {
       if (_productsPage >= _productsTotalPages) return;
       _productsPage++;
-      emit(state.copyWith(
-        productsState: state.productsState.copyWith(isLoading: true),
-      ));
     } else {
+      _fetchVersion++;
       _productsPage = 1;
       _productsTotalPages = 1;
-      _allProducts.clear();
+      _paginationResetKey++;
       emit(state.copyWith(
         productsState: BaseState<ProductsResponseEntity>.loading(),
         selectedCategoryId: categoryId,
+        clearSelectedCategoryId: categoryId == null,
       ));
     }
+
+    final myVersion = _fetchVersion;
 
     final response = await _getProductsByCategoryUseCase.execute(
       requestModel: GetProductsByCategoryRequestModel(categoryId: categoryId),
@@ -108,15 +113,24 @@ class CategoriesViewModel extends Cubit<CategoriesState> {
       limit: 10,
     );
 
+    if (myVersion != _fetchVersion) return;
+
     switch (response) {
       case SuccessBaseResponse<ProductsResponseEntity>():
-        _allProducts.addAll(response.data.products);
         _productsPage = response.data.metadata?.currentPage ?? 1;
         _productsTotalPages = response.data.metadata?.totalPages ?? 1;
+
+        final previousProducts = isLoadMore
+            ? (state.productsState.data?.products ?? <ProductEntity>[])
+            : <ProductEntity>[];
+
         emit(state.copyWith(
           productsState: BaseState.success(
             ProductsResponseEntity(
-              products: List.unmodifiable(_allProducts),
+              products: [
+                ...previousProducts,
+                ...response.data.products,
+              ],
               metadata: response.data.metadata,
             ),
           ),

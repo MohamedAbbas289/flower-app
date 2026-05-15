@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flower_app/core/entities/tab_item_data.dart';
 
-class CategoryEntity extends Equatable implements TabItem {
+class CategoryEntity extends Equatable implements TabItemData {
   final String? rawId;
   final String? rawName;
   final String? slug;
