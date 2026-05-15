@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+
 import 'package:flower_app/core/entities/product_card_data.dart';
 import 'package:flower_app/core/reusable_widgets/product_card_widget.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/utils/app_responsive.dart';
-import 'package:flutter/material.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 final class _FakeProduct implements ProductCardData {
   const _FakeProduct();
@@ -32,10 +33,10 @@ class ProductsGridView extends StatefulWidget {
     super.key,
     required this.products,
     required this.onAddToCart,
+    required this.onCardClicked,
     required this.currentPage,
     required this.totalPages,
-    required this.onCardClicked,
-    this.paginationResetKey = 0,
+    required this.paginationResetKey,
     this.isLoading = false,
     this.onLoadMore,
   });
@@ -43,11 +44,14 @@ class ProductsGridView extends StatefulWidget {
   final List<ProductCardData> products;
   final void Function(String productId) onAddToCart;
   final void Function(String productId) onCardClicked;
+
   final int currentPage;
   final int totalPages;
+
+  final int paginationResetKey;
+
   final bool isLoading;
   final VoidCallback? onLoadMore;
-  final int paginationResetKey;
 
   @override
   State<ProductsGridView> createState() => _ProductsGridViewState();
@@ -70,7 +74,7 @@ class _ProductsGridViewState extends State<ProductsGridView> {
     final reachedEnd = position.pixels >= position.maxScrollExtent - 200;
     final hasMorePages = widget.currentPage < widget.totalPages;
 
-    if (reachedEnd && hasMorePages && !_isLoadingMore) {
+    if (reachedEnd && hasMorePages && !_isLoadingMore && !widget.isLoading) {
       _isLoadingMore = true;
       widget.onLoadMore?.call();
     }
@@ -80,8 +84,12 @@ class _ProductsGridViewState extends State<ProductsGridView> {
   void didUpdateWidget(covariant ProductsGridView oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.paginationResetKey != widget.paginationResetKey ||
-        oldWidget.currentPage != widget.currentPage) {
+    final resetPagination =
+        oldWidget.paginationResetKey != widget.paginationResetKey;
+
+    final pageChanged = oldWidget.currentPage != widget.currentPage;
+
+    if (resetPagination || pageChanged) {
       _isLoadingMore = false;
     }
   }
@@ -96,11 +104,12 @@ class _ProductsGridViewState extends State<ProductsGridView> {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
 
-    final hasPaginationSpinner =
+    final hasMorePages =
         widget.products.isNotEmpty && widget.currentPage < widget.totalPages;
+
     final itemCount = widget.isLoading
         ? AppResponsive.gridSkeletonCount(size)
-        : widget.products.length + (hasPaginationSpinner ? 1 : 0);
+        : widget.products.length + (hasMorePages ? 1 : 0);
 
     return Skeletonizer(
       enabled: widget.isLoading,
@@ -123,7 +132,9 @@ class _ProductsGridViewState extends State<ProductsGridView> {
             return const ProductCardWidget(product: _FakeProduct());
           }
 
-          if (index == widget.products.length) {
+          final isPaginationLoader = index == widget.products.length;
+
+          if (isPaginationLoader) {
             return const Center(
               child: Padding(
                 padding: EdgeInsets.all(16),
