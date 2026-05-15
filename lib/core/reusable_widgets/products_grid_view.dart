@@ -38,6 +38,7 @@ class ProductsGridView extends StatefulWidget {
     required this.totalPages,
     required this.paginationResetKey,
     this.isLoading = false,
+    this.hasError = false,
     this.onLoadMore,
   });
 
@@ -51,6 +52,7 @@ class ProductsGridView extends StatefulWidget {
   final int paginationResetKey;
 
   final bool isLoading;
+  final bool hasError;
   final VoidCallback? onLoadMore;
 
   @override
@@ -75,7 +77,9 @@ class _ProductsGridViewState extends State<ProductsGridView> {
     final hasMorePages = widget.currentPage < widget.totalPages;
 
     if (reachedEnd && hasMorePages && !_isLoadingMore && !widget.isLoading) {
-      _isLoadingMore = true;
+      setState(() {
+        _isLoadingMore = true;
+      });
       widget.onLoadMore?.call();
     }
   }
@@ -88,8 +92,9 @@ class _ProductsGridViewState extends State<ProductsGridView> {
         oldWidget.paginationResetKey != widget.paginationResetKey;
 
     final pageChanged = oldWidget.currentPage != widget.currentPage;
+    final errorOccurred = !oldWidget.hasError && widget.hasError;
 
-    if (resetPagination || pageChanged) {
+    if (resetPagination || pageChanged || errorOccurred) {
       _isLoadingMore = false;
     }
   }
@@ -104,12 +109,9 @@ class _ProductsGridViewState extends State<ProductsGridView> {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
 
-    final hasMorePages =
-        widget.products.isNotEmpty && widget.currentPage < widget.totalPages;
-
     final itemCount = widget.isLoading
         ? AppResponsive.gridSkeletonCount(size)
-        : widget.products.length + (hasMorePages ? 1 : 0);
+        : widget.products.length + (_isLoadingMore ? 1 : 0);
 
     return Skeletonizer(
       enabled: widget.isLoading,

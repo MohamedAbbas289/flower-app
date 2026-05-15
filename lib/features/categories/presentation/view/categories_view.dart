@@ -160,6 +160,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                           totalPages: ps.data?.metadata?.totalPages ?? 1,
                           paginationResetKey: vm.paginationResetKey,
                           isLoading: ps.isLoading && products.isEmpty,
+                          hasError: ps.msg != null,
                           onLoadMore: () => vm.doEvent(LoadMoreProductsEvent()),
                         );
                       },
