@@ -11,6 +11,6 @@ part 'best_seller_api_client.g.dart';
 abstract class BestSellerApiClient {
   @factoryMethod
   factory BestSellerApiClient(Dio dio) = _BestSellerApiClient;
-  @GET(Endpoints.bestSeller)
+  @GET(Endpoints.getBestSeller)
   Future<BestSellerResponse> fetchBestSellers();
 }

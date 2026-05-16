@@ -135,7 +135,6 @@ class _OccasionsTabBar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 12, bottom: 4),
       child: AppTabBarWidget(
-        key: ValueKey('${occasions.length}_${state.selectedOccasionId}'),
         tabs: occasions,
         initialIndex: initialIndex,
         isLoadingMore: state.isLoadingMoreOccasions,
@@ -179,13 +178,12 @@ class _OccasionsBody extends StatelessWidget {
     return ProductsGridView(
       products: products,
       onCardClicked: (productId) {
-        Navigator.of(
-          context,
-        ).pushNamed(AppRoutesName.productDetails, arguments: productId);
+        Navigator.of(context).pushNamed(
+          AppRoutesName.productDetails,
+          arguments: productId,
+        );
       },
-      heroTagBuilder:
-          (productId) =>
-              AppStrings.productImageHeroTag(productId),
+      heroTagBuilder: (productId) => AppStrings.productImageHeroTag(productId),
       isLoading: productsState.isLoading && products.isEmpty,
       currentPage: state.currentPage,
       totalPages: state.totalPages,

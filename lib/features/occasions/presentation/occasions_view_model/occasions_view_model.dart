@@ -19,7 +19,7 @@ class OccasionsViewModel extends Cubit<OccasionsState> {
   final GetOccasionsUseCase _getOccasionsUseCase;
   final GetProductsByOccasionUseCase _getProductsByOccasionUseCase;
 
-  static const int _limit = 10;
+  static const int _limit = 20;
 
   void doEvent(OccasionsEvent event) {
     switch (event) {
@@ -42,39 +42,49 @@ class OccasionsViewModel extends Cubit<OccasionsState> {
   }
 
   Future<void> _getOccasions(String? initialOccasionId) async {
-  emit(state.copyWith(
-    occasionsState: BaseState<List<OccasionEntity>>.loading(),
-  ));
+    emit(
+      state.copyWith(occasionsState: BaseState<List<OccasionEntity>>.loading()),
+    );
 
-  final response = await _getOccasionsUseCase.execute(page: 1, limit: _limit);
+    final response = await _getOccasionsUseCase.execute(page: 1, limit: _limit);
 
-  switch (response) {
-    case SuccessBaseResponse<OccasionsEntity>():
-      final data = response.data;
+    switch (response) {
+      case SuccessBaseResponse<OccasionsEntity>():
+        final data = response.data;
 
-      emit(state.copyWith(
-        occasionsState: BaseState<List<OccasionEntity>>.success(data.occasions),
-        occasionsCurrentPage: data.currentPage,
-        occasionsTotalPages: data.totalPages,
-      ));
+        emit(
+          state.copyWith(
+            occasionsState: BaseState<List<OccasionEntity>>.success(
+              data.occasions,
+            ),
+            occasionsCurrentPage: data.currentPage,
+            occasionsTotalPages: data.totalPages,
+          ),
+        );
 
-      if (data.occasions.isNotEmpty) {
-        final targetId = initialOccasionId != null &&
-                data.occasions.any((o) => o.id == initialOccasionId)
-            ? initialOccasionId
-            : data.occasions.first.id;
+        if (data.occasions.isNotEmpty) {
+          final targetId =
+              initialOccasionId != null &&
+                  data.occasions.any((o) => o.id == initialOccasionId)
+              ? initialOccasionId
+              : data.occasions.first.id;
 
-        doEvent(GetProductsByOccasionEvent(occasionId: targetId));
-      }
-      break;
+          doEvent(GetProductsByOccasionEvent(occasionId: targetId));
+        }
+        break;
 
-    case ErrorBaseResponse<OccasionsEntity>():
-      emit(state.copyWith(
-        occasionsState: BaseState<List<OccasionEntity>>.error(response.errorMessage),
-      ));
-      break;
+      case ErrorBaseResponse<OccasionsEntity>():
+        emit(
+          state.copyWith(
+            occasionsState: BaseState<List<OccasionEntity>>.error(
+              response.errorMessage,
+            ),
+          ),
+        );
+        break;
+    }
   }
-}
+
   Future<void> _loadMoreOccasions() async {
     if (state.isLoadingMoreOccasions) return;
 
@@ -95,13 +105,14 @@ class OccasionsViewModel extends Cubit<OccasionsState> {
         final current = state.occasionsState.data ?? [];
         final updated = [...current, ...data.occasions];
 
-        emit(state.copyWith(
-          isLoadingMoreOccasions: false,
-          occasionsCurrentPage: data.currentPage,
-          occasionsTotalPages: data.totalPages,
-          occasionsState:
-              BaseState<List<OccasionEntity>>.success(updated),
-        ));
+        emit(
+          state.copyWith(
+            isLoadingMoreOccasions: false,
+            occasionsCurrentPage: data.currentPage,
+            occasionsTotalPages: data.totalPages,
+            occasionsState: BaseState<List<OccasionEntity>>.success(updated),
+          ),
+        );
         break;
 
       case ErrorBaseResponse<OccasionsEntity>():
@@ -111,13 +122,15 @@ class OccasionsViewModel extends Cubit<OccasionsState> {
   }
 
   Future<void> _getProductsByOccasion(String occasionId) async {
-    emit(state.copyWith(
-      selectedOccasionId: occasionId,
-      currentPage: 1,
-      totalPages: 1,
-      productsState: BaseState<List<ProductEntity>>.loading(),
-      paginationResetKey: state.paginationResetKey + 1,
-    ));
+    emit(
+      state.copyWith(
+        selectedOccasionId: occasionId,
+        currentPage: 1,
+        totalPages: 1,
+        productsState: BaseState<List<ProductEntity>>.loading(),
+        paginationResetKey: state.paginationResetKey + 1,
+      ),
+    );
 
     final response = await _getProductsByOccasionUseCase.execute(
       occasionId: occasionId,
@@ -127,22 +140,25 @@ class OccasionsViewModel extends Cubit<OccasionsState> {
 
     switch (response) {
       case SuccessBaseResponse<ProductsEntity>():
-        emit(state.copyWith(
-          currentPage: response.data.currentPage,
-          totalPages: response.data.totalPages,
-          productsState: BaseState<List<ProductEntity>>.success(
-            response.data.products,
+        emit(
+          state.copyWith(
+            currentPage: response.data.currentPage,
+            totalPages: response.data.totalPages,
+            productsState: BaseState<List<ProductEntity>>.success(
+              response.data.products,
+            ),
           ),
-        ));
+        );
         break;
 
       case ErrorBaseResponse<ProductsEntity>():
-        emit(state.copyWith(
-          productsState:
-              BaseState<List<ProductEntity>>.error(
-                response.errorMessage,
-              ),
-        ));
+        emit(
+          state.copyWith(
+            productsState: BaseState<List<ProductEntity>>.error(
+              response.errorMessage,
+            ),
+          ),
+        );
         break;
     }
   }
@@ -167,13 +183,14 @@ class OccasionsViewModel extends Cubit<OccasionsState> {
         final current = state.productsState.data ?? [];
         final updated = [...current, ...response.data.products];
 
-        emit(state.copyWith(
-          isLoadingMore: false,
-          currentPage: response.data.currentPage,
-          totalPages: response.data.totalPages,
-          productsState:
-              BaseState<List<ProductEntity>>.success(updated),
-        ));
+        emit(
+          state.copyWith(
+            isLoadingMore: false,
+            currentPage: response.data.currentPage,
+            totalPages: response.data.totalPages,
+            productsState: BaseState<List<ProductEntity>>.success(updated),
+          ),
+        );
         break;
 
       case ErrorBaseResponse<ProductsEntity>():

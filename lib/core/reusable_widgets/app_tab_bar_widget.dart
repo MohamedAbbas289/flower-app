@@ -37,7 +37,9 @@ class _AppTabBarWidgetState extends State<AppTabBarWidget> {
 
     if (widget.initialIndex > 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToTab(widget.initialIndex);
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (mounted) _scrollToTab(widget.initialIndex);
+        });
       });
     }
   }
@@ -70,7 +72,22 @@ class _AppTabBarWidgetState extends State<AppTabBarWidget> {
         _selectedIndex = widget.initialIndex;
       });
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToTab(widget.initialIndex);
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (mounted) _scrollToTab(widget.initialIndex);
+        });
+      });
+    }
+
+    if (oldWidget.tabs.isEmpty && widget.tabs.isNotEmpty ||
+        (oldWidget.tabs != widget.tabs &&
+            _selectedIndex != widget.initialIndex)) {
+      setState(() {
+        _selectedIndex = widget.initialIndex;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (mounted) _scrollToTab(widget.initialIndex);
+        });
       });
     }
   }

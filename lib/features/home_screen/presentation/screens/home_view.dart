@@ -197,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
         SectionHeader(
           title: AppStrings.bestSeller,
           actionText: AppStrings.viewAll,
-          onTap: () {},
+          onTap: () => Navigator.pushNamed(context, AppRoutesName.bestSeller),
         ),
         const SizedBox(height: 12),
         _buildBestSellerContent(state.bestSellersState),
@@ -233,7 +233,11 @@ class _HomeScreenState extends State<HomeScreen> {
             name: product.title ?? '',
             image: product.imgCover ?? '',
             price: product.priceAfterDiscount ?? product.price ?? 0,
-            onTap: () {},
+            onTap: () => Navigator.pushNamed(
+              context,
+              AppRoutesName.productDetails,
+              arguments: product.id,
+            ),
           );
         },
       ),
