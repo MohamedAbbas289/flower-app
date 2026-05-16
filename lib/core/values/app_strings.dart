@@ -162,7 +162,6 @@ Thank you for choosing Flowery 💐
   static const String home = 'Home';
   static const String cart = 'Cart';
   static const categories = 'Categories';
-
   static const String profileView = 'Profile';
 
   static const String defaultAddress = 'Deliver to 2XVP+XC - Sheikh Zayed ';
@@ -190,4 +189,8 @@ Thank you for choosing Flowery 💐
   static const String bouquetInclude = 'Bouquet includes';
   static const String pinkRoses = 'Pink roses';
   static const String whiteWrap = 'White Wrap';
+  // best seller screen
+  static const String bestSellerTitle = 'Best Seller';
+  static const String bestSellerSubTitle =
+      'Bloom with our exquisite best sellers';
 }

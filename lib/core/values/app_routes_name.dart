@@ -13,4 +13,5 @@ abstract class AppRoutesName {
   static const occasions = "/OccasionsView";
   static const categories = "/categoriesView";
   static const productDetails = "/productDetailsView";
+  static const bestSeller = '/bestSellerView';
 }

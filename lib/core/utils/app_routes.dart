@@ -2,6 +2,7 @@ import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/app_section/presentation/view/app_section_view.dart';
+import 'package:flower_app/features/best_seller/presentation/view/best_seller_view.dart';
 import 'package:flower_app/features/occasions/presentation/occasions_view_model/occasions_view_model.dart';
 import 'package:flower_app/features/occasions/presentation/pages/occasions_view.dart';
 import 'package:flower_app/features/splash/presentation/splash_view.dart';
@@ -46,6 +47,9 @@ class AppRoutes {
             ),
           ),
         );
+      case AppRoutesName.bestSeller:
+        return MaterialPageRoute(builder: (_) =>const BestSellerView());
+
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(
