@@ -39,7 +39,6 @@ class BestSellerItem extends StatelessWidget {
               width: _cardWidth,
               child: ProductImage(
                 imageUrl: image,
-                heroTag: AppStrings.productImageHeroTag(id),
                 devicePixelRatio: MediaQuery.devicePixelRatioOf(context),
                 size: MediaQuery.sizeOf(context),
               ),

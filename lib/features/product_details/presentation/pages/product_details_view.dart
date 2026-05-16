@@ -6,14 +6,29 @@ import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
 import 'package:flower_app/features/product_details/domain/entities/product_details_entity.dart';
 import 'package:flower_app/features/product_details/presentation/view_model/product_details_cubit.dart';
+import 'package:flower_app/features/product_details/presentation/view_model/product_details_events.dart';
 import 'package:flower_app/features/product_details/presentation/view_model/product_details_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
-class ProductDetailsView extends StatelessWidget {
+class ProductDetailsView extends StatefulWidget {
   const ProductDetailsView({super.key, required this.productId});
   final String productId;
+
+  @override
+  State<ProductDetailsView> createState() => _ProductDetailsViewState();
+}
+
+class _ProductDetailsViewState extends State<ProductDetailsView> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProductDetailsCubit>().doEvent(
+      GetProductDetailsEvent(productId: widget.productId),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProductDetailsCubit, ProductDetailsBaseState>(
@@ -35,13 +50,15 @@ class ProductDetailsView extends StatelessWidget {
           );
         }
       },
-      child: const _ProductDetailsScaffold(),
+      child: _ProductDetailsScaffold(productId: widget.productId),
     );
   }
 }
 
 class _ProductDetailsScaffold extends StatelessWidget {
-  const _ProductDetailsScaffold();
+  const _ProductDetailsScaffold({required this.productId});
+
+  final String productId;
 
   @override
   Widget build(BuildContext context) {
@@ -56,15 +73,11 @@ class _ProductDetailsScaffold extends StatelessWidget {
           }
 
           if (state.productDetailsState.data != null) {
-            return _ProductDetailsBody(entity: state.productDetailsState.data!);
+            return _ProductDetailsBody(
+              entity: state.productDetailsState.data!,
+              productId: productId,
+            );
           }
-
-          // if (state.productDetailsState.msg != null && state.productDetailsState.data == null) {
-          //   return Center(
-          //     child: Text(state.productDetailsState.msg!, style: TextStyles.errorText),
-          //   );
-          // }
-
           return const SizedBox.shrink();
         },
       ),
@@ -74,9 +87,10 @@ class _ProductDetailsScaffold extends StatelessWidget {
 }
 
 class _ProductDetailsBody extends StatelessWidget {
-  const _ProductDetailsBody({required this.entity});
+  const _ProductDetailsBody({required this.entity, required this.productId});
 
   final ProductDetailsEntity entity;
+  final String productId;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +98,7 @@ class _ProductDetailsBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _ImageSlider(entity: entity),
+          _ImageSlider(entity: entity, productId: productId),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
@@ -109,9 +123,10 @@ class _ProductDetailsBody extends StatelessWidget {
 }
 
 class _ImageSlider extends StatefulWidget {
-  const _ImageSlider({required this.entity});
+  const _ImageSlider({required this.entity, required this.productId});
 
   final ProductDetailsEntity entity;
+  final String productId;
 
   @override
   State<_ImageSlider> createState() => _ImageSliderState();
@@ -130,25 +145,30 @@ class _ImageSliderState extends State<_ImageSlider> {
             itemCount: widget.entity.images.length,
             onPageChanged: (index) => setState(() => _currentIndex = index),
             itemBuilder: (context, index) {
-              return Hero(
-                tag: 'product-image-${widget.entity.id}',
-                child: CachedNetworkImage(
-                  imageUrl: widget.entity.images[index],
-                  width: double.infinity,
-                  height: 400,
-                  fit: BoxFit.cover,
-                  memCacheWidth: 600,
-                  placeholder: (_, _) => const Center(
-                    child: CircularProgressIndicator(color: AppColors.pink),
-                  ),
-                  errorWidget: (_, _, _) =>
-                      const Icon(Icons.broken_image, color: AppColors.gray),
+              final imageWidget = CachedNetworkImage(
+                imageUrl: widget.entity.images[index],
+                width: double.infinity,
+                height: 400,
+                fit: BoxFit.cover,
+                memCacheWidth: 600,
+                placeholder: (_, _) => const Center(
+                  child: CircularProgressIndicator(color: AppColors.pink),
                 ),
+                errorWidget: (_, _, _) =>
+                    const Icon(Icons.broken_image, color: AppColors.gray),
               );
+
+              if (index == 0) {
+                return Hero(
+                  tag: AppStrings.productImageHeroTag(widget.productId),
+                  child: imageWidget,
+                );
+              }
+              return imageWidget;
             },
           ),
         ),
-        Positioned(top: 40, left: 16, child: _BackButton()),
+        Positioned(top: 40, left: 8, child: _BackButton()),
         Positioned(
           bottom: 12,
           left: 0,
@@ -166,9 +186,12 @@ class _ImageSliderState extends State<_ImageSlider> {
 class _BackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.pop(context),
-      child: const Icon(Icons.arrow_back_ios_new, color: AppColors.black),
+    return IconButton(
+      onPressed: () => Navigator.pop(context),
+      icon: SvgPicture.asset(
+        Assets.assetsIconsArrowBack,
+        colorFilter: const ColorFilter.mode(AppColors.black, BlendMode.srcIn),
+      ),
     );
   }
 }
@@ -216,7 +239,7 @@ class _PriceAndStatus extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'EGP ${entity.price}',
+              'EGP ${entity.priceAfterDiscount}',
               style: TextStyles.appBarTextStyle.copyWith(
                 fontWeight: FontWeight.w700,
                 fontSize: 22,

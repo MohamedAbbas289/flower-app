@@ -8,11 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ProductCardWidget extends StatelessWidget {
-  const ProductCardWidget({super.key, required this.product, this.onAddToCart});
+  const ProductCardWidget({
+    super.key,
+    required this.product,
+    this.onAddToCart,
+    this.heroTag,
+  });
 
   final ProductCardData product;
   final VoidCallback? onAddToCart;
-
+  final String? heroTag;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -23,6 +28,7 @@ class ProductCardWidget extends StatelessWidget {
       devicePixelRatio: devicePixelRatio,
       product: product,
       onAddToCart: onAddToCart,
+      heroTag: heroTag,
     );
   }
 }
@@ -33,8 +39,9 @@ class _ProductCardContent extends StatelessWidget {
     required this.size,
     required this.devicePixelRatio,
     this.onAddToCart,
+    this.heroTag,
   });
-
+  final String? heroTag;
   final ProductCardData product;
   final VoidCallback? onAddToCart;
   final Size size;
@@ -59,7 +66,7 @@ class _ProductCardContent extends StatelessWidget {
               size: size,
               devicePixelRatio: devicePixelRatio,
               imageUrl: product.imageUrl,
-              heroTag: AppStrings.productImageHeroTag(product.id),
+              heroTag: heroTag,
             ),
           ),
           const SizedBox(height: 8),

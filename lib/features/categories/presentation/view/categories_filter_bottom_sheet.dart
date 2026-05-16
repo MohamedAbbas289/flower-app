@@ -69,11 +69,10 @@ class _CategoriesFilterBottomSheetState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(title, style: TextStyles.bodyRegular16),
-            Radio<SortType>(
-              value: value,
+            RadioGroup<SortType>(
               groupValue: _selectedSortType,
-              activeColor: AppColors.pink,
               onChanged: (v) => setState(() => _selectedSortType = v),
+              child: Radio<SortType>(value: value, activeColor: AppColors.pink),
             ),
           ],
         ),

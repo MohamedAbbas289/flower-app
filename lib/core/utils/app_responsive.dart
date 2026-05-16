@@ -5,7 +5,7 @@ class AppResponsive {
 
   static int gridCrossAxisCount(Size size) => 2;
 
-  static double gridChildAspectRatio(Size size) => 0.76;
+  static double gridChildAspectRatio(Size size) => 0.78;
 
   static int gridSkeletonCount(Size size) => 6;
 

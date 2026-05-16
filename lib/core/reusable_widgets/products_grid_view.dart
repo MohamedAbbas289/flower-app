@@ -40,9 +40,11 @@ class ProductsGridView extends StatefulWidget {
     this.isLoading = false,
     this.hasError = false,
     this.onLoadMore,
+    this.heroTagBuilder,
   });
 
   final List<ProductCardData> products;
+  final String Function(String productId)? heroTagBuilder;
   final void Function(String productId) onAddToCart;
   final void Function(String productId) onCardClicked;
 
@@ -153,6 +155,7 @@ class _ProductsGridViewState extends State<ProductsGridView> {
             child: ProductCardWidget(
               product: product,
               onAddToCart: () => widget.onAddToCart(product.id),
+              heroTag: widget.heroTagBuilder?.call(product.id),
             ),
           );
         },

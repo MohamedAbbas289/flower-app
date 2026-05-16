@@ -5,6 +5,7 @@ import 'package:flower_app/core/reusable_widgets/app_tab_bar_widget.dart';
 import 'package:flower_app/core/reusable_widgets/products_grid_view.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
+import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
 import 'package:flower_app/features/categories/presentation/view/categories_filter_bottom_sheet.dart';
@@ -89,11 +90,14 @@ class _CategoriesViewState extends State<CategoriesView> {
                     if (state.categoriesState.msg != null) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                         child: Text(
                           state.categoriesState.msg!,
-                          style: TextStyles.bodyRegular12
-                              .copyWith(color: AppColors.red),
+                          style: TextStyles.bodyRegular12.copyWith(
+                            color: AppColors.red,
+                          ),
                         ),
                       );
                     }
@@ -106,8 +110,8 @@ class _CategoriesViewState extends State<CategoriesView> {
                     final initialIndex = selectedId == null
                         ? 0
                         : tabs
-                            .indexWhere((t) => t.id == selectedId)
-                            .clamp(0, tabs.length - 1);
+                              .indexWhere((t) => t.id == selectedId)
+                              .clamp(0, tabs.length - 1);
 
                     return AppTabBarWidget(
                       key: ValueKey('${cats.length}_$selectedId'),
@@ -116,12 +120,12 @@ class _CategoriesViewState extends State<CategoriesView> {
                       onTabChanged: (tab) {
                         if (tab is _AllTab) {
                           context.read<CategoriesViewModel>().doEvent(
-                                AllProductsSelectedEvent(),
-                              );
+                            AllProductsSelectedEvent(),
+                          );
                         } else {
                           context.read<CategoriesViewModel>().doEvent(
-                                CategorySelectedEvent(tab.id),
-                              );
+                            CategorySelectedEvent(tab.id),
+                          );
                         }
                       },
                     );
@@ -143,8 +147,11 @@ class _CategoriesViewState extends State<CategoriesView> {
                             onRetry: () {
                               final vm = context.read<CategoriesViewModel>();
                               if (state.selectedCategoryId != null) {
-                                vm.doEvent(CategorySelectedEvent(
-                                    state.selectedCategoryId!));
+                                vm.doEvent(
+                                  CategorySelectedEvent(
+                                    state.selectedCategoryId!,
+                                  ),
+                                );
                               } else {
                                 vm.doEvent(AllProductsSelectedEvent());
                               }
@@ -167,14 +174,20 @@ class _CategoriesViewState extends State<CategoriesView> {
                         return ProductsGridView(
                           products: products,
                           onAddToCart: (_) {},
-                          onCardClicked: (_) {},
+                          onCardClicked: (productId) {
+                            Navigator.of(context).pushNamed(
+                              AppRoutesName.productDetails,
+                              arguments: productId,
+                            );
+                          },
+                          heroTagBuilder: (productId) =>
+                              AppStrings.productImageHeroTag(productId),
                           currentPage: ps.data?.metadata?.currentPage ?? 1,
                           totalPages: ps.data?.metadata?.totalPages ?? 1,
                           paginationResetKey: vm.paginationResetKey,
                           isLoading: ps.isLoading && products.isEmpty,
                           hasError: ps.msg != null,
-                          onLoadMore: () =>
-                              vm.doEvent(LoadMoreProductsEvent()),
+                          onLoadMore: () => vm.doEvent(LoadMoreProductsEvent()),
                         );
                       },
                     ),

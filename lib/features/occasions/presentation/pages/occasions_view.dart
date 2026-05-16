@@ -3,6 +3,7 @@ import 'package:flower_app/core/reusable_widgets/app_tab_bar_widget.dart';
 import 'package:flower_app/core/reusable_widgets/products_grid_view.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
+import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/occasions/presentation/occasions_view_model/occasions_events.dart';
 import 'package:flower_app/features/occasions/presentation/occasions_view_model/occasions_state.dart';
@@ -166,9 +167,7 @@ class _OccasionsBody extends StatelessWidget {
         onRetry: () {
           if (state.selectedOccasionId != null) {
             context.read<OccasionsViewModel>().doEvent(
-              GetProductsByOccasionEvent(
-                occasionId: state.selectedOccasionId!,
-              ),
+              GetProductsByOccasionEvent(occasionId: state.selectedOccasionId!),
             );
           }
         },
@@ -179,7 +178,14 @@ class _OccasionsBody extends StatelessWidget {
 
     return ProductsGridView(
       products: products,
-      onCardClicked: (productId) {},
+      onCardClicked: (productId) {
+        Navigator.of(
+          context,
+        ).pushNamed(AppRoutesName.productDetails, arguments: productId);
+      },
+      heroTagBuilder:
+          (productId) =>
+              AppStrings.productImageHeroTag(productId),
       isLoading: productsState.isLoading && products.isEmpty,
       currentPage: state.currentPage,
       totalPages: state.totalPages,
@@ -187,7 +193,9 @@ class _OccasionsBody extends StatelessWidget {
       onLoadMore: () {
         context.read<OccasionsViewModel>().doEvent(LoadMoreProductsEvent());
       },
-      onAddToCart: (productId) {},
+      onAddToCart: (productId) {
+        // TODO add to cart feature
+      },
     );
   }
 }
@@ -214,10 +222,7 @@ class _ErrorView extends StatelessWidget {
               style: TextStyles.bodyRegular14.copyWith(color: AppColors.gray),
             ),
             const SizedBox(height: 16),
-            FilledButton(
-              onPressed: onRetry,
-              child: Text(AppStrings.retry),
-            ),
+            FilledButton(onPressed: onRetry, child: Text(AppStrings.retry)),
           ],
         ),
       ),

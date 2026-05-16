@@ -232,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
             id: product.id ?? '',
             name: product.title ?? '',
             image: product.imgCover ?? '',
-            price: product.price ?? 0,
+            price: product.priceAfterDiscount ?? product.price ?? 0,
             onTap: () {},
           );
         },
