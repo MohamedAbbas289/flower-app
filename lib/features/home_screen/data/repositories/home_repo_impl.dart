@@ -1,9 +1,6 @@
 
 
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/home_screen/domain/entities/best_seller_model.dart';
-import 'package:flower_app/features/home_screen/domain/entities/category_model.dart';
-import 'package:flower_app/features/home_screen/domain/entities/occasion_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/repositories/home_repo_contract.dart';

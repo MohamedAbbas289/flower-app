@@ -1,17 +1,15 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/home_screen/domain/entities/best_seller_model.dart';
-import 'package:flower_app/features/home_screen/domain/entities/category_model.dart';
-import 'package:flower_app/features/home_screen/domain/entities/occasion_model.dart';
+import 'package:flower_app/features/home_screen/domain/entities/best_seller_entity.dart';
+import 'package:flower_app/features/home_screen/domain/entities/category_entity.dart';
+import 'package:flower_app/features/home_screen/domain/entities/occasion_entity.dart';
 import 'package:flower_app/features/home_screen/domain/use_cases/get_best_seller_use_case.dart';
 import 'package:flower_app/features/home_screen/domain/use_cases/get_category_use_cases.dart';
 import 'package:flower_app/features/home_screen/domain/use_cases/get_occasion_use_case.dart';
-import 'package:flower_app/features/home_screen/presentation/view_model/cubit/home_view_model.dart';
-import 'package:flower_app/features/home_screen/presentation/view_model/states/home_events.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'home_view_model_test.mocks.dart';
+import 'home_view_Entity_test.mocks.dart';
 
 @GenerateMocks([
   GetCategoryUseCases,
@@ -23,18 +21,18 @@ void main() {
   late MockGetOccasionUseCase mockGetOccasionUseCase;
   late MockGetBestSellerUseCase mockGetBestSellerUseCase;
 
-  late HomeViewModel viewModel;
+  late HomeViewEntity viewEntity;
 
   setUp(() {
-    provideDummy<BaseResponse<List<CategoryModel>>>(
-      SuccessBaseResponse<List<CategoryModel>>(data: []),
+    provideDummy<BaseResponse<List<CategoryEntity>>>(
+      SuccessBaseResponse<List<CategoryEntity>>(data: []),
     );
-    provideDummy<BaseResponse<List<CategoryModel>>>(
-      ErrorBaseResponse<List<CategoryModel>>(exception: Exception()),
+    provideDummy<BaseResponse<List<CategoryEntity>>>(
+      ErrorBaseResponse<List<CategoryEntity>>(exception: Exception()),
     );
-    provideDummy<BaseResponse<List<CategoryModel>>>(
-      SuccessBaseResponse<List<CategoryModel>>(data: [
-        CategoryModel(
+    provideDummy<BaseResponse<List<CategoryEntity>>>(
+      SuccessBaseResponse<List<CategoryEntity>>(data: [
+        CategoryEntity(
           id: '1',
           name: 'test',
           slug: 'test',
@@ -45,15 +43,15 @@ void main() {
           productsCount: 1,
         ),],
       ),);
-    provideDummy<BaseResponse<List<OccasionModel>>>(
-      SuccessBaseResponse<List<OccasionModel>>(data: []),
+    provideDummy<BaseResponse<List<OccasionEntity>>>(
+      SuccessBaseResponse<List<OccasionEntity>>(data: []),
     );
-    provideDummy<BaseResponse<List<OccasionModel>>>(
-      ErrorBaseResponse<List<OccasionModel>>(exception: Exception()),
+    provideDummy<BaseResponse<List<OccasionEntity>>>(
+      ErrorBaseResponse<List<OccasionEntity>>(exception: Exception()),
     );
-    provideDummy<BaseResponse<List<OccasionModel>>>(
-      SuccessBaseResponse<List<OccasionModel>>(data: [
-        OccasionModel(
+    provideDummy<BaseResponse<List<OccasionEntity>>>(
+      SuccessBaseResponse<List<OccasionEntity>>(data: [
+        OccasionEntity(
           id: '1',
           name: 'test',
           slug: 'test',
@@ -65,15 +63,15 @@ void main() {
         ),
       ]),
     );
-    provideDummy<BaseResponse<List<BestSellerModel>>>(
-      SuccessBaseResponse<List<BestSellerModel>>(data: []),
+    provideDummy<BaseResponse<List<BestSellerEntity>>>(
+      SuccessBaseResponse<List<BestSellerEntity>>(data: []),
     );
-    provideDummy<BaseResponse<List<BestSellerModel>>>(
-      ErrorBaseResponse<List<BestSellerModel>>(exception: Exception()),
+    provideDummy<BaseResponse<List<BestSellerEntity>>>(
+      ErrorBaseResponse<List<BestSellerEntity>>(exception: Exception()),
     );
-    provideDummy<BaseResponse<List<BestSellerModel>>>(
-      SuccessBaseResponse<List<BestSellerModel>>(data: [
-        BestSellerModel(
+    provideDummy<BaseResponse<List<BestSellerEntity>>>(
+      SuccessBaseResponse<List<BestSellerEntity>>(data: [
+        BestSellerEntity(
           id: '1',
           slug: 'test',
           isSuperAdmin: true,
@@ -90,39 +88,39 @@ void main() {
     mockGetOccasionUseCase = MockGetOccasionUseCase();
     mockGetBestSellerUseCase = MockGetBestSellerUseCase();
 
-    viewModel = HomeViewModel(
+    viewEntity = HomeViewEntity(
       mockGetCategoryUseCases,
       mockGetOccasionUseCase,
       mockGetBestSellerUseCase,
     );
   });
 
-  group('HomeViewModel Tests', () {
+  group('HomeViewEntity Tests', () {
 
     test(' Test Success Case initial state in HomeState With Empty Data  ', () async {
 
       when(mockGetCategoryUseCases()).thenAnswer(
-            (_) async => SuccessBaseResponse<List<CategoryModel>>(
+            (_) async => SuccessBaseResponse<List<CategoryEntity>>(
           data: [],
         ),
       );
 
       when(mockGetOccasionUseCase()).thenAnswer(
-            (_) async => SuccessBaseResponse<List<OccasionModel>>(
+            (_) async => SuccessBaseResponse<List<OccasionEntity>>(
           data: [],
         ),
       );
 
       when(mockGetBestSellerUseCase()).thenAnswer(
-            (_) async => SuccessBaseResponse<List<BestSellerModel>>(
+            (_) async => SuccessBaseResponse<List<BestSellerEntity>>(
           data: [],
         ),
       );
 
-      await viewModel.doEvent(GetAllDataEvent());
-      expect(viewModel.state.categories, []);
-      expect(viewModel.state.occasions, []);
-      expect(viewModel.state.bestSellers, []);
+      await viewEntity.doEvent(GetAllDataEvent());
+      expect(viewEntity.state.categories, []);
+      expect(viewEntity.state.occasions, []);
+      expect(viewEntity.state.bestSellers, []);
 
 
 
@@ -130,25 +128,25 @@ void main() {
     test(' Test Error Case initial state in HomeState With Exception    ', () async {
 
       when(mockGetCategoryUseCases()).thenAnswer(
-            (_) async => ErrorBaseResponse<List<CategoryModel>>(
+            (_) async => ErrorBaseResponse<List<CategoryEntity>>(
           exception: Exception(),
         ),
       );
       when(mockGetOccasionUseCase()).thenAnswer(
-            (_) async => ErrorBaseResponse<List<OccasionModel>>(
+            (_) async => ErrorBaseResponse<List<OccasionEntity>>(
           exception: Exception(),
         ),
       );
       when(mockGetBestSellerUseCase()).thenAnswer(
-            (_) async => ErrorBaseResponse<List<BestSellerModel>>(
+            (_) async => ErrorBaseResponse<List<BestSellerEntity>>(
           exception: Exception(),
         ),
       );
 
-      await viewModel.doEvent(GetAllDataEvent());
-      expect(viewModel.state.categoriesError, isNotEmpty);
-      expect(viewModel.state.occasionsError, isNotEmpty);
-      expect(viewModel.state.bestSellersError, isNotEmpty);
+      await viewEntity.doEvent(GetAllDataEvent());
+      expect(viewEntity.state.categoriesError, isNotEmpty);
+      expect(viewEntity.state.occasionsError, isNotEmpty);
+      expect(viewEntity.state.bestSellersError, isNotEmpty);
 
 
 
@@ -156,9 +154,9 @@ void main() {
     test(' Test Success Case initial state in HomeState With  Data  ', () async {
 
       when(mockGetCategoryUseCases()).thenAnswer(
-            (_) async => SuccessBaseResponse<List<CategoryModel>>(
+            (_) async => SuccessBaseResponse<List<CategoryEntity>>(
           data: [
-            CategoryModel(
+            CategoryEntity(
               id: '1',
               name: 'test',
               slug: 'test',
@@ -173,9 +171,9 @@ void main() {
       );
 
       when(mockGetOccasionUseCase()).thenAnswer(
-            (_) async => SuccessBaseResponse<List<OccasionModel>>(
+            (_) async => SuccessBaseResponse<List<OccasionEntity>>(
           data: [
-            OccasionModel(
+            OccasionEntity(
               id: '1',
               name: 'test',
               slug: 'test',
@@ -190,9 +188,9 @@ void main() {
       );
 
       when(mockGetBestSellerUseCase()).thenAnswer(
-            (_) async => SuccessBaseResponse<List<BestSellerModel>>(
+            (_) async => SuccessBaseResponse<List<BestSellerEntity>>(
           data: [
-            BestSellerModel(
+            BestSellerEntity(
               id: '1',
               slug: 'test',
               isSuperAdmin: true,
@@ -203,10 +201,10 @@ void main() {
         ),
       );
 
-      await viewModel.doEvent(GetAllDataEvent());
-      expect(viewModel.state.categories, isNotEmpty);
-      expect(viewModel.state.occasions, isNotEmpty);
-      expect(viewModel.state.bestSellers, isNotEmpty);
+      await viewEntity.doEvent(GetAllDataEvent());
+      expect(viewEntity.state.categories, isNotEmpty);
+      expect(viewEntity.state.occasions, isNotEmpty);
+      expect(viewEntity.state.bestSellers, isNotEmpty);
 
 
 

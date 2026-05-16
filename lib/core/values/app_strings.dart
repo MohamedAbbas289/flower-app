@@ -15,6 +15,7 @@ Thank you for choosing Flowery 💐
 ''';
   static const String close = 'Close';
   static const String addToCart = 'Add to cart';
+  static const String search = 'Search';
 
   // titles
   static const String loginTitle = 'Login';
@@ -105,7 +106,8 @@ Thank you for choosing Flowery 💐
       'A server error occurred. Please try again later';
   static const String somethingWentWrong =
       'Something went wrong. Please try again later';
-  static const String dataParsingError = 'Data parsing error. Please try again later';
+  static const String dataParsingError =
+      'Data parsing error. Please try again later';
   // app error messages
   static const String routeNotFound = 'Route not found';
   static const String imageNotAvailable = 'Image not available';
@@ -145,7 +147,6 @@ Thank you for choosing Flowery 💐
   static const String categoryView = 'Categories';
   static const String cartView = 'Cart';
   static const String profileView = 'Profile';
-
 
   static const String location = 'Deliver to 2XVP+XC - Sheikh Zayed ';
   static const String viewAll = 'View all';

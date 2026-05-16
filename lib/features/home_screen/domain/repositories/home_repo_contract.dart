@@ -1,15 +1,11 @@
-
-import 'package:flower_app/features/home_screen/domain/entities/best_seller_model.dart';
-import 'package:flower_app/features/home_screen/domain/entities/category_model.dart';
-import 'package:flower_app/features/home_screen/domain/entities/occasion_model.dart';
+import 'package:flower_app/features/home_screen/domain/entities/best_seller_entity.dart';
+import 'package:flower_app/features/home_screen/domain/entities/category_entity.dart';
+import 'package:flower_app/features/home_screen/domain/entities/occasion_entity.dart';
 
 import '../../../../config/base_response/base_response.dart';
 
-abstract class HomeRepoContract {
-
-  Future<BaseResponse<List<CategoryModel>>> getAllCategory();
-  Future<BaseResponse<List<OccasionModel>>> getAllOccasion();
-  Future<BaseResponse<List<BestSellerModel>>> getAllBestSeller();
-
-
+abstract interface class HomeRepoContract {
+  Future<BaseResponse<List<CategoryEntity>>> getAllCategory();
+  Future<BaseResponse<List<OccasionEntity>>> getAllOccasion();
+  Future<BaseResponse<List<BestSellerEntity>>> getAllBestSeller();
 }

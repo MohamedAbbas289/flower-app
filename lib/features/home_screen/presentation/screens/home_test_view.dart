@@ -23,8 +23,7 @@ class HomeScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return BlocProvider(
-      create: (context) => homeViewModel..doEvent(GetAllDataEvent())
-        ,
+      create: (context) => homeViewModel..doEvent(GetAllDataEvent()),
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -46,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                     height: 50,
                     child: TextFormField(
                       decoration: InputDecoration(
-                        hintText: 'Search',
+                        hintText: AppStrings.search,
                         prefixIcon: const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 15),
                           child: Icon(Icons.search),
@@ -63,10 +62,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 15,
-            vertical: 10,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -93,9 +89,7 @@ class HomeScreen extends StatelessWidget {
                 BlocBuilder<HomeViewModel, HomeState>(
                   builder: (context, state) {
                     if (state.categoriesError.isNotEmpty) {
-                      return Center(
-                        child: Text(state.categoriesError),
-                      );
+                      return Center(child: Text(state.categoriesError));
                     }
                     if (state.categories.isNotEmpty &&
                         !state.categoriesLoading) {
@@ -118,9 +112,7 @@ class HomeScreen extends StatelessWidget {
                     }
                     if (state.categoriesLoading) {
                       return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.pink,
-                        ),
+                        child: CircularProgressIndicator(color: AppColors.pink),
                       );
                     }
                     return const SizedBox.shrink();
@@ -141,9 +133,7 @@ class HomeScreen extends StatelessWidget {
                 BlocBuilder<HomeViewModel, HomeState>(
                   builder: (context, state) {
                     if (state.bestSellersError.isNotEmpty) {
-                      return Center(
-                        child: Text(state.bestSellersError),
-                      );
+                      return Center(child: Text(state.bestSellersError));
                     }
                     if (state.bestSellers.isNotEmpty &&
                         !state.bestSellersLoading) {
@@ -167,9 +157,7 @@ class HomeScreen extends StatelessWidget {
                     }
                     if (state.bestSellersLoading) {
                       return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.pink,
-                        ),
+                        child: CircularProgressIndicator(color: AppColors.pink),
                       );
                     }
                     return const SizedBox.shrink();
@@ -189,12 +177,9 @@ class HomeScreen extends StatelessWidget {
                 BlocBuilder<HomeViewModel, HomeState>(
                   builder: (context, state) {
                     if (state.occasionsError.isNotEmpty) {
-                      return Center(
-                        child: Text(state.occasionsError),
-                      );
+                      return Center(child: Text(state.occasionsError));
                     }
-                    if (state.occasions.isNotEmpty &&
-                        !state.occasionsLoading) {
+                    if (state.occasions.isNotEmpty && !state.occasionsLoading) {
                       return SizedBox(
                         height: size.height * 0.22,
                         child: ListView.separated(
@@ -214,9 +199,7 @@ class HomeScreen extends StatelessWidget {
                     }
                     if (state.occasionsLoading) {
                       return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.pink,
-                        ),
+                        child: CircularProgressIndicator(color: AppColors.pink),
                       );
                     }
                     return const SizedBox.shrink();
