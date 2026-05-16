@@ -11,8 +11,8 @@ class AppTabBarWidget extends StatefulWidget {
     this.initialIndex = 0,
   });
 
-  final List<TabItem> tabs;
-  final void Function(TabItem tab) onTabChanged;
+  final List<TabItemData> tabs;
+  final void Function(TabItemData tab) onTabChanged;
   final int initialIndex;
 
   @override
@@ -112,26 +112,28 @@ class _TabItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyles.bodyRegular14.copyWith(
-              color: isSelected ? AppColors.pink : AppColors.gray,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+      child: IntrinsicWidth(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyles.bodyRegular14.copyWith(
+                color: isSelected ? AppColors.pink : AppColors.gray,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            height: 2,
-            color: isSelected ? AppColors.pink : AppColors.placeHolder,
-          ),
-        ],
+            const SizedBox(height: 4),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              height: 2,
+              color: isSelected ? AppColors.pink : AppColors.placeHolder,
+            ),
+          ],
+        ),
       ),
     );
   }

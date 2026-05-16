@@ -54,7 +54,7 @@ class _ProductCardContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AspectRatio(
-            aspectRatio: 1 / 0.78,
+            aspectRatio: 1 / 0.72,
             child: ProductImage(
               size: size,
               devicePixelRatio: devicePixelRatio,

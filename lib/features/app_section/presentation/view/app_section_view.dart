@@ -9,6 +9,7 @@ import '../widgets/bottom_nav_icon.dart';
 import '../widgets/cart_test_view.dart';
 import '../widgets/categories_test_view.dart';
 import '../../../home_screen/presentation/screens/home_view.dart';
+import 'package:flower_app/features/categories/presentation/screens/categories_screen.dart';
 import '../widgets/profile_test_view.dart';
 
 class AppSectionView extends StatefulWidget {
@@ -26,6 +27,7 @@ class _AppSectionViewState extends State<AppSectionView> {
       child: HomeScreen(),
     ),
     CategoriesTestView(),
+    const CategoriesScreen(),
     CartTestView(),
     ProfileTestView(),
   ];
@@ -54,10 +56,10 @@ class _AppSectionViewState extends State<AppSectionView> {
       label: AppStrings.profileView,
     ),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: const Text("App Section")),
       body: _tabs[_currentTabIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentTabIndex,

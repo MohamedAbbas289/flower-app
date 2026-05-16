@@ -1,4 +1,4 @@
-abstract interface class TabItem {
+abstract interface class TabItemData {
   String get id;
   String get name;
 }
