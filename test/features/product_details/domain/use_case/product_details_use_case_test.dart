@@ -17,7 +17,6 @@ void main() {
     id: '69d988754461df0f939b581a',
     title: 'Pink Rose Bouquet',
     description: 'Lorem ipsum',
-    imgCover: 'https://example.com/image.jpg',
     images: ['https://example.com/image.jpg'],
     price: 1500,
     priceAfterDiscount: 1200,

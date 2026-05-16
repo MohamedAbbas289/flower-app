@@ -55,6 +55,8 @@ class _AppTabBarWidgetState extends State<AppTabBarWidget> {
     }
   }
 
+  //TODO: show it to eng.Loay
+
   @override
   void didUpdateWidget(covariant AppTabBarWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -93,6 +95,7 @@ class _AppTabBarWidgetState extends State<AppTabBarWidget> {
   }
 
   void _scrollToTab(int index) {
+    //>>>>>>>>>>>>>
     if (index < 0 || index >= _tabKeys.length) return;
     final BuildContext? context = _tabKeys[index].currentContext;
     if (context != null) {
