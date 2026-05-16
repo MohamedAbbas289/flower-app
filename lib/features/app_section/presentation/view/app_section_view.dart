@@ -7,7 +7,6 @@ import 'package:flower_app/features/app_section/domain/entity/bottom_nav_item_en
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/bottom_nav_icon.dart';
 import '../widgets/cart_test_view.dart';
-import '../widgets/categories_test_view.dart';
 import '../../../home_screen/presentation/screens/home_view.dart';
 import 'package:flower_app/features/categories/presentation/screens/categories_screen.dart';
 import '../widgets/profile_test_view.dart';
@@ -26,7 +25,6 @@ class _AppSectionViewState extends State<AppSectionView> {
       create: (context) => getIt<HomeViewModel>(),
       child: HomeScreen(),
     ),
-    CategoriesTestView(),
     const CategoriesScreen(),
     CartTestView(),
     ProfileTestView(),
