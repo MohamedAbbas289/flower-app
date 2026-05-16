@@ -26,18 +26,6 @@ class HomeViewModel extends Cubit<HomeState> {
         _loadHomeData();
       case RetryLoadHomeDataEvent():
         _retryLoadHomeData();
-      case NavigateToCategoryEvent():
-        _navigateToCategory(event.categoryId);
-      case NavigateToOccasionEvent():
-        _navigateToOccasion(event.occasionId);
-      case NavigateToBestSellerEvent():
-        _navigateToBestSeller(event.productId);
-      case NavigateToViewAllCategoriesEvent():
-        _navigateToViewAllCategories();
-      case NavigateToViewAllOccasionsEvent():
-        _navigateToViewAllOccasions();
-      case NavigateToViewAllBestSellersEvent():
-        _navigateToViewAllBestSellers();
     }
   }
 
@@ -100,27 +88,4 @@ class HomeViewModel extends Cubit<HomeState> {
     }
   }
 
-  void _navigateToCategory(String categoryId) {
-    // TODO: navigation
-  }
-
-  void _navigateToOccasion(String occasionId) {
-    // TODO: navigation
-  }
-
-  void _navigateToBestSeller(String productId) {
-    // TODO: navigation
-  }
-
-  void _navigateToViewAllCategories() {
-    // TODO: navigation
-  }
-
-  void _navigateToViewAllOccasions() {
-    // TODO: navigation
-  }
-
-  void _navigateToViewAllBestSellers() {
-    // TODO: navigation
-  }
 }

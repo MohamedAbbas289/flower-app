@@ -1,6 +1,7 @@
 import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
+import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
 import 'package:flower_app/features/home_screen/domain/entities/best_seller_entity.dart';
@@ -146,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
         SectionHeader(
           title: AppStrings.categories,
           actionText: AppStrings.viewAll,
-          onTap: () => _cubit.doEvent(const NavigateToViewAllCategoriesEvent()),
+          onTap: () => Navigator.pushNamed(context, AppRoutesName.category),
         ),
         const SizedBox(height: 12),
         _buildCategoriesContent(state.categoriesState),
@@ -181,9 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
             id: category.id ?? '',
             name: category.name ?? '',
             image: category.image ?? '',
-            onTap: () => _cubit.doEvent(
-              NavigateToCategoryEvent(categoryId: category.id ?? ''),
-            ),
+            onTap: () {},
           );
         },
       ),
@@ -197,8 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
         SectionHeader(
           title: AppStrings.bestSeller,
           actionText: AppStrings.viewAll,
-          onTap: () =>
-              _cubit.doEvent(const NavigateToViewAllBestSellersEvent()),
+          onTap: () {},
         ),
         const SizedBox(height: 12),
         _buildBestSellerContent(state.bestSellersState),
@@ -234,9 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
             name: product.title ?? '',
             image: product.imgCover ?? '',
             price: product.price ?? 0,
-            onTap: () => _cubit.doEvent(
-              NavigateToBestSellerEvent(productId: product.id ?? ''),
-            ),
+            onTap: () {},
           );
         },
       ),
@@ -250,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
         SectionHeader(
           title: AppStrings.occasions,
           actionText: AppStrings.viewAll,
-          onTap: () => _cubit.doEvent(const NavigateToViewAllOccasionsEvent()),
+          onTap: () => Navigator.pushNamed(context, AppRoutesName.occasions),
         ),
         const SizedBox(height: 12),
         _buildOccasionsContent(state.occasionsState),
@@ -285,9 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
             id: occasion.id ?? '',
             name: occasion.name ?? '',
             image: occasion.image ?? '',
-            onTap: () => _cubit.doEvent(
-              NavigateToOccasionEvent(occasionId: occasion.id ?? ''),
-            ),
+            onTap: () {},
           );
         },
       ),

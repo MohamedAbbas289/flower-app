@@ -1,5 +1,4 @@
 import 'package:flower_app/core/reusable_widgets/product_image.dart';
-import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_styles.dart';
@@ -42,7 +41,6 @@ class CategoryItem extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               child: ProductImage(
                 imageUrl: image,
-                heroTag: AppStrings.productImageHeroTag(id),
                 devicePixelRatio: MediaQuery.devicePixelRatioOf(context),
                 size: MediaQuery.sizeOf(context),
               ),

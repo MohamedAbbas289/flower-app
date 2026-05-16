@@ -24,6 +24,9 @@ Thank you for choosing Flowery 💐
   // titles
   static const String loginTitle = 'Login';
   static const String signupTitle = 'Sign up';
+  static const String occasionTitle = 'Occasion';
+  static const String occasionSubtitle =
+      'Bloom with our exquisite best sellers';
   // labels
   static const String genderLabel = 'Gender';
   static const String maleLabel = 'Male';
@@ -92,7 +95,7 @@ Thank you for choosing Flowery 💐
       'Failed to delete remember me preference';
   static const String clearStorageFailed = 'Failed to clear storage';
 
-  // dio error messages
+  // api error messages
   static const String connectionTimeout =
       'Connection timed out. Please check your internet connection and try again';
   static const String requestTimeout =
@@ -118,6 +121,12 @@ Thank you for choosing Flowery 💐
   static const noCategoriesFound = 'No categories found';
   static const noProductsFound = 'No products found';
   static const noOccasionsFound = 'No occasions found';
+  static const String badRequest = 'Bad request. Please try again later';
+  static const String forbidden = 'Forbidden. Please try again later';
+  static const String unauthorized = 'Unauthorized. Please try again later';
+  static const String notFound = 'Not found. Please try again later';
+  static const String internalServerError =
+      'Internal server error. Please try again later';
 
   // UI strings (feature forget pasword)
   static const String password = "Password";

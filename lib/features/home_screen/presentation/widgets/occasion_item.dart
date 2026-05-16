@@ -1,5 +1,4 @@
 import 'package:flower_app/core/reusable_widgets/product_image.dart';
-import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/values/endpoints.dart';
@@ -37,7 +36,6 @@ class OccasionItem extends StatelessWidget {
               width: _cardWidth,
               child: ProductImage(
                 imageUrl: '${Endpoints.imageBaseUrl}$image',
-                heroTag: AppStrings.productImageHeroTag(id),
                 devicePixelRatio: MediaQuery.devicePixelRatioOf(context),
                 size: MediaQuery.sizeOf(context),
               ),
