@@ -181,4 +181,13 @@ Thank you for choosing Flowery 💐
   static const String discount = 'Discount';
   static const String noProductsAvailable =
       'Oops! No products available at the moment :(';
+  // Product details screen
+  static const String allPricesIncludeTax = 'All prices include tax';
+  static const String status = 'Status:';
+  static const String inStock = 'In Stock';
+  static const String outOfStock = 'Out Of Stock';
+  static const String description = 'Description';
+  static const String bouquetInclude = 'Bouquet includes';
+  static const String pinkRoses = 'Pink roses';
+  static const String whiteWrap = 'White Wrap';
 }

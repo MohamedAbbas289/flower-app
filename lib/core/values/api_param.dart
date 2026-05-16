@@ -15,4 +15,5 @@ class ApiParam {
   static const String occasions = "occasions";
   static const String page = "page";
   static const String limit = "limit";
+  static const String id = "_id";
 }

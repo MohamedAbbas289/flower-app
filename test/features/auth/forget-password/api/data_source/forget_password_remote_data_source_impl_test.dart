@@ -3,7 +3,6 @@ import 'package:flower_app/features/auth/forget-password/api/data_source/forget_
 import 'package:flower_app/features/auth/forget-password/domain/entities/forget_password_entity.dart';
 import 'package:test/test.dart';
 
-
 void main() {
   late ForgetPasswordRemoteDataSourceImpl dataSource;
 
@@ -28,7 +27,7 @@ void main() {
 
   group("verifyCode", () {
     test("valid code returns success", () async {
-      final result = await dataSource.verifyCode("123456");
+      final result = await dataSource.verifyCode("1234");
 
       expect(result, isA<SuccessBaseResponse<ForgetPasswordEntity>>());
 
@@ -42,7 +41,7 @@ void main() {
     });
 
     test("invalid code returns error", () async {
-      final result = await dataSource.verifyCode("123456");
+      final result = await dataSource.verifyCode("0000");
 
       expect(result, isA<ErrorBaseResponse<ForgetPasswordEntity>>());
 
