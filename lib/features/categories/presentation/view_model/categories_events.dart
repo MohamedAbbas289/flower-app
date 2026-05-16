@@ -2,7 +2,10 @@ enum SortType { lowestPrice, highestPrice, newest, oldest, discount }
 
 sealed class CategoriesEvents {}
 
-class LoadInitialDataEvent extends CategoriesEvents {}
+class LoadInitialDataEvent extends CategoriesEvents {
+  final String? initialCategoryId;
+  LoadInitialDataEvent({this.initialCategoryId});
+}
 
 class CategorySelectedEvent extends CategoriesEvents {
   final String categoryId;

@@ -34,6 +34,12 @@ class _AppTabBarWidgetState extends State<AppTabBarWidget> {
     _selectedIndex = widget.initialIndex;
     _tabKeys = List.generate(widget.tabs.length, (_) => GlobalKey());
     _scrollController.addListener(_onScroll);
+
+    if (widget.initialIndex > 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToTab(widget.initialIndex);
+      });
+    }
   }
 
   void _onScroll() {
@@ -63,11 +69,14 @@ class _AppTabBarWidgetState extends State<AppTabBarWidget> {
       setState(() {
         _selectedIndex = widget.initialIndex;
       });
-      _scrollToTab(widget.initialIndex);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToTab(widget.initialIndex);
+      });
     }
   }
 
   void _scrollToTab(int index) {
+    if (index < 0 || index >= _tabKeys.length) return;
     final BuildContext? context = _tabKeys[index].currentContext;
     if (context != null) {
       Scrollable.ensureVisible(

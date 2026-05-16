@@ -24,7 +24,7 @@ class OccasionsViewModel extends Cubit<OccasionsState> {
   void doEvent(OccasionsEvent event) {
     switch (event) {
       case GetOccasionsEvent():
-        _getOccasions();
+        _getOccasions(event.initialOccasionId);
         break;
 
       case GetProductsByOccasionEvent():
@@ -41,47 +41,40 @@ class OccasionsViewModel extends Cubit<OccasionsState> {
     }
   }
 
-  Future<void> _getOccasions() async {
-    emit(state.copyWith(
-      occasionsState: BaseState<List<OccasionEntity>>.loading(),
-    ));
+  Future<void> _getOccasions(String? initialOccasionId) async {
+  emit(state.copyWith(
+    occasionsState: BaseState<List<OccasionEntity>>.loading(),
+  ));
 
-    final response = await _getOccasionsUseCase.execute(
-      page: 1,
-      limit: _limit,
-    );
+  final response = await _getOccasionsUseCase.execute(page: 1, limit: _limit);
 
-    switch (response) {
-      case SuccessBaseResponse<OccasionsEntity>():
-        final data = response.data;
+  switch (response) {
+    case SuccessBaseResponse<OccasionsEntity>():
+      final data = response.data;
 
-        emit(state.copyWith(
-          occasionsState:
-              BaseState<List<OccasionEntity>>.success(data.occasions),
-          occasionsCurrentPage: data.currentPage,
-          occasionsTotalPages: data.totalPages,
-        ));
+      emit(state.copyWith(
+        occasionsState: BaseState<List<OccasionEntity>>.success(data.occasions),
+        occasionsCurrentPage: data.currentPage,
+        occasionsTotalPages: data.totalPages,
+      ));
 
-        if (data.occasions.isNotEmpty) {
-          doEvent(
-            GetProductsByOccasionEvent(
-              occasionId: data.occasions.first.id,
-            ),
-          );
-        }
-        break;
+      if (data.occasions.isNotEmpty) {
+        final targetId = initialOccasionId != null &&
+                data.occasions.any((o) => o.id == initialOccasionId)
+            ? initialOccasionId
+            : data.occasions.first.id;
 
-      case ErrorBaseResponse<OccasionsEntity>():
-        emit(state.copyWith(
-          occasionsState:
-              BaseState<List<OccasionEntity>>.error(
-                response.errorMessage,
-              ),
-        ));
-        break;
-    }
+        doEvent(GetProductsByOccasionEvent(occasionId: targetId));
+      }
+      break;
+
+    case ErrorBaseResponse<OccasionsEntity>():
+      emit(state.copyWith(
+        occasionsState: BaseState<List<OccasionEntity>>.error(response.errorMessage),
+      ));
+      break;
   }
-
+}
   Future<void> _loadMoreOccasions() async {
     if (state.isLoadingMoreOccasions) return;
 

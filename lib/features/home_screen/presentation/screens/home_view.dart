@@ -19,8 +19,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
+  const HomeScreen({super.key, this.onCategoryViewAll, this.onCategoryTap});
+  final VoidCallback? onCategoryViewAll;
+  final void Function(String categoryId)? onCategoryTap;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -147,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
         SectionHeader(
           title: AppStrings.categories,
           actionText: AppStrings.viewAll,
-          onTap: () => Navigator.pushNamed(context, AppRoutesName.category),
+          onTap: () => widget.onCategoryViewAll?.call(),
         ),
         const SizedBox(height: 12),
         _buildCategoriesContent(state.categoriesState),
@@ -182,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
             id: category.id ?? '',
             name: category.name ?? '',
             image: category.image ?? '',
-            onTap: () {},
+            onTap: () => widget.onCategoryTap?.call(category.id ?? ''),
           );
         },
       ),
@@ -281,7 +282,11 @@ class _HomeScreenState extends State<HomeScreen> {
             id: occasion.id ?? '',
             name: occasion.name ?? '',
             image: occasion.image ?? '',
-            onTap: () {},
+            onTap: () => Navigator.pushNamed(
+              context,
+              AppRoutesName.occasions,
+              arguments: occasion.id,
+            ),
           );
         },
       ),

@@ -26,10 +26,11 @@ class AppRoutes {
       case AppRoutesName.signUp:
         return MaterialPageRoute(builder: (_) => const SignupView());
       case AppRoutesName.occasions:
+        final occasionId = settings.arguments as String?;
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (_) => getIt<OccasionsViewModel>(),
-            child: const OccasionsView(),
+            child: OccasionsView(initialOccasionId: occasionId),
           ),
         );
 

@@ -20,19 +20,19 @@ class AppSectionView extends StatefulWidget {
 
 class _AppSectionViewState extends State<AppSectionView> {
   int _currentTabIndex = 0;
-  final List<Widget> _tabs = [
-    BlocProvider(
-      create: (context) => getIt<HomeViewModel>(),
-      child: HomeScreen(),
-    ),
-    const CategoriesScreen(),
-    CartTestView(),
-    ProfileTestView(),
-  ];
+  String? _initialCategoryId;
+
+  void _navigateToCategories({String? categoryId}) {
+    setState(() {
+      _currentTabIndex = 1;
+      _initialCategoryId = categoryId;
+    });
+  }
 
   void _onTabTapped(int index) {
     setState(() {
       _currentTabIndex = index;
+      if (index != 1) _initialCategoryId = null;
     });
   }
 
@@ -58,7 +58,24 @@ class _AppSectionViewState extends State<AppSectionView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _tabs[_currentTabIndex],
+      body: IndexedStack(
+        index: _currentTabIndex,
+        children: [
+          BlocProvider(
+            create: (context) => getIt<HomeViewModel>(),
+            child: HomeScreen(
+              onCategoryViewAll: () => _navigateToCategories(),
+              onCategoryTap: (id) => _navigateToCategories(categoryId: id),
+            ),
+          ),
+          CategoriesScreen(
+            key: ValueKey(_initialCategoryId),
+            initialCategoryId: _initialCategoryId,
+          ),
+          CartTestView(),
+          ProfileTestView(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentTabIndex,
         onTap: _onTabTapped,

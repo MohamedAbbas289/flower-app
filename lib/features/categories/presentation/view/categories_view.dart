@@ -72,7 +72,8 @@ class _CategoriesViewState extends State<CategoriesView> {
                 const SizedBox(height: 12),
                 BlocBuilder<CategoriesViewModel, CategoriesState>(
                   buildWhen: (prev, curr) =>
-                      prev.categoriesState != curr.categoriesState,
+                      prev.categoriesState != curr.categoriesState ||
+                      prev.selectedCategoryId != curr.selectedCategoryId,
                   builder: (context, state) {
                     if (state.categoriesState.isLoading) {
                       return const SizedBox(
@@ -91,25 +92,36 @@ class _CategoriesViewState extends State<CategoriesView> {
                             horizontal: 16, vertical: 8),
                         child: Text(
                           state.categoriesState.msg!,
-                          style: TextStyles.bodyRegular12.copyWith(
-                              color: AppColors.red),
+                          style: TextStyles.bodyRegular12
+                              .copyWith(color: AppColors.red),
                         ),
                       );
                     }
+
                     final cats = state.categoriesState.data ?? [];
                     if (cats.isEmpty) return const SizedBox.shrink();
+
+                    final tabs = <TabItemData>[const _AllTab(), ...cats];
+                    final selectedId = state.selectedCategoryId;
+                    final initialIndex = selectedId == null
+                        ? 0
+                        : tabs
+                            .indexWhere((t) => t.id == selectedId)
+                            .clamp(0, tabs.length - 1);
+
                     return AppTabBarWidget(
-                      key: ValueKey(cats.length),
-                      tabs: <TabItemData>[const _AllTab(), ...cats],
+                      key: ValueKey('${cats.length}_$selectedId'),
+                      tabs: tabs,
+                      initialIndex: initialIndex,
                       onTabChanged: (tab) {
                         if (tab is _AllTab) {
                           context.read<CategoriesViewModel>().doEvent(
-                            AllProductsSelectedEvent(),
-                          );
+                                AllProductsSelectedEvent(),
+                              );
                         } else {
                           context.read<CategoriesViewModel>().doEvent(
-                            CategorySelectedEvent(tab.id),
-                          );
+                                CategorySelectedEvent(tab.id),
+                              );
                         }
                       },
                     );
@@ -142,7 +154,8 @@ class _CategoriesViewState extends State<CategoriesView> {
 
                         final products = ps.data?.products ?? [];
 
-                        if (!ps.isLoading && ps.data != null &&
+                        if (!ps.isLoading &&
+                            ps.data != null &&
                             products.isEmpty) {
                           return const _ErrorView(
                             message: AppStrings.noProductsAvailable,
@@ -155,13 +168,13 @@ class _CategoriesViewState extends State<CategoriesView> {
                           products: products,
                           onAddToCart: (_) {},
                           onCardClicked: (_) {},
-                          // TODO: navigate to product details
                           currentPage: ps.data?.metadata?.currentPage ?? 1,
                           totalPages: ps.data?.metadata?.totalPages ?? 1,
                           paginationResetKey: vm.paginationResetKey,
                           isLoading: ps.isLoading && products.isEmpty,
                           hasError: ps.msg != null,
-                          onLoadMore: () => vm.doEvent(LoadMoreProductsEvent()),
+                          onLoadMore: () =>
+                              vm.doEvent(LoadMoreProductsEvent()),
                         );
                       },
                     ),

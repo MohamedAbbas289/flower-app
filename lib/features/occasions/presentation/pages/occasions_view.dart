@@ -11,7 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OccasionsView extends StatefulWidget {
-  const OccasionsView({super.key});
+  const OccasionsView({super.key, this.initialOccasionId});
+
+  final String? initialOccasionId;
 
   @override
   State<OccasionsView> createState() => _OccasionsViewState();
@@ -21,7 +23,9 @@ class _OccasionsViewState extends State<OccasionsView> {
   @override
   void initState() {
     super.initState();
-    context.read<OccasionsViewModel>().doEvent(GetOccasionsEvent());
+    context.read<OccasionsViewModel>().doEvent(
+      GetOccasionsEvent(initialOccasionId: widget.initialOccasionId),
+    );
   }
 
   @override
@@ -125,12 +129,14 @@ class _OccasionsTabBar extends StatelessWidget {
     final selectedIndex = occasions.indexWhere(
       (occasion) => occasion.id == state.selectedOccasionId,
     );
+    final initialIndex = selectedIndex < 0 ? 0 : selectedIndex;
 
     return Padding(
       padding: const EdgeInsets.only(top: 12, bottom: 4),
       child: AppTabBarWidget(
+        key: ValueKey('${occasions.length}_${state.selectedOccasionId}'),
         tabs: occasions,
-        initialIndex: selectedIndex < 0 ? 0 : selectedIndex,
+        initialIndex: initialIndex,
         isLoadingMore: state.isLoadingMoreOccasions,
         onLoadMore: () {
           context.read<OccasionsViewModel>().doEvent(LoadMoreOccasionsEvent());

@@ -6,13 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CategoriesScreen extends StatelessWidget {
-  const CategoriesScreen({super.key});
+  const CategoriesScreen({super.key, this.initialCategoryId});
+
+  final String? initialCategoryId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          getIt<CategoriesViewModel>()..doEvent(LoadInitialDataEvent()),
+      create: (_) => getIt<CategoriesViewModel>()
+        ..doEvent(LoadInitialDataEvent(initialCategoryId: initialCategoryId)),
       child: const CategoriesView(),
     );
   }

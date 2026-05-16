@@ -187,9 +187,9 @@ void main() {
   });
 
   group('GetOccasionsEvent', () {
-    group('success with non-empty occasions', () {
+    group('success with non-empty occasions — no initialOccasionId', () {
       blocTest<OccasionsViewModel, OccasionsState>(
-        'emits loading → occasions success → products loading → products success',
+        'selects first occasion when no initialOccasionId provided',
         build: () {
           stubGetOccasionsSuccess(data: occasionsPageOne);
           stubGetProductsSuccess(
@@ -206,11 +206,16 @@ void main() {
             isTrue,
           ),
           isA<OccasionsState>()
-              .having((s) => s.occasionsState.data, 'occasionsState.data', [
-                occasion1,
-                occasion2,
-              ])
-              .having((s) => s.occasionsCurrentPage, 'occasionsCurrentPage', 1)
+              .having(
+                (s) => s.occasionsState.data,
+                'occasionsState.data',
+                [occasion1, occasion2],
+              )
+              .having(
+                (s) => s.occasionsCurrentPage,
+                'occasionsCurrentPage',
+                1,
+              )
               .having((s) => s.occasionsTotalPages, 'occasionsTotalPages', 2),
           isA<OccasionsState>()
               .having(
@@ -225,10 +230,11 @@ void main() {
               )
               .having((s) => s.paginationResetKey, 'paginationResetKey', 1),
           isA<OccasionsState>()
-              .having((s) => s.productsState.data, 'productsState.data', [
-                product1,
-                product2,
-              ])
+              .having(
+                (s) => s.productsState.data,
+                'productsState.data',
+                [product1, product2],
+              )
               .having((s) => s.currentPage, 'currentPage', 1)
               .having((s) => s.totalPages, 'totalPages', 3),
         ],
@@ -245,12 +251,115 @@ void main() {
       );
     });
 
+    group('success with non-empty occasions — with initialOccasionId', () {
+      blocTest<OccasionsViewModel, OccasionsState>(
+        'selects initialOccasionId when it exists in the list',
+        build: () {
+          stubGetOccasionsSuccess(data: occasionsPageOne);
+          stubGetProductsSuccess(
+            data: productsPageOne,
+            occasionId: occasionId2,
+          );
+          return sut;
+        },
+        act: (vm) =>
+            vm.doEvent(GetOccasionsEvent(initialOccasionId: occasionId2)),
+        expect: () => [
+          isA<OccasionsState>().having(
+            (s) => s.occasionsState.isLoading,
+            'occasionsState.isLoading',
+            isTrue,
+          ),
+          isA<OccasionsState>().having(
+            (s) => s.occasionsState.data,
+            'occasionsState.data',
+            [occasion1, occasion2],
+          ),
+          isA<OccasionsState>()
+              .having(
+                (s) => s.productsState.isLoading,
+                'productsState.isLoading',
+                isTrue,
+              )
+              .having(
+                (s) => s.selectedOccasionId,
+                'selectedOccasionId',
+                occasionId2,
+              ),
+          isA<OccasionsState>().having(
+            (s) => s.productsState.data,
+            'productsState.data',
+            [product1, product2],
+          ),
+        ],
+        verify: (_) {
+          verify(
+            mockGetProductsByOccasionUseCase.execute(
+              occasionId: occasionId2,
+              page: 1,
+              limit: 10,
+            ),
+          ).called(1);
+        },
+      );
+
+      blocTest<OccasionsViewModel, OccasionsState>(
+        'falls back to first occasion when initialOccasionId not in list',
+        build: () {
+          stubGetOccasionsSuccess(data: occasionsPageOne);
+          stubGetProductsSuccess(
+            data: productsPageOne,
+            occasionId: occasionId1,
+          );
+          return sut;
+        },
+        act: (vm) => vm.doEvent(
+          GetOccasionsEvent(initialOccasionId: 'non-existent-id'),
+        ),
+        expect: () => [
+          isA<OccasionsState>().having(
+            (s) => s.occasionsState.isLoading,
+            'loading',
+            isTrue,
+          ),
+          isA<OccasionsState>().having(
+            (s) => s.occasionsState.data,
+            'data',
+            [occasion1, occasion2],
+          ),
+          isA<OccasionsState>().having(
+            (s) => s.selectedOccasionId,
+            'selectedOccasionId falls back to first',
+            occasionId1,
+          ),
+          isA<OccasionsState>().having(
+            (s) => s.productsState.data,
+            'productsState.data',
+            [product1, product2],
+          ),
+        ],
+        verify: (_) {
+          verify(
+            mockGetProductsByOccasionUseCase.execute(
+              occasionId: occasionId1,
+              page: 1,
+              limit: 10,
+            ),
+          ).called(1);
+        },
+      );
+    });
+
     group('success with empty occasions', () {
       blocTest<OccasionsViewModel, OccasionsState>(
         'does NOT trigger GetProductsByOccasionEvent when occasions list is empty',
         build: () {
           stubGetOccasionsSuccess(
-            data: OccasionsEntity(occasions: [], currentPage: 1, totalPages: 1),
+            data: OccasionsEntity(
+              occasions: [],
+              currentPage: 1,
+              totalPages: 1,
+            ),
           );
           return sut;
         },
@@ -337,10 +446,11 @@ void main() {
             .having((s) => s.totalPages, 'totalPages reset', 1)
             .having((s) => s.paginationResetKey, 'paginationResetKey', 1),
         isA<OccasionsState>()
-            .having((s) => s.productsState.data, 'productsState.data', [
-              product1,
-              product2,
-            ])
+            .having(
+              (s) => s.productsState.data,
+              'productsState.data',
+              [product1, product2],
+            )
             .having((s) => s.currentPage, 'currentPage', 1)
             .having((s) => s.totalPages, 'totalPages', 3),
       ],
@@ -584,8 +694,10 @@ void main() {
     blocTest<OccasionsViewModel, OccasionsState>(
       'does nothing when already on last occasions page',
       build: () => sut,
-      seed: () =>
-          const OccasionsState(occasionsCurrentPage: 2, occasionsTotalPages: 2),
+      seed: () => const OccasionsState(
+        occasionsCurrentPage: 2,
+        occasionsTotalPages: 2,
+      ),
       act: (vm) => vm.doEvent(LoadMoreOccasionsEvent()),
       expect: () => [],
       verify: (_) {

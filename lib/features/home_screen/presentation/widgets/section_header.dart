@@ -29,8 +29,9 @@ class SectionHeader extends StatelessWidget {
             actionText,
             style: TextStyles.bodyRegular12.copyWith(
               fontWeight: FontWeight.w500,
+              color: AppColors.pink,
               decoration: TextDecoration.underline,
-              decorationColor: AppColors.red,
+              decorationColor: AppColors.pink,
             ),
           ),
         ),

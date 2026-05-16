@@ -16,7 +16,8 @@ import 'package:injectable/injectable.dart';
 class CategoriesViewModel extends Cubit<CategoriesState> {
   CategoriesViewModel(
     this._getCategoriesUseCase,
-      this._getProductsByCategoryUseCase,) : super(const CategoriesState());
+    this._getProductsByCategoryUseCase,
+  ) : super(const CategoriesState());
 
   final GetCategoriesUseCase _getCategoriesUseCase;
   final GetProductsByCategoryUseCase _getProductsByCategoryUseCase;
@@ -33,7 +34,7 @@ class CategoriesViewModel extends Cubit<CategoriesState> {
   void doEvent(CategoriesEvents event) {
     switch (event) {
       case LoadInitialDataEvent():
-        _loadInitialData();
+        _loadInitialData(event.initialCategoryId);
         break;
       case CategorySelectedEvent():
         _fetchProducts(categoryId: event.categoryId);
@@ -53,9 +54,9 @@ class CategoriesViewModel extends Cubit<CategoriesState> {
     }
   }
 
-  Future<void> _loadInitialData() async {
+  Future<void> _loadInitialData(String? initialCategoryId) async {
     await _fetchCategories();
-    await _fetchProducts(categoryId: null);
+    await _fetchProducts(categoryId: initialCategoryId);
   }
 
   Future<void> _fetchCategories() async {
@@ -64,23 +65,28 @@ class CategoriesViewModel extends Cubit<CategoriesState> {
 
     const maxRetries = 3;
     for (var attempt = 0; attempt < maxRetries; attempt++) {
-      final response =
-      await _getCategoriesUseCase.execute(page: 1, limit: 50);
+      final response = await _getCategoriesUseCase.execute(page: 1, limit: 50);
       switch (response) {
         case SuccessBaseResponse<CategoriesResponseEntity>():
           _categories.addAll(response.data.categories);
-          emit(state.copyWith(
-            categoriesState: BaseState.success(List.unmodifiable(_categories)),
-          ));
+          emit(
+            state.copyWith(
+              categoriesState: BaseState.success(
+                List.unmodifiable(_categories),
+              ),
+            ),
+          );
           return;
         case ErrorBaseResponse<CategoriesResponseEntity>():
           if (attempt < maxRetries - 1) {
             await Future.delayed(Duration(milliseconds: 500 * (attempt + 1)));
             continue;
           }
-          emit(state.copyWith(
-            categoriesState: BaseState.error(response.errorMessage),
-          ));
+          emit(
+            state.copyWith(
+              categoriesState: BaseState.error(response.errorMessage),
+            ),
+          );
           return;
       }
     }
@@ -98,11 +104,13 @@ class CategoriesViewModel extends Cubit<CategoriesState> {
       _productsPage = 1;
       _productsTotalPages = 1;
       _paginationResetKey++;
-      emit(state.copyWith(
-        productsState: BaseState<ProductsResponseEntity>.loading(),
-        selectedCategoryId: categoryId,
-        clearSelectedCategoryId: categoryId == null,
-      ));
+      emit(
+        state.copyWith(
+          productsState: BaseState<ProductsResponseEntity>.loading(),
+          selectedCategoryId: categoryId,
+          clearSelectedCategoryId: categoryId == null,
+        ),
+      );
     }
 
     final myVersion = _fetchVersion;
@@ -124,22 +132,21 @@ class CategoriesViewModel extends Cubit<CategoriesState> {
             ? (state.productsState.data?.products ?? <ProductEntity>[])
             : <ProductEntity>[];
 
-        emit(state.copyWith(
-          productsState: BaseState.success(
-            ProductsResponseEntity(
-              products: [
-                ...previousProducts,
-                ...response.data.products,
-              ],
-              metadata: response.data.metadata,
+        emit(
+          state.copyWith(
+            productsState: BaseState.success(
+              ProductsResponseEntity(
+                products: [...previousProducts, ...response.data.products],
+                metadata: response.data.metadata,
+              ),
             ),
           ),
-        ));
+        );
         break;
       case ErrorBaseResponse<ProductsResponseEntity>():
-        emit(state.copyWith(
-          productsState: BaseState.error(response.errorMessage),
-        ));
+        emit(
+          state.copyWith(productsState: BaseState.error(response.errorMessage)),
+        );
         break;
     }
   }

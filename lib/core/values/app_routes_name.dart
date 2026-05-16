@@ -8,8 +8,9 @@ abstract class AppRoutesName {
   static const resetPassword = "/resetPasswordView";
   // Main Views
   static const home = "/homeView";
-  static const category = "/categoryView";
   static const cart = "/cartView";
   static const profile = "/profileView";
   static const occasions = "/OccasionsView";
+  static const categories = "/categoriesView";
+
 }
