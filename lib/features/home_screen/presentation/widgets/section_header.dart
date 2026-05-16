@@ -19,10 +19,7 @@ class SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
-          title,
-          style: TextStyles.bodyRegular18,
-        ),
+        Text(title, style: TextStyles.bodyRegular18),
 
         const Spacer(),
 
@@ -31,6 +28,7 @@ class SectionHeader extends StatelessWidget {
           child: Text(
             actionText,
             style: TextStyles.bodyRegular12.copyWith(
+              fontWeight: FontWeight.w500,
               decoration: TextDecoration.underline,
               decorationColor: AppColors.red,
             ),

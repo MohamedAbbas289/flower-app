@@ -1,55 +1,37 @@
+import 'package:equatable/equatable.dart';
+import 'package:flower_app/config/base_state/base_state.dart';
+import 'package:flower_app/features/home_screen/domain/entities/best_seller_entity.dart';
+import 'package:flower_app/features/home_screen/domain/entities/occasion_entity.dart';
 
-import 'package:flower_app/features/home_screen/domain/entities/best_seller_model.dart';
-import 'package:flower_app/features/home_screen/domain/entities/occasion_model.dart';
+import '../../../domain/entities/category_entity.dart';
 
-import '../../../domain/entities/category_model.dart';
-
-
-class HomeState {
-
-  final bool categoriesLoading;
-  final bool occasionsLoading;
-  final bool bestSellersLoading;
-  final List<CategoryModel> categories;
-  final List<OccasionModel> occasions;
-  final List<BestSellerModel> bestSellers;
-  final String categoriesError;
-  final String occasionsError;
-  final String bestSellersError;
+class HomeState extends Equatable {
+  final BaseState<List<CategoryEntity>> categoriesState;
+  final BaseState<List<OccasionEntity>> occasionsState;
+  final BaseState<List<BestSellerEntity>> bestSellersState;
 
   const HomeState({
-    this.categoriesLoading = false,
-    this.occasionsLoading = false,
-    this.bestSellersLoading = false,
-    this.categories = const [],
-    this.occasions = const [],
-    this.bestSellers = const [],
-    this.categoriesError = '',
-    this.occasionsError = '',
-    this.bestSellersError = '',
+    this.categoriesState = const BaseState(),
+    this.occasionsState = const BaseState(),
+    this.bestSellersState = const BaseState(),
   });
 
   HomeState copyWith({
-    bool? categoriesLoading,
-    bool? occasionsLoading,
-    bool? bestSellersLoading,
-    List<CategoryModel>? categories,
-    List<OccasionModel>? occasions,
-    List<BestSellerModel>? bestSellers,
-    String? categoriesError,
-    String? occasionsError,
-    String? bestSellersError,
+    BaseState<List<CategoryEntity>>? categoriesState,
+    BaseState<List<OccasionEntity>>? occasionsState,
+    BaseState<List<BestSellerEntity>>? bestSellersState,
   }) {
     return HomeState(
-      categoriesLoading: categoriesLoading ?? this.categoriesLoading,
-      occasionsLoading: occasionsLoading ?? this.occasionsLoading,
-      bestSellersLoading: bestSellersLoading ?? this.bestSellersLoading,
-      categories: categories ?? this.categories,
-      occasions: occasions ?? this.occasions,
-      bestSellers: bestSellers ?? this.bestSellers,
-      categoriesError: categoriesError ?? this.categoriesError,
-      occasionsError: occasionsError ?? this.occasionsError,
-      bestSellersError: bestSellersError ?? this.bestSellersError,
+      categoriesState: categoriesState ?? this.categoriesState,
+      occasionsState: occasionsState ?? this.occasionsState,
+      bestSellersState: bestSellersState ?? this.bestSellersState,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    categoriesState,
+    occasionsState,
+    bestSellersState,
+  ];
 }

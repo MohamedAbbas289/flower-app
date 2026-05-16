@@ -74,10 +74,10 @@ abstract class TextStyles {
     fontWeight: FontWeight.w500,
     color: AppColors.black,
   );
-  static const TextStyle bodyRegular12 = TextStyle(
+  static TextStyle bodyRegular12 = GoogleFonts.inter(
     fontSize: 12,
-    fontWeight: FontWeight.w500,
-    color: AppColors.red,
+    fontWeight: FontWeight.w400,
+    color: AppColors.black,
   );
 
 }

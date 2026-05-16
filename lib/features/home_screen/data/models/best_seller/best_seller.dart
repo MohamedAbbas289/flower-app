@@ -1,4 +1,4 @@
-import 'package:flower_app/features/home_screen/domain/entities/best_seller_model.dart';
+import 'package:flower_app/features/home_screen/domain/entities/best_seller_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'best_seller.g.dart';

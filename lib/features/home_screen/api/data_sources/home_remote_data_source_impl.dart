@@ -1,7 +1,4 @@
-
-
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/home_screen/data/models/best_seller/best_seller.dart';
 import 'package:flower_app/features/home_screen/data/models/category/category.dart';
@@ -18,52 +15,38 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSourceContract {
   HomeRemoteDataSourceImpl(this.homeScreenApiClient);
 
   @override
-  Future<BaseResponse<List<BestSellerDto>>> getAllBestSeller() async{
-      try{
-    final response = await homeScreenApiClient.getBestSellers();
-    return SuccessBaseResponse<List<BestSellerDto>>(data: response.bestSeller??[]);
-  }catch (e){
-    if (e is DioException) {
-      return ErrorBaseResponse<List<BestSellerDto>>( exception: e );
-    } else if (e is TimeoutException) {
-      return ErrorBaseResponse<List<BestSellerDto>>(exception: e );
+  Future<BaseResponse<List<BestSellerDto>>> getAllBestSeller() async {
+    try {
+      final response = await homeScreenApiClient.getBestSellers();
+      return SuccessBaseResponse<List<BestSellerDto>>(
+        data: response.bestSeller ?? [],
+      );
+    } catch (e) {
+      return ErrorBaseResponse<List<BestSellerDto>>(exception: e);
     }
-      return ErrorBaseResponse<List<BestSellerDto>>(exception: e );
-  }
-
   }
 
   @override
-  Future<BaseResponse<List<CategoryDto>>> getAllCategory() async{
-    try{
+  Future<BaseResponse<List<CategoryDto>>> getAllCategory() async {
+    try {
       final response = await homeScreenApiClient.getCategories();
-      return SuccessBaseResponse<List<CategoryDto>>(data: response.categories??[]);
-    }catch (e){
-      if (e is DioException) {
-        return ErrorBaseResponse<List<CategoryDto>>( exception: e );
-      } else if (e is TimeoutException) {
-        return ErrorBaseResponse<List<CategoryDto>>(exception: e );
-      }
-      return ErrorBaseResponse<List<CategoryDto>>(exception: e );
+      return SuccessBaseResponse<List<CategoryDto>>(
+        data: response.categories ?? [],
+      );
+    } catch (e) {
+      return ErrorBaseResponse<List<CategoryDto>>(exception: e);
     }
-
   }
 
   @override
-  Future<BaseResponse<List<OccasionDto>>> getAllOccasion() async{
-    try{
+  Future<BaseResponse<List<OccasionDto>>> getAllOccasion() async {
+    try {
       final response = await homeScreenApiClient.getOccasions();
-      return SuccessBaseResponse<List<OccasionDto>>(data: response.occasions??[]);
-    }catch (e){
-      if (e is DioException) {
-        return ErrorBaseResponse<List<OccasionDto>>( exception: e );
-      } else if (e is TimeoutException) {
-        return ErrorBaseResponse<List<OccasionDto>>(exception: e );
-      }
-      return ErrorBaseResponse<List<OccasionDto>>(exception: e );
+      return SuccessBaseResponse<List<OccasionDto>>(
+        data: response.occasions ?? [],
+      );
+    } catch (e) {
+      return ErrorBaseResponse<List<OccasionDto>>(exception: e);
     }
   }
-
-
 }
-

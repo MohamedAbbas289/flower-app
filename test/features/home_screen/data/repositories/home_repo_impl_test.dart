@@ -5,9 +5,9 @@ import 'package:flower_app/features/home_screen/data/models/best_seller/best_sel
 import 'package:flower_app/features/home_screen/data/models/category/category.dart';
 import 'package:flower_app/features/home_screen/data/models/occasions/occasion.dart';
 import 'package:flower_app/features/home_screen/data/repositories/home_repo_impl.dart';
-import 'package:flower_app/features/home_screen/domain/entities/best_seller_model.dart';
-import 'package:flower_app/features/home_screen/domain/entities/category_model.dart';
-import 'package:flower_app/features/home_screen/domain/entities/occasion_model.dart';
+import 'package:flower_app/features/home_screen/domain/entities/best_seller_entity.dart';
+import 'package:flower_app/features/home_screen/domain/entities/category_entity.dart';
+import 'package:flower_app/features/home_screen/domain/entities/occasion_entity.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

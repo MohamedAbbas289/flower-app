@@ -2,9 +2,9 @@ import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../domain/entities/best_seller_model.dart';
-import '../../../domain/entities/category_model.dart';
-import '../../../domain/entities/occasion_model.dart';
+import '../../../domain/entities/best_seller_entity.dart';
+import '../../../domain/entities/category_entity.dart';
+import '../../../domain/entities/occasion_entity.dart';
 import '../../../domain/use_cases/get_best_seller_use_case.dart';
 import '../../../domain/use_cases/get_category_use_cases.dart';
 import '../../../domain/use_cases/get_occasion_use_case.dart';
