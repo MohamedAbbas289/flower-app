@@ -18,8 +18,6 @@ class AppSectionView extends StatefulWidget {
 
 class _AppSectionViewState extends State<AppSectionView> {
   int _currentTabIndex = 0;
-
-  // Using a static list means each screen is kept alive when switching tabs
   final List<Widget> _tabs = [
     HomeTestView(),
     const CategoriesScreen(),
@@ -56,7 +54,10 @@ class _AppSectionViewState extends State<AppSectionView> {
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(title: const Text("App Section")),
-      body: _tabs[_currentTabIndex],
+      body: IndexedStack(
+        index: _currentTabIndex,
+        children: _tabs,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentTabIndex,
         onTap: _onTabTapped,

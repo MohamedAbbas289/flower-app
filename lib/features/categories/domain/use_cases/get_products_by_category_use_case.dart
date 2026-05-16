@@ -14,8 +14,8 @@ class GetProductsByCategoryUseCase {
     required GetProductsByCategoryRequestModel requestModel,
     required int page,
     required int limit,
-  }) async {
-    return await _repository.getProductsByCategory(
+  }) {
+    return _repository.getProductsByCategory(
       categoryId: requestModel.categoryId,
       page: page,
       limit: limit,

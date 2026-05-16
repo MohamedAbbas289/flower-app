@@ -85,7 +85,7 @@ void main() {
         final result = await repository.getCategories(page: 1, limit: 50);
 
         expect(result, isA<ErrorBaseResponse<CategoriesResponseEntity>>());
-        verify(mockDataSource.getCategories(page: 1, limit: 50)).called(1);
+        verify(mockDataSource.getCategories(page: 1, limit: 50)).called(3);
         verifyNoMoreInteractions(mockDataSource);
       },
     );

@@ -1,12 +1,9 @@
 import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/categories/api/responses/categories_response.dart';
 import 'package:flower_app/features/categories/api/responses/products_response.dart';
 import 'package:flower_app/features/categories/data/data_sources/categories_remote_data_source.dart';
-import 'package:flower_app/features/categories/data/models/category_model.dart';
-import 'package:flower_app/features/categories/data/models/product_model.dart';
 import 'package:flower_app/features/categories/domain/entities/categories_response_entity.dart';
-import 'package:flower_app/features/categories/domain/entities/category_entity.dart';
-import 'package:flower_app/features/categories/domain/entities/product_entity.dart';
 import 'package:flower_app/features/categories/domain/entities/products_response_entity.dart';
 import 'package:flower_app/features/categories/domain/repository/categories_repository.dart';
 import 'package:injectable/injectable.dart';
@@ -22,28 +19,26 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
     int? page,
     int? limit,
   }) async {
-    final response = await _remoteDataSource.getCategories(
-      page: page ?? 1,
-      limit: limit ?? 50,
-    );
+    const maxRetries = 3;
+    for (var attempt = 0; attempt < maxRetries; attempt++) {
+      final response = await _remoteDataSource.getCategories(
+        page: page ?? 1,
+        limit: limit ?? 50,
+      );
 
-    switch (response) {
-      case SuccessBaseResponse<CategoriesResponse>():
-        final entities = response.data.categories
-            ?.map((e) => e.toEntity())
-            .toList()
-            .cast<CategoryEntity>() ??
-            <CategoryEntity>[];
-        final metadata = response.data.metadata?.toEntity();
-        return SuccessBaseResponse(
-          data: CategoriesResponseEntity(
-            categories: entities,
-            metadata: metadata,
-          ),
-        );
-      case ErrorBaseResponse<CategoriesResponse>():
-        return ErrorBaseResponse(exception: response.exception);
+      switch (response) {
+        case SuccessBaseResponse<CategoriesResponse>():
+          return SuccessBaseResponse(data: response.data.toEntity());
+        case ErrorBaseResponse<CategoriesResponse>():
+          if (attempt < maxRetries - 1) {
+            await Future.delayed(Duration(milliseconds: 500 * (attempt + 1)));
+            continue;
+          }
+          return ErrorBaseResponse(exception: response.exception);
+      }
     }
+    // Should never reach here due to the return in the loop
+    return ErrorBaseResponse(exception: Exception(AppStrings.retryFailed));
   }
 
   @override
@@ -60,18 +55,7 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
 
     switch (response) {
       case SuccessBaseResponse<ProductsResponse>():
-        final entities = response.data.products
-            ?.map((e) => e.toEntity())
-            .toList()
-            .cast<ProductEntity>() ??
-            <ProductEntity>[];
-        final metadata = response.data.metadata?.toEntity();
-        return SuccessBaseResponse(
-          data: ProductsResponseEntity(
-            products: entities,
-            metadata: metadata,
-          ),
-        );
+        return SuccessBaseResponse(data: response.data.toEntity());
       case ErrorBaseResponse<ProductsResponse>():
         return ErrorBaseResponse(exception: response.exception);
     }

@@ -12,7 +12,7 @@ class GetCategoriesUseCase {
   Future<BaseResponse<CategoriesResponseEntity>> execute({
     required int page,
     required int limit,
-  }) async {
-    return await _repository.getCategories(page: page, limit: limit);
+  }) {
+    return _repository.getCategories(page: page, limit: limit);
   }
 }

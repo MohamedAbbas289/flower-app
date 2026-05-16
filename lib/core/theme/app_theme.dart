@@ -10,6 +10,8 @@ class AppTheme {
       primary: AppColors.pink,
     ),
     progressIndicatorTheme: ProgressIndicatorThemeData(
+      circularTrackColor: AppColors.lightPink,
+      linearTrackColor: AppColors.pink,
       color: AppColors.lightPink,
     ),
     appBarTheme: AppBarTheme(

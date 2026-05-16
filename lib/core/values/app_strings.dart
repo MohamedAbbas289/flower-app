@@ -157,6 +157,10 @@ Thank you for choosing Flowery 💐
   static const String oldSort = 'Old';
   static const String discount = 'Discount';
   static const String retry = 'Retry';
+  static const String page = 'page';
+  static const String limit = 'limit';
+  static const String category = 'category';
+  static const String retryFailed = 'Retry failed';
   static const String noProductsAvailable =
       'Oops! No products available at the moment :(';
 }

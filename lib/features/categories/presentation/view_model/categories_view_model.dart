@@ -62,27 +62,19 @@ class CategoriesViewModel extends Cubit<CategoriesState> {
     _categories.clear();
     emit(state.copyWith(categoriesState: BaseState.loading()));
 
-    const maxRetries = 3;
-    for (var attempt = 0; attempt < maxRetries; attempt++) {
-      final response =
-      await _getCategoriesUseCase.execute(page: 1, limit: 50);
-      switch (response) {
-        case SuccessBaseResponse<CategoriesResponseEntity>():
-          _categories.addAll(response.data.categories);
-          emit(state.copyWith(
-            categoriesState: BaseState.success(List.unmodifiable(_categories)),
-          ));
-          return;
-        case ErrorBaseResponse<CategoriesResponseEntity>():
-          if (attempt < maxRetries - 1) {
-            await Future.delayed(Duration(milliseconds: 500 * (attempt + 1)));
-            continue;
-          }
-          emit(state.copyWith(
-            categoriesState: BaseState.error(response.errorMessage),
-          ));
-          return;
-      }
+    final response = await _getCategoriesUseCase.execute(page: 1, limit: 50);
+    switch (response) {
+      case SuccessBaseResponse<CategoriesResponseEntity>():
+        _categories.addAll(response.data.categories);
+        emit(state.copyWith(
+          categoriesState: BaseState.success(List.unmodifiable(_categories)),
+        ));
+        return;
+      case ErrorBaseResponse<CategoriesResponseEntity>():
+        emit(state.copyWith(
+          categoriesState: BaseState.error(response.errorMessage),
+        ));
+        return;
     }
   }
 

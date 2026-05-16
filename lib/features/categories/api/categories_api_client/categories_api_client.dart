@@ -4,6 +4,7 @@ import 'package:flower_app/features/categories/api/responses/products_response.d
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 
+import '../../../../core/values/app_strings.dart';
 import '../responses/categories_response.dart';
 
 part 'categories_api_client.g.dart';
@@ -16,14 +17,14 @@ abstract class CategoriesApiClient {
 
   @GET(Endpoints.getCategories)
   Future<CategoriesResponse> getCategories({
-    @Query('page') int? page,
-    @Query('limit') int? limit,
+    @Query(AppStrings.page) int? page,
+    @Query(AppStrings.limit) int? limit,
   });
 
   @GET(Endpoints.getProducts)
   Future<ProductsResponse> getProductsByCategory({
-    @Query('category') String? categoryId,
-    @Query('page') int? page,
-    @Query('limit') int? limit,
+    @Query(AppStrings.category) String? categoryId,
+    @Query(AppStrings.page) int? page,
+    @Query(AppStrings.limit) int? limit,
   });
 }

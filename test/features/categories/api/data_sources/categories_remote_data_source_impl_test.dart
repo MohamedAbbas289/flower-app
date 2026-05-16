@@ -45,6 +45,12 @@ void main() {
           final result = await dataSource.getCategories(page: 1, limit: 50);
 
           expect(result, isA<ErrorBaseResponse<CategoriesResponse>>());
+          expect(
+            (result as ErrorBaseResponse<CategoriesResponse>)
+                .exception
+                .toString(),
+            contains('network error'),
+          );
         });
 
     test(
@@ -87,6 +93,12 @@ void main() {
           );
 
           expect(result, isA<ErrorBaseResponse<ProductsResponse>>());
+          expect(
+            (result as ErrorBaseResponse<ProductsResponse>)
+                .exception
+                .toString(),
+            contains('network error'),
+          );
         });
   });
 }

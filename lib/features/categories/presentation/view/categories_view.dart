@@ -24,7 +24,13 @@ class CategoriesView extends StatefulWidget {
 }
 
 class _CategoriesViewState extends State<CategoriesView> {
-  bool _showFab = true;
+  final ValueNotifier<bool> _showFab = ValueNotifier(true);
+
+  @override
+  void dispose() {
+    _showFab.dispose();
+    super.dispose();
+  }
 
   void _openFilter() {
     showModalBottomSheet(
@@ -55,12 +61,14 @@ class _CategoriesViewState extends State<CategoriesView> {
           child: NotificationListener<UserScrollNotification>(
             onNotification: (n) {
               if (n.metrics.axis != Axis.vertical) return false;
-              if (n.direction == ScrollDirection.forward && !_showFab) {
-                setState(() => _showFab = true);
-              } else if (n.direction == ScrollDirection.reverse && _showFab) {
-                setState(() => _showFab = false);
-              } else if (n.direction == ScrollDirection.idle && !_showFab) {
-                setState(() => _showFab = true);
+              if (n.direction == ScrollDirection.forward && !_showFab.value) {
+                _showFab.value = true;
+              } else
+              if (n.direction == ScrollDirection.reverse && _showFab.value) {
+                _showFab.value = false;
+              } else
+              if (n.direction == ScrollDirection.idle && !_showFab.value) {
+                _showFab.value = true;
               }
               return false;
             },
@@ -78,10 +86,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                       return const SizedBox(
                         height: 40,
                         child: Center(
-                          child: LinearProgressIndicator(
-                            color: AppColors.pink,
-                            backgroundColor: AppColors.placeHolder,
-                          ),
+                          child: LinearProgressIndicator(),
                         ),
                       );
                     }
@@ -172,28 +177,33 @@ class _CategoriesViewState extends State<CategoriesView> {
           ),
         ),
       ),
-      floatingActionButton: AnimatedSlide(
-        duration: const Duration(milliseconds: 300),
-        offset: _showFab ? Offset.zero : const Offset(0, 2),
-        child: AnimatedOpacity(
-          duration: const Duration(milliseconds: 300),
-          opacity: _showFab ? 1.0 : 0.0,
-          child: FloatingActionButton.extended(
-            onPressed: _openFilter,
-            backgroundColor: AppColors.pink,
-            icon: SvgPicture.asset(
-              Assets.assetsIconsTune,
-              colorFilter: const ColorFilter.mode(
-                AppColors.white,
-                BlendMode.srcIn,
+      floatingActionButton: ValueListenableBuilder<bool>(
+        valueListenable: _showFab,
+        builder: (context, showFab, child) {
+          return AnimatedSlide(
+            duration: const Duration(milliseconds: 300),
+            offset: showFab ? Offset.zero : const Offset(0, 2),
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: showFab ? 1.0 : 0.0,
+              child: FloatingActionButton.extended(
+                onPressed: _openFilter,
+                backgroundColor: AppColors.pink,
+                icon: SvgPicture.asset(
+                  Assets.assetsIconsTune,
+                  colorFilter: const ColorFilter.mode(
+                    AppColors.white,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                label: const Text(
+                  AppStrings.filter,
+                  style: TextStyle(color: AppColors.white),
+                ),
               ),
             ),
-            label: const Text(
-              AppStrings.filter,
-              style: TextStyle(color: AppColors.white),
-            ),
-          ),
-        ),
+          );
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

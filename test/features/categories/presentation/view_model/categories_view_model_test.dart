@@ -57,7 +57,7 @@ void main() {
 
     blocTest<CategoriesViewModel, CategoriesState>(
       'LoadInitialDataEvent emits loading then success for categories and products',
-      build: () {
+      setUp: () {
         when(mockGetCategoriesUseCase.execute(page: 1, limit: 50))
             .thenAnswer((_) async =>
             SuccessBaseResponse(
@@ -77,8 +77,8 @@ void main() {
                     currentPage: 1, totalPages: 1, limit: 10),
               ),
             ));
-        return viewModel;
       },
+      build: () => viewModel,
       act: (cubit) => cubit.doEvent(LoadInitialDataEvent()),
       expect: () => [
         CategoriesState(
@@ -101,7 +101,7 @@ void main() {
 
     blocTest<CategoriesViewModel, CategoriesState>(
       'CategorySelectedEvent fetches products for the selected category',
-      build: () {
+      setUp: () {
         when(mockGetProductsByCategoryUseCase.execute(
             requestModel: anyNamed('requestModel'), page: 1, limit: 10))
             .thenAnswer((_) async =>
@@ -112,8 +112,8 @@ void main() {
                     currentPage: 1, totalPages: 1, limit: 10),
               ),
             ));
-        return viewModel;
       },
+      build: () => viewModel,
       act: (cubit) => cubit.doEvent(CategorySelectedEvent('123')),
       expect: () => [
         CategoriesState(
@@ -132,7 +132,7 @@ void main() {
 
     blocTest<CategoriesViewModel, CategoriesState>(
       'RefreshEvent re-fetches products for the currently selected category',
-      build: () {
+      setUp: () {
         when(mockGetProductsByCategoryUseCase.execute(
             requestModel: anyNamed('requestModel'), page: 1, limit: 10))
             .thenAnswer((_) async =>
@@ -143,8 +143,8 @@ void main() {
                     currentPage: 1, totalPages: 1, limit: 10),
               ),
             ));
-        return viewModel;
       },
+      build: () => viewModel,
       act: (cubit) => cubit.doEvent(RefreshEvent()),
       expect: () => [
         CategoriesState(
@@ -161,13 +161,13 @@ void main() {
 
     blocTest<CategoriesViewModel, CategoriesState>(
       'CategorySelectedEvent emits productsState error when products API fails',
-      build: () {
+      setUp: () {
         when(mockGetProductsByCategoryUseCase.execute(
             requestModel: anyNamed('requestModel'), page: 1, limit: 10))
             .thenAnswer((_) async =>
             ErrorBaseResponse(exception: Exception('Server error')));
-        return viewModel;
       },
+      build: () => viewModel,
       act: (cubit) => cubit.doEvent(CategorySelectedEvent('abc')),
       expect: () =>
       [
