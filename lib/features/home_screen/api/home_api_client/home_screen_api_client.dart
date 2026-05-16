@@ -10,19 +10,13 @@ part 'home_screen_api_client.g.dart';
 @injectable
 @RestApi()
 abstract class HomeScreenApiClient {
-@factoryMethod
-factory HomeScreenApiClient(Dio dio) = _HomeScreenApiClient;
+  @factoryMethod
+  factory HomeScreenApiClient(Dio dio) = _HomeScreenApiClient;
 
-@GET(Endpoints.getCategories)
+  @GET(Endpoints.getCategories)
   Future<CategoryResponse> getCategories();
-@GET(Endpoints.getOccasions)
+  @GET(Endpoints.getOccasions)
   Future<OccasionsResponse> getOccasions();
-@GET(Endpoints.getBestSeller)
+  @GET(Endpoints.getBestSeller)
   Future<BestSellerResponse> getBestSellers();
-
-
-
-
-
-
 }

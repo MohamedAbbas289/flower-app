@@ -14,8 +14,12 @@ Welcome to Flowery 🌸
 Thank you for choosing Flowery 💐
 ''';
   static const String close = 'Close';
+  static const String retry = 'Retry';
+  static const deliverTo = 'Deliver to';
+  static const String loadingMore = 'loadingMore';
   static const String addToCart = 'Add to cart';
   static const String search = 'Search';
+  static String productImageHeroTag(String id) => 'product-image-$id';
 
   // titles
   static const String loginTitle = 'Login';
@@ -44,7 +48,7 @@ Thank you for choosing Flowery 💐
   static const String creatingAccount =
       'Creating an account, you agree to our ';
   static const String termsAndConditions = 'Terms&Conditions';
-  static String priceText (int price) =>'EGP $price';
+  static String priceText(int price) => 'EGP $price';
 
   // validation messages
   static const String requiredField = 'This field is required';
@@ -111,6 +115,9 @@ Thank you for choosing Flowery 💐
   // app error messages
   static const String routeNotFound = 'Route not found';
   static const String imageNotAvailable = 'Image not available';
+  static const noCategoriesFound = 'No categories found';
+  static const noProductsFound = 'No products found';
+  static const noOccasionsFound = 'No occasions found';
 
   // UI strings (feature forget pasword)
   static const String password = "Password";
@@ -143,13 +150,15 @@ Thank you for choosing Flowery 💐
   static const String dontHaveAccount = "Don't have an account? ";
   static const String signUp = 'Sign up';
   // bottom navigation labels
-  static const String homeView = 'Home';
-  static const String categoryView = 'Categories';
-  static const String cartView = 'Cart';
+  static const String home = 'Home';
+  static const String cart = 'Cart';
+  static const categories = 'Categories';
+
   static const String profileView = 'Profile';
 
-  static const String location = 'Deliver to 2XVP+XC - Sheikh Zayed ';
+  static const String defaultAddress = 'Deliver to 2XVP+XC - Sheikh Zayed ';
   static const String viewAll = 'View all';
   static const String bestSellers = 'Best Sellers';
-  static const String occasion = 'Occasion';
+  static const String occasions = 'Occasion';
+  static const bestSeller = 'Best seller';
 }

@@ -73,27 +73,19 @@ class BestSellerDto {
 
   Map<String, dynamic> toJson() => _$BestSellerDtoToJson(this);
 
-  BestSellerModel toDomain() {
-    return BestSellerModel(
+  BestSellerEntity toDomain() {
+    return BestSellerEntity(
       id: id,
       title: title,
-      slug: slug,
       description: description,
       imgCover: imgCover,
-      images: images,
       price: price,
       priceAfterDiscount: priceAfterDiscount,
       discount: discount,
-      rateAvg: rateAvg,
-      rateCount: rateCount,
       sold: sold,
       quantity: quantity,
       category: category,
       occasion: occasion,
-      isSuperAdmin: isSuperAdmin,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-      v: v,
       bestSellerId: bestSellerId,
     );
   }

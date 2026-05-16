@@ -9,6 +9,7 @@ class ProductImage extends StatelessWidget {
     super.key,
     required this.imageUrl,
     this.heroTag,
+    this.radius = 0,
     required this.size,
     required this.devicePixelRatio,
   });
@@ -17,10 +18,11 @@ class ProductImage extends StatelessWidget {
   final String? heroTag;
   final Size size;
   final double devicePixelRatio;
+  final double radius;
   @override
   Widget build(BuildContext context) {
     final image = ClipRRect(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(radius),
       child: CachedNetworkImage(
         imageUrl: imageUrl,
         width: double.infinity,

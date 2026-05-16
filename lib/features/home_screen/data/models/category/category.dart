@@ -37,15 +37,10 @@ class CategoryDto {
 
   Map<String, dynamic> toJson() => _$CategoryDtoToJson(this);
 
-  CategoryModel toDomain() {
-    return CategoryModel(
+  CategoryEntity toDomain() {
+    return CategoryEntity(
       id: id,
-      name: name,
-      slug: slug,
-      image: image,
-      isSuperAdmin: isSuperAdmin,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
+      name: name,      image: image,
       productsCount: productsCount,
     );
   }

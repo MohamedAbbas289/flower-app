@@ -59,7 +59,7 @@ class _ProductCardContent extends StatelessWidget {
               size: size,
               devicePixelRatio: devicePixelRatio,
               imageUrl: product.imageUrl,
-              heroTag: 'product-image-${product.id}',
+              heroTag: AppStrings.productImageHeroTag(product.id),
             ),
           ),
           const SizedBox(height: 8),

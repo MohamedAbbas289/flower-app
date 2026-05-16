@@ -22,7 +22,3 @@ class CategoryResponse {
 
   Map<String, dynamic> toJson() => _$CategoryResponseToJson(this);
 }
-
-
-
-

@@ -1,15 +1,18 @@
+import 'package:flower_app/config/di/di.dart';
+import 'package:flower_app/features/home_screen/presentation/view_model/cubit/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
 import 'package:flower_app/features/app_section/domain/entity/bottom_nav_item_entity.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/bottom_nav_icon.dart';
 import '../widgets/cart_test_view.dart';
 import '../widgets/categories_test_view.dart';
-import '../../../home_screen/presentation/screens/home_test_view.dart';
+import '../../../home_screen/presentation/screens/home_view.dart';
 import '../widgets/profile_test_view.dart';
 
 class AppSectionView extends StatefulWidget {
-  const AppSectionView({super.key,});
+  const AppSectionView({super.key});
 
   @override
   State<AppSectionView> createState() => _AppSectionViewState();
@@ -18,7 +21,10 @@ class AppSectionView extends StatefulWidget {
 class _AppSectionViewState extends State<AppSectionView> {
   int _currentTabIndex = 0;
   final List<Widget> _tabs = [
-    HomeScreen(),
+    BlocProvider(
+      create: (context) => getIt<HomeViewModel>(),
+      child: HomeScreen(),
+    ),
     CategoriesTestView(),
     CartTestView(),
     ProfileTestView(),
@@ -33,15 +39,15 @@ class _AppSectionViewState extends State<AppSectionView> {
   final List<BottomNavItemEntity> bottomNavItems = [
     BottomNavItemEntity(
       assetName: Assets.assetsIconsHome,
-      label: AppStrings.homeView,
+      label: AppStrings.home,
     ),
     BottomNavItemEntity(
       assetName: Assets.assetsIconsCategories,
-      label: AppStrings.categoryView,
+      label: AppStrings.categories,
     ),
     BottomNavItemEntity(
       assetName: Assets.assetsIconsShoppingCart,
-      label: AppStrings.cartView,
+      label: AppStrings.cart,
     ),
     BottomNavItemEntity(
       assetName: Assets.assetsIconsPerson,

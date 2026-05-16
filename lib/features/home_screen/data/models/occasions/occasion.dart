@@ -37,15 +37,11 @@ class OccasionDto {
 
   Map<String, dynamic> toJson() => _$OccasionDtoToJson(this);
 
-  OccasionModel toDomain() {
-    return OccasionModel(
+  OccasionEntity toDomain() {
+    return OccasionEntity(
       id: id,
       name: name,
-      slug: slug,
       image: image,
-      isSuperAdmin: isSuperAdmin,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
       productsCount: productsCount,
     );
   }

@@ -5,6 +5,9 @@ import 'package:flower_app/features/home_screen/data/models/best_seller/best_sel
 import 'package:flower_app/features/home_screen/data/models/category/category.dart';
 import 'package:flower_app/features/home_screen/data/models/occasions/occasion.dart';
 import 'package:flower_app/features/home_screen/data/repositories/home_repo_impl.dart';
+import 'package:flower_app/features/home_screen/domain/entities/best_seller_entity.dart';
+import 'package:flower_app/features/home_screen/domain/entities/category_entity.dart';
+import 'package:flower_app/features/home_screen/domain/entities/occasion_entity.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -88,14 +91,14 @@ void main() {
      when(mockHomeRemoteDataSource.getAllCategory()).thenAnswer((_)
      async => SuccessBaseResponse<List<CategoryDto>>(data: []));
     final result = await homeRepoImpl.getAllCategory();
-    expect(result, isA<SuccessBaseResponse<List<CategoryModel>>>());
-    expect((result as SuccessBaseResponse<List<CategoryModel>>).data, isEmpty);
+    expect(result, isA<SuccessBaseResponse<List<CategoryEntity>>>());
+    expect((result as SuccessBaseResponse<List<CategoryEntity>>).data, isEmpty);
    });
    test('Test Error Case With Exception ', () async{
      when(mockHomeRemoteDataSource.getAllCategory()).thenAnswer((_)
      async => ErrorBaseResponse<List<CategoryDto>>(exception: Exception()));
      final result = await homeRepoImpl.getAllCategory();
-     expect(result, isA<ErrorBaseResponse<List<CategoryModel>>>());
+     expect(result, isA<ErrorBaseResponse<List<CategoryEntity>>>());
    });
    test('Test Success Case With Data ', () async{
      when(mockHomeRemoteDataSource.getAllCategory()).thenAnswer((_)
@@ -112,8 +115,8 @@ void main() {
        ),
      ]));
      final result = await homeRepoImpl.getAllCategory();
-     expect(result, isA<SuccessBaseResponse<List<CategoryModel>>>());
-     expect((result as SuccessBaseResponse<List<CategoryModel>>).data, isNotEmpty);
+     expect(result, isA<SuccessBaseResponse<List<CategoryEntity>>>());
+     expect((result as SuccessBaseResponse<List<CategoryEntity>>).data, isNotEmpty);
    });
    }) ;
   group('Get Occasion Function Test Group ', (){
@@ -122,14 +125,14 @@ void main() {
       when(mockHomeRemoteDataSource.getAllOccasion()).thenAnswer((_)
       async => SuccessBaseResponse<List<OccasionDto>>(data: []));
       final result = await homeRepoImpl.getAllOccasion();
-      expect(result, isA<SuccessBaseResponse<List<OccasionModel>>>());
-      expect((result as SuccessBaseResponse<List<OccasionModel>>).data, isEmpty);
+      expect(result, isA<SuccessBaseResponse<List<OccasionEntity>>>());
+      expect((result as SuccessBaseResponse<List<OccasionEntity>>).data, isEmpty);
     });
     test('Test Error Case With Exception ', () async{
       when(mockHomeRemoteDataSource.getAllOccasion()).thenAnswer((_)
       async => ErrorBaseResponse<List<OccasionDto>>(exception: Exception()));
       final result = await homeRepoImpl.getAllOccasion();
-      expect(result, isA<ErrorBaseResponse<List<OccasionModel>>>());
+      expect(result, isA<ErrorBaseResponse<List<OccasionEntity>>>());
     });
     test('Test Success Case With Data ', () async{
       when(mockHomeRemoteDataSource.getAllOccasion()).thenAnswer((_)
@@ -146,8 +149,8 @@ void main() {
         ),
       ]));
       final result = await homeRepoImpl.getAllOccasion();
-      expect(result, isA<SuccessBaseResponse<List<OccasionModel>>>());
-      expect((result as SuccessBaseResponse<List<OccasionModel>>).data, isNotEmpty);
+      expect(result, isA<SuccessBaseResponse<List<OccasionEntity>>>());
+      expect((result as SuccessBaseResponse<List<OccasionEntity>>).data, isNotEmpty);
     });
   }) ;
   group('Get Best Seller Function Test Group ', (){
@@ -156,14 +159,14 @@ void main() {
       when(mockHomeRemoteDataSource.getAllBestSeller()).thenAnswer((_)
       async => SuccessBaseResponse<List<BestSellerDto>>(data: []));
       final result = await homeRepoImpl.getAllBestSeller();
-      expect(result, isA<SuccessBaseResponse<List<BestSellerModel>>>());
-      expect((result as SuccessBaseResponse<List<BestSellerModel>>).data, isEmpty);
+      expect(result, isA<SuccessBaseResponse<List<BestSellerEntity>>>());
+      expect((result as SuccessBaseResponse<List<BestSellerEntity>>).data, isEmpty);
     });
     test('Test Error Case With Exception ', () async{
       when(mockHomeRemoteDataSource.getAllBestSeller()).thenAnswer((_)
       async => ErrorBaseResponse<List<BestSellerDto>>(exception: Exception()));
       final result = await homeRepoImpl.getAllBestSeller();
-      expect(result, isA<ErrorBaseResponse<List<BestSellerModel>>>());
+      expect(result, isA<ErrorBaseResponse<List<BestSellerEntity>>>());
     });
     test('Test Success Case With Data ', () async{
       when(mockHomeRemoteDataSource.getAllBestSeller()).thenAnswer((_)
@@ -177,8 +180,8 @@ void main() {
         ),
       ]));
       final result = await homeRepoImpl.getAllBestSeller();
-      expect(result, isA<SuccessBaseResponse<List<BestSellerModel>>>());
-      expect((result as SuccessBaseResponse<List<BestSellerModel>>).data, isNotEmpty);
+      expect(result, isA<SuccessBaseResponse<List<BestSellerEntity>>>());
+      expect((result as SuccessBaseResponse<List<BestSellerEntity>>).data, isNotEmpty);
     });
   }) ;
 

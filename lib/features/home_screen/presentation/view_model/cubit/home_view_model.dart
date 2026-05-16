@@ -1,110 +1,126 @@
 import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/config/base_state/base_state.dart';
+import 'package:flower_app/features/home_screen/domain/use_cases/get_best_seller_use_case.dart';
+import 'package:flower_app/features/home_screen/domain/use_cases/get_category_use_cases.dart';
+import 'package:flower_app/features/home_screen/domain/use_cases/get_occasion_use_case.dart';
+import 'package:flower_app/features/home_screen/presentation/view_model/states/home_events.dart';
+import 'package:flower_app/features/home_screen/presentation/view_model/states/home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../domain/use_cases/get_best_seller_use_case.dart';
-import '../../../domain/use_cases/get_category_use_cases.dart';
-import '../../../domain/use_cases/get_occasion_use_case.dart';
-import '../states/home_events.dart';
-import '../states/home_state.dart';
-
 @injectable
 class HomeViewModel extends Cubit<HomeState> {
-
-  final GetCategoryUseCases _getCategoriesUseCase;
-  final GetOccasionUseCase _getOccasionUseCase;
+  final GetCategoryUseCases _getCategoryUseCases;
   final GetBestSellerUseCase _getBestSellerUseCase;
+  final GetOccasionUseCase _getOccasionUseCase;
+
   HomeViewModel(
-    this._getCategoriesUseCase,
-    this._getOccasionUseCase,
+    this._getCategoryUseCases,
     this._getBestSellerUseCase,
-  ) : super(HomeState());
+    this._getOccasionUseCase,
+  ) : super(const HomeState());
 
-  Future<void> doEvent(HomeEvents event) async {
-    if (event is GetAllDataEvent) {
-      await _getAllData();
-    } else if (event is GetBestSellerEvent) {
-      await _getBestSeller();
-    } else if (event is GetCategoryEvent) {
-      await _getCategories();
-    } else if (event is GetOccasionEvent) {
-      await _getOccasion();
+  void doEvent(HomeEvent event) {
+    switch (event) {
+      case LoadHomeDataEvent():
+        _loadHomeData();
+      case RetryLoadHomeDataEvent():
+        _retryLoadHomeData();
+      case NavigateToCategoryEvent():
+        _navigateToCategory(event.categoryId);
+      case NavigateToOccasionEvent():
+        _navigateToOccasion(event.occasionId);
+      case NavigateToBestSellerEvent():
+        _navigateToBestSeller(event.productId);
+      case NavigateToViewAllCategoriesEvent():
+        _navigateToViewAllCategories();
+      case NavigateToViewAllOccasionsEvent():
+        _navigateToViewAllOccasions();
+      case NavigateToViewAllBestSellersEvent():
+        _navigateToViewAllBestSellers();
     }
   }
 
-
-  Future<void> _getAllData() async {
-     _getCategories();
-     _getOccasion();
-     _getBestSeller();
+  void _loadHomeData() {
+    _fetchCategories();
+    _fetchBestSellers();
+    _fetchOccasions();
   }
 
-  Future<void> _getCategories() async {
-    emit(state.copyWith(categoriesLoading: true, categoriesError: ''));
-    final result = await _getCategoriesUseCase();
-    switch (result) {
-      case SuccessBaseResponse<List<CategoryModel>>():
+  void _retryLoadHomeData() {
+    if (state.categoriesState.msg != null) _fetchCategories();
+    if (state.bestSellersState.msg != null) _fetchBestSellers();
+    if (state.occasionsState.msg != null) _fetchOccasions();
+  }
+
+  Future<void> _fetchCategories() async {
+    emit(state.copyWith(categoriesState: BaseState.loading()));
+    final response = await _getCategoryUseCases();
+    switch (response) {
+      case SuccessBaseResponse():
+        emit(state.copyWith(categoriesState: BaseState.success(response.data)));
+      case ErrorBaseResponse():
         emit(
           state.copyWith(
-            categoriesLoading: false,
-            categories: result.data,
+            categoriesState: BaseState.error(response.errorMessage),
           ),
         );
-        break;
-      case ErrorBaseResponse<List<CategoryModel>>():
-        emit(
-          state.copyWith(
-            categoriesLoading: false,
-            categoriesError: result.errorMessage,
-          ),
-        );
-        break;
     }
   }
 
-  Future<void> _getOccasion() async {
-    emit(state.copyWith(occasionsLoading: true, occasionsError: ''));
-    final result = await _getOccasionUseCase();
-    switch (result) {
-      case SuccessBaseResponse<List<OccasionModel>>():
+  Future<void> _fetchBestSellers() async {
+    emit(state.copyWith(bestSellersState: BaseState.loading()));
+    final response = await _getBestSellerUseCase();
+    switch (response) {
+      case SuccessBaseResponse():
+        emit(
+          state.copyWith(bestSellersState: BaseState.success(response.data)),
+        );
+      case ErrorBaseResponse():
         emit(
           state.copyWith(
-            occasionsLoading: false,
-            occasions: result.data,
+            bestSellersState: BaseState.error(response.errorMessage),
           ),
         );
-        break;
-      case ErrorBaseResponse<List<OccasionModel>>():
-        emit(
-          state.copyWith(
-            occasionsLoading: false,
-            occasionsError: result.errorMessage,
-          ),
-        );
-        break;
     }
   }
 
-  Future<void> _getBestSeller() async {
-    emit(state.copyWith(bestSellersLoading: true, bestSellersError: ''));
-    final result = await _getBestSellerUseCase();
-    switch (result) {
-      case SuccessBaseResponse<List<BestSellerModel>>():
+  Future<void> _fetchOccasions() async {
+    emit(state.copyWith(occasionsState: BaseState.loading()));
+    final response = await _getOccasionUseCase();
+    switch (response) {
+      case SuccessBaseResponse():
+        emit(state.copyWith(occasionsState: BaseState.success(response.data)));
+      case ErrorBaseResponse():
         emit(
           state.copyWith(
-            bestSellersLoading: false,
-            bestSellers: result.data,
+            occasionsState: BaseState.error(response.errorMessage),
           ),
         );
-        break;
-      case ErrorBaseResponse<List<BestSellerModel>>():
-        emit(
-          state.copyWith(
-            bestSellersLoading: false,
-            bestSellersError: result.errorMessage,
-          ),
-        );
-        break;
     }
+  }
+
+  void _navigateToCategory(String categoryId) {
+    // TODO: navigation
+  }
+
+  void _navigateToOccasion(String occasionId) {
+    // TODO: navigation
+  }
+
+  void _navigateToBestSeller(String productId) {
+    // TODO: navigation
+  }
+
+  void _navigateToViewAllCategories() {
+    // TODO: navigation
+  }
+
+  void _navigateToViewAllOccasions() {
+    // TODO: navigation
+  }
+
+  void _navigateToViewAllBestSellers() {
+    // TODO: navigation
   }
 }

@@ -5,11 +5,12 @@ import 'package:flower_app/features/home_screen/domain/entities/occasion_entity.
 import 'package:flower_app/features/home_screen/domain/use_cases/get_best_seller_use_case.dart';
 import 'package:flower_app/features/home_screen/domain/use_cases/get_category_use_cases.dart';
 import 'package:flower_app/features/home_screen/domain/use_cases/get_occasion_use_case.dart';
+import 'package:flower_app/features/home_screen/presentation/view_model/states/home_events.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'home_view_Entity_test.mocks.dart';
+import 'home_view_model_test.mocks.dart';
 
 @GenerateMocks([
   GetCategoryUseCases,
