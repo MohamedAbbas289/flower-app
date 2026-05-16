@@ -1,27 +1,36 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/core/values/images_paths.dart';
 import 'package:flower_app/features/product_details/domain/entities/product_details_entity.dart';
 import 'package:flower_app/features/product_details/presentation/view_model/product_details_cubit.dart';
 import 'package:flower_app/features/product_details/presentation/view_model/product_details_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ProductDetailsView extends StatelessWidget {
-  const ProductDetailsView({super.key});
-
+  const ProductDetailsView({super.key, required this.productId});
+  final String productId;
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProductDetailsCubit, ProductDetailsBaseState>(
-      listenWhen: (_, current) => current is ProductDetailsFailure,
       listener: (context, state) {
-        if (state is ProductDetailsFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.error),
-              backgroundColor: AppColors.red,
-              behavior: SnackBarBehavior.floating,
+        if (!state.productDetailsState.isLoading &&
+            state.productDetailsState.data == null) {
+          AppSnackBar.showError(
+            context,
+            state.productDetailsState.msg!,
+            icon: SvgPicture.asset(
+              Assets.assetsIconsError,
+              width: 22,
+              height: 22,
+              colorFilter: const ColorFilter.mode(
+                Colors.white,
+                BlendMode.srcIn,
+              ),
             ),
           );
         }
@@ -39,26 +48,22 @@ class _ProductDetailsScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: BlocBuilder<ProductDetailsCubit, ProductDetailsBaseState>(
-        buildWhen: (_, current) =>
-            current is ProductDetailsLoading ||
-            current is ProductDetailsSuccess ||
-            current is ProductDetailsFailure,
         builder: (context, state) {
-          if (state is ProductDetailsLoading) {
+          if (state.productDetailsState.isLoading == true) {
             return const Center(
               child: CircularProgressIndicator(color: AppColors.pink),
             );
           }
 
-          if (state is ProductDetailsSuccess) {
-            return _ProductDetailsBody(entity: state.entity);
+          if (state.productDetailsState.data != null) {
+            return _ProductDetailsBody(entity: state.productDetailsState.data!);
           }
 
-          if (state is ProductDetailsFailure) {
-            return Center(
-              child: Text(state.error, style: TextStyles.errorText),
-            );
-          }
+          // if (state.productDetailsState.msg != null && state.productDetailsState.data == null) {
+          //   return Center(
+          //     child: Text(state.productDetailsState.msg!, style: TextStyles.errorText),
+          //   );
+          // }
 
           return const SizedBox.shrink();
         },
@@ -117,22 +122,18 @@ class _ImageSliderState extends State<_ImageSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final images = widget.entity.images.isNotEmpty
-        ? widget.entity.images
-        : [widget.entity.imgCover];
-
     return Stack(
       children: [
         SizedBox(
           height: 450,
           child: PageView.builder(
-            itemCount: images.length,
+            itemCount: widget.entity.images.length,
             onPageChanged: (index) => setState(() => _currentIndex = index),
             itemBuilder: (context, index) {
               return Hero(
-                tag: 'product-${widget.entity.id}-$index',
+                tag: 'product-image-${widget.entity.id}',
                 child: CachedNetworkImage(
-                  imageUrl: images[index],
+                  imageUrl: widget.entity.images[index],
                   width: double.infinity,
                   height: 400,
                   fit: BoxFit.cover,
@@ -153,7 +154,7 @@ class _ImageSliderState extends State<_ImageSlider> {
           left: 0,
           right: 0,
           child: _DotsIndicator(
-            count: images.length,
+            count: widget.entity.images.length,
             currentIndex: _currentIndex,
           ),
         ),

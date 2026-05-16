@@ -4,6 +4,7 @@ import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/app_section/presentation/view/app_section_view.dart';
 import 'package:flower_app/features/product_details/presentation/pages/product_details_view.dart';
 import 'package:flower_app/features/product_details/presentation/view_model/product_details_cubit.dart';
+import 'package:flower_app/features/product_details/presentation/view_model/product_details_events.dart';
 
 import 'package:flower_app/features/splash/presentation/splash_view.dart';
 import 'package:flutter/material.dart';
@@ -29,10 +30,13 @@ class AppRoutes {
       case AppRoutesName.signUp:
         return MaterialPageRoute(builder: (_) => const SignupView());
       case AppRoutesName.productDetails:
+        // final productId = settings.arguments as String;
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (_) => getIt<ProductDetailsCubit>()..getProductDetails(),
-            child: Builder(builder: (context) => const ProductDetailsView()),
+            create: (_) => getIt<ProductDetailsCubit>()..doEvent(GetProductDetailsEvent(productId: '69d988754461df0f939b5817')),
+            child: Builder(
+              builder: (context) => ProductDetailsView(productId: "69d988754461df0f939b5817"),
+            ),
           ),
         );
       default:

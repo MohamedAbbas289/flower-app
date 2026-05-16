@@ -1,31 +1,41 @@
-// To parse this JSON data, do
-//
-//     final productDetailsResponse = productDetailsResponseFromJson(jsonString);
-
 import 'package:json_annotation/json_annotation.dart';
-import 'dart:convert';
 
 part 'product_details_response.g.dart';
-
-ProductDetailsResponse productDetailsResponseFromJson(String str) =>
-    ProductDetailsResponse.fromJson(json.decode(str));
-
-String productDetailsResponseToJson(ProductDetailsResponse data) =>
-    json.encode(data.toJson());
 
 @JsonSerializable()
 class ProductDetailsResponse {
   @JsonKey(name: "message")
   String? message;
-  @JsonKey(name: "product")
-  Product? product;
+  @JsonKey(name: "metadata")
+  Metadata? metadata;
+  @JsonKey(name: "products")
+  List<Product>? products;
 
-  ProductDetailsResponse({this.message, this.product});
+  ProductDetailsResponse({this.message, this.metadata, this.products});
 
   factory ProductDetailsResponse.fromJson(Map<String, dynamic> json) =>
       _$ProductDetailsResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductDetailsResponseToJson(this);
+}
+
+@JsonSerializable()
+class Metadata {
+  @JsonKey(name: "currentPage")
+  int? currentPage;
+  @JsonKey(name: "totalPages")
+  int? totalPages;
+  @JsonKey(name: "limit")
+  int? limit;
+  @JsonKey(name: "totalItems")
+  int? totalItems;
+
+  Metadata({this.currentPage, this.totalPages, this.limit, this.totalItems});
+
+  factory Metadata.fromJson(Map<String, dynamic> json) =>
+      _$MetadataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MetadataToJson(this);
 }
 
 @JsonSerializable()
@@ -63,9 +73,9 @@ class Product {
   @JsonKey(name: "isSuperAdmin")
   bool? isSuperAdmin;
   @JsonKey(name: "createdAt")
-  String? createdAt;
+  DateTime? createdAt;
   @JsonKey(name: "updatedAt")
-  String? updatedAt;
+  DateTime? updatedAt;
   @JsonKey(name: "__v")
   int? v;
   @JsonKey(name: "favoriteId")

@@ -10,14 +10,12 @@ class ProductDetailsRemoteDataSourceImpl
   ProductDetailsRemoteDataSourceImpl(this._productDetailsApiClient);
   final ProductDetailsApiClient _productDetailsApiClient;
   @override
-  Future<BaseResponse<ProductDetailsResponse>> getProductDetails(
-    //   {
-    //    required String productId,
-    // }
-  ) async {
+  Future<BaseResponse<ProductDetailsResponse>> getProductDetails({
+    required String productId,
+  }) async {
     try {
       final response = await _productDetailsApiClient.getProductDetails(
-        // productId: productId,
+        productId: productId,
       );
       return SuccessBaseResponse<ProductDetailsResponse>(data: response);
     } catch (e) {
@@ -25,4 +23,3 @@ class ProductDetailsRemoteDataSourceImpl
     }
   }
 }
-// TODO: Add productId when Feature/best-sellers is implemented

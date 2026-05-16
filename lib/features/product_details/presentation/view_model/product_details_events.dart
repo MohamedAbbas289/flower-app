@@ -1,22 +1,9 @@
-import 'package:equatable/equatable.dart';
-
-sealed class ProductDetailsEvent extends Equatable {
+sealed class ProductDetailsEvent {
   const ProductDetailsEvent();
-  @override
-  List<Object?> get props => [];
 }
 
 class GetProductDetailsEvent extends ProductDetailsEvent {
-  // final String productId;
-
-  const GetProductDetailsEvent(
-    // {required this.productId}
-  );
-
-  @override
-  List<Object?> get props => [
-    // productId
-  ];
+  final String productId;
+  const GetProductDetailsEvent({required this.productId});
 }
 
-// TODO: add productID when feature best seller is implemented

@@ -7,12 +7,11 @@ import 'package:injectable/injectable.dart';
 class ProductDetailsUseCase {
   ProductDetailsUseCase(this._productDetailsRepoContract);
   final ProductDetailsRepoContract _productDetailsRepoContract;
-  Future<BaseResponse<ProductDetailsEntity>> getProductDetails(
-    // {required String productId}
-  ) async {
+  Future<BaseResponse<ProductDetailsEntity>> getProductDetails({
+    required String productId,
+  }) async {
     return await _productDetailsRepoContract.getProductDetails(
-      // productId : productId
+      productId: productId,
     );
   }
 }
-// TODO: Add productId when Feature/best-sellers is implemented

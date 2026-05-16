@@ -3,18 +3,18 @@ import 'package:flower_app/features/product_details/domain/entities/product_deta
 
 extension ProductDetailsMapper on ProductDetailsResponse {
   ProductDetailsEntity toEntity() {
+    final p = products?.firstOrNull;
     return ProductDetailsEntity(
-      id: product?.id ?? '',
-      title: product?.title ?? '',
-      price: product?.price ?? 0,
-      priceAfterDiscount: product?.priceAfterDiscount ?? 0,
-      quantity: product?.quantity ?? 0,
-      rateCount: product?.rateCount ?? 0,
-      rateAvg: product?.rateAvg?.toDouble() ?? 0.0,
-      isInWishlist: product?.isInWishlist ?? false,
-      description: product?.description ?? '',
-      imgCover: product?.imgCover ?? '',
-      images: product?.images ?? [],
+      id: p?.id ?? '',
+      title: p?.title ?? '',
+      description: p?.description ?? '',
+      images: [if (p?.imgCover != null) p!.imgCover!, ...?p?.images],
+      price: p?.price ?? 0,
+      priceAfterDiscount: p?.priceAfterDiscount ?? 0,
+      quantity: p?.quantity ?? 0,
+      rateCount: p?.rateCount ?? 0,
+      rateAvg: p?.rateAvg?.toDouble() ?? 0.0,
+      isInWishlist: p?.isInWishlist ?? false,
     );
   }
 }

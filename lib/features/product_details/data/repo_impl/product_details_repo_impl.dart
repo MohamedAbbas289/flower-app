@@ -14,19 +14,18 @@ class ProductDetailsRepoImpl implements ProductDetailsRepoContract {
   ProductDetailsRepoImpl(this._productDetailsRemoteDataSourceContract);
 
   @override
-  Future<BaseResponse<ProductDetailsEntity>> getProductDetails(
-    // {required String productId}
-  ) async {
+  Future<BaseResponse<ProductDetailsEntity>> getProductDetails({
+    required String productId,
+  }) async {
     final response = await _productDetailsRemoteDataSourceContract
-        .getProductDetails();
+        .getProductDetails(productId: productId);
 
     switch (response) {
       case SuccessBaseResponse<ProductDetailsResponse>():
-        return SuccessBaseResponse(data: response.data.toEntity());
-
+        final data = response.data.toEntity();
+        return SuccessBaseResponse(data: data);
       case ErrorBaseResponse<ProductDetailsResponse>():
         return ErrorBaseResponse(exception: response.exception);
     }
   }
 }
-// TODO: Add productId when Feature/best-sellers is implemented
