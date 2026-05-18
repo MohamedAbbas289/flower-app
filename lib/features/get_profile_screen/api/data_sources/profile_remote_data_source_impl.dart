@@ -12,9 +12,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSourceContract {
   ProfileRemoteDataSourceImpl(this.profileApiClient);
 
   @override
-  Future<BaseResponse<GetUserDto>> getProfileData({String ?token}) async {
+  Future<BaseResponse<GetUserDto>> getProfileData() async {
     try {
-      final response = await profileApiClient.getProfileData(token: token);
+      final response = await profileApiClient.getProfileData();
       return SuccessBaseResponse<GetUserDto>(
         data: response.getUserDto!,
       );

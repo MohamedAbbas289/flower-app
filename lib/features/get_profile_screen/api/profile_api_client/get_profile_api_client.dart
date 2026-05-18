@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
-import '../../../../core/values/api_param.dart';
 import '../../../../core/values/endpoints.dart';
 import '../../data/models/get_profile_response.dart';
 import '../../data/models/get_user_dto.dart';
@@ -16,13 +15,10 @@ abstract class ProfileApiClient {
 
 
   @GET(Endpoints.getProfile)
-  Future<GetProfileResponse> getProfileData({
-    @Header(ApiParam.token) String? token,
-  });
+  Future<GetProfileResponse> getProfileData();
 
   @PUT(Endpoints.editProfile)
   Future<GetProfileResponse> updateProfile({
-    @Header(ApiParam.token) String? token,
     @Body() required GetUserDto request,
   });
 

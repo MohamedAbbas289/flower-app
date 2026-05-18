@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../domain/entities/user_entitiy.dart';
 import 'get_address.dart';
 
 part 'get_user_dto.g.dart';
@@ -52,8 +53,8 @@ class GetUserDto {
   factory GetUserDto.fromJson(Map<String, dynamic> json) => _$GetUserDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$GetUserDtoToJson(this);
-  GetUserDto toDomain(){
-    return GetUserDto(
+  GetUserEntity toDomain(){
+    return GetUserEntity(
       id: id,
       firstName: firstName,
       lastName: lastName,
@@ -65,8 +66,6 @@ class GetUserDto {
       role: role,
       wishlist: wishlist,
       addresses: addresses,
-      createdAt: createdAt,
-      passwordChangedAt: passwordChangedAt,
     );
   }
   }
