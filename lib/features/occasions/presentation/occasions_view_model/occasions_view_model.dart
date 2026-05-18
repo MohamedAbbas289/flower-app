@@ -19,7 +19,7 @@ class OccasionsViewModel extends Cubit<OccasionsState> {
   final GetOccasionsUseCase _getOccasionsUseCase;
   final GetProductsByOccasionUseCase _getProductsByOccasionUseCase;
 
-  static const int _limit = 20;
+  static const int _limit = 10;
 
   void doEvent(OccasionsEvent event) {
     switch (event) {
