@@ -1,4 +1,4 @@
-name: git push origin ci/code-linting-check-actions
+name: Flutter analysis/lint workflow
 
 on:
   pull_request:
