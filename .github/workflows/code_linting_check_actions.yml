@@ -15,6 +15,7 @@ jobs:
   flutter-analyze:
     name: Flutter Analyze
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout code
