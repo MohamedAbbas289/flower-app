@@ -1,4 +1,4 @@
-name: Code Linting Check
+name: git push origin ci/code-linting-check-actions
 
 on:
   pull_request:
@@ -7,7 +7,6 @@ on:
       - synchronize
       - reopened
       - ready_for_review
-      - closed
     branches:
       - main
       - develop
