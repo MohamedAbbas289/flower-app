@@ -8,57 +8,56 @@ import 'package:test/test.dart';
 
 import 'product_details_remote_data_source_impl_test.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<ProductDetailsApiClient>()])
+@GenerateMocks([ProductDetailsApiClient])
 void main() {
-  late ProductDetailsRemoteDataSourceImpl productDetailsRemoteDataSourceImpl;
+  late ProductDetailsRemoteDataSourceImpl dataSource;
   late MockProductDetailsApiClient mockApiClient;
+
+  const tProductId = '69d988754461df0f939b581a';
+
+  final tProduct = Product(
+    id: tProductId,
+    title: 'Pink Rose Bouquet',
+    description: 'Lorem ipsum',
+    imgCover: 'https://example.com/cover.jpg',
+    images: ['https://example.com/image.jpg'],
+    price: 1500,
+    priceAfterDiscount: 1200,
+    quantity: 10,
+    rateCount: 5,
+    rateAvg: 4,
+    isInWishlist: false,
+  );
 
   final tResponse = ProductDetailsResponse(
     message: 'Success',
-    product: Product(
-      id: '69d988754461df0f939b581a',
-      title: 'Pink Rose Bouquet',
-      description: 'Lorem ipsum',
-      imgCover: 'https://example.com/image.jpg',
-      images: ['https://example.com/image.jpg'],
-      price: 1500,
-      priceAfterDiscount: 1200,
-      quantity: 10,
-      rateCount: 5,
-      rateAvg: 4,
-      isInWishlist: false,
-    ),
+    products: [tProduct],
   );
 
   setUp(() {
     mockApiClient = MockProductDetailsApiClient();
-    productDetailsRemoteDataSourceImpl = ProductDetailsRemoteDataSourceImpl(
-      mockApiClient,
-    );
+    dataSource = ProductDetailsRemoteDataSourceImpl(mockApiClient);
   });
 
   group('getProductDetails', () {
     test('returns SuccessBaseResponse on success', () async {
       when(
-        mockApiClient.getProductDetails(),
+        mockApiClient.getProductDetails(productId: anyNamed('productId')),
       ).thenAnswer((_) async => tResponse);
 
-      final result = await productDetailsRemoteDataSourceImpl
-          .getProductDetails();
+      final result = await dataSource.getProductDetails(productId: tProductId);
 
       expect(result, isA<SuccessBaseResponse<ProductDetailsResponse>>());
-
       final success = result as SuccessBaseResponse<ProductDetailsResponse>;
-      expect(success.data.product?.id, '69d988754461df0f939b581a');
+      expect(success.data.products?.first.id, tProductId);
     });
 
     test('returns ErrorBaseResponse on exception', () async {
       when(
-        mockApiClient.getProductDetails(),
+        mockApiClient.getProductDetails(productId: anyNamed('productId')),
       ).thenThrow(Exception('network error'));
 
-      final result = await productDetailsRemoteDataSourceImpl
-          .getProductDetails();
+      final result = await dataSource.getProductDetails(productId: tProductId);
 
       expect(result, isA<ErrorBaseResponse<ProductDetailsResponse>>());
     });

@@ -3,6 +3,7 @@ import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/product_details/domain/entities/product_details_entity.dart';
 import 'package:flower_app/features/product_details/domain/use_case/product_details_use_case.dart';
 import 'package:flower_app/features/product_details/presentation/view_model/product_details_cubit.dart';
+import 'package:flower_app/features/product_details/presentation/view_model/product_details_events.dart';
 import 'package:flower_app/features/product_details/presentation/view_model/product_details_states.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -13,13 +14,14 @@ import 'product_details_cubit_test.mocks.dart';
 @GenerateMocks([ProductDetailsUseCase])
 void main() {
   late ProductDetailsCubit cubit;
-  late MockProductDetailsUseCase mockProductDetailsUseCase;
+  late MockProductDetailsUseCase mockUseCase;
+
+  const tProductId = '69d988754461df0f939b581a';
 
   final tEntity = ProductDetailsEntity(
-    id: '69d988754461df0f939b581a',
+    id: tProductId,
     title: 'Pink Rose Bouquet',
     description: 'Lorem ipsum',
-    imgCover: 'https://example.com/image.jpg',
     images: ['https://example.com/image.jpg'],
     price: 1500,
     priceAfterDiscount: 1200,
@@ -39,44 +41,57 @@ void main() {
   });
 
   setUp(() {
-    mockProductDetailsUseCase = MockProductDetailsUseCase();
-    cubit = ProductDetailsCubit(mockProductDetailsUseCase);
+    mockUseCase = MockProductDetailsUseCase();
+    cubit = ProductDetailsCubit(mockUseCase);
   });
 
   tearDown(() => cubit.close());
 
-  group('getProductDetails', () {
+  group('GetProductDetailsEvent', () {
     blocTest<ProductDetailsCubit, ProductDetailsBaseState>(
-      'emits [ProductDetailsLoading, ProductDetailsSuccess] on success',
+      'emits loading then success on success',
       build: () {
         when(
-          mockProductDetailsUseCase.getProductDetails(),
+          mockUseCase.getProductDetails(productId: anyNamed('productId')),
         ).thenAnswer((_) async => SuccessBaseResponse(data: tEntity));
         return cubit;
       },
-      act: (c) => c.getProductDetails(),
+      act: (c) =>
+          c.doEvent(const GetProductDetailsEvent(productId: tProductId)),
       expect: () => [
-        isA<ProductDetailsLoading>(),
-        isA<ProductDetailsSuccess>().having((s) => s.entity, 'entity', tEntity),
+        isA<ProductDetailsBaseState>().having(
+          (s) => s.productDetailsState.isLoading,
+          'isLoading',
+          true,
+        ),
+        isA<ProductDetailsBaseState>()
+            .having((s) => s.productDetailsState.isLoading, 'isLoading', false)
+            .having((s) => s.productDetailsState.data, 'data', tEntity),
       ],
     );
 
     blocTest<ProductDetailsCubit, ProductDetailsBaseState>(
-      'emits [ProductDetailsLoading, ProductDetailsFailure] on failure',
+      'emits loading then error on failure',
       build: () {
-        when(mockProductDetailsUseCase.getProductDetails()).thenAnswer(
+        when(
+          mockUseCase.getProductDetails(productId: anyNamed('productId')),
+        ).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception('error')),
         );
         return cubit;
       },
-      act: (c) => c.getProductDetails(),
+      act: (c) =>
+          c.doEvent(const GetProductDetailsEvent(productId: tProductId)),
       expect: () => [
-        isA<ProductDetailsLoading>(),
-        isA<ProductDetailsFailure>().having(
-          (s) => s.error,
-          'error',
-          isNotEmpty,
+        isA<ProductDetailsBaseState>().having(
+          (s) => s.productDetailsState.isLoading,
+          'isLoading',
+          true,
         ),
+        isA<ProductDetailsBaseState>()
+            .having((s) => s.productDetailsState.isLoading, 'isLoading', false)
+            .having((s) => s.productDetailsState.data, 'data', null)
+            .having((s) => s.productDetailsState.msg, 'msg', isNotNull),
       ],
     );
   });
