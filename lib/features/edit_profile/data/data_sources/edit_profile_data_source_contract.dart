@@ -5,7 +5,7 @@ import '../../../../config/base_response/base_response.dart';
 
 abstract interface class EditProfileDataSourceContract {
 
-  Future<BaseResponse<EditUserDto>> editProfile();
+  Future<BaseResponse<EditUserDto>> editProfile({String? token});
 
 
 }

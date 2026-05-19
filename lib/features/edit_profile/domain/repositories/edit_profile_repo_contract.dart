@@ -1,0 +1,8 @@
+import 'package:flower_app/features/edit_profile/domain/entities/edit_user_entity.dart';
+
+import '../../../../config/base_response/base_response.dart';
+
+abstract interface class EditProfileRepoContract {
+  Future<BaseResponse<EditUserEntity>> editProfile({String? token});
+
+}

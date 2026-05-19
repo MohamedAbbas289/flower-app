@@ -9,7 +9,7 @@ class EditProfileDataSourceImpl implements EditProfileDataSourceContract{
   final EditProfileApiClient editProfileApiClient;
   EditProfileDataSourceImpl(this.editProfileApiClient);
   @override
-  Future<BaseResponse<EditUserDto>> editProfile() async {
+  Future<BaseResponse<EditUserDto>> editProfile({String? token}) async {
     try {
       final response = await editProfileApiClient.updateProfile(request: EditUserDto());
       return SuccessBaseResponse<EditUserDto>(
