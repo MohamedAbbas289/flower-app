@@ -238,27 +238,13 @@ class _LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginViewModel, LoginState>(
-      builder: (context, state) {
-        final isLoading = state.loginState.isLoading;
-        return SizedBox(
-          width: double.infinity,
-          height: 52,
-          child: ElevatedButton(
-            onPressed: isLoading ? null : onPressed,
-            child: isLoading
-                ? const SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : const Text(AppStrings.loginButton),
-          ),
-        );
-      },
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        child: const Text(AppStrings.loginButton),
+      ),
     );
   }
 }
