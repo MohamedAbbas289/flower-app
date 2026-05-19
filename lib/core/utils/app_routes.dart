@@ -5,6 +5,8 @@ import 'package:flower_app/features/app_section/presentation/view/app_section_vi
 import 'package:flower_app/features/best_seller/presentation/view/best_seller_view.dart';
 import 'package:flower_app/features/occasions/presentation/occasions_view_model/occasions_view_model.dart';
 import 'package:flower_app/features/occasions/presentation/pages/occasions_view.dart';
+import 'package:flower_app/features/change_password/presentation/pages/change_password_view.dart';
+import 'package:flower_app/features/change_password/presentation/change_password_view_model/cubit/change_password_view_model.dart';
 import 'package:flower_app/features/splash/presentation/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,8 +50,15 @@ class AppRoutes {
           ),
         );
       case AppRoutesName.bestSeller:
-        return MaterialPageRoute(builder: (_) =>const BestSellerView());
+        return MaterialPageRoute(builder: (_) => const BestSellerView());
 
+      case AppRoutesName.changePassword:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<ChangePasswordViewModel>(),
+            child: Builder(builder: (context) => const ChangePasswordView()),
+          ),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(
