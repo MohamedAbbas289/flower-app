@@ -18,11 +18,12 @@ jobs:
           
           TITLE_REGEX="^(fix|release|feat|hotfix|build|test)\([A-Z0-9]+-[0-9]+\): [A-Z0-9]+-[0-9]+-.*$"
           if [[ ! "$PR_TITLE" =~ $TITLE_REGEX ]]; then
+          //error
             echo "❌ Invalid PR Title: $PR_TITLE"
             echo "PR Title must follow the pattern: type(scope): {TicketNum}-task name"
             echo "Allowed types: fix, release, feat, hotfix, build, test"
             echo "Example: feat(ECOM-27): ECOM-27-Initialize Project"
             exit 1
           fi
-          
+          //success
           echo "✅ PR Title is valid: $PR_TITLE"
