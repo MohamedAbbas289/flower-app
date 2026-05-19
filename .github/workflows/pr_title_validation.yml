@@ -16,7 +16,7 @@ jobs:
           PR_TITLE="${{ github.event.pull_request.title }}"
           echo "PR Title: $PR_TITLE"
           
-          TITLE_REGEX="^(fix|release|feat|hotfix|build|test)\([A-Z]+-[0-9]+\): [A-Z]+-[0-9]+-.*$"
+          TITLE_REGEX="^(fix|release|feat|hotfix|build|test)\([A-Z0-9]+-[0-9]+\): [A-Z0-9]+-[0-9]+-.*$"
           if [[ ! "$PR_TITLE" =~ $TITLE_REGEX ]]; then
             echo "❌ Invalid PR Title: $PR_TITLE"
             echo "PR Title must follow the pattern: type(scope): {TicketNum}-task name"
