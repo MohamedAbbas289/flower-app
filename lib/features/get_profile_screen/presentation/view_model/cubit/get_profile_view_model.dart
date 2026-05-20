@@ -1,5 +1,6 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
+import 'package:flower_app/features/get_profile_screen/domain/entities/user_entitiy.dart';
 import 'package:flower_app/features/get_profile_screen/domain/use_cases/get_profile_use_cases.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -10,11 +11,8 @@ import '../states/get_profile_state.dart';
 class GetProfileViewModel extends Cubit<GetProfileState> {
   final GetProfileUseCases _getProfileUseCases;
 
-
-  GetProfileViewModel(
-    this._getProfileUseCases,
-
-  ) : super(const GetProfileState());
+  GetProfileViewModel(this._getProfileUseCases)
+    : super(const GetProfileState());
 
   void doEvent(GetProfileEvent event) {
     switch (event) {
@@ -25,32 +23,32 @@ class GetProfileViewModel extends Cubit<GetProfileState> {
     }
   }
 
-
-
   void _loadGetProfileData() {
     _getProfile();
-
   }
 
   void _retryLoadGetProfileData() {
     if (state.getProfileState.msg != null) _getProfile();
-
   }
 
   Future<void> _getProfile() async {
-    emit(state.copyWith(getProfileState: BaseState.loading()));
+    emit(state.copyWith(getProfileState: BaseState<GetUserEntity>.loading()));
     final response = await _getProfileUseCases();
     switch (response) {
       case SuccessBaseResponse():
-        emit(state.copyWith(getProfileState: BaseState.success(response.data)));
+        emit(
+          state.copyWith(
+            getProfileState: BaseState<GetUserEntity>.success(response.data),
+          ),
+        );
       case ErrorBaseResponse():
         emit(
           state.copyWith(
-            getProfileState: BaseState.error(response.errorMessage),
+            getProfileState: BaseState<GetUserEntity>.error(
+              response.errorMessage,
+            ),
           ),
         );
     }
   }
-
-
 }
