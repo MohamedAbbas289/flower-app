@@ -11,8 +11,8 @@ import 'package:flower_app/core/theme/text_styles.dart';
 import '../../../../core/values/images_paths.dart';
 import '../widgets/profile_details.dart';
 
-class ProfileTestView extends StatelessWidget {
-  const ProfileTestView({super.key});
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +106,12 @@ class _ProfileViewContent extends StatelessWidget {
               );
             }
 
-            return ProfileDetails(user: profileState.data);
+
+              return ProfileDetails(user: profileState.data);
+
+
+
+
           },
         ),
       ),

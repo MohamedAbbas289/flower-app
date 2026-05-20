@@ -5,15 +5,16 @@ class RowSection extends StatelessWidget {
   final String title;
   final IconData? icon;
   final VoidCallback? onTap;
-  final IconData iconBack;
-
+  final IconData ?iconBack;
+  final String? name;
 
   const RowSection({
     super.key,
     required this.title,
      this.icon,
     this.onTap,
-    this.iconBack = Icons.arrow_forward_ios
+    this.name,
+    this.iconBack
   });
 
   @override
@@ -27,7 +28,19 @@ class RowSection extends StatelessWidget {
           style: TextStyles.bodyRegular13,
         ),
         const Spacer(),
-        InkWell(onTap: onTap, child: Icon(iconBack,)),
+        if (iconBack != null)
+        InkWell(onTap: onTap,
+            child: Icon(Icons.arrow_forward_ios,)),
+        const SizedBox(width: 12),
+        if (name != null)
+          InkWell(
+            onTap: (){
+
+            },
+            child: Text(name!,
+              style: TextStyles.bodyRegular11,
+            ),
+          ),
       ],
     );
   }

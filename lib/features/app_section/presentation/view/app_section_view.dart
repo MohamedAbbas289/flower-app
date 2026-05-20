@@ -73,7 +73,7 @@ class _AppSectionViewState extends State<AppSectionView> {
             initialCategoryId: _initialCategoryId,
           ),
           CartTestView(),
-          ProfileTestView(),
+          ProfileScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
