@@ -4,7 +4,6 @@ import 'package:flower_app/features/best_seller/data/model/best_seller_product_m
 import 'package:flower_app/features/best_seller/data/model/best_seller_response.dart';
 import 'package:flower_app/features/best_seller/data/repo/best_seller_repo_impl.dart';
 import 'package:flower_app/features/best_seller/domain/entity/best_seller_product_entity.dart';
-import 'package:flower_app/features/best_seller/domain/repo/best_seller_repo_contract.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

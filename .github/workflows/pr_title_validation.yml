@@ -24,4 +24,5 @@ jobs:
             echo "Example: feat(ECOM-27): ECOM-27-Initialize Project"
             exit 1
           fi
+          
           echo "✅ PR Title is valid: $PR_TITLE"

@@ -193,4 +193,14 @@ Thank you for choosing Flowery 💐
   static const String bestSellerTitle = 'Best Seller';
   static const String bestSellerSubTitle =
       'Bloom with our exquisite best sellers';
+// profile screen
+  static const String myOrders = 'My orders';
+  static const String savedAddress = 'Saved address';
+  static const String notification = 'Notification';
+  static const String aboutUs = 'About us';
+  static const String termsConditions = 'Terms & conditions';
+  static const String logout = 'Logout';
+  static const String language = 'Language';
+  static const String english = 'English';
+
 }

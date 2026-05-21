@@ -5,28 +5,20 @@ class BaseState<T> extends Equatable {
   final T? data;
   final String? msg;
 
-  const BaseState({
-    this.isLoading = false,
-    this.data,
-    this.msg,
-  });
+  const BaseState({this.isLoading = false, this.data, this.msg});
 
   @override
   List<Object?> get props => [isLoading, data, msg];
 
-  factory BaseState.loading() => const BaseState(isLoading: true);
+  factory BaseState.loading() => BaseState<T>(isLoading: true);
 
   factory BaseState.success(T data) =>
-      BaseState(isLoading: false, data: data, msg: null);
+      BaseState<T>(isLoading: false, data: data, msg: null);
 
   factory BaseState.error(String msg) =>
-      BaseState(isLoading: false, msg: msg, data: null);
+      BaseState<T>(isLoading: false, msg: msg, data: null);
 
-  BaseState<T> copyWith({
-    bool? isLoading,
-    T? data,
-    String? msg,
-  }) {
+  BaseState<T> copyWith({bool? isLoading, T? data, String? msg}) {
     return BaseState(
       isLoading: isLoading ?? this.isLoading,
       data: data ?? this.data,
