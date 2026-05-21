@@ -13,7 +13,7 @@ import 'package:flower_app/features/product_details/presentation/view_model/prod
 import '../../features/auth/forget-password/presentation/flow/forget_password_routes.dart';
 import '../../features/auth/login/presentation/screens/login_screen.dart';
 import '../../features/auth/signup/presentation/pages/signup_view.dart';
-import '../../features/get_profile_screen/presentation/widgets/edit_profile.dart';
+import '../../features/edit_profile/presentation/screens/edit_profile.dart';
 
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {

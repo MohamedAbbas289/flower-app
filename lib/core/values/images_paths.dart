@@ -78,7 +78,8 @@ class Assets {
 
   static const String assetsImagesFlowerIcon = "assets/images/flowerLogo.svg";
 
-  static const String penIcon = "assets/icons/photo_camera.svg";
+  static const String penIcon = "assets/images/pen.svg";
+  static const String languageIcon = "assets/images/language.svg";
   static const String defaultProfileImage = "assets/images/default-profile.svg";
 }
 
