@@ -29,7 +29,8 @@ class EditAddress {
     this.id,
   });
 
-  factory EditAddress.fromJson(Map<String, dynamic> json) => _$EditAddressFromJson(json);
+  factory EditAddress.fromJson(Map<String, dynamic> json) =>
+      _$EditAddressFromJson(json);
 
   Map<String, dynamic> toJson() => _$EditAddressToJson(this);
 }

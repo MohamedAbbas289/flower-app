@@ -5,12 +5,14 @@ import '../../../../core/theme/text_styles.dart';
 
 class GenderOption extends StatelessWidget {
   final String gender;
+  final String value;
   final String selectedGender;
   final ValueChanged<String> onChanged;
 
   const GenderOption({
     super.key,
     required this.gender,
+    required this.value,
     required this.selectedGender,
     required this.onChanged,
   });
@@ -27,14 +29,11 @@ class GenderOption extends StatelessWidget {
       },
 
       child: RadioListTile<String>(
-        value: gender,
+        value: value,
 
         fillColor: WidgetStateProperty.all(AppColors.pink),
 
-        title: Text(
-          gender,
-          style: TextStyles.bodyRegular14,
-        ),
+        title: Text(gender, style: TextStyles.bodyRegular14),
       ),
     );
   }

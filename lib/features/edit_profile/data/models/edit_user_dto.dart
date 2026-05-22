@@ -5,7 +5,7 @@ import 'edit_address.dart';
 
 part 'edit_user_dto.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class EditUserDto {
   @JsonKey(name: "_id")
   String? id;
@@ -50,7 +50,8 @@ class EditUserDto {
     this.passwordChangedAt,
   });
 
-  factory EditUserDto.fromJson(Map<String, dynamic> json) => _$EditUserDtoFromJson(json);
+  factory EditUserDto.fromJson(Map<String, dynamic> json) =>
+      _$EditUserDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$EditUserDtoToJson(this);
 
@@ -69,8 +70,4 @@ class EditUserDto {
       passwordChangedAt: passwordChangedAt,
     );
   }
-
-  }
-
-
-
+}

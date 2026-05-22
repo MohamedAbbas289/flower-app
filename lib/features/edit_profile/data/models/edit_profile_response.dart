@@ -11,16 +11,10 @@ class EditProfileResponse {
   @JsonKey(name: "user")
   EditUserDto? user;
 
-  EditProfileResponse({
-    this.message,
-    this.user,
-  });
+  EditProfileResponse({this.message, this.user});
 
-  factory EditProfileResponse.fromJson(Map<String, dynamic> json) => _$EditProfileResponseFromJson(json);
+  factory EditProfileResponse.fromJson(Map<String, dynamic> json) =>
+      _$EditProfileResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$EditProfileResponseToJson(this);
 }
-
-
-
-

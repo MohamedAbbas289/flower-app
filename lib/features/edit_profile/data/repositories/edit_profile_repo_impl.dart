@@ -5,7 +5,6 @@ import 'package:injectable/injectable.dart';
 import '../../domain/entities/edit_user_entity.dart';
 import '../../domain/repositories/edit_profile_repo_contract.dart';
 
-
 @Injectable(as: EditProfileRepoContract)
 class EditProfileRepoImpl implements EditProfileRepoContract {
   final EditProfileDataSourceContract editProfileDataSourceContract;
@@ -13,9 +12,13 @@ class EditProfileRepoImpl implements EditProfileRepoContract {
   EditProfileRepoImpl(this.editProfileDataSourceContract);
 
   @override
-  Future<BaseResponse<EditUserEntity>> editProfile({String? token}) async {
+  Future<BaseResponse<EditUserEntity>> editProfile({
+    String? token,
+    required EditUserDto request,
+  }) async {
     final response = await editProfileDataSourceContract.editProfile(
       token: token,
+      request: request,
     );
     switch (response) {
       case SuccessBaseResponse<EditUserDto>():
