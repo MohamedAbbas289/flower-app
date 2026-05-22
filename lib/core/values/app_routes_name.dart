@@ -6,6 +6,7 @@ abstract class AppRoutesName {
   static const forgotPassword = "/forgotPasswordView";
   static const verifyEmail = "/verifyEmailView";
   static const resetPassword = "/resetPasswordView";
+  static const changePassword = "/changePasswordView";
   // Main Views
   static const home = "/homeView";
   static const cart = "/cartView";

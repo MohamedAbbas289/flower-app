@@ -193,6 +193,11 @@ Thank you for choosing Flowery 💐
   static const String bestSellerTitle = 'Best Seller';
   static const String bestSellerSubTitle =
       'Bloom with our exquisite best sellers';
+  // change password screen
+  static const String update = 'Update';
+  static const String passwordUpdated = 'Password Updated';
+  static const String currentPassword = 'Current password';
+  static const String changePassword = 'Change password';
 // profile screen
   static const String myOrders = 'My orders';
   static const String savedAddress = 'Saved address';
