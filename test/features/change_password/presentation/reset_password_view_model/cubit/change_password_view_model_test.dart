@@ -55,15 +55,15 @@ void main() {
   group('ChangePasswordRequestEvent', () {
     blocTest<ChangePasswordViewModel, ChangePasswordState>(
       'emits loading then success on success',
-      build: () {
+      setUp: () {
         when(
           mockUseCase.changePassword(
             password: anyNamed('password'),
             newPassword: anyNamed('newPassword'),
           ),
         ).thenAnswer((_) async => SuccessBaseResponse(data: tEntity));
-        return viewModel;
       },
+      build: () => viewModel,
       act: (vm) => vm.doEvent(
         ChangePasswordRequestEvent(
           password: 'OldPass@123',
@@ -84,7 +84,7 @@ void main() {
 
     blocTest<ChangePasswordViewModel, ChangePasswordState>(
       'emits loading then error on failure',
-      build: () {
+      setUp: () {
         when(
           mockUseCase.changePassword(
             password: anyNamed('password'),
@@ -93,8 +93,8 @@ void main() {
         ).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception('error')),
         );
-        return viewModel;
       },
+      build: () => viewModel,
       act: (vm) => vm.doEvent(
         ChangePasswordRequestEvent(
           password: 'OldPass@123',

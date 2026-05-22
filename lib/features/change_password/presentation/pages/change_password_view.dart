@@ -76,53 +76,57 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                   autovalidateMode: state.autoValidate
                       ? AutovalidateMode.onUserInteraction
                       : AutovalidateMode.disabled,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 24),
-                      _PasswordField(
-                        controller: _currentPasswordController,
-                        label: AppStrings.currentPassword,
-                        hint: AppStrings.currentPassword,
-                        obscureText: _obscureCurrent,
-                        onToggle: () =>
-                            setState(() => _obscureCurrent = !_obscureCurrent),
-                        validator: (v) =>
-                            AppValidations.validatePassword(v ?? ''),
-                      ),
-                      const SizedBox(height: 16),
-                      _PasswordField(
-                        controller: _newPasswordController,
-                        label: AppStrings.newPassword,
-                        hint: AppStrings.newPassword,
-                        obscureText: _obscureNew,
-                        onToggle: () =>
-                            setState(() => _obscureNew = !_obscureNew),
-                        validator: (v) =>
-                            AppValidations.validatePassword(v ?? ''),
-                      ),
-                      const SizedBox(height: 16),
-                      _PasswordField(
-                        controller: _confirmPasswordController,
-                        label: AppStrings.confirmPassword,
-                        hint: AppStrings.confirmPassword,
-                        obscureText: _obscureConfirm,
-                        onToggle: () =>
-                            setState(() => _obscureConfirm = !_obscureConfirm),
-                        validator: (v) =>
-                            AppValidations.validateConfirmPassword(
-                              _newPasswordController.text,
-                              v ?? '',
-                            ),
-                      ),
-                      const SizedBox(height: 32),
-                      _UpdateButton(
-                        isLoading: state.changePasswordState.isLoading,
-                        onPressed: () => _onUpdate(context),
-                        currentController: _currentPasswordController,
-                        newController: _newPasswordController,
-                        confirmController: _confirmPasswordController,
-                      ),
-                    ],
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 24),
+                        _PasswordField(
+                          controller: _currentPasswordController,
+                          label: AppStrings.currentPassword,
+                          hint: AppStrings.currentPassword,
+                          obscureText: _obscureCurrent,
+                          onToggle: () => setState(
+                            () => _obscureCurrent = !_obscureCurrent,
+                          ),
+                          validator: (v) =>
+                              AppValidations.validatePassword(v ?? ''),
+                        ),
+                        const SizedBox(height: 16),
+                        _PasswordField(
+                          controller: _newPasswordController,
+                          label: AppStrings.newPassword,
+                          hint: AppStrings.newPassword,
+                          obscureText: _obscureNew,
+                          onToggle: () =>
+                              setState(() => _obscureNew = !_obscureNew),
+                          validator: (v) =>
+                              AppValidations.validatePassword(v ?? ''),
+                        ),
+                        const SizedBox(height: 16),
+                        _PasswordField(
+                          controller: _confirmPasswordController,
+                          label: AppStrings.confirmPassword,
+                          hint: AppStrings.confirmPassword,
+                          obscureText: _obscureConfirm,
+                          onToggle: () => setState(
+                            () => _obscureConfirm = !_obscureConfirm,
+                          ),
+                          validator: (v) =>
+                              AppValidations.validateConfirmPassword(
+                                _newPasswordController.text,
+                                v ?? '',
+                              ),
+                        ),
+                        const SizedBox(height: 32),
+                        _UpdateButton(
+                          isLoading: state.changePasswordState.isLoading,
+                          onPressed: () => _onUpdate(context),
+                          currentController: _currentPasswordController,
+                          newController: _newPasswordController,
+                          confirmController: _confirmPasswordController,
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -182,6 +186,11 @@ class _PasswordField extends StatelessWidget {
         labelText: label,
         hintText: hint,
         floatingLabelBehavior: FloatingLabelBehavior.always,
+        icon: Icon(
+          obscureText
+              ? Icons.visibility_off_outlined
+              : Icons.visibility_outlined,
+        ),
       ),
     );
   }
