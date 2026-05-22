@@ -165,5 +165,71 @@ void main() {
 
       expect(result, isA<ErrorBaseResponse<GetUserEntity>>());
     });
+
+    blocTest<GetProfileViewModel, GetProfileState>(
+      'RefreshProfileEvent emits loading then success',
+      build: () {
+        const user = GetUserEntity(
+          id: '1',
+          firstName: 'refreshed',
+          lastName: 'user',
+          email: 'r@example.com',
+        );
+        when(getProfileUseCases()).thenAnswer(
+          (_) async => SuccessBaseResponse<GetUserEntity>(data: user),
+        );
+        return GetProfileViewModel(getProfileUseCases);
+      },
+      act: (vm) => vm.doEvent(const RefreshProfileEvent()),
+      wait: const Duration(milliseconds: 1),
+      expect: () => [
+        const GetProfileState(getProfileState: BaseState(isLoading: true)),
+        const GetProfileState(
+          getProfileState: BaseState<GetUserEntity>(
+            isLoading: false,
+            data: GetUserEntity(
+              id: '1',
+              firstName: 'refreshed',
+              lastName: 'user',
+              email: 'r@example.com',
+            ),
+          ),
+        ),
+      ],
+      verify: (_) {
+        verify(getProfileUseCases()).called(1);
+      },
+    );
+
+    blocTest<GetProfileViewModel, GetProfileState>(
+      'RefreshProfileEvent emits loading then error when use case fails',
+      build: () {
+        when(getProfileUseCases()).thenAnswer(
+          (_) async =>
+              ErrorBaseResponse<GetUserEntity>(exception: Exception('timeout')),
+        );
+        return GetProfileViewModel(getProfileUseCases);
+      },
+      act: (vm) => vm.doEvent(const RefreshProfileEvent()),
+      wait: const Duration(milliseconds: 1),
+      expect: () {
+        final response = ErrorBaseResponse<GetUserEntity>(
+          exception: Exception('timeout'),
+        );
+        return [
+          const GetProfileState(getProfileState: BaseState(isLoading: true)),
+          GetProfileState(
+            getProfileState: BaseState<GetUserEntity>(
+              isLoading: false,
+              msg: response.errorMessage,
+            ),
+          ),
+        ];
+      },
+      verify: (_) {
+        verify(getProfileUseCases()).called(1);
+      },
+    );
   });
 }
+
