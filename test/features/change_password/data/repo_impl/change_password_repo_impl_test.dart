@@ -68,6 +68,8 @@ void main() {
       );
 
       expect(result, isA<ErrorBaseResponse<ChangePasswordEntity>>());
+      final error = result as ErrorBaseResponse<ChangePasswordEntity>;
+      expect(error.errorMessage, isNotEmpty);
     });
   });
 }

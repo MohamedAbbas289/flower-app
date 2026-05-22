@@ -56,4 +56,20 @@ void main() {
       expect(result, isA<ErrorBaseResponse<ChangePasswordResponse>>());
     });
   });
+  test('returns ErrorBaseResponse on exception', () async {
+    when(
+      mockApiClient.changePassword(
+        changePasswordRequestModel: anyNamed('changePasswordRequestModel'),
+      ),
+    ).thenThrow(Exception('network error'));
+
+    final result = await dataSource.changePassword(
+      password: 'OldPass@123',
+      newPassword: 'NewPass@123',
+    );
+
+    expect(result, isA<ErrorBaseResponse<ChangePasswordResponse>>());
+    final error = result as ErrorBaseResponse<ChangePasswordResponse>;
+    expect(error.errorMessage, isNotEmpty);
+  });
 }

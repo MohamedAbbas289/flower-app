@@ -1,3 +1,4 @@
+import 'package:flower_app/config/auth/auth_manager.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flower_app/features/change_password/domain/entity/change_password_entity.dart';
@@ -9,10 +10,11 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class ChangePasswordViewModel extends Cubit<ChangePasswordState> {
-  ChangePasswordViewModel(this._changePasswordUseCase)
+  ChangePasswordViewModel(this._changePasswordUseCase, this._authManager)
     : super(const ChangePasswordState());
 
   final ChangePasswordUseCase _changePasswordUseCase;
+  final AuthManager _authManager;
 
   void doEvent(ChangePasswordEvent event) {
     switch (event) {
@@ -41,6 +43,11 @@ class ChangePasswordViewModel extends Cubit<ChangePasswordState> {
 
     switch (response) {
       case SuccessBaseResponse<ChangePasswordEntity>():
+        final rememberMe = await _authManager.shouldAutoLogin();
+        await _authManager.setAuthData(
+          token: response.data.token,
+          rememberMe: rememberMe,
+        );
         emit(
           state.copyWith(changePasswordState: BaseState.success(response.data)),
         );

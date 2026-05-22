@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flower_app/config/auth/auth_manager.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/change_password/domain/entity/change_password_entity.dart';
 import 'package:flower_app/features/change_password/domain/use_case/change_password_use_case.dart';
@@ -11,10 +12,11 @@ import 'package:test/test.dart';
 
 import 'change_password_view_model_test.mocks.dart';
 
-@GenerateMocks([ChangePasswordUseCase])
+@GenerateMocks([ChangePasswordUseCase, AuthManager])
 void main() {
   late ChangePasswordViewModel viewModel;
   late MockChangePasswordUseCase mockUseCase;
+  late MockAuthManager mockAuthManager;
 
   final tEntity = ChangePasswordEntity(
     message: 'Password changed successfully',
@@ -32,7 +34,17 @@ void main() {
 
   setUp(() {
     mockUseCase = MockChangePasswordUseCase();
-    viewModel = ChangePasswordViewModel(mockUseCase);
+    mockAuthManager = MockAuthManager();
+
+    when(mockAuthManager.shouldAutoLogin()).thenAnswer((_) async => false);
+    when(
+      mockAuthManager.setAuthData(
+        token: anyNamed('token'),
+        rememberMe: anyNamed('rememberMe'),
+      ),
+    ).thenAnswer((_) async {});
+
+    viewModel = ChangePasswordViewModel(mockUseCase, mockAuthManager);
   });
 
   tearDown(() => viewModel.close());
