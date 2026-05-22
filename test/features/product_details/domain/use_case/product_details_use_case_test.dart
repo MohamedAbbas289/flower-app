@@ -13,8 +13,10 @@ void main() {
   late ProductDetailsUseCase useCase;
   late MockProductDetailsRepoContract mockRepo;
 
+  const tProductId = '69d988754461df0f939b581a';
+
   final tEntity = ProductDetailsEntity(
-    id: '69d988754461df0f939b581a',
+    id: tProductId,
     title: 'Pink Rose Bouquet',
     description: 'Lorem ipsum',
     images: ['https://example.com/image.jpg'],
@@ -43,33 +45,35 @@ void main() {
   group('getProductDetails', () {
     test('delegates to repo and returns SuccessBaseResponse', () async {
       when(
-        mockRepo.getProductDetails(),
+        mockRepo.getProductDetails(productId: anyNamed('productId')),
       ).thenAnswer((_) async => SuccessBaseResponse(data: tEntity));
 
-      final result = await useCase.getProductDetails();
+      final result = await useCase.getProductDetails(productId: tProductId);
 
       expect(result, isA<SuccessBaseResponse<ProductDetailsEntity>>());
       expect(
         (result as SuccessBaseResponse<ProductDetailsEntity>).data,
         tEntity,
       );
-      verify(mockRepo.getProductDetails()).called(1);
+      verify(mockRepo.getProductDetails(productId: tProductId)).called(1);
       verifyNoMoreInteractions(mockRepo);
     });
 
     test('returns ErrorBaseResponse when repo returns error', () async {
-      when(mockRepo.getProductDetails()).thenAnswer(
+      when(
+        mockRepo.getProductDetails(productId: anyNamed('productId')),
+      ).thenAnswer(
         (_) async => ErrorBaseResponse(exception: Exception('error')),
       );
 
-      final result = await useCase.getProductDetails();
+      final result = await useCase.getProductDetails(productId: tProductId);
 
       expect(result, isA<ErrorBaseResponse<ProductDetailsEntity>>());
       expect(
         (result as ErrorBaseResponse<ProductDetailsEntity>).errorMessage,
         isNotEmpty,
       );
-      verify(mockRepo.getProductDetails()).called(1);
+      verify(mockRepo.getProductDetails(productId: tProductId)).called(1);
       verifyNoMoreInteractions(mockRepo);
     });
   });

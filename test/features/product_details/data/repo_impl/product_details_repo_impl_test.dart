@@ -11,25 +11,28 @@ import 'product_details_repo_impl_test.mocks.dart';
 
 @GenerateMocks([ProductDetailsRemoteDataSourceContract])
 void main() {
-  late ProductDetailsRepoImpl productDetailsRepoImpl;
-  late MockProductDetailsRemoteDataSourceContract
-  mockProductDetailsRemoteDataSourceContract;
+  late ProductDetailsRepoImpl repo;
+  late MockProductDetailsRemoteDataSourceContract mockDataSource;
+
+  const tProductId = '69d988754461df0f939b581a';
+
+  final tProduct = Product(
+    id: tProductId,
+    title: 'Pink Rose Bouquet',
+    description: 'Lorem ipsum',
+    imgCover: 'https://example.com/cover.jpg',
+    images: ['https://example.com/image.jpg'],
+    price: 1500,
+    priceAfterDiscount: 1200,
+    quantity: 10,
+    rateCount: 5,
+    rateAvg: 4,
+    isInWishlist: false,
+  );
 
   final tResponse = ProductDetailsResponse(
     message: 'Success',
-    product: Product(
-      id: '69d988754461df0f939b581a',
-      title: 'Pink Rose Bouquet',
-      description: 'Lorem ipsum',
-      imgCover: 'https://example.com/image.jpg',
-      images: ['https://example.com/image.jpg'],
-      price: 1500,
-      priceAfterDiscount: 1200,
-      quantity: 10,
-      rateCount: 5,
-      rateAvg: 4,
-      isInWishlist: false,
-    ),
+    products: [tProduct],
   );
 
   setUpAll(() {
@@ -42,36 +45,32 @@ void main() {
   });
 
   setUp(() {
-    mockProductDetailsRemoteDataSourceContract =
-        MockProductDetailsRemoteDataSourceContract();
-    productDetailsRepoImpl = ProductDetailsRepoImpl(
-      mockProductDetailsRemoteDataSourceContract,
-    );
+    mockDataSource = MockProductDetailsRemoteDataSourceContract();
+    repo = ProductDetailsRepoImpl(mockDataSource);
   });
 
   group('getProductDetails', () {
     test('returns SuccessBaseResponse with entity on success', () async {
       when(
-        mockProductDetailsRemoteDataSourceContract.getProductDetails(),
+        mockDataSource.getProductDetails(productId: anyNamed('productId')),
       ).thenAnswer((_) async => SuccessBaseResponse(data: tResponse));
 
-      final result = await productDetailsRepoImpl.getProductDetails();
+      final result = await repo.getProductDetails(productId: tProductId);
 
       expect(result, isA<SuccessBaseResponse<ProductDetailsEntity>>());
-
       final success = result as SuccessBaseResponse<ProductDetailsEntity>;
-      expect(success.data.id, '69d988754461df0f939b581a');
+      expect(success.data.id, tProductId);
       expect(success.data.price, 1500);
     });
 
     test('returns ErrorBaseResponse on failure', () async {
       when(
-        mockProductDetailsRemoteDataSourceContract.getProductDetails(),
+        mockDataSource.getProductDetails(productId: anyNamed('productId')),
       ).thenAnswer(
         (_) async => ErrorBaseResponse(exception: Exception('network error')),
       );
 
-      final result = await productDetailsRepoImpl.getProductDetails();
+      final result = await repo.getProductDetails(productId: tProductId);
 
       expect(result, isA<ErrorBaseResponse<ProductDetailsEntity>>());
     });

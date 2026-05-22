@@ -1,4 +1,4 @@
-class ApiParam {
+ class ApiParam {
   static const String firstName = "firstName";
   static const String lastName = "lastName";
   static const String email = "email";

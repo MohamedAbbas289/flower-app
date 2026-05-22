@@ -9,7 +9,7 @@ import '../widgets/bottom_nav_icon.dart';
 import '../widgets/cart_test_view.dart';
 import '../../../home_screen/presentation/screens/home_view.dart';
 import 'package:flower_app/features/categories/presentation/screens/categories_screen.dart';
-import '../widgets/profile_test_view.dart';
+import '../../../get_profile_screen/presentation/screens/profile_test_view.dart';
 
 class AppSectionView extends StatefulWidget {
   const AppSectionView({super.key});
@@ -73,7 +73,7 @@ class _AppSectionViewState extends State<AppSectionView> {
             initialCategoryId: _initialCategoryId,
           ),
           CartTestView(),
-          ProfileTestView(),
+          ProfileScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
