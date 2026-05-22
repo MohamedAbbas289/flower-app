@@ -30,7 +30,7 @@ class AppRoutes {
       case AppRoutesName.signUp:
         return MaterialPageRoute(builder: (_) => const SignupView());
         case AppRoutesName.editProfile:
-        return MaterialPageRoute(builder: (_) => const EditProfile());
+        return MaterialPageRoute(builder: (_) =>  EditProfile());
       case AppRoutesName.occasions:
         final occasionId = settings.arguments as String?;
         return MaterialPageRoute(
