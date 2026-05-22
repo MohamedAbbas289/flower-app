@@ -1,3 +1,4 @@
+import 'package:flower_app/core/reusable_widgets/app_refresh_indicator.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/reusable_widgets/app_tab_bar_widget.dart';
 import 'package:flower_app/core/reusable_widgets/products_grid_view.dart';
@@ -29,28 +30,39 @@ class _OccasionsViewState extends State<OccasionsView> {
     );
   }
 
+  Future<void> _onRefresh() async {
+    final vm = context.read<OccasionsViewModel>();
+    vm.doEvent(RefreshOccasionsEvent());
+    await vm.stream.firstWhere(
+      (s) => !s.occasionsState.isLoading && !s.productsState.isLoading,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: const _OccasionsAppBar(),
-      body: BlocConsumer<OccasionsViewModel, OccasionsState>(
-        listenWhen: (previous, current) =>
-            previous.productsState.msg != current.productsState.msg &&
-            current.productsState.msg != null &&
-            current.productsState.data == null,
-        listener: (context, state) {
-          AppSnackBar.showError(context, state.productsState.msg!);
-        },
-        builder: (context, state) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _OccasionsTabBar(state: state),
-              Expanded(child: _OccasionsBody(state: state)),
-            ],
-          );
-        },
+      body: AppRefreshIndicator(
+        onRefresh: _onRefresh,
+        child: BlocConsumer<OccasionsViewModel, OccasionsState>(
+          listenWhen: (previous, current) =>
+              previous.productsState.msg != current.productsState.msg &&
+              current.productsState.msg != null &&
+              current.productsState.data == null,
+          listener: (context, state) {
+            AppSnackBar.showError(context, state.productsState.msg!);
+          },
+          builder: (context, state) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _OccasionsTabBar(state: state),
+                Expanded(child: _OccasionsBody(state: state)),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

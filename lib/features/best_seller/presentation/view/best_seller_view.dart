@@ -1,4 +1,5 @@
 import 'package:flower_app/config/di/di.dart';
+import 'package:flower_app/core/reusable_widgets/app_refresh_indicator.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/reusable_widgets/products_grid_view.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
@@ -18,20 +19,43 @@ class BestSellerView extends StatelessWidget {
     return BlocProvider<BestSellerCubit>(
       create: (context) =>
           getIt<BestSellerCubit>()..doEvent(FetchBestSellerProductsEvent()),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(AppStrings.bestSellerTitle),
-              Text(
-                AppStrings.bestSellerSubTitle,
-                style: TextStyles.bodyRegular13,
-              ),
-            ],
-          ),
+      child: const _BestSellerContent(),
+    );
+  }
+}
+
+class _BestSellerContent extends StatefulWidget {
+  const _BestSellerContent();
+
+  @override
+  State<_BestSellerContent> createState() => _BestSellerContentState();
+}
+
+class _BestSellerContentState extends State<_BestSellerContent> {
+  Future<void> _onRefresh() async {
+    final cubit = context.read<BestSellerCubit>();
+    cubit.doEvent(RefreshBestSellerEvent());
+    await cubit.stream.firstWhere((s) => !s.bestSellerState.isLoading);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(AppStrings.bestSellerTitle),
+            Text(
+              AppStrings.bestSellerSubTitle,
+              style: TextStyles.bodyRegular13,
+            ),
+          ],
         ),
-        body: BlocConsumer<BestSellerCubit, BestSellerState>(
+      ),
+      body: AppRefreshIndicator(
+        onRefresh: _onRefresh,
+        child: BlocConsumer<BestSellerCubit, BestSellerState>(
           listenWhen: (previous, current) =>
               previous.bestSellerState.msg != current.bestSellerState.msg &&
               current.bestSellerState.msg != null,
@@ -56,7 +80,7 @@ class BestSellerView extends StatelessWidget {
                   context,
                 ).pushNamed(AppRoutesName.productDetails, arguments: productId);
               },
-             // ToDo: eng.Loay
+              // ToDo: eng.Loay
               heroTagBuilder: (productId) =>
                   AppStrings.productImageHeroTag(productId),
               currentPage: 1,

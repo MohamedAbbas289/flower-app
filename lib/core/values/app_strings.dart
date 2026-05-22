@@ -167,5 +167,4 @@ abstract class AppStrings {
   static String get lastName => 'lastName'.tr();
   static String get phoneNumber => 'phoneNumber'.tr();
   static String productImageHeroTag(String id) => 'product-image-$id';
-  static String get changeLanguage => 'changeLanguage'.tr();
 }

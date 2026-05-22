@@ -65,10 +65,7 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
     );
   }
 
-  Widget _buildLanguageOption({
-    required String label,
-    required String value,
-  }) {
+  Widget _buildLanguageOption({required String label, required String value}) {
     return InkWell(
       onTap: () {
         setState(() => _selectedLanguage = value);

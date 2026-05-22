@@ -19,6 +19,9 @@ class BestSellerCubit extends Cubit<BestSellerState> {
       case FetchBestSellerProductsEvent():
         _fetchBestSellerProducts();
         break;
+      case RefreshBestSellerEvent():
+        _fetchBestSellerProducts();
+        break;
     }
   }
 

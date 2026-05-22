@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
+import 'package:flower_app/core/reusable_widgets/app_refresh_indicator.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
@@ -39,20 +40,27 @@ class _HomeScreenState extends State<HomeScreen> {
     _cubit.doEvent(const LoadHomeDataEvent());
   }
 
+  Future<void> _onRefresh() async {
+    _cubit.doEvent(const RefreshHomeEvent());
+    await _cubit.stream.firstWhere(
+      (s) =>
+          !s.categoriesState.isLoading &&
+          !s.bestSellersState.isLoading &&
+          !s.occasionsState.isLoading,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final _ = context.locale;
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: _buildAppBar(),
-      body: BlocBuilder<HomeViewModel, HomeState>(
-        builder: (context, state) {
-          return RefreshIndicator(
-            color: AppColors.pink,
-            onRefresh: () async {
-              _cubit.doEvent(const RetryLoadHomeDataEvent());
-            },
-            child: SingleChildScrollView(
+      body: AppRefreshIndicator(
+        onRefresh: _onRefresh,
+        child: BlocBuilder<HomeViewModel, HomeState>(
+          builder: (context, state) {
+            return SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,9 +75,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 24),
                 ],
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

@@ -10,3 +10,6 @@ class RetryLoadHomeDataEvent extends HomeEvent {
   const RetryLoadHomeDataEvent();
 }
 
+class RefreshHomeEvent extends HomeEvent {
+  const RefreshHomeEvent();
+}

@@ -4,6 +4,7 @@ import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/features/profile/domain/use_cases/get_profile_data_use_cases.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+
 import '../states/get_profile_events.dart';
 import '../states/get_profile_state.dart';
 
@@ -20,6 +21,8 @@ class ProfileViewModel extends Cubit<GetProfileState> {
         _loadGetProfileData();
       case RetryLoadProfileDataEvent():
         _retryLoadGetProfileData();
+      case RefreshProfileEvent():
+        _getProfile();
     }
   }
 
