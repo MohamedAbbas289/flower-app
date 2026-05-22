@@ -35,8 +35,6 @@ void main() {
     viewModel = ChangePasswordViewModel(mockUseCase);
   });
 
-  tearDown(() => viewModel.close());
-
   group('EnableAutoValidateEvent', () {
     blocTest<ChangePasswordViewModel, ChangePasswordState>(
       'emits autoValidate true',
