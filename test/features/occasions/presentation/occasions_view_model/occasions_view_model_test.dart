@@ -736,4 +736,60 @@ void main() {
       ],
     );
   });
+
+  group('RefreshOccasionsEvent', () {
+    blocTest<OccasionsViewModel, OccasionsState>(
+      'reloads occasions from page 1 and auto-selects previously selected occasion',
+      build: () {
+        stubGetOccasionsSuccess(data: occasionsPageOne);
+        stubGetProductsSuccess(data: productsPageOne, occasionId: occasionId2);
+        return sut;
+      },
+      seed: () =>
+          OccasionsState(
+            selectedOccasionId: occasionId2,
+            occasionsState: BaseState.success([occasion1, occasion2]),
+            productsState: BaseState.success([product1]),
+          ),
+      act: (vm) => vm.doEvent(RefreshOccasionsEvent()),
+      verify: (vm) {
+        verify(mockGetOccasionsUseCase.execute(page: 1, limit: 10)).called(1);
+        expect(vm.state.occasionsState.data, [occasion1, occasion2]);
+        expect(vm.state.productsState.data, [product1, product2]);
+      },
+    );
+
+    blocTest<OccasionsViewModel, OccasionsState>(
+      'emits loading state during refresh',
+      build: () {
+        stubGetOccasionsSuccess(data: occasionsPageOne);
+        stubGetProductsSuccess(data: productsPageOne, occasionId: occasionId1);
+        return sut;
+      },
+      act: (vm) => vm.doEvent(RefreshOccasionsEvent()),
+      expect: () =>
+      [
+        isA<OccasionsState>().having(
+              (s) => s.occasionsState.isLoading,
+          'occasionsState.isLoading',
+          isTrue,
+        ),
+        isA<OccasionsState>().having(
+              (s) => s.occasionsState.data,
+          'occasionsState.data loaded',
+          [occasion1, occasion2],
+        ),
+        isA<OccasionsState>().having(
+              (s) => s.productsState.isLoading,
+          'productsState.isLoading',
+          isTrue,
+        ),
+        isA<OccasionsState>().having(
+              (s) => s.productsState.data,
+          'productsState.data loaded',
+          [product1, product2],
+        ),
+      ],
+    );
+  });
 }

@@ -225,4 +225,48 @@ void main() {
       },
     );
   });
-}
+
+  group('HomeViewModel – RefreshHomeEvent', () {
+    blocTest<HomeViewModel, HomeState>(
+      'always re-fetches all sections regardless of current state',
+      build: () {
+        stubAllSuccess(
+          categories: [tCategory],
+          occasions: [tOccasion],
+          bestSellers: [tBestSeller],
+        );
+        return buildViewModel();
+      },
+      act: (vm) async {
+        vm.doEvent(const LoadHomeDataEvent());
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        vm.doEvent(const RefreshHomeEvent());
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+      },
+      verify: (vm) {
+        verify(mockGetCategoryUseCases()).called(2);
+        verify(mockGetOccasionUseCase()).called(2);
+        verify(mockGetBestSellerUseCase()).called(2);
+      },
+    );
+
+    blocTest<HomeViewModel, HomeState>(
+      'emits updated data after refresh',
+      build: () {
+        stubAllSuccess(
+          categories: [tCategory],
+          occasions: [tOccasion],
+          bestSellers: [tBestSeller],
+        );
+        return buildViewModel();
+      },
+      act: (vm) => vm.doEvent(const RefreshHomeEvent()),
+      verify: (vm) {
+        expect(vm.state.categoriesState.data, [tCategory]);
+        expect(vm.state.occasionsState.data, [tOccasion]);
+        expect(vm.state.bestSellersState.data, [tBestSeller]);
+        expect(vm.state.categoriesState.msg, isNull);
+      },
+    );
+  });
+}
