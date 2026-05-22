@@ -1,13 +1,15 @@
 import 'package:flower_app/config/di/di.dart';
+import 'package:flower_app/core/reusable_widgets/app_refresh_indicator.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
+import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/features/get_profile_screen/presentation/view_model/cubit/get_profile_view_model.dart';
 import 'package:flower_app/features/get_profile_screen/presentation/view_model/states/get_profile_events.dart';
 import 'package:flower_app/features/get_profile_screen/presentation/view_model/states/get_profile_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flower_app/core/theme/text_styles.dart';
+
 import '../../../../core/values/images_paths.dart';
 import '../widgets/profile_details.dart';
 
@@ -24,8 +26,19 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-class _ProfileViewContent extends StatelessWidget {
+class _ProfileViewContent extends StatefulWidget {
   const _ProfileViewContent();
+
+  @override
+  State<_ProfileViewContent> createState() => _ProfileViewContentState();
+}
+
+class _ProfileViewContentState extends State<_ProfileViewContent> {
+  Future<void> _onRefresh() async {
+    final vm = context.read<GetProfileViewModel>();
+    vm.doEvent(const RefreshProfileEvent());
+    await vm.stream.firstWhere((s) => !s.getProfileState.isLoading);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +57,11 @@ class _ProfileViewContent extends StatelessWidget {
                   fit: BoxFit.contain,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               Stack(
                 clipBehavior: Clip.none,
                 children: [
                   const Icon(Icons.notifications_none_sharp, size: 30),
-
                   Positioned(
                     right: -2,
                     top: -2,
@@ -76,47 +88,52 @@ class _ProfileViewContent extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(width: 4),
+              const SizedBox(width: 4),
             ],
           ),
         ),
-        body: BlocConsumer<GetProfileViewModel, GetProfileState>(
-          listenWhen: (previous, current) =>
-              previous.getProfileState.msg != current.getProfileState.msg &&
-              current.getProfileState.msg != null,
-          listener: (context, state) {
-            AppSnackBar.showError(context, state.getProfileState.msg!);
-          },
-          builder: (context, state) {
-            final profileState = state.getProfileState;
+        body: AppRefreshIndicator(
+          onRefresh: _onRefresh,
+          child: BlocConsumer<GetProfileViewModel, GetProfileState>(
+            listenWhen: (previous, current) =>
+                previous.getProfileState.msg != current.getProfileState.msg &&
+                current.getProfileState.msg != null,
+            listener: (context, state) {
+              AppSnackBar.showError(context, state.getProfileState.msg!);
+            },
+            builder: (context, state) {
+              final profileState = state.getProfileState;
 
-            if (profileState.isLoading && profileState.data == null) {
-              return const Center(child: CircularProgressIndicator(
-                color: AppColors.pink,
-              ));
-            }
+              if (profileState.isLoading && profileState.data == null) {
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColors.pink),
+                );
+              }
 
-            if (profileState.msg != null && profileState.data == null) {
-              return Center(
-                child: Text(
-                  profileState.msg!,
-                  textAlign: TextAlign.center,
-                  style: TextStyles.bodyRegular18,
-                ),
+              if (profileState.msg != null && profileState.data == null) {
+                return SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    child: Center(
+                      child: Text(
+                        profileState.msg!,
+                        textAlign: TextAlign.center,
+                        style: TextStyles.bodyRegular18,
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              return SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: ProfileDetails(user: profileState.data),
               );
-            }
-
-
-              return ProfileDetails(user: profileState.data);
-
-
-
-
-          },
+            },
+          ),
         ),
       ),
     );
   }
 }
-
-

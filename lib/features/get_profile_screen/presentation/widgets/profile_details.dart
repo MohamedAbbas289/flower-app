@@ -1,8 +1,14 @@
+import 'package:flower_app/config/di/di.dart';
+import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
+import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/features/auth/logout/presentation/screens/logout_dialog.dart';
+import 'package:flower_app/features/auth/logout/presentation/view_model/logout_view_model.dart';
 import 'package:flower_app/features/get_profile_screen/presentation/widgets/row_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/values/endpoints.dart';
@@ -11,6 +17,7 @@ import '../../domain/entities/user_entitiy.dart';
 import '../view_model/cubit/get_profile_view_model.dart';
 import '../view_model/states/get_profile_events.dart';
 class ProfileDetails extends StatelessWidget {
+
   const ProfileDetails({super.key, required this.user});
   final GetUserEntity? user;
   @override
@@ -115,7 +122,23 @@ class ProfileDetails extends StatelessWidget {
               title: AppStrings.logout,
               icon: Icons.logout,
               iconBack: Icons.logout,
-              onTap: () {},
+              onTap: () =>
+                  showDialog(
+                    context: context,
+                    builder: (_) =>
+                        BlocProvider(
+                          create: (_) => getIt<LogoutViewModel>(),
+                          child: LogoutDialog(
+                            onSuccess: () =>
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                  AppRoutesName.login,
+                                      (route) => false,
+                                ),
+                            onError: (message) =>
+                                AppSnackBar.showError(context, message),
+                          ),
+                        ),
+                  ),
             ),
           ],
         ),

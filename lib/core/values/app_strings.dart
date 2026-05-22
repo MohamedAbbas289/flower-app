@@ -200,6 +200,8 @@ Thank you for choosing Flowery 💐
   static const String aboutUs = 'About us';
   static const String termsConditions = 'Terms & conditions';
   static const String logout = 'Logout';
+  static const String confirmLogout = 'Confirm logout!!';
+  static const String cancelButton = 'Cancel';
   static const String language = 'Language';
   static const String english = 'English';
 

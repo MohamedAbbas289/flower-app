@@ -26,6 +26,8 @@ class HomeViewModel extends Cubit<HomeState> {
         _loadHomeData();
       case RetryLoadHomeDataEvent():
         _retryLoadHomeData();
+      case RefreshHomeEvent():
+        _refreshHomeData();
     }
   }
 
@@ -39,6 +41,14 @@ class HomeViewModel extends Cubit<HomeState> {
     if (state.categoriesState.msg != null) _fetchCategories();
     if (state.bestSellersState.msg != null) _fetchBestSellers();
     if (state.occasionsState.msg != null) _fetchOccasions();
+  }
+
+  Future<void> _refreshHomeData() {
+    return Future.wait([
+      _fetchCategories(),
+      _fetchBestSellers(),
+      _fetchOccasions(),
+    ]);
   }
 
   Future<void> _fetchCategories() async {

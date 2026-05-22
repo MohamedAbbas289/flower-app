@@ -37,6 +37,12 @@ abstract class CacheModule {
           maxStale: const Duration(days: 1),
           hitCacheOnErrorExcept: [401, 403],
         ),
+        homeOptions: CacheOptions(
+          store: store,
+          policy: CachePolicy.request,
+          maxStale: const Duration(days: 1),
+          hitCacheOnErrorExcept: [401, 403],
+        ),
       );
 
   @lazySingleton

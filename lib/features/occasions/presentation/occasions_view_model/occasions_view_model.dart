@@ -38,6 +38,10 @@ class OccasionsViewModel extends Cubit<OccasionsState> {
       case LoadMoreOccasionsEvent():
         _loadMoreOccasions();
         break;
+
+      case RefreshOccasionsEvent():
+        _getOccasions(state.selectedOccasionId);
+        break;
     }
   }
 

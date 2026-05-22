@@ -13,3 +13,5 @@ class GetProductsByOccasionEvent extends OccasionsEvent {
 class LoadMoreProductsEvent extends OccasionsEvent {}
 
 class LoadMoreOccasionsEvent extends OccasionsEvent {}
+
+class RefreshOccasionsEvent extends OccasionsEvent {}
