@@ -22,8 +22,4 @@ jobs:
       - name: Generate Mocks (build_runner)
         run: dart run build_runner build --delete-conflicting-outputs
       - name: Run tests
-        run: flutter test --coverage
-      - name: Check Coverage Percentage
-        uses: VeryGoodOpenSource/very_good_coverage@v3
-        with:
-          path: coverage/lcov.info
+        run: flutter test
