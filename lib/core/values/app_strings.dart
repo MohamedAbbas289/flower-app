@@ -208,7 +208,6 @@ Thank you for choosing Flowery 💐
   static const String language = 'Language';
   static const String english = 'English';
   static const String editProfile = 'Edit Profile';
-  static const String update = 'Update';
   static const String change = 'Change';
 
 
