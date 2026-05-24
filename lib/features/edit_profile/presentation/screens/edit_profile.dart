@@ -127,7 +127,7 @@ class EditProfile extends StatelessWidget {
               if (state.updateProfileState.data != null) {
                 AppSnackBar.showSuccess(
                   context,
-                  'Profile updated successfully',
+                  AppStrings.profileUpdatedSuccessfully,
                 );
               }
             },
