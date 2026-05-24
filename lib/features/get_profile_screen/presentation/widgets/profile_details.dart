@@ -1,5 +1,6 @@
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/get_profile_screen/presentation/widgets/row_section.dart';
+import 'package:flower_app/features/get_profile_screen/presentation/widgets/web_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -105,11 +106,32 @@ class ProfileDetails extends StatelessWidget {
             RowSection(
                 title: AppStrings.aboutUs,
                 iconBack: Icons.arrow_forward_ios,
-                onTap: () {}),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const WebViewScreen(
+                        title: AppStrings.aboutUs,
+                        url: Endpoints.aboutFlowerApp,
+                      ),
+                    ),
+                  );
+
+                }),
             RowSection(
                 title: AppStrings.termsConditions,
                 iconBack: Icons.arrow_forward_ios,
-                onTap: () {}),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const WebViewScreen(
+                        title: AppStrings.termsAndConditions,
+                        url: Endpoints.termsFlowerApp,
+                      ),
+                    ),
+                  );
+                }),
             Container(width: double.infinity, height: 1, color: AppColors.gray),
             RowSection(
               title: AppStrings.logout,
