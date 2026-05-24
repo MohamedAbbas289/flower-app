@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../../data/models/edit_user_dto.dart';
 
 sealed class UpdateProfileEvent {
@@ -16,4 +18,14 @@ class UpdateProfileDataEvent extends UpdateProfileEvent {
   final EditUserDto request;
 
   const UpdateProfileDataEvent(this.request);
+}
+
+class UploadImageEvent extends UpdateProfileEvent {
+  final File image;
+  final int imageIndex;
+
+  UploadImageEvent({
+    required this.image,
+    required this.imageIndex,
+  });
 }

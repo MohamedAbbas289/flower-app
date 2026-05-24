@@ -26,6 +26,9 @@ class EditProfileViewModel extends Cubit<UpdateProfileState> {
         _retryLoadUpdateProfileData();
       case UpdateProfileDataEvent():
         _updateProfile(event.request);
+      case UploadImageEvent():
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 

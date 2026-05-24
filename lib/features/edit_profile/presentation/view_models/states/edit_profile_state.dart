@@ -7,22 +7,26 @@ class UpdateProfileState extends Equatable {
   final BaseState<GetUserEntity> profileDataState;
   final BaseState<EditUserEntity> updateProfileState;
   final String selectedGender;
+  final String? profilePhoto;
 
   const UpdateProfileState({
     this.profileDataState = const BaseState(),
     this.updateProfileState = const BaseState(),
     this.selectedGender = 'female',
+    this.profilePhoto,
   });
 
   UpdateProfileState copyWith({
     BaseState<GetUserEntity>? profileDataState,
     BaseState<EditUserEntity>? updateProfileState,
     String? selectedGender,
+    String? profilePhoto,
   }) {
     return UpdateProfileState(
       profileDataState: profileDataState ?? this.profileDataState,
       updateProfileState: updateProfileState ?? this.updateProfileState,
       selectedGender: selectedGender ?? this.selectedGender,
+      profilePhoto: profilePhoto ?? this.profilePhoto,
     );
   }
 
@@ -31,5 +35,6 @@ class UpdateProfileState extends Equatable {
     profileDataState,
     updateProfileState,
     selectedGender,
+    profilePhoto,
   ];
 }
