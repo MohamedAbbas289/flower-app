@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import '../../../../config/base_response/base_response.dart';
 import '../../data/models/edit_user_dto.dart';
@@ -9,7 +11,13 @@ class EditProfileUseCases {
   final EditProfileRepoContract editProfileRepoContract;
   EditProfileUseCases(this.editProfileRepoContract);
 
-  Future<BaseResponse<EditUserEntity>> call(EditUserDto request) async {
-    return await editProfileRepoContract.editProfile(request: request);
+  Future<BaseResponse<EditUserEntity>> call(
+    EditUserDto request, {
+    File? image,
+  }) async {
+    return await editProfileRepoContract.editProfile(
+      request: request,
+      image: image,
+    );
   }
 }

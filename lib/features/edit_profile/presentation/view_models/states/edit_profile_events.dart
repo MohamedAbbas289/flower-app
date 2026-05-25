@@ -22,10 +22,6 @@ class UpdateProfileDataEvent extends UpdateProfileEvent {
 
 class UploadImageEvent extends UpdateProfileEvent {
   final File image;
-  final int imageIndex;
 
-  UploadImageEvent({
-    required this.image,
-    required this.imageIndex,
-  });
+  const UploadImageEvent({required this.image});
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flower_app/features/get_profile_screen/domain/entities/user_entitiy.dart';
@@ -8,12 +10,14 @@ class UpdateProfileState extends Equatable {
   final BaseState<EditUserEntity> updateProfileState;
   final String selectedGender;
   final String? profilePhoto;
+  final File? selectedProfileImage;
 
   const UpdateProfileState({
     this.profileDataState = const BaseState(),
     this.updateProfileState = const BaseState(),
     this.selectedGender = 'female',
     this.profilePhoto,
+    this.selectedProfileImage,
   });
 
   UpdateProfileState copyWith({
@@ -21,12 +25,14 @@ class UpdateProfileState extends Equatable {
     BaseState<EditUserEntity>? updateProfileState,
     String? selectedGender,
     String? profilePhoto,
+    File? selectedProfileImage,
   }) {
     return UpdateProfileState(
       profileDataState: profileDataState ?? this.profileDataState,
       updateProfileState: updateProfileState ?? this.updateProfileState,
       selectedGender: selectedGender ?? this.selectedGender,
       profilePhoto: profilePhoto ?? this.profilePhoto,
+      selectedProfileImage: selectedProfileImage ?? this.selectedProfileImage,
     );
   }
 
@@ -36,5 +42,6 @@ class UpdateProfileState extends Equatable {
     updateProfileState,
     selectedGender,
     profilePhoto,
+    selectedProfileImage,
   ];
 }

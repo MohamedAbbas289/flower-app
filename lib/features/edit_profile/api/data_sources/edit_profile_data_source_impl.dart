@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/edit_profile/data/data_sources/edit_profile_data_source_contract.dart';
 import 'package:injectable/injectable.dart';
@@ -12,12 +14,20 @@ class EditProfileDataSourceImpl implements EditProfileDataSourceContract {
   Future<BaseResponse<EditUserDto>> editProfile({
     String? token,
     required EditUserDto request,
+    File? image,
   }) async {
     try {
       final response = await editProfileApiClient.updateProfile(
         request: request,
       );
-      return SuccessBaseResponse<EditUserDto>(data: response.user!);
+      if (image == null) {
+        return SuccessBaseResponse<EditUserDto>(data: response.user!);
+      }
+
+      final imageResponse = await editProfileApiClient.updateProfileWithImage(
+        photo: image,
+      );
+      return SuccessBaseResponse<EditUserDto>(data: imageResponse.user!);
     } catch (e) {
       return ErrorBaseResponse<EditUserDto>(exception: e);
     }

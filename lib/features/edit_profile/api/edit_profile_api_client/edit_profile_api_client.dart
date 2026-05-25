@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/error_logger.dart';
@@ -16,5 +18,15 @@ abstract class EditProfileApiClient {
   @PUT(Endpoints.editProfile)
   Future<EditProfileResponse> updateProfile({
     @Body() required EditUserDto request,
+  });
+
+  @MultiPart()
+  @PUT(Endpoints.editProfile)
+  Future<EditProfileResponse> updateProfileWithImage({
+    @Part(name: 'firstName') String? firstName,
+    @Part(name: 'lastName') String? lastName,
+    @Part(name: 'email') String? email,
+    @Part(name: 'phone') String? phone,
+    @Part(name: 'photo') File? photo,
   });
 }

@@ -156,7 +156,14 @@ class EditProfile extends StatelessWidget {
                 child: Column(
                   spacing: 20,
                   children: [
-                    ChangeProfileScreen(photo: profileState.data?.photo),
+                    ChangeProfileScreen(
+                      photo: state.profilePhoto ?? profileState.data?.photo,
+                      onImageSelected: (image) {
+                        context.read<EditProfileViewModel>().doEvent(
+                          UploadImageEvent(image: image),
+                        );
+                      },
+                    ),
                     Row(
                       children: [
                         Expanded(

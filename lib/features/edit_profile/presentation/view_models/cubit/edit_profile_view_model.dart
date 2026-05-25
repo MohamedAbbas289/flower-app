@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
@@ -27,7 +29,7 @@ class EditProfileViewModel extends Cubit<UpdateProfileState> {
       case UpdateProfileDataEvent():
         _updateProfile(event.request);
       case UploadImageEvent():
-        throw UnimplementedError();
+        _uploadImage(event.image);
     }
   }
 
@@ -65,7 +67,10 @@ class EditProfileViewModel extends Cubit<UpdateProfileState> {
     emit(
       state.copyWith(updateProfileState: BaseState<EditUserEntity>.loading()),
     );
-    final response = await _editProfileUseCases(request);
+    final response = await _editProfileUseCases(
+      request,
+      image: state.selectedProfileImage,
+    );
     switch (response) {
       case SuccessBaseResponse():
         emit(
@@ -74,6 +79,7 @@ class EditProfileViewModel extends Cubit<UpdateProfileState> {
               response.data,
             ),
             selectedGender: response.data.gender ?? state.selectedGender,
+            profilePhoto: response.data.photo ?? state.profilePhoto,
           ),
         );
       case ErrorBaseResponse():
@@ -89,5 +95,9 @@ class EditProfileViewModel extends Cubit<UpdateProfileState> {
 
   void changeGender(String gender) {
     emit(state.copyWith(selectedGender: gender));
+  }
+
+  void _uploadImage(File image) {
+    emit(state.copyWith(selectedProfileImage: image));
   }
 }

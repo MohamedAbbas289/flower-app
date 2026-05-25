@@ -7,8 +7,9 @@ import '../../../../core/values/endpoints.dart';
 import '../../../../core/values/images_paths.dart';
 
 class ChangeProfileScreen extends StatefulWidget {
-  const ChangeProfileScreen({super.key, this.photo});
+  const ChangeProfileScreen({super.key, this.photo, this.onImageSelected});
   final String? photo;
+  final ValueChanged<File>? onImageSelected;
 
   @override
   State<ChangeProfileScreen> createState() => _ChangeProfileScreenState();
@@ -30,7 +31,9 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
 
     final file = response.file;
     if (file != null) {
-      setState(() => _selectedImage = File(file.path));
+      final selectedImage = File(file.path);
+      setState(() => _selectedImage = selectedImage);
+      widget.onImageSelected?.call(selectedImage);
     }
   }
 
@@ -41,7 +44,9 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
       final image = await _imagePicker.pickImage(source: source);
       if (image == null || !mounted) return;
 
-      setState(() => _selectedImage = File(image.path));
+      final selectedImage = File(image.path);
+      setState(() => _selectedImage = selectedImage);
+      widget.onImageSelected?.call(selectedImage);
     } catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(
