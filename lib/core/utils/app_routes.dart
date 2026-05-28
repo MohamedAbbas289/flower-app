@@ -2,6 +2,7 @@ import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/features/add_adress/presentation/screens/add_new_address.dart';
 import 'package:flower_app/features/app_section/presentation/view/app_section_view.dart';
 import 'package:flower_app/features/best_seller/presentation/view/best_seller_view.dart';
 import 'package:flower_app/features/edit_profile/presentation/pages/edit_profile_view.dart';
@@ -32,6 +33,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const AppSectionView());
       case AppRoutesName.signUp:
         return MaterialPageRoute(builder: (_) => const SignupView());
+        case AppRoutesName.addresses:
+        return MaterialPageRoute(builder: (_) =>  AddNewAddress());
       case AppRoutesName.occasions:
         final occasionId = settings.arguments as String?;
         return MaterialPageRoute(
