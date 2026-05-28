@@ -12,6 +12,7 @@ abstract class Endpoints {
   static const String getOccasions = "$baseUrl/occasions";
   static const String getProducts = "$baseUrl/products";
   static const String home = "$baseUrl/home";
+  static const String addresses = "$baseUrl/addresses";
   static const String changePassword = '$baseUrl/auth/change-password';
   static const String getProfile = '$baseUrl/auth/profile-data';
   static const String editProfile = '$baseUrl/auth/editProfile';

@@ -82,7 +82,9 @@ class ProfileDetails extends StatelessWidget {
               title: AppStrings.savedAddress,
               icon: Icons.location_on_outlined,
               iconBack: Icons.arrow_forward_ios,
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, '/addresses');
+              },
             ),
             Container(width: double.infinity, height: 1, color: AppColors.gray),
             Row(
