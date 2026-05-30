@@ -7,8 +7,8 @@ import 'package:flower_app/features/edit_profile/domain/use_cases/edit_profile_u
 import 'package:flower_app/features/edit_profile/presentation/view_models/cubit/edit_profile_view_model.dart';
 import 'package:flower_app/features/edit_profile/presentation/view_models/states/edit_profile_events.dart';
 import 'package:flower_app/features/edit_profile/presentation/view_models/states/edit_profile_state.dart';
-import 'package:flower_app/features/get_profile_screen/domain/entities/user_entitiy.dart';
-import 'package:flower_app/features/get_profile_screen/domain/use_cases/get_profile_use_cases.dart';
+import 'package:flower_app/features/profile/domain/entities/user_entitiy.dart';
+import 'package:flower_app/features/profile/domain/use_cases/get_profile_use_cases.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

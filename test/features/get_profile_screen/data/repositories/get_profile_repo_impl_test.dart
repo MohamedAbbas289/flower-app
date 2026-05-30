@@ -1,8 +1,8 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/get_profile_screen/data/data_sources/profile_remote_data_source_contract.dart';
-import 'package:flower_app/features/get_profile_screen/data/models/get_user_dto.dart';
-import 'package:flower_app/features/get_profile_screen/data/repositories/get_profile_repo_impl.dart';
-import 'package:flower_app/features/get_profile_screen/domain/entities/user_entitiy.dart';
+import 'package:flower_app/features/profile/data/data_sources_contract/profile_remote_data_source_contract.dart';
+import 'package:flower_app/features/profile/data/models/user_model.dart';
+import 'package:flower_app/features/profile/data/repository_impl/get_profile_repo_impl.dart';
+import 'package:flower_app/features/profile/domain/entities/user_entitiy.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

@@ -36,6 +36,8 @@ class Assets {
 
   static const String assetsIconsGift = "assets/icons/gift.svg";
 
+  static const String assetsIconsGoButton = "assets/icons/go_button.svg";
+
   static const String assetsIconsHome = "assets/icons/home.svg";
 
   static const String assetsIconsLocation = "assets/icons/location.svg";
@@ -43,6 +45,10 @@ class Assets {
   static const String assetsIconsLocationOn = "assets/icons/location_on.svg";
 
   static const String assetsIconsLogout = "assets/icons/logout.svg";
+
+  static const String assetsIconsNotification = "assets/icons/notification.svg";
+
+  static const String assetsIconsOrder = "assets/icons/order.svg";
 
   static const String assetsIconsPayments = "assets/icons/payments.svg";
 
@@ -75,9 +81,7 @@ class Assets {
   static const String assetsIconsVisibilityOn = "assets/icons/visibility_on.svg";
 
   static const String assetsImagesAppIcon = "assets/images/app_icon.png";
-  static const String assetsImagesFlowerIcon = "assets/images/flowerLogo.svg";
-  static const String penIcon = "assets/images/pen.svg";
-  static const String languageIcon = "assets/images/language.svg";
-  static const String defaultProfileImage = "assets/images/default-profile.png";
+
+  static const String assetsImagesPen = "assets/images/pen.svg";
 }
 

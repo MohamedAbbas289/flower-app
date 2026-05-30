@@ -1,11 +1,11 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/get_profile_screen/domain/entities/user_entitiy.dart';
-import 'package:flower_app/features/get_profile_screen/domain/use_cases/get_profile_use_cases.dart';
-import 'package:flower_app/features/get_profile_screen/presentation/view_model/cubit/get_profile_view_model.dart';
-import 'package:flower_app/features/get_profile_screen/presentation/view_model/states/get_profile_events.dart';
-import 'package:flower_app/features/get_profile_screen/presentation/view_model/states/get_profile_state.dart';
+import 'package:flower_app/features/profile/domain/entities/user_entitiy.dart';
+import 'package:flower_app/features/profile/domain/use_cases/get_profile_use_cases.dart';
+import 'package:flower_app/features/profile/presentation/view_model/cubit/get_profile_view_model.dart';
+import 'package:flower_app/features/profile/presentation/view_model/states/get_profile_events.dart';
+import 'package:flower_app/features/profile/presentation/view_model/states/get_profile_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
