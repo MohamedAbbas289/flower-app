@@ -1,17 +1,17 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
-import 'package:flower_app/features/profile/domain/use_cases/get_profile_use_cases.dart';
+import 'package:flower_app/features/profile/domain/use_cases/get_profile_data_use_cases.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import '../states/get_profile_events.dart';
 import '../states/get_profile_state.dart';
 
 @injectable
-class GetProfileViewModel extends Cubit<GetProfileState> {
-  final GetProfileUseCases _getProfileUseCases;
+class ProfileViewModel extends Cubit<GetProfileState> {
+  final GetProfileDataUseCases _getProfileDataUseCases;
 
-  GetProfileViewModel(this._getProfileUseCases)
+  ProfileViewModel(this._getProfileDataUseCases)
     : super(const GetProfileState());
 
   void doEvent(GetProfileEvent event) {
@@ -35,7 +35,7 @@ class GetProfileViewModel extends Cubit<GetProfileState> {
     emit(
       state.copyWith(getProfileState: BaseState<AuthResponseEntity>.loading()),
     );
-    final response = await _getProfileUseCases();
+    final response = await _getProfileDataUseCases();
     switch (response) {
       case SuccessBaseResponse():
         emit(

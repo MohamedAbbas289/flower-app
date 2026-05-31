@@ -10,8 +10,9 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/values/endpoints.dart';
 import '../../../../core/values/images_paths.dart';
-import '../view_model/cubit/get_profile_view_model.dart';
+import '../view_model/cubit/profile_view_model.dart';
 import '../view_model/states/get_profile_events.dart';
+import '../view_model/states/get_profile_state.dart';
 
 class ProfileDetails extends StatelessWidget {
   const ProfileDetails({super.key, required this.authResponse});
@@ -19,14 +20,10 @@ class ProfileDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userData = authResponse?.user;
-
     return RefreshIndicator(
       color: AppColors.pink,
       onRefresh: () async {
-        context.read<GetProfileViewModel>().doEvent(
-          const LoadProfileDataEvent(),
-        );
+        context.read<ProfileViewModel>().doEvent(const LoadProfileDataEvent());
       },
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -34,56 +31,84 @@ class ProfileDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 16),
-            Container(
-              width: 81,
-              height: 81,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: userData?.photo != null && userData!.photo!.isNotEmpty
-                  ? Image.network(
-                      userData.photo!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          SvgPicture.asset(
-                            Assets.assetsIconsPerson,
-                            fit: BoxFit.cover,
+            BlocBuilder<ProfileViewModel, GetProfileState>(
+              buildWhen: (previous, current) =>
+                  previous.getProfileState != current.getProfileState,
+              builder: (context, state) {
+                final userData = state.getProfileState.isLoading
+                    ? authResponse?.user
+                    : state.getProfileState.data?.user ?? authResponse?.user;
+
+                return Column(
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: 81,
+                          height: 81,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
                           ),
-                    )
-                  : SvgPicture.asset(
-                      Assets.assetsIconsPerson,
-                      fit: BoxFit.cover,
+                          clipBehavior: Clip.antiAlias,
+                          child:
+                              userData?.photo != null &&
+                                  userData!.photo!.isNotEmpty
+                              ? Image.network(
+                                  userData.photo!,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      SvgPicture.asset(
+                                        Assets.assetsIconsPerson,
+                                        fit: BoxFit.cover,
+                                      ),
+                                )
+                              : SvgPicture.asset(
+                                  Assets.assetsIconsPerson,
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                        if (state.getProfileState.isLoading)
+                          const CircularProgressIndicator(
+                            color: AppColors.pink,
+                          ),
+                      ],
                     ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  (userData?.firstName ?? '').trim(),
-                  style: TextStyles.bodyRegular18,
-                ),
-                IconButton(
-                  onPressed: () async {
-                    final updatedData = await Navigator.pushNamed(
-                      context,
-                      AppRoutesName.editProfile,
-                      arguments: authResponse,
-                    );
-                    if (context.mounted && updatedData != null) {
-                      context.read<GetProfileViewModel>().doEvent(
-                        RetryLoadProfileDataEvent(),
-                      );
-                    }
-                  },
-                  icon: SvgPicture.asset(Assets.assetsImagesPen),
-                ),
-              ],
-            ),
-            Text(
-              userData?.email ?? '',
-              style: TextStyles.bodyRegular18.copyWith(color: AppColors.gray),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          (userData?.firstName ?? '').trim(),
+                          style: TextStyles.bodyRegular18,
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            final updatedData = await Navigator.pushNamed(
+                              context,
+                              AppRoutesName.editProfile,
+                              arguments:
+                                  state.getProfileState.data ?? authResponse,
+                            );
+                            if (context.mounted && updatedData != null) {
+                              context.read<ProfileViewModel>().doEvent(
+                                const RetryLoadProfileDataEvent(),
+                              );
+                            }
+                          },
+                          icon: SvgPicture.asset(Assets.assetsImagesPen),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      userData?.email ?? '',
+                      style: TextStyles.bodyRegular18.copyWith(
+                        color: AppColors.gray,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
             const SizedBox(height: 32),
             Column(

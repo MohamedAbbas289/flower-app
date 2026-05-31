@@ -3,7 +3,7 @@ import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_strings.dart';
-import 'package:flower_app/features/profile/presentation/view_model/cubit/get_profile_view_model.dart';
+import 'package:flower_app/features/profile/presentation/view_model/cubit/profile_view_model.dart';
 import 'package:flower_app/features/profile/presentation/view_model/states/get_profile_events.dart';
 import 'package:flower_app/features/profile/presentation/view_model/states/get_profile_state.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-          getIt<GetProfileViewModel>()..doEvent(const LoadProfileDataEvent()),
+          getIt<ProfileViewModel>()..doEvent(const LoadProfileDataEvent()),
       child: const _ProfileViewContent(),
     );
   }
@@ -75,7 +75,7 @@ class _ProfileViewContent extends StatelessWidget {
           ),
         ),
       ),
-      body: BlocConsumer<GetProfileViewModel, GetProfileState>(
+      body: BlocConsumer<ProfileViewModel, GetProfileState>(
         listenWhen: (previous, current) =>
             previous.getProfileState.msg != current.getProfileState.msg &&
             current.getProfileState.msg != null,
