@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
@@ -40,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _ = context.locale;
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: _buildAppBar(),
@@ -104,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 prefixIconConstraints: const BoxConstraints(maxHeight: 18),
                 prefixIcon: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsetsDirectional.only(start: 12.0),
                   child: SvgPicture.asset(
                     Assets.assetsIconsSearch,
                     colorFilter: const ColorFilter.mode(
@@ -123,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildLocationWidget() {
     return Padding(
-      padding: const EdgeInsets.only(left: 16.0),
+      padding: const EdgeInsetsDirectional.only(start: 16.0),
       child: Row(
         children: [
           SvgPicture.asset(

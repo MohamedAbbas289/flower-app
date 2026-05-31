@@ -52,7 +52,7 @@ class _CategoriesFilterBottomSheetState
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(AppStrings.filter),
+            child: Text(AppStrings.filter),
           ),
           const SizedBox(height: 24),
         ],

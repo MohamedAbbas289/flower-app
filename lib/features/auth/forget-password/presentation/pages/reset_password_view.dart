@@ -113,7 +113,7 @@ class _ResetPasswordBodyState extends State<_ResetPasswordBody> {
               controller: _passwordController,
               obscureText: true,
               validator: (v) => AppValidations.validatePassword(v ?? ''),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: AppStrings.newPassword,
                 hintText: AppStrings.enterYourPassword,
                 floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -127,7 +127,7 @@ class _ResetPasswordBodyState extends State<_ResetPasswordBody> {
                 _passwordController.text,
                 v ?? '',
               ),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: AppStrings.confirmPassword,
                 hintText: AppStrings.confirmPassword,
                 floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -205,7 +205,7 @@ class _SubmitButton extends StatelessWidget {
             onPressed: isLoading ? null : onPressed,
             child: isLoading
                 ? const CircularProgressIndicator()
-                : const Text(AppStrings.confirm),
+                : Text(AppStrings.confirm),
           ),
         );
       },

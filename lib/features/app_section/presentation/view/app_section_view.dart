@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/features/home_screen/presentation/view_model/cubit/home_view_model.dart';
 import 'package:flower_app/features/profile/presentation/screens/profile_view.dart';
@@ -36,27 +37,28 @@ class _AppSectionViewState extends State<AppSectionView> {
     });
   }
 
-  final List<BottomNavItemEntity> bottomNavItems = [
-    BottomNavItemEntity(
-      assetName: Assets.assetsIconsHome,
-      label: AppStrings.home,
-    ),
-    BottomNavItemEntity(
-      assetName: Assets.assetsIconsCategories,
-      label: AppStrings.categories,
-    ),
-    BottomNavItemEntity(
-      assetName: Assets.assetsIconsShoppingCart,
-      label: AppStrings.cart,
-    ),
-    BottomNavItemEntity(
-      assetName: Assets.assetsIconsPerson,
-      label: AppStrings.profileView,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final _ = context.locale;
+    final bottomNavItems = [
+      BottomNavItemEntity(
+        assetName: Assets.assetsIconsHome,
+        label: AppStrings.home,
+      ),
+      BottomNavItemEntity(
+        assetName: Assets.assetsIconsCategories,
+        label: AppStrings.categories,
+      ),
+      BottomNavItemEntity(
+        assetName: Assets.assetsIconsShoppingCart,
+        label: AppStrings.cart,
+      ),
+      BottomNavItemEntity(
+        assetName: Assets.assetsIconsPerson,
+        label: AppStrings.profileView,
+      ),
+    ];
+
     return Scaffold(
       body: IndexedStack(
         index: _currentTabIndex,

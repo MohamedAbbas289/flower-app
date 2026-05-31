@@ -342,7 +342,7 @@ class _AddToCartButton extends StatelessWidget {
           onPressed: () {
             // TODO: implement add to cart navigation
           },
-          child: const Text(AppStrings.addToCart),
+          child: Text(AppStrings.addToCart),
         ),
       ),
     );

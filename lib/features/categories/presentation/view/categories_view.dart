@@ -164,7 +164,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                         if (!ps.isLoading &&
                             ps.data != null &&
                             products.isEmpty) {
-                          return const _ErrorView(
+                          return _ErrorView(
                             message: AppStrings.noProductsAvailable,
                             onRetry: null,
                           );
@@ -180,7 +180,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                               arguments: productId,
                             );
                           },
-                           // ToDo: eng.Loay
+                          // ToDo: eng.Loay
                           heroTagBuilder: (productId) =>
                               AppStrings.productImageHeroTag(productId),
                           currentPage: ps.data?.metadata?.currentPage ?? 1,
@@ -215,7 +215,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                 BlendMode.srcIn,
               ),
             ),
-            label: const Text(
+            label: Text(
               AppStrings.filter,
               style: TextStyle(color: AppColors.white),
             ),
@@ -339,10 +339,7 @@ class _ErrorView extends StatelessWidget {
             ),
             if (onRetry != null) ...[
               const SizedBox(height: 16),
-              FilledButton(
-                onPressed: onRetry,
-                child: const Text(AppStrings.retry),
-              ),
+              FilledButton(onPressed: onRetry, child: Text(AppStrings.retry)),
             ],
           ],
         ),

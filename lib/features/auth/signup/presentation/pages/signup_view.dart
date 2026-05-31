@@ -116,10 +116,13 @@ class _SignupAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: IconButton(
-        icon: SvgPicture.asset(Assets.assetsIconsArrowBack),
+        icon: Transform.flip(
+          flipX: Directionality.of(context) == TextDirection.rtl,
+          child: SvgPicture.asset(Assets.assetsIconsArrowBack),
+        ),
         onPressed: () => Navigator.pop(context),
       ),
-      title: const Text(AppStrings.signupTitle),
+      title: Text(AppStrings.signupTitle),
     );
   }
 
@@ -271,7 +274,7 @@ class _NameRow extends StatelessWidget {
         Expanded(
           child: TextFormField(
             controller: firstNameController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: AppStrings.firstNameLabel,
               hintText: AppStrings.firstNameHint,
             ),
@@ -282,7 +285,7 @@ class _NameRow extends StatelessWidget {
         Expanded(
           child: TextFormField(
             controller: lastNameController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: AppStrings.lastNameLabel,
               hintText: AppStrings.lastNameHint,
             ),
@@ -303,7 +306,7 @@ class _EmailField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         labelText: AppStrings.emailLabel,
         hintText: AppStrings.emailHint,
       ),
@@ -400,33 +403,36 @@ class _PhoneField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: AppStrings.phoneLabel,
-        hintText: AppStrings.phoneHint,
-        prefixIcon: Padding(
-          padding: EdgeInsets.only(left: 12, right: 8),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SvgPicture.asset(Assets.assetsIconsEgypt),
-              SizedBox(width: 6),
-              Text("+20", style: TextStyles.bodyRegular16),
-            ],
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: AppStrings.phoneLabel,
+          hintText: AppStrings.phoneHint,
+          prefixIcon: Padding(
+            padding: const EdgeInsetsDirectional.only(start: 12, end: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SvgPicture.asset(Assets.assetsIconsEgypt),
+                const SizedBox(width: 6),
+                Text("+20", style: TextStyles.bodyRegular16),
+              ],
+            ),
+          ),
+          prefixIconConstraints: const BoxConstraints(
+            minWidth: 0,
+            minHeight: 0,
           ),
         ),
-
-        prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9+]')),
+          LengthLimitingTextInputFormatter(11),
+        ],
+        keyboardType: TextInputType.phone,
+        validator: (value) => AppValidations.validatePhone(value ?? ''),
       ),
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9+]')),
-        LengthLimitingTextInputFormatter(11),
-      ],
-      keyboardType: TextInputType.phone,
-      validator: (value) {
-        return AppValidations.validatePhone(value ?? '');
-      },
     );
   }
 }
@@ -449,7 +455,7 @@ class _GenderSection extends StatelessWidget {
             groupValue: selectedGender,
             onChanged: onChanged,
             child: Row(
-              children: const [
+              children: [
                 _GenderOption(label: AppStrings.female, value: 'female'),
                 SizedBox(width: 16),
                 _GenderOption(label: AppStrings.male, value: 'male'),

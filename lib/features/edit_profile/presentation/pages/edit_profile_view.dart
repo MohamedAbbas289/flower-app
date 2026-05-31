@@ -40,7 +40,10 @@ class _EditProfileContent extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppStrings.editProfile),
         leading: IconButton(
-          icon: SvgPicture.asset(Assets.assetsIconsArrowBack),
+          icon: Transform.flip(
+            flipX: Directionality.of(context) == TextDirection.rtl,
+            child: SvgPicture.asset(Assets.assetsIconsArrowBack),
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),

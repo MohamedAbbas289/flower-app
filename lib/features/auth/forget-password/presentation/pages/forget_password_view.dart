@@ -110,7 +110,7 @@ class _ForgetPasswordBodyState extends State<_ForgetPasswordBody> {
           TextFormField(
             controller: _emailController,
             validator: (v) => AppValidations.validateEmail(v ?? ''),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: AppStrings.email,
               hintText: AppStrings.enterYourEmail,
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -178,7 +178,7 @@ class _SubmitButton extends StatelessWidget {
             onPressed: isLoading ? null : onPressed,
             child: isLoading
                 ? const CircularProgressIndicator()
-                : const Text(AppStrings.confirm),
+                : Text(AppStrings.confirm),
           ),
         );
       },

@@ -118,7 +118,7 @@ class _LoginAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Padding(
+      title: Padding(
         padding: EdgeInsetsDirectional.only(start: 20),
         child: Text(AppStrings.loginTitle),
       ),
@@ -158,7 +158,7 @@ class _EmailField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       validator: (value) => AppValidations.validateEmail(value ?? ''),
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         labelText: AppStrings.emailLabel,
         hintText: AppStrings.emailHint,
       ),
@@ -217,7 +217,7 @@ class _RememberMeRow extends StatelessWidget {
     return Row(
       children: [
         Checkbox(value: value, onChanged: onChanged),
-        const Text(AppStrings.rememberMe),
+        Text(AppStrings.rememberMe),
         const Spacer(),
         GestureDetector(
           onTap: () =>
@@ -243,7 +243,7 @@ class _LoginButton extends StatelessWidget {
       height: 52,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: const Text(AppStrings.loginButton),
+        child: Text(AppStrings.loginButton),
       ),
     );
   }
@@ -256,7 +256,7 @@ class _GuestButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: () {},
-      child: const Text(AppStrings.continueAsGuest),
+      child: Text(AppStrings.continueAsGuest),
     );
   }
 }

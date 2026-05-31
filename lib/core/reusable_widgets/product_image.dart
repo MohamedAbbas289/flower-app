@@ -83,7 +83,7 @@ class _ImageErrorState extends State<_ImageError> {
             color: AppColors.gray,
           ),
           const SizedBox(height: 4),
-          const Text(
+          Text(
             AppStrings.imageNotAvailable,
             style: TextStyle(fontSize: 10, color: AppColors.gray),
           ),

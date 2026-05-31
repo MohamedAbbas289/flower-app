@@ -94,7 +94,7 @@ class RowSection extends StatelessWidget {
               ],
               Text(title, style: TextStyles.bodyRegular13),
               const Spacer(),
-              _buildTrailing(),
+              _buildTrailing(context),
             ],
           ),
         ),
@@ -102,17 +102,29 @@ class RowSection extends StatelessWidget {
     );
   }
 
-  Widget _buildTrailing() {
+  Widget _buildTrailing(BuildContext context) {
     switch (trailing) {
       case RowSectionTrailing.arrow:
-        return SvgPicture.asset(Assets.assetsIconsGoButton);
+        return Directionality(
+          textDirection: TextDirection.ltr,
+          child: Transform.flip(
+            flipX: Directionality.of(context) == TextDirection.rtl,
+            child: SvgPicture.asset(Assets.assetsIconsGoButton),
+          ),
+        );
       case RowSectionTrailing.text:
         return Text(
           trailingText ?? '',
           style: TextStyles.bodyRegular11.copyWith(color: AppColors.pink),
         );
       case RowSectionTrailing.toggle:
-        return SvgPicture.asset(Assets.assetsIconsGoButton);
+        return Directionality(
+          textDirection: TextDirection.ltr,
+          child: Transform.flip(
+            flipX: Directionality.of(context) == TextDirection.rtl,
+            child: SvgPicture.asset(Assets.assetsIconsGoButton),
+          ),
+        );
       case RowSectionTrailing.none:
         return const SizedBox.shrink();
     }

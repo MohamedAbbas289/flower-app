@@ -261,7 +261,7 @@ class _UpdateButtonState extends State<_UpdateButton> {
                   strokeWidth: 2.5,
                 ),
               )
-            : const Text(AppStrings.update),
+            : Text(AppStrings.update),
       ),
     );
   }

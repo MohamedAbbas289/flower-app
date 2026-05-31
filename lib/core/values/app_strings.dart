@@ -1,231 +1,171 @@
+import 'package:easy_localization/easy_localization.dart';
+
 abstract class AppStrings {
-  // general
-  static const String appName = 'Flowery';
-  static const String terms = '''
-Welcome to Flowery 🌸
-
-1. By creating an account, you agree to use the app for personal shopping only.
-2. All flower products are subject to availability.
-3. Prices may change without prior notice.
-4. Delivery times may vary depending on location.
-5. Refunds are applicable only in case of damaged or incorrect orders.
-6. Misuse of the platform may result in account suspension.
-
-Thank you for choosing Flowery 💐
-''';
-  static const String close = 'Close';
-  static const String cancel = 'cancel';
-  static const String retry = 'Retry';
-  static const deliverTo = 'Deliver to';
-  static const String loadingMore = 'loadingMore';
-  static const String addToCart = 'Add to cart';
-  static const String search = 'Search';
-  static String productImageHeroTag(String id) => 'product-image-$id';
-
-  // titles
-  static const String loginTitle = 'Login';
-  static const String signupTitle = 'Sign up';
-  static const String occasionTitle = 'Occasion';
-  static const String occasionSubtitle =
-      'Bloom with our exquisite best sellers';
-  // labels
-  static const String genderLabel = 'Gender';
-  static const String male = 'Male';
-  static const String female = 'Female';
-  // text fileds labels
-  static const String firstNameLabel = 'First name';
-  static const String lastNameLabel = 'Last name';
-  static const String emailLabel = 'Email';
-  static const String passwordLabel = 'Password';
-  static const String confirmPasswordLabel = 'Confirm password';
-  static const String phoneLabel = 'Phone number';
-
-  // text fields hints
-  static const String firstNameHint = 'Enter first name';
-  static const String lastNameHint = 'Enter last name';
-  static const String emailHint = 'Enter your email';
-  static const String passwordHint = 'Enter password';
-  static const String confirmPasswordHint = 'Confirm password';
-  static const String phoneHint = 'Enter phone number';
-  // texts on body
-  static const String alreadyHaveAccount = 'Already have an account? ';
-  static const String creatingAccount =
-      'Creating an account, you agree to our ';
-  static const String termsAndConditions = 'Terms&Conditions';
+  static String get appName => 'appName'.tr();
+  static String get terms => 'terms'.tr();
+  static String get close => 'close'.tr();
+  static String get cancel => 'cancel'.tr();
+  static String get retry => 'retry'.tr();
+  static String get deliverTo => 'deliverTo'.tr();
+  static String get loadingMore => 'loadingMore'.tr();
+  static String get addToCart => 'addToCart'.tr();
+  static String get search => 'search'.tr();
+  static String get loginTitle => 'loginTitle'.tr();
+  static String get signupTitle => 'signupTitle'.tr();
+  static String get occasionTitle => 'occasionTitle'.tr();
+  static String get occasionSubtitle => 'occasionSubtitle'.tr();
+  static String get genderLabel => 'genderLabel'.tr();
+  static String get male => 'male'.tr();
+  static String get female => 'female'.tr();
+  static String get firstNameLabel => 'firstNameLabel'.tr();
+  static String get lastNameLabel => 'lastNameLabel'.tr();
+  static String get emailLabel => 'emailLabel'.tr();
+  static String get passwordLabel => 'passwordLabel'.tr();
+  static String get confirmPasswordLabel => 'confirmPasswordLabel'.tr();
+  static String get phoneLabel => 'phoneLabel'.tr();
+  static String get firstNameHint => 'firstNameHint'.tr();
+  static String get lastNameHint => 'lastNameHint'.tr();
+  static String get emailHint => 'emailHint'.tr();
+  static String get passwordHint => 'passwordHint'.tr();
+  static String get confirmPasswordHint => 'confirmPasswordHint'.tr();
+  static String get phoneHint => 'phoneHint'.tr();
+  static String get alreadyHaveAccount => 'alreadyHaveAccount'.tr();
+  static String get creatingAccount => 'creatingAccount'.tr();
+  static String get termsAndConditions => 'termsAndConditions'.tr();
   static String priceText(int price) => 'EGP $price';
-
-  // validation messages
-  static const String requiredField = 'This field is required';
-  static const String invalidInput = 'Please enter a valid value';
-  static const String firstNameRequired = 'First name is required';
-  static const String lastNameRequired = 'Last name is required';
-  static const String nameInvalid = 'Name can only contain letters and spaces';
-  static const String nameTooShort = 'Name must be at least 2 characters';
-  static const String nameTooLong = 'Name must not exceed 20 characters';
-  static const String emailRequired = 'Email is required';
-  static const String emailInvalid =
-      'Please enter a valid email address (example@domain.com)';
-  static const String passwordRequired = 'Password is required';
-  static const String passwordWeak = 'Password is too weak.';
-  static const String confirmPasswordRequired = 'Please confirm your password';
-  static const String passwordDoNotMatch =
-      'Passwords do not match. Please make sure both passwords are identical';
-  static const String phoneRequired = 'Phone number is required';
-  static const String phoneInvalid =
-      'Please enter a valid Egyptian phone number (e.g. 010xxxxxxxx)';
-  static const String otpEmpty = 'Verification code is required';
-  static const String otpLength = 'Verification code must be exactly 4 digits';
-  static const String otpInvalid =
-      'Verification code must contain numbers only';
-
-  // auth error messages
-  static const String tokenEmpty = 'Authentication token is missing';
-  static const String tokenWriteFailed = 'Failed to save authentication token';
-  static const String tokenReadFailed = 'Failed to read authentication token';
-  static const String tokenDeleteFailed =
-      'Failed to delete authentication token';
-  static const String userIdEmpty = 'User ID is missing';
-  static const String userIdReadFailed = 'Failed to read user ID';
-  static const String userIdWriteFailed = 'Failed to save user ID';
-  static const String userIdDeleteFailed = 'Failed to delete user ID';
-  static const String rememberMeWriteFailed =
-      'Failed to save remember me preference';
-  static const String rememberMeReadFailed =
-      'Failed to read remember me preference';
-  static const String rememberMeDeleteFailed =
-      'Failed to delete remember me preference';
-  static const String clearStorageFailed = 'Failed to clear storage';
-
-  // api error messages
-  static const String connectionTimeout =
-      'Connection timed out. Please check your internet connection and try again';
-  static const String requestTimeout =
-      'Request timed out. Please check your internet connection and try again';
-  static const String serverTookTooLongToRespond =
-      'Server took too long to respond. Please try again later';
-  static const String badCertificate =
-      'Bad certificate. Please check your connection and try again';
-  static const String noInternetConnection =
-      'No internet connection. Please check your connection and try again';
-  static const String requestCanceled =
-      'Request canceled. Please try again later';
-  static const String unexpectedErrorOccurred =
-      'An unexpected error occurred. Please try again later';
-  static const String serverErrorOccurred =
-      'A server error occurred. Please try again later';
-  static const String somethingWentWrong =
-      'Something went wrong. Please try again later';
-  static const String dataParsingError =
-      'Data parsing error. Please try again later';
-  // app error messages
-  static const String routeNotFound = 'Route not found';
-  static const String imageNotAvailable = 'Image not available';
-  static const noCategoriesFound = 'No categories found';
-  static const noProductsFound = 'No products found';
-  static const noOccasionsFound = 'No occasions found';
-  static const String badRequest = 'Bad request. Please try again later';
-  static const String forbidden = 'Forbidden. Please try again later';
-  static const String unauthorized = 'Unauthorized. Please try again later';
-  static const String notFound = 'Not found. Please try again later';
-  static const String internalServerError =
-      'Internal server error. Please try again later';
-
-  // UI strings (feature forget pasword)
-  static const String password = "Password";
-  static const String forgetPassword = "Forget password";
-  static const String pleaseEnterYourEmailAssociatedToYourAccount =
-      "Please enter your email associated to\nyour account";
-  static const String email = "Email";
-  static const String enterYourEmail = "Enter Your Email";
-  static const String confirm = "Confirm";
-  static const String emailVerification = "Email verification";
-  static const String didntReciveCode = "Didn't receive code? ";
-  static const String resend = "Resend";
-  static const String newPassword = "New password";
-  static const String enterYourPassword = "Enter Your Password";
-  static const String confirmPassword = "Confirm password";
-  static const String hitTextForResetPassword =
-      "Password must not be empty and must contain 6 characters with upper case letter and one number at least";
-  static const String exampleEmail = "example@email.com";
-  static const String invalidCode = "Invalid code";
-  static const String resetPassword = "Reset password";
-  //snackbar messages
-  static const String accountCreatedSuccessfully =
-      'Account created successfully! , please login to continue';
-
-  // login screen
-  static const String rememberMe = 'Remember me';
-  static const String doYouForgetPassword = 'Forget password?';
-  static const String loginButton = 'Login';
-  static const String continueAsGuest = 'Continue as guest';
-  static const String dontHaveAccount = "Don't have an account? ";
-  static const String signUp = 'Sign up';
-  // bottom navigation labels
-  static const String home = 'Home';
-  static const String cart = 'Cart';
-  static const categories = 'Categories';
-  static const String profileView = 'Profile';
-
-  static const String defaultAddress = 'Deliver to 2XVP+XC - Sheikh Zayed ';
-  static const String viewAll = 'View all';
-  static const String bestSellers = 'Best Sellers';
-  static const String occasions = 'Occasion';
-  static const bestSeller = 'Best seller';
-  // categories screen
-  static const String all = 'All';
-  static const String filter = 'Filter';
-  static const String sortBy = 'Sort by';
-  static const String lowestPrice = 'Lowest Price';
-  static const String highestPrice = 'Highest Price';
-  static const String newSort = 'New';
-  static const String oldSort = 'Old';
-  static const String discount = 'Discount';
-  static const String noProductsAvailable =
-      'Oops! No products available at the moment :(';
-  // Product details screen
-  static const String allPricesIncludeTax = 'All prices include tax';
-  static const String status = 'Status:';
-  static const String inStock = 'In Stock';
-  static const String outOfStock = 'Out Of Stock';
-  static const String description = 'Description';
-  static const String bouquetInclude = 'Bouquet includes';
-  static const String pinkRoses = 'Pink roses';
-  static const String whiteWrap = 'White Wrap';
-  // best seller screen
-  static const String bestSellerTitle = 'Best Seller';
-  static const String bestSellerSubTitle =
-      'Bloom with our exquisite best sellers';
-  // change password screen
-  static const String update = 'Update';
-  static const String passwordUpdated = 'Password Updated';
-  static const String currentPassword = 'Current password';
-  static const String changePassword = 'Change password';
-  // profile screen
-  static const String myOrders = 'My orders';
-  static const String savedAddress = 'Saved address';
-  static const String notification = 'Notification';
-  static const String aboutUs = 'About us';
-  static const String termsConditions = 'Terms & conditions';
-  static const String logout = 'Logout';
-  static const String language = 'Language';
-  static const String english = 'English';
-  static const String editProfile = 'Edit Profile';
-  static const String change = 'Change';
-  static const String profileUpdatedSuccessfully =
-      'Profile updated successfully';
-
-  // edit profile screen
-  static const String doYouWantToEdit = 'Do you want to edit your';
-  static const String permissionDenied =
-      "Permission denied. Please allow access from settings.";
-  static const String editField = 'Edit Field';
-  static const String changePhoto = 'Change Photo';
-  static const String chooseImageSource = 'Choose image source';
-  static const String camera = 'Camera';
-  static const String gallery = 'Gallery';
-  static const String profileUpdated = 'Profile updated successfully';
-  static const String gender = 'Gender';
-  static const String firstName = 'First name';
-  static const String lastName = 'Last name';
-  static const String phoneNumber = 'Phone number';
+  static String get requiredField => 'requiredField'.tr();
+  static String get invalidInput => 'invalidInput'.tr();
+  static String get firstNameRequired => 'firstNameRequired'.tr();
+  static String get lastNameRequired => 'lastNameRequired'.tr();
+  static String get nameInvalid => 'nameInvalid'.tr();
+  static String get nameTooShort => 'nameTooShort'.tr();
+  static String get nameTooLong => 'nameTooLong'.tr();
+  static String get emailRequired => 'emailRequired'.tr();
+  static String get emailInvalid => 'emailInvalid'.tr();
+  static String get passwordRequired => 'passwordRequired'.tr();
+  static String get passwordWeak => 'passwordWeak'.tr();
+  static String get confirmPasswordRequired => 'confirmPasswordRequired'.tr();
+  static String get passwordDoNotMatch => 'passwordDoNotMatch'.tr();
+  static String get phoneRequired => 'phoneRequired'.tr();
+  static String get phoneInvalid => 'phoneInvalid'.tr();
+  static String get otpEmpty => 'otpEmpty'.tr();
+  static String get otpLength => 'otpLength'.tr();
+  static String get otpInvalid => 'otpInvalid'.tr();
+  static String get tokenEmpty => 'tokenEmpty'.tr();
+  static String get tokenWriteFailed => 'tokenWriteFailed'.tr();
+  static String get tokenReadFailed => 'tokenReadFailed'.tr();
+  static String get tokenDeleteFailed => 'tokenDeleteFailed'.tr();
+  static String get userIdEmpty => 'userIdEmpty'.tr();
+  static String get userIdReadFailed => 'userIdReadFailed'.tr();
+  static String get userIdWriteFailed => 'userIdWriteFailed'.tr();
+  static String get userIdDeleteFailed => 'userIdDeleteFailed'.tr();
+  static String get rememberMeWriteFailed => 'rememberMeWriteFailed'.tr();
+  static String get rememberMeReadFailed => 'rememberMeReadFailed'.tr();
+  static String get rememberMeDeleteFailed => 'rememberMeDeleteFailed'.tr();
+  static String get clearStorageFailed => 'clearStorageFailed'.tr();
+  static String get connectionTimeout => 'connectionTimeout'.tr();
+  static String get requestTimeout => 'requestTimeout'.tr();
+  static String get serverTookTooLongToRespond =>
+      'serverTookTooLongToRespond'.tr();
+  static String get badCertificate => 'badCertificate'.tr();
+  static String get noInternetConnection => 'noInternetConnection'.tr();
+  static String get requestCanceled => 'requestCanceled'.tr();
+  static String get unexpectedErrorOccurred => 'unexpectedErrorOccurred'.tr();
+  static String get serverErrorOccurred => 'serverErrorOccurred'.tr();
+  static String get somethingWentWrong => 'somethingWentWrong'.tr();
+  static String get dataParsingError => 'dataParsingError'.tr();
+  static String get routeNotFound => 'routeNotFound'.tr();
+  static String get imageNotAvailable => 'imageNotAvailable'.tr();
+  static String get noCategoriesFound => 'noCategoriesFound'.tr();
+  static String get noProductsFound => 'noProductsFound'.tr();
+  static String get noOccasionsFound => 'noOccasionsFound'.tr();
+  static String get badRequest => 'badRequest'.tr();
+  static String get forbidden => 'forbidden'.tr();
+  static String get unauthorized => 'unauthorized'.tr();
+  static String get notFound => 'notFound'.tr();
+  static String get internalServerError => 'internalServerError'.tr();
+  static String get password => 'password'.tr();
+  static String get forgetPassword => 'forgetPassword'.tr();
+  static String get pleaseEnterYourEmailAssociatedToYourAccount =>
+      'pleaseEnterYourEmailAssociatedToYourAccount'.tr();
+  static String get email => 'email'.tr();
+  static String get enterYourEmail => 'enterYourEmail'.tr();
+  static String get confirm => 'confirm'.tr();
+  static String get emailVerification => 'emailVerification'.tr();
+  static String get didntReciveCode => 'didntReciveCode'.tr();
+  static String get resend => 'resend'.tr();
+  static String get newPassword => 'newPassword'.tr();
+  static String get enterYourPassword => 'enterYourPassword'.tr();
+  static String get confirmPassword => 'confirmPassword'.tr();
+  static String get hitTextForResetPassword => 'hitTextForResetPassword'.tr();
+  static String get exampleEmail => 'exampleEmail'.tr();
+  static String get invalidCode => 'invalidCode'.tr();
+  static String get resetPassword => 'resetPassword'.tr();
+  static String get accountCreatedSuccessfully =>
+      'accountCreatedSuccessfully'.tr();
+  static String get rememberMe => 'rememberMe'.tr();
+  static String get doYouForgetPassword => 'doYouForgetPassword'.tr();
+  static String get loginButton => 'loginButton'.tr();
+  static String get continueAsGuest => 'continueAsGuest'.tr();
+  static String get dontHaveAccount => 'dontHaveAccount'.tr();
+  static String get signUp => 'signUp'.tr();
+  static String get home => 'home'.tr();
+  static String get cart => 'cart'.tr();
+  static String get categories => 'categories'.tr();
+  static String get profileView => 'profileView'.tr();
+  static String get defaultAddress => 'defaultAddress'.tr();
+  static String get viewAll => 'viewAll'.tr();
+  static String get bestSellers => 'bestSellers'.tr();
+  static String get occasions => 'occasions'.tr();
+  static String get bestSeller => 'bestSeller'.tr();
+  static String get all => 'all'.tr();
+  static String get filter => 'filter'.tr();
+  static String get sortBy => 'sortBy'.tr();
+  static String get lowestPrice => 'lowestPrice'.tr();
+  static String get highestPrice => 'highestPrice'.tr();
+  static String get newSort => 'newSort'.tr();
+  static String get oldSort => 'oldSort'.tr();
+  static String get discount => 'discount'.tr();
+  static String get noProductsAvailable => 'noProductsAvailable'.tr();
+  static String get allPricesIncludeTax => 'allPricesIncludeTax'.tr();
+  static String get status => 'status'.tr();
+  static String get inStock => 'inStock'.tr();
+  static String get outOfStock => 'outOfStock'.tr();
+  static String get description => 'description'.tr();
+  static String get bouquetInclude => 'bouquetInclude'.tr();
+  static String get pinkRoses => 'pinkRoses'.tr();
+  static String get whiteWrap => 'whiteWrap'.tr();
+  static String get bestSellerTitle => 'bestSellerTitle'.tr();
+  static String get bestSellerSubTitle => 'bestSellerSubTitle'.tr();
+  static String get update => 'update'.tr();
+  static String get passwordUpdated => 'passwordUpdated'.tr();
+  static String get currentPassword => 'currentPassword'.tr();
+  static String get changePassword => 'changePassword'.tr();
+  static String get myOrders => 'myOrders'.tr();
+  static String get savedAddress => 'savedAddress'.tr();
+  static String get notification => 'notification'.tr();
+  static String get aboutUs => 'aboutUs'.tr();
+  static String get termsConditions => 'termsConditions'.tr();
+  static String get logout => 'logout'.tr();
+  static String get language => 'language'.tr();
+  static String get english => 'english'.tr();
+  static String get arabic => 'arabic'.tr();
+  static String get editProfile => 'editProfile'.tr();
+  static String get change => 'change'.tr();
+  static String get profileUpdatedSuccessfully =>
+      'profileUpdatedSuccessfully'.tr();
+  static String get doYouWantToEdit => 'doYouWantToEdit'.tr();
+  static String get permissionDenied => 'permissionDenied'.tr();
+  static String get editField => 'editField'.tr();
+  static String get changePhoto => 'changePhoto'.tr();
+  static String get chooseImageSource => 'chooseImageSource'.tr();
+  static String get camera => 'camera'.tr();
+  static String get gallery => 'gallery'.tr();
+  static String get profileUpdated => 'profileUpdated'.tr();
+  static String get gender => 'gender'.tr();
+  static String get firstName => 'firstName'.tr();
+  static String get lastName => 'lastName'.tr();
+  static String get phoneNumber => 'phoneNumber'.tr();
+  static String productImageHeroTag(String id) => 'product-image-$id';
+  static String get changeLanguage => 'changeLanguage'.tr();
 }

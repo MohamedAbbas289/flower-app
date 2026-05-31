@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/features/profile/presentation/widgets/language_bottom_sheet.dart';
 import 'package:flower_app/features/profile/presentation/widgets/row_section.dart';
 import 'package:flower_app/features/profile/presentation/widgets/web_view_screen.dart';
 import 'package:flutter/material.dart';
@@ -140,8 +142,16 @@ class ProfileDetails extends StatelessWidget {
                 RowSection.text(
                   title: AppStrings.language,
                   iconPath: Assets.assetsIconsTranslate,
-                  text: AppStrings.english,
-                  onTap: () {},
+                  text: context.locale.languageCode == 'ar'
+                      ? AppStrings.arabic
+                      : AppStrings.english,
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      builder: (_) => const LanguageBottomSheet(),
+                    );
+                  },
                 ),
                 RowSection.arrow(
                   title: AppStrings.aboutUs,
@@ -149,7 +159,7 @@ class ProfileDetails extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const WebViewScreen(
+                        builder: (_) => WebViewScreen(
                           title: AppStrings.aboutUs,
                           url: Endpoints.aboutFlowerApp,
                         ),
@@ -163,7 +173,7 @@ class ProfileDetails extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const WebViewScreen(
+                        builder: (_) => WebViewScreen(
                           title: AppStrings.termsAndConditions,
                           url: Endpoints.termsFlowerApp,
                         ),

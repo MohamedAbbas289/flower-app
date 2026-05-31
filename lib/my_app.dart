@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flower_app/core/theme/app_theme.dart';
 import 'package:flower_app/core/utils/app_routes.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
@@ -14,6 +15,9 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: AppRoutes.onGenerateRoute,
       theme: AppTheme.lightTheme,
       themeMode: ThemeMode.system,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
     );
   }
 }

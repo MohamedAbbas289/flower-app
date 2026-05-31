@@ -183,7 +183,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
             height: 48,
             child: ElevatedButton(
               onPressed: _onUpdate,
-              child: const Text(AppStrings.update),
+              child: Text(AppStrings.update),
             ),
           ),
         ],
