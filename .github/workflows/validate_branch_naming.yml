@@ -25,7 +25,7 @@ jobs:
           if [[ ! "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix|chore|refactor|test|docs)/.+ ]]; then
             echo "❌ Invalid branch name: $BRANCH_NAME"
             echo "Branch name must follow the pattern: <type>/<description>"
-            echo "Allowed types: feature, bugfix, hotfix, chore, refactor, test, docs, ci"
+            echo "Allowed types: feature, bugfix, hotfix, chore, refactor, test, docs"
             echo "Example: feature/product-details"
             exit 1
           fi

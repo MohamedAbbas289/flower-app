@@ -1,8 +1,10 @@
 import 'package:flower_app/config/di/di.dart';
+import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/app_section/presentation/view/app_section_view.dart';
 import 'package:flower_app/features/best_seller/presentation/view/best_seller_view.dart';
+import 'package:flower_app/features/edit_profile/presentation/pages/edit_profile_view.dart';
 import 'package:flower_app/features/occasions/presentation/occasions_view_model/occasions_view_model.dart';
 import 'package:flower_app/features/occasions/presentation/pages/occasions_view.dart';
 import 'package:flower_app/features/change_password/presentation/pages/change_password_view.dart';
@@ -59,6 +61,11 @@ class AppRoutes {
             create: (_) => getIt<ChangePasswordViewModel>(),
             child: Builder(builder: (context) => const ChangePasswordView()),
           ),
+        );
+      case AppRoutesName.editProfile:
+        final authData = settings.arguments as AuthResponseEntity;
+        return MaterialPageRoute(
+          builder: (_) => EditProfileView(initialData: authData),
         );
       default:
         return MaterialPageRoute(

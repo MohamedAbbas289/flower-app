@@ -1,5 +1,6 @@
 import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/features/home_screen/presentation/view_model/cubit/home_view_model.dart';
+import 'package:flower_app/features/profile/presentation/screens/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
@@ -72,6 +73,7 @@ class _AppSectionViewState extends State<AppSectionView> {
             initialCategoryId: _initialCategoryId,
           ),
           CartTestView(),
+          ProfileView(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

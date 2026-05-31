@@ -3,7 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract class TextStyles {
-  static TextStyle appBarTextStyle = GoogleFonts.inter(
+  static final TextStyle appNameTextStyle = GoogleFonts.imFellEnglish(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    letterSpacing: 2,
+    color: AppColors.pink,
+  );
+  static final TextStyle appBarTextStyle = GoogleFonts.inter(
     fontSize: 20,
     fontWeight: FontWeight.w500,
     color: AppColors.black,
@@ -29,7 +35,7 @@ abstract class TextStyles {
     letterSpacing: 0.5,
   );
 
-  static TextStyle bodyRegularUnderLine13 = GoogleFonts.inter(
+  static final TextStyle bodyRegularUnderLine13 = GoogleFonts.inter(
     fontSize: 13,
     fontWeight: FontWeight.w400,
     color: AppColors.black,
@@ -43,43 +49,43 @@ abstract class TextStyles {
     color: AppColors.red,
   );
 
-  static TextStyle errorText = GoogleFonts.inter(
+  static final TextStyle errorText = GoogleFonts.inter(
     fontSize: 16,
     fontWeight: FontWeight.w500,
     color: AppColors.red,
   );
 
-  static TextStyle buttonTextStyle = GoogleFonts.inter(
+  static final TextStyle buttonTextStyle = GoogleFonts.inter(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     color: AppColors.white,
   );
-  static TextStyle bodyRegular12 = GoogleFonts.inter(
+  static final TextStyle bodyRegular12 = GoogleFonts.inter(
     fontSize: 12,
     fontWeight: FontWeight.w400,
     color: AppColors.black,
   );
-  static TextStyle bodyRegular13 = GoogleFonts.inter(
+  static final TextStyle bodyRegular13 = GoogleFonts.inter(
     fontSize: 13,
     fontWeight: FontWeight.w400,
     color: AppColors.black,
   );
-  static TextStyle bodyRegular14 = GoogleFonts.inter(
+  static final TextStyle bodyRegular14 = GoogleFonts.inter(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.black,
   );
-  static TextStyle bodyRegular16 = GoogleFonts.inter(
+  static final TextStyle bodyRegular16 = GoogleFonts.inter(
     fontSize: 16,
     fontWeight: FontWeight.w400,
     color: AppColors.black,
   );
-  static TextStyle bodyRegular18 = GoogleFonts.inter(
+  static final TextStyle bodyRegular18 = GoogleFonts.inter(
     fontSize: 18,
     fontWeight: FontWeight.w500,
     color: AppColors.black,
   );
-  static TextStyle bodyRegular11 = GoogleFonts.inter(
+  static final TextStyle bodyRegular11 = GoogleFonts.inter(
     fontSize: 11,
     fontWeight: FontWeight.w400,
     color: AppColors.pink,

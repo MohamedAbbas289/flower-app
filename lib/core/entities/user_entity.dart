@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class UserEntity extends Equatable {
+  final String? id;
   final String? firstName;
   final String? lastName;
   final String? email;
@@ -9,7 +10,6 @@ class UserEntity extends Equatable {
   final String? photo;
   final String? role;
   final List<dynamic>? wishlist;
-  final String? id;
   final List<dynamic>? addresses;
   final DateTime? createdAt;
 

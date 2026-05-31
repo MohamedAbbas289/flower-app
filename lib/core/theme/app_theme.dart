@@ -19,6 +19,7 @@ class AppTheme {
       surfaceTintColor: AppColors.white,
       iconTheme: IconThemeData(color: AppColors.black, size: 24),
       leadingWidth: 40,
+      foregroundColor: AppColors.black,
     ),
     textTheme: TextTheme(bodyMedium: TextStyles.bodyRegular14),
     inputDecorationTheme: InputDecorationTheme(

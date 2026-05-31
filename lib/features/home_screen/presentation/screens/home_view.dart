@@ -20,8 +20,10 @@ import 'package:flutter_svg/svg.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, this.onCategoryViewAll, this.onCategoryTap});
+
   final VoidCallback? onCategoryViewAll;
   final void Function(String categoryId)? onCategoryTap;
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -50,10 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  _buildLocationWidget(),
+                  const SizedBox(height: 24),
                   _buildCategoriesSection(state),
                   const SizedBox(height: 24),
                   _buildBestSellerSection(state),
@@ -72,71 +75,79 @@ class _HomeScreenState extends State<HomeScreen> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       automaticallyImplyLeading: false,
-      title: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          children: [
-            SizedBox(
-              height: 50,
-              width: 100,
-              child: SvgPicture.asset(
-                Assets.assetsImagesFlowerIcon,
-                fit: BoxFit.contain,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: SizedBox(
-                height: 50,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: AppStrings.search,
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Icon(Icons.search),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+      titleSpacing: 8,
+      title: Row(
+        children: [
+          CircleAvatar(
+            radius: 12,
+            child: Image.asset(Assets.assetsImagesAppIcon, height: 15),
+          ),
+          const SizedBox(width: 4),
+          Text(AppStrings.appName, style: TextStyles.appNameTextStyle),
+          const SizedBox(width: 8),
+          Expanded(
+            child: TextFormField(
+              decoration: InputDecoration(
+                hintText: AppStrings.search,
+                constraints: const BoxConstraints(maxHeight: 40),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 8,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(22),
+                  borderSide: const BorderSide(color: AppColors.placeHolder),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(22),
+                  borderSide: const BorderSide(color: AppColors.pink),
+                ),
+                prefixIconConstraints: const BoxConstraints(maxHeight: 18),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: SvgPicture.asset(
+                    Assets.assetsIconsSearch,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.gray,
+                      BlendMode.srcIn,
                     ),
                   ),
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(32),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16, bottom: 8),
-          child: Row(
-            children: [
-              const Icon(
-                Icons.location_on_outlined,
-                color: AppColors.pink,
-                size: 16,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                AppStrings.deliverTo,
-                style: TextStyles.bodyRegular12.copyWith(color: AppColors.gray),
-              ),
-              const SizedBox(width: 4),
-              Text(
-                AppStrings.defaultAddress,
-                style: TextStyles.bodyRegular12.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.black,
-                ),
-              ),
-              const Icon(
-                Icons.keyboard_arrow_down,
-                color: AppColors.pink,
-                size: 16,
-              ),
-            ],
           ),
-        ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLocationWidget() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            Assets.assetsIconsLocationOn,
+            colorFilter: const ColorFilter.mode(
+              AppColors.black,
+              BlendMode.srcIn,
+            ),
+          ),
+          const SizedBox(width: 4),
+          Text(AppStrings.deliverTo, style: TextStyles.bodyRegular12),
+          const SizedBox(width: 4),
+          Text(
+            AppStrings.defaultAddress,
+            style: TextStyles.bodyRegular12.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const Icon(
+            Icons.keyboard_arrow_down,
+            color: AppColors.pink,
+            size: 32,
+          ),
+        ],
       ),
     );
   }
@@ -175,6 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
       height: 100,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: categories.length,
         separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (_, index) {
@@ -224,6 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
       height: 200,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: bestSellers.length,
         separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (_, index) {
@@ -278,6 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
       height: 200,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: occasions.length,
         separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (_, index) {

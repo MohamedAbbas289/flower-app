@@ -22,11 +22,11 @@ class AppDialog {
     bool barrierDismissible = true,
     bool buttonsVertical = false,
 
-    Color confirmButtonColor = Colors.black,
+    Color confirmButtonColor = AppColors.pink,
     Color cancelButtonColor = AppColors.red,
 
     Color confirmTextColor = AppColors.white,
-    Color cancelTextColor = Colors.white,
+    Color cancelTextColor = AppColors.white,
   }) {
     return showDialog(
       context: context,
@@ -174,7 +174,10 @@ class _DialogButton extends StatelessWidget {
           ),
         ),
 
-        child: Text(text, style: TextStyles.bodyRegular14),
+        child: Text(
+          text,
+          style: TextStyles.bodyRegular14.copyWith(color: textColor),
+        ),
       ),
     );
   }

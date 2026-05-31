@@ -17,25 +17,26 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(title, style: TextStyles.bodyRegular18),
-
-        const Spacer(),
-
-        InkWell(
-          onTap: onTap,
-          child: Text(
-            actionText,
-            style: TextStyles.bodyRegular12.copyWith(
-              fontWeight: FontWeight.w500,
-              color: AppColors.pink,
-              decoration: TextDecoration.underline,
-              decorationColor: AppColors.pink,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Text(title, style: TextStyles.bodyRegular18),
+          const Spacer(),
+          InkWell(
+            onTap: onTap,
+            child: Text(
+              actionText,
+              style: TextStyles.bodyRegular12.copyWith(
+                fontWeight: FontWeight.w500,
+                color: AppColors.pink,
+                decoration: TextDecoration.underline,
+                decorationColor: AppColors.pink,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
