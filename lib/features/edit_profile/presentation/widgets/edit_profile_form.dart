@@ -2,6 +2,7 @@ import 'package:flower_app/core/reusable_widgets/app_dialog.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/utils/validation/app_validations.dart';
+import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/edit_profile/api/request_models/edit_profile_request_model.dart';
 import 'package:flutter/material.dart';
@@ -212,26 +213,35 @@ class _EditProfileFormState extends State<EditProfileForm> {
   }
 
   Widget _buildPasswordField() {
-    return TextFormField(
-      enabled: false,
-      initialValue: '••••••',
-      style: TextStyles.bodyRegular14.copyWith(color: AppColors.black),
-      decoration: InputDecoration(
-        labelText: AppStrings.password,
-        disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4),
-          borderSide: const BorderSide(color: AppColors.gray, width: 1),
-        ),
-        suffixIcon: TextButton(
-          onPressed: () {
-            // TODO: Navigate to change password screen
-          },
-          child: Text(
-            AppStrings.change,
-            style: TextStyles.bodyRegular14.copyWith(color: AppColors.pink),
+    return Stack(
+      alignment: Alignment.centerRight,
+      children: [
+        TextFormField(
+          enabled: false,
+          initialValue: '••••••',
+          style: TextStyles.bodyRegular14.copyWith(color: AppColors.black),
+          decoration: InputDecoration(
+            labelText: AppStrings.password,
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4),
+              borderSide: const BorderSide(color: AppColors.gray, width: 1),
+            ),
+            suffixIcon: const SizedBox(width: 80),
           ),
         ),
-      ),
+        Positioned(
+          right: 8,
+          child: TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutesName.changePassword);
+            },
+            child: Text(
+              AppStrings.change,
+              style: TextStyles.bodyRegular14.copyWith(color: AppColors.pink),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
