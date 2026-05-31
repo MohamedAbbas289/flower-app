@@ -28,7 +28,7 @@ class GetProfileViewModel extends Cubit<GetProfileState> {
   }
 
   void _retryLoadGetProfileData() {
-    if (state.getProfileState.msg != null) _getProfile();
+    _getProfile();
   }
 
   Future<void> _getProfile() async {

@@ -14,18 +14,18 @@ import '../view_model/cubit/get_profile_view_model.dart';
 import '../view_model/states/get_profile_events.dart';
 
 class ProfileDetails extends StatelessWidget {
-  const ProfileDetails({super.key, required this.user});
-  final AuthResponseEntity? user;
+  const ProfileDetails({super.key, required this.authResponse});
+  final AuthResponseEntity? authResponse;
 
   @override
   Widget build(BuildContext context) {
-    final userData = user?.user;
+    final userData = authResponse?.user;
 
     return RefreshIndicator(
       color: AppColors.pink,
       onRefresh: () async {
         context.read<GetProfileViewModel>().doEvent(
-          const RetryLoadProfileDataEvent(),
+          const LoadProfileDataEvent(),
         );
       },
       child: SingleChildScrollView(
@@ -64,22 +64,28 @@ class ProfileDetails extends StatelessWidget {
                   (userData?.firstName ?? '').trim(),
                   style: TextStyles.bodyRegular18,
                 ),
-                const SizedBox(width: 4),
                 IconButton(
-                  onPressed: () =>
-                      Navigator.pushNamed(context, AppRoutesName.editProfile),
+                  onPressed: () async {
+                    final updatedData = await Navigator.pushNamed(
+                      context,
+                      AppRoutesName.editProfile,
+                      arguments: authResponse,
+                    );
+                    if (context.mounted && updatedData != null) {
+                      context.read<GetProfileViewModel>().doEvent(
+                        RetryLoadProfileDataEvent(),
+                      );
+                    }
+                  },
                   icon: SvgPicture.asset(Assets.assetsImagesPen),
                 ),
               ],
             ),
-
             Text(
               userData?.email ?? '',
               style: TextStyles.bodyRegular18.copyWith(color: AppColors.gray),
             ),
-
             const SizedBox(height: 32),
-
             Column(
               children: [
                 RowSection.arrow(
@@ -96,17 +102,14 @@ class ProfileDetails extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Divider(color: AppColors.gray, thickness: 1, height: 1),
-
             RowSection.toggle(
               title: AppStrings.notification,
               value: true,
               onTap: () {},
               onToggle: (value) {},
             ),
-
             const Divider(color: AppColors.gray, thickness: 1, height: 1),
             const SizedBox(height: 16),
-
             Column(
               children: [
                 RowSection.text(
@@ -145,15 +148,12 @@ class ProfileDetails extends StatelessWidget {
                 ),
               ],
             ),
-
             const Divider(color: AppColors.gray, thickness: 1, height: 32),
-
             RowSection.arrow(
               title: AppStrings.logout,
               iconPath: Assets.assetsIconsLogout,
               onTap: () {},
             ),
-
             const SizedBox(height: 16),
           ],
         ),

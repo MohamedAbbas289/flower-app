@@ -101,7 +101,7 @@ class _ProfileViewContent extends StatelessWidget {
             );
           }
 
-          return ProfileDetails(user: profileState.data);
+          return ProfileDetails(authResponse: profileState.data);
         },
       ),
     );

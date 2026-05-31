@@ -14,6 +14,7 @@ Welcome to Flowery 🌸
 Thank you for choosing Flowery 💐
 ''';
   static const String close = 'Close';
+  static const String cancel = 'cancel';
   static const String retry = 'Retry';
   static const deliverTo = 'Deliver to';
   static const String loadingMore = 'loadingMore';
@@ -29,8 +30,8 @@ Thank you for choosing Flowery 💐
       'Bloom with our exquisite best sellers';
   // labels
   static const String genderLabel = 'Gender';
-  static const String maleLabel = 'Male';
-  static const String femaleLabel = 'Female';
+  static const String male = 'Male';
+  static const String female = 'Female';
   // text fileds labels
   static const String firstNameLabel = 'First name';
   static const String lastNameLabel = 'Last name';
@@ -106,7 +107,8 @@ Thank you for choosing Flowery 💐
       'Bad certificate. Please check your connection and try again';
   static const String noInternetConnection =
       'No internet connection. Please check your connection and try again';
-  static const String cancel = 'Request canceled. Please try again later';
+  static const String requestCanceled =
+      'Request canceled. Please try again later';
   static const String unexpectedErrorOccurred =
       'An unexpected error occurred. Please try again later';
   static const String serverErrorOccurred =
@@ -198,7 +200,7 @@ Thank you for choosing Flowery 💐
   static const String passwordUpdated = 'Password Updated';
   static const String currentPassword = 'Current password';
   static const String changePassword = 'Change password';
-// profile screen
+  // profile screen
   static const String myOrders = 'My orders';
   static const String savedAddress = 'Saved address';
   static const String notification = 'Notification';
@@ -209,7 +211,21 @@ Thank you for choosing Flowery 💐
   static const String english = 'English';
   static const String editProfile = 'Edit Profile';
   static const String change = 'Change';
-  static const String profileUpdatedSuccessfully = 'Profile updated successfully';
+  static const String profileUpdatedSuccessfully =
+      'Profile updated successfully';
 
-
+  // edit profile screen
+  static const String doYouWantToEdit = 'Do you want to edit your';
+  static const String permissionDenied =
+      "Permission denied. Please allow access from settings.";
+  static const String editField = 'Edit Field';
+  static const String changePhoto = 'Change Photo';
+  static const String chooseImageSource = 'Choose image source';
+  static const String camera = 'Camera';
+  static const String gallery = 'Gallery';
+  static const String profileUpdated = 'Profile updated successfully';
+  static const String gender = 'Gender';
+  static const String firstName = 'First name';
+  static const String lastName = 'Last name';
+  static const String phoneNumber = 'Phone number';
 }

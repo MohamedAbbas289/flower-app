@@ -51,7 +51,7 @@ class ErrorHandler {
         return AppStrings.badCertificate;
 
       case DioExceptionType.cancel:
-        return AppStrings.cancel;
+        return AppStrings.requestCanceled;
 
       case DioExceptionType.connectionError:
         return AppStrings.noInternetConnection;

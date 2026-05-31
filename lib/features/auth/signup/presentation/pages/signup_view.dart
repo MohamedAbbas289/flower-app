@@ -450,9 +450,9 @@ class _GenderSection extends StatelessWidget {
             onChanged: onChanged,
             child: Row(
               children: const [
-                _GenderOption(label: AppStrings.femaleLabel, value: 'female'),
+                _GenderOption(label: AppStrings.female, value: 'female'),
                 SizedBox(width: 16),
-                _GenderOption(label: AppStrings.maleLabel, value: 'male'),
+                _GenderOption(label: AppStrings.male, value: 'male'),
               ],
             ),
           ),

@@ -19,7 +19,7 @@ abstract class AppRegex {
   static bool isValidPhoneNumber(String phone) {
     final cleaned = phone.replaceAll(RegExp(r'\s+'), '').trim();
 
-    final regex = RegExp(r'^01[0125][0-9]{8}$');
+    final regex = RegExp(r'^(\+20|0)1[0125][0-9]{8}$');
     return regex.hasMatch(cleaned);
   }
 
