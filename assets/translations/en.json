@@ -159,6 +159,6 @@
   "firstName": "First name",
   "lastName": "Last name",
   "phoneNumber": "Phone number",
-  "changeLanguage": "Change Language"
-
+  "changeLanguage": "Change Language",
+  "confirmLogout": "Confirm logout"
 }

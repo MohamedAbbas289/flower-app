@@ -4,6 +4,7 @@ import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/features/auth/logout/presentation/view_model/logout_view_model.dart';
 import 'package:flower_app/features/profile/presentation/view_model/cubit/profile_view_model.dart';
 import 'package:flower_app/features/profile/presentation/view_model/states/get_profile_events.dart';
 import 'package:flower_app/features/profile/presentation/view_model/states/get_profile_state.dart';
@@ -19,9 +20,14 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) =>
-          getIt<ProfileViewModel>()..doEvent(const LoadProfileDataEvent()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) =>
+              getIt<ProfileViewModel>()..doEvent(const LoadProfileDataEvent()),
+        ),
+        BlocProvider(create: (_) => getIt<LogoutViewModel>()),
+      ],
       child: const _ProfileViewContent(),
     );
   }

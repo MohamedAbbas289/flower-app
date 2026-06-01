@@ -159,5 +159,6 @@
   "firstName": "الاسم الأول",
   "lastName": "الاسم الأخير",
   "phoneNumber": "رقم الهاتف",
-  "changeLanguage": "تغيير اللغة"
+  "changeLanguage": "تغيير اللغة",
+  "confirmLogout": "تأكيد تسجيل الخروج"
 }

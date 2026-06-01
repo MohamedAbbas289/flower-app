@@ -32,7 +32,7 @@ class AppDialog {
       context: context,
       barrierDismissible: barrierDismissible,
 
-      builder: (_) {
+      builder: (context) {
         return Dialog(
           backgroundColor: AppColors.lightPink,
           insetPadding: const EdgeInsets.symmetric(horizontal: 24),

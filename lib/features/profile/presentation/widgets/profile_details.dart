@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
+import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/features/auth/logout/presentation/screens/logout_dialog.dart';
 import 'package:flower_app/features/profile/presentation/widgets/language_bottom_sheet.dart';
 import 'package:flower_app/features/profile/presentation/widgets/row_section.dart';
 import 'package:flower_app/features/profile/presentation/widgets/web_view_screen.dart';
@@ -32,6 +34,14 @@ class ProfileDetails extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            LogoutDialog(
+              onSuccess: () => Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutesName.login,
+                (route) => false,
+              ),
+              onError: (msg) => AppSnackBar.showError(context, msg),
+            ),
             const SizedBox(height: 16),
             BlocBuilder<ProfileViewModel, GetProfileState>(
               buildWhen: (previous, current) =>
@@ -53,8 +63,7 @@ class ProfileDetails extends StatelessWidget {
                             borderRadius: BorderRadius.circular(100),
                           ),
                           clipBehavior: Clip.antiAlias,
-                          child:
-                              userData?.photo != null &&
+                          child: userData?.photo != null &&
                                   userData!.photo!.isNotEmpty
                               ? Image.network(
                                   userData.photo!,
@@ -187,7 +196,7 @@ class ProfileDetails extends StatelessWidget {
             RowSection.arrow(
               title: AppStrings.logout,
               iconPath: Assets.assetsIconsLogout,
-              onTap: () {},
+              onTap: () => LogoutDialog.show(context: context),
             ),
             const SizedBox(height: 16),
           ],

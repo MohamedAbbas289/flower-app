@@ -229,8 +229,8 @@ class _EditProfileFormState extends State<EditProfileForm> {
             suffixIcon: const SizedBox(width: 80),
           ),
         ),
-        Positioned(
-          right: 8,
+        PositionedDirectional(
+          end: 8,
           child: TextButton(
             onPressed: () {
               Navigator.pushNamed(context, AppRoutesName.changePassword);
