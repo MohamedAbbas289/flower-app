@@ -32,7 +32,6 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const AppSectionView());
       case AppRoutesName.signUp:
         return MaterialPageRoute(builder: (_) => const SignupView());
-        
       case AppRoutesName.occasions:
         final occasionId = settings.arguments as String?;
         return MaterialPageRoute(
