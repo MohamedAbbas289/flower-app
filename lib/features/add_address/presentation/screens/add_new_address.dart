@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/values/app_strings.dart';
 import '../widgets/drop_down_item.dart';
+import '../widgets/map.dart';
 
 class AddNewAddress extends StatelessWidget {
    AddNewAddress({super.key});
@@ -27,6 +28,7 @@ class AddNewAddress extends StatelessWidget {
               Container(
                 height: size.height*.25,
                 color: Colors.pink,
+                child: MapSample(),
               ),
               TextFormField(
                 controller: addressController,
