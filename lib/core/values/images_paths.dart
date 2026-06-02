@@ -79,5 +79,8 @@ class Assets {
   static const String penIcon = "assets/images/pen.svg";
   static const String languageIcon = "assets/images/language.svg";
   static const String defaultProfileImage = "assets/images/default-profile.png";
+
+  static const String assetsLocations = "assets/icons/location1.svg";
+
 }
 
