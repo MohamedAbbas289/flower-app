@@ -175,4 +175,8 @@ abstract class AppStrings {
   static const String enterThePhoneNumber = 'Enter the phone number';
   static const String enterTheRecipientName = 'Enter the recipient name';
   static const String saveAddress  = 'Save address ';
+  static const String city  = 'City ';
+  static const String area  = 'Area ';
+
+
 }

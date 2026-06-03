@@ -4,7 +4,7 @@ import '../../domain/entities/address_entity.dart';
 
 part 'add_address_dto.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class AddAddressDto {
   @JsonKey(name: "street")
   String? street;
@@ -31,7 +31,8 @@ class AddAddressDto {
     this.id,
   });
 
-  factory AddAddressDto.fromJson(Map<String, dynamic> json) => _$AddAddressDtoFromJson(json);
+  factory AddAddressDto.fromJson(Map<String, dynamic> json) =>
+      _$AddAddressDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$AddAddressDtoToJson(this);
 
@@ -46,4 +47,4 @@ class AddAddressDto {
       id: id,
     );
   }
-  }
+}
