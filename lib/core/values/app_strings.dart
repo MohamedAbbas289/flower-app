@@ -169,4 +169,5 @@ abstract class AppStrings {
   static String productImageHeroTag(String id) => 'product-image-$id';
   static String get changeLanguage => 'changeLanguage'.tr();
   static String get confirmLogout => 'confirmLogout'.tr();
+  
 }
