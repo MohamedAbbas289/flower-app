@@ -169,24 +169,12 @@ abstract class AppStrings {
   static String productImageHeroTag(String id) => 'product-image-$id';
   static String get changeLanguage => 'changeLanguage'.tr();
   static String get confirmLogout => 'confirmLogout'.tr();
-  static const String address = 'Address';
-  static const String recipientName = 'Recipient name';
-  static const String enterTheAddress = 'Enter the address';
-  static const String enterThePhoneNumber = 'Enter the phone number';
-  static const String enterTheRecipientName = 'Enter the recipient name';
-  static const String saveAddress  = 'Save address ';
-  static const String city  = 'City ';
-  static const String area  = 'Area ';
-
-// address screen
-  static const String address = 'Address';
-  static const String recipientName = 'Recipient name';
-  static const String enterTheAddress = 'Enter the address';
-  static const String enterThePhoneNumber = 'Enter the phone number';
-  static const String enterTheRecipientName = 'Enter the recipient name';
-  static const String saveAddress  = 'Save address ';
-  static const String city  = 'City ';
-  static const String area  = 'Area ';
-
-
+  static String get address => 'address'.tr();
+  static String get recipientName => 'recipientName'.tr();
+  static String get enterTheAddress => 'Enter the address'.tr();
+  static String get enterThePhoneNumber => 'Enter the phone number'.tr();
+  static String get enterTheRecipientName => 'Enter the recipient name'.tr();
+  static String get saveAddress => 'Save address '.tr();
+  static String get city => 'City '.tr();
+  static String get area => 'Area '.tr();
 }

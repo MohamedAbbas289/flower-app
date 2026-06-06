@@ -160,5 +160,13 @@
   "lastName": "Last name",
   "phoneNumber": "Phone number",
   "changeLanguage": "Change Language",
-  "confirmLogout": "Confirm logout"
+  "confirmLogout": "Confirm logout",
+  "address": "Address",
+  "recipientName": "Recipient Name",
+  "enterTheAddress": "Enter the address",
+  "enterThePhoneNumber": "Enter the phone number",
+  "enterTheRecipientName": "Enter the recipient name",
+  "saveAddress": "Save Address",
+  "city": "City",
+  "area": "Area"
 }

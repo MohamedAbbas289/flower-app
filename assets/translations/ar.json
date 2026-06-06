@@ -160,5 +160,13 @@
   "lastName": "الاسم الأخير",
   "phoneNumber": "رقم الهاتف",
   "changeLanguage": "تغيير اللغة",
-  "confirmLogout": "تأكيد تسجيل الخروج"
+  "confirmLogout": "تأكيد تسجيل الخروج",
+  "address": "العنوان",
+  "recipientName": "اسم المستلم",
+  "enterTheAddress": "أدخل العنوان",
+  "enterThePhoneNumber": "أدخل رقم الهاتف",
+  "enterTheRecipientName": "أدخل اسم المستلم",
+  "saveAddress": "حفظ العنوان",
+  "city": "المدينة",
+  "area": "المنطقة"
 }
