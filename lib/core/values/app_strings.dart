@@ -178,5 +178,15 @@ abstract class AppStrings {
   static const String city  = 'City ';
   static const String area  = 'Area ';
 
+// address screen
+  static const String address = 'Address';
+  static const String recipientName = 'Recipient name';
+  static const String enterTheAddress = 'Enter the address';
+  static const String enterThePhoneNumber = 'Enter the phone number';
+  static const String enterTheRecipientName = 'Enter the recipient name';
+  static const String saveAddress  = 'Save address ';
+  static const String city  = 'City ';
+  static const String area  = 'Area ';
+
 
 }
