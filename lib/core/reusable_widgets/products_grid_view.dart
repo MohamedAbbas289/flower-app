@@ -33,6 +33,8 @@ class ProductsGridView extends StatefulWidget {
     super.key,
     required this.products,
     required this.onAddToCart,
+    required this.onRemoveFromCart,
+    required this.isInCart,
     required this.onCardClicked,
     required this.currentPage,
     required this.totalPages,
@@ -44,16 +46,14 @@ class ProductsGridView extends StatefulWidget {
   });
 
   final List<ProductCardData> products;
-  // ToDo: eng.Loay
   final String Function(String productId)? heroTagBuilder;
   final void Function(String productId) onAddToCart;
+  final void Function(String productId) onRemoveFromCart;
+  final bool Function(String productId) isInCart;
   final void Function(String productId) onCardClicked;
-
   final int currentPage;
   final int totalPages;
-
   final int paginationResetKey;
-
   final bool isLoading;
   final bool hasError;
   final VoidCallback? onLoadMore;
@@ -74,15 +74,11 @@ class _ProductsGridViewState extends State<ProductsGridView> {
 
   void _onScroll() {
     if (!_controller.hasClients) return;
-
     final position = _controller.position;
     final reachedEnd = position.pixels >= position.maxScrollExtent - 200;
     final hasMorePages = widget.currentPage < widget.totalPages;
-
     if (reachedEnd && hasMorePages && !_isLoadingMore && !widget.isLoading) {
-      setState(() {
-        _isLoadingMore = true;
-      });
+      setState(() => _isLoadingMore = true);
       widget.onLoadMore?.call();
     }
   }
@@ -90,13 +86,10 @@ class _ProductsGridViewState extends State<ProductsGridView> {
   @override
   void didUpdateWidget(covariant ProductsGridView oldWidget) {
     super.didUpdateWidget(oldWidget);
-
     final resetPagination =
         oldWidget.paginationResetKey != widget.paginationResetKey;
-
     final pageChanged = oldWidget.currentPage != widget.currentPage;
     final errorOccurred = !oldWidget.hasError && widget.hasError;
-
     if (resetPagination || pageChanged || errorOccurred) {
       _isLoadingMore = false;
     }
@@ -134,11 +127,13 @@ class _ProductsGridViewState extends State<ProductsGridView> {
         itemCount: itemCount,
         itemBuilder: (context, index) {
           if (widget.isLoading) {
-            return const ProductCardWidget(product: _FakeProduct());
+            return const ProductCardWidget(
+              product: _FakeProduct(),
+              isInCart: false,
+            );
           }
 
           final isPaginationLoader = index == widget.products.length;
-
           if (isPaginationLoader) {
             return const Center(
               child: Padding(
@@ -155,8 +150,9 @@ class _ProductsGridViewState extends State<ProductsGridView> {
             onTap: () => widget.onCardClicked(product.id),
             child: ProductCardWidget(
               product: product,
-              onAddToCart: () => widget.onAddToCart(product.id),
-              // ToDo: eng.Loay
+              isInCart: widget.isInCart(product.id),
+              onAddToCart: widget.onAddToCart,
+              onRemoveFromCart: widget.onRemoveFromCart,
               heroTag: widget.heroTagBuilder?.call(product.id),
             ),
           );

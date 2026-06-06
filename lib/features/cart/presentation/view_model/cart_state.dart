@@ -8,6 +8,7 @@ class CartState extends Equatable {
   final BaseState<CartEntity> updateQuantityState;
   final BaseState<CartEntity> removeItemState;
   final BaseState<void> clearCartState;
+  final Map<String, int> localQuantities;
 
   const CartState({
     this.cartState = const BaseState(),
@@ -15,6 +16,7 @@ class CartState extends Equatable {
     this.updateQuantityState = const BaseState(),
     this.removeItemState = const BaseState(),
     this.clearCartState = const BaseState(),
+    this.localQuantities = const {},
   });
 
   CartState copyWith({
@@ -23,6 +25,7 @@ class CartState extends Equatable {
     BaseState<CartEntity>? updateQuantityState,
     BaseState<CartEntity>? removeItemState,
     BaseState<void>? clearCartState,
+    Map<String, int>? localQuantities,
   }) {
     return CartState(
       cartState: cartState ?? this.cartState,
@@ -30,7 +33,12 @@ class CartState extends Equatable {
       updateQuantityState: updateQuantityState ?? this.updateQuantityState,
       removeItemState: removeItemState ?? this.removeItemState,
       clearCartState: clearCartState ?? this.clearCartState,
+      localQuantities: localQuantities ?? this.localQuantities,
     );
+  }
+
+  int getQuantity(String productId, int defaultQuantity) {
+    return localQuantities[productId] ?? defaultQuantity;
   }
 
   @override
@@ -40,5 +48,6 @@ class CartState extends Equatable {
         updateQuantityState,
         removeItemState,
         clearCartState,
+        localQuantities,
       ];
 }

@@ -21,6 +21,18 @@ class AddToCartEvent extends CartEvent {
   List<Object?> get props => [productId, quantity];
 }
 
+class UpdateLocalQuantityEvent extends CartEvent {
+  final String productId;
+  final int quantity;
+  const UpdateLocalQuantityEvent({
+    required this.productId,
+    required this.quantity,
+  });
+
+  @override
+  List<Object?> get props => [productId, quantity];
+}
+
 class UpdateQuantityEvent extends CartEvent {
   final String productId;
   final int quantity;
@@ -31,13 +43,13 @@ class UpdateQuantityEvent extends CartEvent {
   List<Object?> get props => [productId, quantity];
 }
 
-class RemoveCartItemEvent extends CartEvent {
-  final String itemId;
+class RemoveProductfromCart extends CartEvent {
+  final String productId;
 
-  const RemoveCartItemEvent({required this.itemId});
+  const RemoveProductfromCart({required this.productId});
 
   @override
-  List<Object?> get props => [itemId];
+  List<Object?> get props => [productId];
 }
 
 class ClearCartEvent extends CartEvent {

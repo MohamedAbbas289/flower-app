@@ -37,14 +37,9 @@ class CartRepoImpl implements CartRepoContract {
   }
 
   @override
-  Future<BaseResponse<CartEntity>> removeCartItem(String itemId) async {
-    final response = await _dataSource.removeCartItem(itemId);
+  Future<BaseResponse<CartEntity>> removeProductfromCart(String productId) async {
+    final response = await _dataSource.removeProductfromCart(productId);
     return _mapResponse(response);
-  }
-
-  @override
-  Future<BaseResponse<void>> clearCart() async {
-    return await _dataSource.clearCart();
   }
 
   BaseResponse<CartEntity> _mapResponse(

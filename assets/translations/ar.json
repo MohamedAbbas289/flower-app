@@ -160,5 +160,15 @@
   "lastName": "الاسم الأخير",
   "phoneNumber": "رقم الهاتف",
   "changeLanguage": "تغيير اللغة",
-  "confirmLogout": "تأكيد تسجيل الخروج"
+  "confirmLogout": "تأكيد تسجيل الخروج",
+  "items": "منتجات",
+  "cartEmpty": "سلتك فارغة",
+  "pleaseLoginToViewCart": "يرجى تسجيل الدخول لعرض سلتك",
+  "subTotal": "المجموع الفرعي",
+  "deliveryFee": "رسوم التوصيل",
+  "total": "الإجمالي",
+  "checkout": "إتمام الشراء",
+  "removeItem": "حذف المنتج",
+  "removeItemConfirmation": "هل أنت متأكد أنك تريد حذف هذا المنتج من سلتك؟",
+  "remove": "حذف"
 }

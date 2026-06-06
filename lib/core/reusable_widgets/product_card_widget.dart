@@ -11,13 +11,18 @@ class ProductCardWidget extends StatelessWidget {
   const ProductCardWidget({
     super.key,
     required this.product,
+    required this.isInCart,
     this.onAddToCart,
+    this.onRemoveFromCart,
     this.heroTag,
   });
 
   final ProductCardData product;
-  final VoidCallback? onAddToCart;
+  final bool isInCart;
+  final void Function(String productId)? onAddToCart;
+  final void Function(String productId)? onRemoveFromCart;
   final String? heroTag;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -27,7 +32,9 @@ class ProductCardWidget extends StatelessWidget {
       size: size,
       devicePixelRatio: devicePixelRatio,
       product: product,
+      isInCart: isInCart,
       onAddToCart: onAddToCart,
+      onRemoveFromCart: onRemoveFromCart,
       heroTag: heroTag,
     );
   }
@@ -38,12 +45,17 @@ class _ProductCardContent extends StatelessWidget {
     required this.product,
     required this.size,
     required this.devicePixelRatio,
+    required this.isInCart,
     this.onAddToCart,
+    this.onRemoveFromCart,
     this.heroTag,
   });
+
   final String? heroTag;
   final ProductCardData product;
-  final VoidCallback? onAddToCart;
+  final bool isInCart;
+  final void Function(String productId)? onAddToCart;
+  final void Function(String productId)? onRemoveFromCart;
   final Size size;
   final double devicePixelRatio;
 
@@ -75,7 +87,16 @@ class _ProductCardContent extends StatelessWidget {
             child: _ProductInfo(product: product, size: size),
           ),
           const SizedBox(height: 8),
-          _AddToCartButton(onPressed: onAddToCart, size: size),
+          _AddToCartButton(
+            size: size,
+            isInCart: isInCart,
+            onAddToCart: onAddToCart != null
+                ? () => onAddToCart!(product.id)
+                : null,
+            onRemoveFromCart: onRemoveFromCart != null
+                ? () => onRemoveFromCart!(product.id)
+                : null,
+          ),
         ],
       ),
     );
@@ -110,6 +131,7 @@ class _PriceRow extends StatelessWidget {
 
   final ProductCardData product;
   final Size size;
+
   @override
   Widget build(BuildContext context) {
     return FittedBox(
@@ -123,12 +145,10 @@ class _PriceRow extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-
           if (product.originalPrice != null &&
               product.discountPercent != null &&
               product.discountPercent! > 0) ...[
             const SizedBox(width: 6),
-
             Text(
               '${product.originalPrice}',
               style: TextStyles.bodyRegular12.copyWith(
@@ -137,9 +157,7 @@ class _PriceRow extends StatelessWidget {
                 decorationColor: AppColors.gray,
               ),
             ),
-
             const SizedBox(width: 4),
-
             Text(
               '${product.discountPercent}%',
               style: TextStyles.bodyRegular12.copyWith(
@@ -155,41 +173,56 @@ class _PriceRow extends StatelessWidget {
 }
 
 class _AddToCartButton extends StatelessWidget {
-  const _AddToCartButton({this.onPressed, required this.size});
+  const _AddToCartButton({
+    required this.size,
+    required this.isInCart,
+    this.onAddToCart,
+    this.onRemoveFromCart,
+  });
 
-  final VoidCallback? onPressed;
   final Size size;
+  final bool isInCart;
+  final VoidCallback? onAddToCart;
+  final VoidCallback? onRemoveFromCart;
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 30,
-      child: FilledButton(
-        onPressed: onPressed,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              Assets.assetsIconsShoppingCart,
-              height: 18,
-              width: 18,
-              colorFilter: const ColorFilter.mode(
-                AppColors.white,
-                BlendMode.srcIn,
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      child: SizedBox(
+        key: ValueKey(isInCart),
+        width: double.infinity,
+        height: 30,
+        child: FilledButton(
+          onPressed: isInCart ? onRemoveFromCart : onAddToCart,
+          style: FilledButton.styleFrom(
+            backgroundColor: isInCart ? AppColors.red : AppColors.pink,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                isInCart
+                    ? Assets.assetsIconsTrash
+                    : Assets.assetsIconsShoppingCart,
+                height: 18,
+                width: 18,
+                colorFilter: const ColorFilter.mode(
+                  AppColors.white,
+                  BlendMode.srcIn,
+                ),
               ),
-            ),
-
-            const SizedBox(width: 6),
-
-            Flexible(
-              child: Text(
-                AppStrings.addToCart,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyles.buttonTextStyle,
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  isInCart ? AppStrings.remove : AppStrings.addToCart,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyles.buttonTextStyle,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

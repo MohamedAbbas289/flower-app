@@ -47,22 +47,13 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSourceContract {
   }
 
   @override
-  Future<BaseResponse<CartResponseModel>> removeCartItem(String itemId) async {
+  Future<BaseResponse<CartResponseModel>> removeProductfromCart(String productId) async {
     try {
-      final response = await _cartApiClient.removeCartItem(itemId);
+      final response = await _cartApiClient.removeProductfromCart(productId);
       return SuccessBaseResponse(data: response);
     } catch (e) {
       return ErrorBaseResponse(exception: e);
     }
   }
 
-  @override
-  Future<BaseResponse<void>> clearCart() async {
-    try {
-      await _cartApiClient.clearCart();
-      return SuccessBaseResponse(data: null);
-    } catch (e) {
-      return ErrorBaseResponse(exception: e);
-    }
-  }
 }

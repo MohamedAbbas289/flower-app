@@ -4,6 +4,7 @@ import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/app_section/presentation/view/app_section_view.dart';
 import 'package:flower_app/features/best_seller/presentation/view/best_seller_view.dart';
+import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
 import 'package:flower_app/features/edit_profile/presentation/pages/edit_profile_view.dart';
 import 'package:flower_app/features/occasions/presentation/occasions_view_model/occasions_view_model.dart';
 import 'package:flower_app/features/occasions/presentation/pages/occasions_view.dart';
@@ -32,27 +33,38 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const AppSectionView());
       case AppRoutesName.signUp:
         return MaterialPageRoute(builder: (_) => const SignupView());
+
       case AppRoutesName.occasions:
         final occasionId = settings.arguments as String?;
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => getIt<OccasionsViewModel>(),
-            child: OccasionsView(initialOccasionId: occasionId),
+          builder: (_) => BlocProvider.value(
+            value: getIt<CartBloc>(),
+            child: BlocProvider(
+              create: (_) => getIt<OccasionsViewModel>(),
+              child: OccasionsView(initialOccasionId: occasionId),
+            ),
           ),
         );
 
       case AppRoutesName.productDetails:
         final productId = settings.arguments as String;
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => getIt<ProductDetailsCubit>(),
-            child: Builder(
-              builder: (context) => ProductDetailsView(productId: productId),
+          builder: (_) => BlocProvider.value(
+            value: getIt<CartBloc>(),
+            child: BlocProvider(
+              create: (_) => getIt<ProductDetailsCubit>(),
+              child: ProductDetailsView(productId: productId),
             ),
           ),
         );
+
       case AppRoutesName.bestSeller:
-        return MaterialPageRoute(builder: (_) => const BestSellerView());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: getIt<CartBloc>(),
+            child: const BestSellerView(),
+          ),
+        );
 
       case AppRoutesName.changePassword:
         return MaterialPageRoute(
@@ -61,11 +73,13 @@ class AppRoutes {
             child: Builder(builder: (context) => const ChangePasswordView()),
           ),
         );
+
       case AppRoutesName.editProfile:
         final authData = settings.arguments as AuthResponseEntity;
         return MaterialPageRoute(
           builder: (_) => EditProfileView(initialData: authData),
         );
+
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

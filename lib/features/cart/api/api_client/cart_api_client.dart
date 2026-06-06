@@ -10,7 +10,7 @@ part 'cart_api_client.g.dart';
 
 @lazySingleton
 @RestApi()
-abstract class CartApiClient {
+abstract interface class CartApiClient {
   @factoryMethod
   factory CartApiClient(Dio dio) = _CartApiClient;
   @GET(Endpoints.cart)
@@ -22,17 +22,16 @@ abstract class CartApiClient {
     @Field(ApiParam.quantity) int quantity,
   );
 
-  @PUT(Endpoints.updateCart)
+  @PUT(Endpoints.addOrEditOnCart)
   Future<CartResponseModel> updateQuantity(
     @Path(ApiParam.productId) String productId,
     @Field(ApiParam.quantity) int quantity,
   );
 
-  @DELETE(Endpoints.cartItem)
-  Future<CartResponseModel> removeCartItem(
-    @Path(ApiParam.itemId) String itemId,
+  @DELETE(Endpoints.addOrEditOnCart)
+  Future<CartResponseModel> removeProductfromCart(
+    @Path(ApiParam.productId) String productId,
   );
 
-  @DELETE(Endpoints.cart)
-  Future<void> clearCart();
+
 }

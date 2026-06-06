@@ -169,5 +169,14 @@ abstract class AppStrings {
   static String productImageHeroTag(String id) => 'product-image-$id';
   static String get changeLanguage => 'changeLanguage'.tr();
   static String get confirmLogout => 'confirmLogout'.tr();
-  
+  static String get items => 'items'.tr();
+  static String get cartEmpty => 'cartEmpty'.tr();
+  static String get pleaseLoginToViewCart => 'pleaseLoginToViewCart'.tr();
+  static String get subTotal => 'subTotal'.tr();
+  static String get deliveryFee => 'deliveryFee'.tr();
+  static String get total => 'total'.tr();
+  static String get checkout => 'checkout'.tr();
+  static String get removeItem => 'removeItem'.tr();
+  static String get removeItemConfirmation => 'removeItemConfirmation'.tr();
+  static String get remove => 'remove'.tr();
 }

@@ -5,6 +5,5 @@ abstract interface class CartRepoContract {
   Future<BaseResponse<CartEntity>> getCart();
   Future<BaseResponse<CartEntity>> addToCart(String productId, int quantity);
   Future<BaseResponse<CartEntity>> updateQuantity(String productId, int quantity);
-  Future<BaseResponse<CartEntity>> removeCartItem(String itemId);
-  Future<BaseResponse<void>> clearCart();
+  Future<BaseResponse<CartEntity>> removeProductfromCart(String productId);
 }

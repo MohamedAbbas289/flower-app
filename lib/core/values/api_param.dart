@@ -19,6 +19,5 @@ class ApiParam {
   static const String photo = "photo";
   static const String product = "product";
   static const String quantity = "quantity";
-  static const String itemId = "itemId";
   static const String productId = "productId";
 }

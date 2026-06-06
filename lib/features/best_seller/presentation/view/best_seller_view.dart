@@ -3,11 +3,14 @@ import 'package:flower_app/core/reusable_widgets/app_refresh_indicator.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/reusable_widgets/products_grid_view.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
+import 'package:flower_app/core/utils/cart_helpers.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/best_seller/presentation/view_model/best_seller_cubit.dart';
 import 'package:flower_app/features/best_seller/presentation/view_model/best_seller_event.dart';
 import 'package:flower_app/features/best_seller/presentation/view_model/best_seller_state.dart';
+import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
+import 'package:flower_app/features/cart/presentation/view_model/cart_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -71,21 +74,32 @@ class _BestSellerContentState extends State<_BestSellerContent> {
               return Center(child: Text(bs.msg!, textAlign: TextAlign.center));
             }
 
-            return ProductsGridView(
-              isLoading: bs.isLoading && (bs.data == null || bs.data!.isEmpty),
-              products: bs.data ?? [],
-              onAddToCart: (_) {},
-              onCardClicked: (productId) {
-                Navigator.of(
-                  context,
-                ).pushNamed(AppRoutesName.productDetails, arguments: productId);
+            return BlocBuilder<CartBloc, CartState>(
+              buildWhen: (prev, curr) => prev.cartState != curr.cartState,
+              builder: (context, cartState) {
+                return ProductsGridView(
+                  isLoading:
+                      bs.isLoading && (bs.data == null || bs.data!.isEmpty),
+                  products: bs.data ?? [],
+                  isInCart: (productId) =>
+                      CartHelpers.isInCart(context, productId),
+                  onAddToCart: (productId) =>
+                      CartHelpers.addToCart(context, productId),
+                  onRemoveFromCart: (productId) =>
+                      CartHelpers.removeFromCart(context, productId),
+                  onCardClicked: (productId) {
+                    Navigator.of(context).pushNamed(
+                      AppRoutesName.productDetails,
+                      arguments: productId,
+                    );
+                  },
+                  heroTagBuilder: (productId) =>
+                      AppStrings.productImageHeroTag(productId),
+                  currentPage: 1,
+                  totalPages: 1,
+                  paginationResetKey: 0,
+                );
               },
-              // ToDo: eng.Loay
-              heroTagBuilder: (productId) =>
-                  AppStrings.productImageHeroTag(productId),
-              currentPage: 1,
-              totalPages: 1,
-              paginationResetKey: 0,
             );
           },
         ),

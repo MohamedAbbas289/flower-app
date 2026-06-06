@@ -4,12 +4,12 @@ import 'package:flower_app/features/cart/domain/repo_contract/cart_repo_contract
 import 'package:injectable/injectable.dart';
 
 @injectable
-class RemoveCartItemUseCase {
+class RemoveProductFromCartUseCase {
   final CartRepoContract _cartRepoContract;
 
-  RemoveCartItemUseCase(this._cartRepoContract);
+  RemoveProductFromCartUseCase(this._cartRepoContract);
 
-  Future<BaseResponse<CartEntity>> call(String itemId) async {
-    return await _cartRepoContract.removeCartItem(itemId);
+  Future<BaseResponse<CartEntity>> call(String productId) async {
+    return await _cartRepoContract.removeProductfromCart(productId);
   }
 }
