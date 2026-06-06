@@ -174,7 +174,7 @@ abstract class AppStrings {
   static String get enterTheAddress => 'Enter the address'.tr();
   static String get enterThePhoneNumber => 'Enter the phone number'.tr();
   static String get enterTheRecipientName => 'Enter the recipient name'.tr();
-  static String get saveAddress => 'Save address '.tr();
-  static String get city => 'City '.tr();
-  static String get area => 'Area '.tr();
+  static String get saveAddress => 'Save address'.tr();
+  static String get city => 'City'.tr();
+  static String get area => 'Area'.tr();
 }
