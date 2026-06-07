@@ -2,8 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flower_app/core/values/api_param.dart';
 import 'package:flower_app/features/cart/data/models/cart_response_model.dart';
 import 'package:injectable/injectable.dart';
-import 'package:retrofit/error_logger.dart';
-import 'package:retrofit/http.dart';
+import 'package:retrofit/retrofit.dart';
 import '../../../../core/values/endpoints.dart';
 
 part 'cart_api_client.g.dart';

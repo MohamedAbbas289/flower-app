@@ -76,7 +76,7 @@ void main() {
         act: (cubit) => cubit.doEvent(UpdateProfileEvent(tRequest)),
         expect: () => [
           EditProfileState(updateProfileState: BaseState<AuthResponseEntity>.loading()),
-          EditProfileState(updateProfileState: BaseState<AuthResponseEntity>.error('Something went wrong. Please try again later')),
+          EditProfileState(updateProfileState: BaseState<AuthResponseEntity>.error('somethingWentWrong')),
         ],
       );
     });
@@ -106,7 +106,7 @@ void main() {
         act: (cubit) => cubit.doEvent(UploadPhotoEvent(tFile)),
         expect: () => [
           EditProfileState(uploadPhotoState: BaseState<void>.loading()),
-          EditProfileState(uploadPhotoState: BaseState<void>.error('Something went wrong. Please try again later')),
+          EditProfileState(uploadPhotoState: BaseState<void>.error('somethingWentWrong')),
         ],
       );
     });

@@ -17,6 +17,16 @@ void main() {
   late MockFetchBestSellerUseCase mockFetchBestSellerUseCase;
   late BestSellerCubit bestSellerCubit;
 
+  final tProduct = BestSellerProductEntity(
+    productId: "69d988754461df0f939b5817",
+    title: "Wdding Flower",
+    productPrice: 300,
+    priceAfterDiscount: 100,
+    discount: 60,
+    imgCover:
+        "https://flower.elevateegy.com/uploads/fefa790a-f0c1-42a0-8699-34e8fc065812-cover_image.png",
+  );
+
   setUpAll(() {
     provideDummy<BaseResponse<List<BestSellerProductEntity>>>(
       SuccessBaseResponse<List<BestSellerProductEntity>>(data: const []),
@@ -37,50 +47,19 @@ void main() {
 
     blocTest<BestSellerCubit, BestSellerState>(
       'should emit loading then success when fetch best sellers succeeds',
-
       build: () {
-        final product = BestSellerProductEntity(
-          productId: "69d988754461df0f939b5817",
-          title: "Wdding Flower",
-          productPrice: 300,
-          priceAfterDiscount: 100,
-          discount: 60,
-          imgCover:
-              "https://flower.elevateegy.com/uploads/fefa790a-f0c1-42a0-8699-34e8fc065812-cover_image.png",
+        when(mockFetchBestSellerUseCase.call()).thenAnswer(
+          (_) async => SuccessBaseResponse<List<BestSellerProductEntity>>(
+            data: [tProduct],
+          ),
         );
-
-        final successResponse =
-            SuccessBaseResponse<List<BestSellerProductEntity>>(data: [product]);
-
-        when(
-          mockFetchBestSellerUseCase.call(),
-        ).thenAnswer((_) async => successResponse);
-
         return bestSellerCubit;
       },
-
-      act: (cubit) {
-        cubit.doEvent(FetchBestSellerProductsEvent());
-      },
-
+      act: (cubit) => cubit.doEvent(FetchBestSellerProductsEvent()),
       expect: () => [
         BestSellerState(bestSellerState: BaseState.loading()),
-
-        BestSellerState(
-          bestSellerState: BaseState.success([
-            BestSellerProductEntity(
-              productId: "69d988754461df0f939b5817",
-              title: "Wdding Flower",
-              productPrice: 300,
-              priceAfterDiscount: 100,
-              discount: 60,
-              imgCover:
-                  "https://flower.elevateegy.com/uploads/fefa790a-f0c1-42a0-8699-34e8fc065812-cover_image.png",
-            ),
-          ]),
-        ),
+        BestSellerState(bestSellerState: BaseState.success([tProduct])),
       ],
-
       verify: (_) {
         verify(mockFetchBestSellerUseCase.call()).called(1);
         verifyNoMoreInteractions(mockFetchBestSellerUseCase);
@@ -89,77 +68,36 @@ void main() {
 
     blocTest<BestSellerCubit, BestSellerState>(
       'should emit loading then error when fetch best sellers fails',
-
       build: () {
-        final errorResponse = ErrorBaseResponse<List<BestSellerProductEntity>>(
-          exception: Exception('network error'),
+        when(mockFetchBestSellerUseCase.call()).thenAnswer(
+          (_) async => ErrorBaseResponse<List<BestSellerProductEntity>>(
+            exception: Exception('network error'),
+          ),
         );
-
-        when(
-          mockFetchBestSellerUseCase.call(),
-        ).thenAnswer((_) async => errorResponse);
-
         return bestSellerCubit;
       },
-
-      act: (cubit) {
-        cubit.doEvent(FetchBestSellerProductsEvent());
-      },
-
+      act: (cubit) => cubit.doEvent(FetchBestSellerProductsEvent()),
       expect: () => [
         BestSellerState(bestSellerState: BaseState.loading()),
-        BestSellerState(
-          bestSellerState: BaseState.error(
-            'Something went wrong. Please try again later',
-          ),
-        ),
+        BestSellerState(bestSellerState: BaseState.error('somethingWentWrong')),
       ],
     );
 
     blocTest<BestSellerCubit, BestSellerState>(
       'RefreshBestSellerEvent emits loading then success same as fetch',
-
       build: () {
-        final product = BestSellerProductEntity(
-          productId: "69d988754461df0f939b5817",
-          title: "Wdding Flower",
-          productPrice: 300,
-          priceAfterDiscount: 100,
-          discount: 60,
-          imgCover:
-              "https://flower.elevateegy.com/uploads/fefa790a-f0c1-42a0-8699-34e8fc065812-cover_image.png",
-        );
-
         when(mockFetchBestSellerUseCase.call()).thenAnswer(
           (_) async => SuccessBaseResponse<List<BestSellerProductEntity>>(
-            data: [product],
+            data: [tProduct],
           ),
         );
-
         return bestSellerCubit;
       },
-
-      act: (cubit) {
-        cubit.doEvent(RefreshBestSellerEvent());
-      },
-
+      act: (cubit) => cubit.doEvent(RefreshBestSellerEvent()),
       expect: () => [
         BestSellerState(bestSellerState: BaseState.loading()),
-        BestSellerState(
-          bestSellerState: BaseState.success([
-            BestSellerProductEntity(
-              productId: "69d988754461df0f939b5817",
-              title: "Wdding Flower",
-              productPrice: 300,
-              priceAfterDiscount: 100,
-              discount: 60,
-              imgCover:
-                  "https://flower.elevateegy.com/uploads/fefa790a-f0c1-42a0-8699-34e8fc065812-cover_image.png",
-            ),
-          ]),
-        ),
+        BestSellerState(bestSellerState: BaseState.success([tProduct])),
       ],
-
       verify: (_) {
         verify(mockFetchBestSellerUseCase.call()).called(1);
       },

@@ -1,0 +1,66 @@
+import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/features/cart/domain/entities/cart_entity.dart';
+import 'package:flower_app/features/cart/domain/repo_contract/cart_repo_contract.dart';
+import 'package:flower_app/features/cart/domain/use_cases/update_quantity_use_case.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+
+import 'update_quantity_use_case_test.mocks.dart';
+
+@GenerateMocks([CartRepoContract])
+void main() {
+  late MockCartRepoContract mockCartRepoContract;
+  late UpdateQuantityUseCase useCase;
+
+  const tProductId = 'product_123';
+  const tQuantity = 3;
+
+  const tCartEntity = CartEntity(
+    id: 'cart_1',
+    cartItems: [],
+    totalPrice: 100,
+    totalPriceAfterDiscount: 90,
+    discount: 10,
+    numOfCartItems: 0,
+  );
+
+  setUp(() {
+    mockCartRepoContract = MockCartRepoContract();
+    useCase = UpdateQuantityUseCase(mockCartRepoContract);
+    provideDummy<BaseResponse<CartEntity>>(
+      SuccessBaseResponse(data: tCartEntity),
+    );
+  });
+
+  test('returns SuccessBaseResponse with CartEntity on success', () async {
+    when(
+      mockCartRepoContract.updateQuantity(tProductId, tQuantity),
+    ).thenAnswer((_) async => SuccessBaseResponse(data: tCartEntity));
+
+    final result = await useCase(tProductId, tQuantity);
+
+    expect(result, isA<SuccessBaseResponse<CartEntity>>());
+    expect((result as SuccessBaseResponse).data, tCartEntity);
+    verify(
+      mockCartRepoContract.updateQuantity(tProductId, tQuantity),
+    ).called(1);
+    verifyNoMoreInteractions(mockCartRepoContract);
+  });
+
+  test('returns ErrorBaseResponse when repo returns error', () async {
+    final tException = Exception('Update quantity failed');
+    when(
+      mockCartRepoContract.updateQuantity(tProductId, tQuantity),
+    ).thenAnswer((_) async => ErrorBaseResponse(exception: tException));
+
+    final result = await useCase(tProductId, tQuantity);
+
+    expect(result, isA<ErrorBaseResponse<CartEntity>>());
+    expect((result as ErrorBaseResponse).exception, tException);
+    verify(
+      mockCartRepoContract.updateQuantity(tProductId, tQuantity),
+    ).called(1);
+    verifyNoMoreInteractions(mockCartRepoContract);
+  });
+}
