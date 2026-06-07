@@ -5,6 +5,7 @@ import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/app_section/presentation/view/app_section_view.dart';
 import 'package:flower_app/features/best_seller/presentation/view/best_seller_view.dart';
 import 'package:flower_app/features/edit_profile/presentation/pages/edit_profile_view.dart';
+import 'package:flower_app/features/notifications/presentation/view/notifications_view.dart';
 import 'package:flower_app/features/occasions/presentation/occasions_view_model/occasions_view_model.dart';
 import 'package:flower_app/features/occasions/presentation/pages/occasions_view.dart';
 import 'package:flower_app/features/change_password/presentation/pages/change_password_view.dart';
@@ -66,11 +67,12 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => EditProfileView(initialData: authData),
         );
+      case AppRoutesName.notifications:
+        return MaterialPageRoute(builder: (_) => const NotificationsView());
       default:
         return MaterialPageRoute(
-          builder: (_) => Scaffold(
-            body: Center(child: Text(AppStrings.routeNotFound)),
-          ),
+          builder: (_) =>
+              Scaffold(body: Center(child: Text(AppStrings.routeNotFound))),
         );
     }
   }

@@ -160,5 +160,6 @@
   "lastName": "الاسم الأخير",
   "phoneNumber": "رقم الهاتف",
   "changeLanguage": "تغيير اللغة",
-  "confirmLogout": "تأكيد تسجيل الخروج"
+  "confirmLogout": "تأكيد تسجيل الخروج",
+  "noNotificationsFound": "لا توجد إشعارات"
 }

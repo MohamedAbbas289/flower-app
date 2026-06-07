@@ -160,5 +160,6 @@
   "lastName": "Last name",
   "phoneNumber": "Phone number",
   "changeLanguage": "Change Language",
-  "confirmLogout": "Confirm logout"
+  "confirmLogout": "Confirm logout",
+  "noNotificationsFound": "No notifications found"
 }

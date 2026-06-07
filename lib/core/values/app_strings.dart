@@ -169,4 +169,7 @@ abstract class AppStrings {
   static String productImageHeroTag(String id) => 'product-image-$id';
   static String get changeLanguage => 'changeLanguage'.tr();
   static String get confirmLogout => 'confirmLogout'.tr();
+  static String get noNotifications => 'No Notifications'.tr();
+  static String get noNotificationsFound => "No notifications found".tr();
+  static String get notifications => 'notifications'.tr();
 }
