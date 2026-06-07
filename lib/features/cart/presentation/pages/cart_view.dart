@@ -227,6 +227,7 @@ class _CartItemCard extends StatelessWidget {
       confirmText: AppStrings.remove,
       cancelText: AppStrings.cancel,
       confirmButtonColor: AppColors.red,
+      cancelButtonColor: AppColors.pink,
       onConfirm: () => context.read<CartBloc>().add(
         RemoveProductfromCart(productId: item.product.id),
       ),
