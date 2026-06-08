@@ -82,11 +82,11 @@ class _BestSellerContentState extends State<_BestSellerContent> {
                       bs.isLoading && (bs.data == null || bs.data!.isEmpty),
                   products: bs.data ?? [],
                   isInCart: (productId) =>
-                      CartHelpers.isInCart(context, productId),
+                      getIt<CartHelpers>().isInCart(context, productId),
                   onAddToCart: (productId) =>
-                      CartHelpers.addToCart(context, productId),
+                      getIt<CartHelpers>().addToCart(context, productId),
                   onRemoveFromCart: (productId) =>
-                      CartHelpers.removeFromCart(context, productId),
+                      getIt<CartHelpers>().removeFromCart(context, productId),
                   onCardClicked: (productId) {
                     Navigator.of(context).pushNamed(
                       AppRoutesName.productDetails,

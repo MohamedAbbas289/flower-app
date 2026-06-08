@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
+import 'package:flower_app/features/cart/api/request_models/cart_request_model.dart';
 import 'package:flower_app/features/cart/domain/entities/cart_entity.dart';
 import 'package:flower_app/features/cart/domain/use_cases/add_to_cart_use_case.dart';
 import 'package:flower_app/features/cart/domain/use_cases/get_cart_use_case.dart';
@@ -27,8 +28,8 @@ void main() {
   late MockUpdateQuantityUseCase mockUpdateQuantityUseCase;
   late MockRemoveProductFromCartUseCase mockRemoveProductFromCartUseCase;
 
-  const tProductId = 'product_123';
-  const tQuantity = 2;
+  const tRequestModel = CartRequestModel(productId: 'product_123', quantity: 2);
+
   const tErrorMessage = 'somethingWentWrong';
 
   const tCartEntity = CartEntity(
@@ -95,11 +96,11 @@ void main() {
       build: buildBloc,
       setUp: () {
         when(
-          mockAddToCartUseCase(tProductId, tQuantity),
+          mockAddToCartUseCase(tRequestModel),
         ).thenAnswer((_) async => SuccessBaseResponse(data: tCartEntity));
       },
       act: (bloc) =>
-          bloc.add(AddToCartEvent(productId: tProductId, quantity: tQuantity)),
+          bloc.add(AddToCartEvent(requestModel: tRequestModel)),
       expect: () => [
         CartState(addToCartState: BaseState.loading()),
         CartState(
@@ -113,12 +114,12 @@ void main() {
       'emits loading then error when use case returns error',
       build: buildBloc,
       setUp: () {
-        when(mockAddToCartUseCase(tProductId, tQuantity)).thenAnswer(
+        when(mockAddToCartUseCase(tRequestModel)).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception(tErrorMessage)),
         );
       },
       act: (bloc) =>
-          bloc.add(AddToCartEvent(productId: tProductId, quantity: tQuantity)),
+          bloc.add(AddToCartEvent(requestModel: tRequestModel)),
       expect: () => [
         CartState(addToCartState: BaseState.loading()),
         CartState(addToCartState: BaseState.error(tErrorMessage)),
@@ -131,10 +132,10 @@ void main() {
       'emits state with updated localQuantities',
       build: buildBloc,
       act: (bloc) => bloc.add(
-        UpdateLocalQuantityEvent(productId: tProductId, quantity: tQuantity),
+        UpdateLocalQuantityEvent(requestModel: tRequestModel),
       ),
       expect: () => [
-        CartState(localQuantities: {tProductId: tQuantity}),
+        CartState(localQuantities: {tRequestModel.productId: tRequestModel.quantity}),
       ],
     );
   });
@@ -145,11 +146,11 @@ void main() {
       build: buildBloc,
       setUp: () {
         when(
-          mockUpdateQuantityUseCase(tProductId, tQuantity),
+          mockUpdateQuantityUseCase(tRequestModel),
         ).thenAnswer((_) async => SuccessBaseResponse(data: tCartEntity));
       },
       act: (bloc) => bloc.add(
-        UpdateQuantityEvent(productId: tProductId, quantity: tQuantity),
+        UpdateQuantityEvent(requestModel: tRequestModel),
       ),
       wait: const Duration(milliseconds: 600),
       expect: () => [
@@ -165,12 +166,12 @@ void main() {
       'emits error and clears localQuantities when use case returns error',
       build: buildBloc,
       setUp: () {
-        when(mockUpdateQuantityUseCase(tProductId, tQuantity)).thenAnswer(
+        when(mockUpdateQuantityUseCase(tRequestModel)).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception(tErrorMessage)),
         );
       },
       act: (bloc) => bloc.add(
-        UpdateQuantityEvent(productId: tProductId, quantity: tQuantity),
+        UpdateQuantityEvent(requestModel: tRequestModel),
       ),
       wait: const Duration(milliseconds: 600),
       expect: () => [
@@ -188,10 +189,10 @@ void main() {
       build: buildBloc,
       setUp: () {
         when(
-          mockRemoveProductFromCartUseCase(tProductId),
+          mockRemoveProductFromCartUseCase(tRequestModel.productId),
         ).thenAnswer((_) async => SuccessBaseResponse(data: tCartEntity));
       },
-      act: (bloc) => bloc.add(RemoveProductfromCart(productId: tProductId)),
+      act: (bloc) => bloc.add(RemoveProductfromCartEvent(productId: tRequestModel.productId)),
       expect: () => [
         CartState(removeItemState: BaseState.loading()),
         CartState(
@@ -205,11 +206,11 @@ void main() {
       'emits loading then error when use case returns error',
       build: buildBloc,
       setUp: () {
-        when(mockRemoveProductFromCartUseCase(tProductId)).thenAnswer(
+        when(mockRemoveProductFromCartUseCase(tRequestModel.productId)).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception(tErrorMessage)),
         );
       },
-      act: (bloc) => bloc.add(RemoveProductfromCart(productId: tProductId)),
+      act: (bloc) => bloc.add(RemoveProductfromCartEvent(productId: tRequestModel.productId)),
       expect: () => [
         CartState(removeItemState: BaseState.loading()),
         CartState(removeItemState: BaseState.error(tErrorMessage)),

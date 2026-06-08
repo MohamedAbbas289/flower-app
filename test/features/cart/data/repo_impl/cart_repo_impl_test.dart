@@ -1,4 +1,5 @@
 import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/features/cart/api/request_models/cart_request_model.dart';
 import 'package:flower_app/features/cart/data/data_source_contract/cart_remote_data_source_contract.dart';
 import 'package:flower_app/features/cart/data/models/cart_model.dart';
 import 'package:flower_app/features/cart/data/models/cart_response_model.dart';
@@ -14,9 +15,8 @@ import 'cart_repo_impl_test.mocks.dart';
 void main() {
   late MockCartRemoteDataSourceContract mockDataSource;
   late CartRepoImpl repo;
-
+  const tRequestModel = CartRequestModel(productId: 'product_123', quantity: 2);
   const tProductId = 'product_123';
-  const tQuantity = 2;
 
   const tCartEntity = CartEntity(
     id: 'cart_1',
@@ -57,33 +57,42 @@ void main() {
   });
 
   group('getCart', () {
-    test('returns SuccessBaseResponse with CartEntity when cart is not null', () async {
-      when(mockDataSource.getCart())
-          .thenAnswer((_) async => SuccessBaseResponse(data: tCartResponseWithData));
+    test(
+      'returns SuccessBaseResponse with CartEntity when cart is not null',
+      () async {
+        when(mockDataSource.getCart()).thenAnswer(
+          (_) async => SuccessBaseResponse(data: tCartResponseWithData),
+        );
 
-      final result = await repo.getCart();
+        final result = await repo.getCart();
 
-      expect(result, isA<SuccessBaseResponse<CartEntity>>());
-      expect((result as SuccessBaseResponse).data, tCartEntity);
-      verify(mockDataSource.getCart()).called(1);
-      verifyNoMoreInteractions(mockDataSource);
-    });
+        expect(result, isA<SuccessBaseResponse<CartEntity>>());
+        expect((result as SuccessBaseResponse).data, tCartEntity);
+        verify(mockDataSource.getCart()).called(1);
+        verifyNoMoreInteractions(mockDataSource);
+      },
+    );
 
-    test('returns SuccessBaseResponse with empty CartEntity when cart is null', () async {
-      when(mockDataSource.getCart())
-          .thenAnswer((_) async => SuccessBaseResponse(data: tCartResponseNullCart));
+    test(
+      'returns SuccessBaseResponse with empty CartEntity when cart is null',
+      () async {
+        when(mockDataSource.getCart()).thenAnswer(
+          (_) async => SuccessBaseResponse(data: tCartResponseNullCart),
+        );
 
-      final result = await repo.getCart();
+        final result = await repo.getCart();
 
-      expect(result, isA<SuccessBaseResponse<CartEntity>>());
-      expect((result as SuccessBaseResponse).data, tEmptyCartEntity);
-      verify(mockDataSource.getCart()).called(1);
-      verifyNoMoreInteractions(mockDataSource);
-    });
+        expect(result, isA<SuccessBaseResponse<CartEntity>>());
+        expect((result as SuccessBaseResponse).data, tEmptyCartEntity);
+        verify(mockDataSource.getCart()).called(1);
+        verifyNoMoreInteractions(mockDataSource);
+      },
+    );
 
     test('returns ErrorBaseResponse when data source returns error', () async {
-      when(mockDataSource.getCart())
-          .thenAnswer((_) async => ErrorBaseResponse(exception: tException));
+      when(
+        mockDataSource.getCart(),
+      ).thenAnswer((_) async => ErrorBaseResponse(exception: tException));
 
       final result = await repo.getCart();
 
@@ -95,109 +104,135 @@ void main() {
   });
 
   group('addToCart', () {
-    test('returns SuccessBaseResponse with CartEntity when cart is not null', () async {
-      when(mockDataSource.addToCart(tProductId, tQuantity))
-          .thenAnswer((_) async => SuccessBaseResponse(data: tCartResponseWithData));
+    test(
+      'returns SuccessBaseResponse with CartEntity when cart is not null',
+      () async {
+        when(mockDataSource.addToCart(tRequestModel)).thenAnswer(
+          (_) async => SuccessBaseResponse(data: tCartResponseWithData),
+        );
 
-      final result = await repo.addToCart(tProductId, tQuantity);
+        final result = await repo.addToCart(tRequestModel);
+        expect(result, isA<SuccessBaseResponse<CartEntity>>());
+        expect((result as SuccessBaseResponse).data, tCartEntity);
+        verify(mockDataSource.addToCart(tRequestModel)).called(1);
+        verifyNoMoreInteractions(mockDataSource);
+      },
+    );
 
-      expect(result, isA<SuccessBaseResponse<CartEntity>>());
-      expect((result as SuccessBaseResponse).data, tCartEntity);
-      verify(mockDataSource.addToCart(tProductId, tQuantity)).called(1);
-      verifyNoMoreInteractions(mockDataSource);
-    });
+    test(
+      'returns SuccessBaseResponse with empty CartEntity when cart is null',
+      () async {
+        when(mockDataSource.addToCart(tRequestModel)).thenAnswer(
+          (_) async => SuccessBaseResponse(data: tCartResponseNullCart),
+        );
 
-    test('returns SuccessBaseResponse with empty CartEntity when cart is null', () async {
-      when(mockDataSource.addToCart(tProductId, tQuantity))
-          .thenAnswer((_) async => SuccessBaseResponse(data: tCartResponseNullCart));
+        final result = await repo.addToCart(tRequestModel);
 
-      final result = await repo.addToCart(tProductId, tQuantity);
-
-      expect(result, isA<SuccessBaseResponse<CartEntity>>());
-      expect((result as SuccessBaseResponse).data, tEmptyCartEntity);
-      verify(mockDataSource.addToCart(tProductId, tQuantity)).called(1);
-      verifyNoMoreInteractions(mockDataSource);
-    });
+        expect(result, isA<SuccessBaseResponse<CartEntity>>());
+        expect((result as SuccessBaseResponse).data, tEmptyCartEntity);
+        verify(mockDataSource.addToCart(tRequestModel)).called(1);
+        verifyNoMoreInteractions(mockDataSource);
+      },
+    );
 
     test('returns ErrorBaseResponse when data source returns error', () async {
-      when(mockDataSource.addToCart(tProductId, tQuantity))
-          .thenAnswer((_) async => ErrorBaseResponse(exception: tException));
+      when(
+        mockDataSource.addToCart(tRequestModel),
+      ).thenAnswer((_) async => ErrorBaseResponse(exception: tException));
 
-      final result = await repo.addToCart(tProductId, tQuantity);
+      final result = await repo.addToCart(tRequestModel);
 
       expect(result, isA<ErrorBaseResponse<CartEntity>>());
       expect((result as ErrorBaseResponse).exception, tException);
-      verify(mockDataSource.addToCart(tProductId, tQuantity)).called(1);
+      verify(mockDataSource.addToCart(tRequestModel)).called(1);
       verifyNoMoreInteractions(mockDataSource);
     });
   });
 
   group('updateQuantity', () {
-    test('returns SuccessBaseResponse with CartEntity when cart is not null', () async {
-      when(mockDataSource.updateQuantity(tProductId, tQuantity))
-          .thenAnswer((_) async => SuccessBaseResponse(data: tCartResponseWithData));
+    test(
+      'returns SuccessBaseResponse with CartEntity when cart is not null',
+      () async {
+        when(mockDataSource.updateQuantity(tRequestModel)).thenAnswer(
+          (_) async => SuccessBaseResponse(data: tCartResponseWithData),
+        );
 
-      final result = await repo.updateQuantity(tProductId, tQuantity);
+        final result = await repo.updateQuantity(tRequestModel);
 
-      expect(result, isA<SuccessBaseResponse<CartEntity>>());
-      expect((result as SuccessBaseResponse).data, tCartEntity);
-      verify(mockDataSource.updateQuantity(tProductId, tQuantity)).called(1);
-      verifyNoMoreInteractions(mockDataSource);
-    });
+        expect(result, isA<SuccessBaseResponse<CartEntity>>());
+        expect((result as SuccessBaseResponse).data, tCartEntity);
+        verify(mockDataSource.updateQuantity(tRequestModel)).called(1);
+        verifyNoMoreInteractions(mockDataSource);
+      },
+    );
 
-    test('returns SuccessBaseResponse with empty CartEntity when cart is null', () async {
-      when(mockDataSource.updateQuantity(tProductId, tQuantity))
-          .thenAnswer((_) async => SuccessBaseResponse(data: tCartResponseNullCart));
+    test(
+      'returns SuccessBaseResponse with empty CartEntity when cart is null',
+      () async {
+        when(mockDataSource.updateQuantity(tRequestModel)).thenAnswer(
+          (_) async => SuccessBaseResponse(data: tCartResponseNullCart),
+        );
 
-      final result = await repo.updateQuantity(tProductId, tQuantity);
+        final result = await repo.updateQuantity(tRequestModel);
 
-      expect(result, isA<SuccessBaseResponse<CartEntity>>());
-      expect((result as SuccessBaseResponse).data, tEmptyCartEntity);
-      verify(mockDataSource.updateQuantity(tProductId, tQuantity)).called(1);
-      verifyNoMoreInteractions(mockDataSource);
-    });
+        expect(result, isA<SuccessBaseResponse<CartEntity>>());
+        expect((result as SuccessBaseResponse).data, tEmptyCartEntity);
+        verify(mockDataSource.updateQuantity(tRequestModel)).called(1);
+        verifyNoMoreInteractions(mockDataSource);
+      },
+    );
 
     test('returns ErrorBaseResponse when data source returns error', () async {
-      when(mockDataSource.updateQuantity(tProductId, tQuantity))
-          .thenAnswer((_) async => ErrorBaseResponse(exception: tException));
+      when(
+        mockDataSource.updateQuantity(tRequestModel),
+      ).thenAnswer((_) async => ErrorBaseResponse(exception: tException));
 
-      final result = await repo.updateQuantity(tProductId, tQuantity);
+      final result = await repo.updateQuantity(tRequestModel);
 
       expect(result, isA<ErrorBaseResponse<CartEntity>>());
       expect((result as ErrorBaseResponse).exception, tException);
-      verify(mockDataSource.updateQuantity(tProductId, tQuantity)).called(1);
+      verify(mockDataSource.updateQuantity(tRequestModel)).called(1);
       verifyNoMoreInteractions(mockDataSource);
     });
   });
 
   group('removeProductfromCart', () {
-    test('returns SuccessBaseResponse with CartEntity when cart is not null', () async {
-      when(mockDataSource.removeProductfromCart(tProductId))
-          .thenAnswer((_) async => SuccessBaseResponse(data: tCartResponseWithData));
+    test(
+      'returns SuccessBaseResponse with CartEntity when cart is not null',
+      () async {
+        when(mockDataSource.removeProductfromCart(tProductId)).thenAnswer(
+          (_) async => SuccessBaseResponse(data: tCartResponseWithData),
+        );
 
-      final result = await repo.removeProductfromCart(tProductId);
+        final result = await repo.removeProductfromCart(tProductId);
 
-      expect(result, isA<SuccessBaseResponse<CartEntity>>());
-      expect((result as SuccessBaseResponse).data, tCartEntity);
-      verify(mockDataSource.removeProductfromCart(tProductId)).called(1);
-      verifyNoMoreInteractions(mockDataSource);
-    });
+        expect(result, isA<SuccessBaseResponse<CartEntity>>());
+        expect((result as SuccessBaseResponse).data, tCartEntity);
+        verify(mockDataSource.removeProductfromCart(tProductId)).called(1);
+        verifyNoMoreInteractions(mockDataSource);
+      },
+    );
 
-    test('returns SuccessBaseResponse with empty CartEntity when cart is null', () async {
-      when(mockDataSource.removeProductfromCart(tProductId))
-          .thenAnswer((_) async => SuccessBaseResponse(data: tCartResponseNullCart));
+    test(
+      'returns SuccessBaseResponse with empty CartEntity when cart is null',
+      () async {
+        when(mockDataSource.removeProductfromCart(tProductId)).thenAnswer(
+          (_) async => SuccessBaseResponse(data: tCartResponseNullCart),
+        );
 
-      final result = await repo.removeProductfromCart(tProductId);
+        final result = await repo.removeProductfromCart(tProductId);
 
-      expect(result, isA<SuccessBaseResponse<CartEntity>>());
-      expect((result as SuccessBaseResponse).data, tEmptyCartEntity);
-      verify(mockDataSource.removeProductfromCart(tProductId)).called(1);
-      verifyNoMoreInteractions(mockDataSource);
-    });
+        expect(result, isA<SuccessBaseResponse<CartEntity>>());
+        expect((result as SuccessBaseResponse).data, tEmptyCartEntity);
+        verify(mockDataSource.removeProductfromCart(tProductId)).called(1);
+        verifyNoMoreInteractions(mockDataSource);
+      },
+    );
 
     test('returns ErrorBaseResponse when data source returns error', () async {
-      when(mockDataSource.removeProductfromCart(tProductId))
-          .thenAnswer((_) async => ErrorBaseResponse(exception: tException));
+      when(
+        mockDataSource.removeProductfromCart(tProductId),
+      ).thenAnswer((_) async => ErrorBaseResponse(exception: tException));
 
       final result = await repo.removeProductfromCart(tProductId);
 

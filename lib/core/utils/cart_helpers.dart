@@ -1,23 +1,28 @@
+import 'package:flower_app/features/cart/api/request_models/cart_request_model.dart';
 import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
 import 'package:flower_app/features/cart/presentation/view_model/cart_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 
+@lazySingleton
 class CartHelpers {
-  static bool isInCart(BuildContext context, String productId) {
+  bool isInCart(BuildContext context, String productId) {
     return context.read<CartBloc>().state.cartState.data?.cartItems.any(
           (item) => item.product.id == productId,
         ) ??
         false;
   }
 
-  static void addToCart(BuildContext context, String productId) {
+  void addToCart(BuildContext context, String productId) {
     context.read<CartBloc>().add(
-      AddToCartEvent(productId: productId, quantity: 1),
+      AddToCartEvent(
+        requestModel: CartRequestModel(productId: productId, quantity: 1),
+      ),
     );
   }
 
-  static void removeFromCart(BuildContext context, String productId) {
+  void removeFromCart(BuildContext context, String productId) {
     final item = context
         .read<CartBloc>()
         .state
@@ -28,7 +33,7 @@ class CartHelpers {
 
     if (item != null) {
       context.read<CartBloc>().add(
-        RemoveProductfromCart(productId: item.product.id),
+        RemoveProductfromCartEvent(productId: item.product.id),
       );
     }
   }

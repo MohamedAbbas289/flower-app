@@ -1,3 +1,4 @@
+import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/reusable_widgets/app_refresh_indicator.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/reusable_widgets/app_tab_bar_widget.dart';
@@ -195,15 +196,16 @@ class _OccasionsBody extends StatelessWidget {
       builder: (context, cartState) {
         return ProductsGridView(
           products: products,
-          isInCart: (productId) => CartHelpers.isInCart(context, productId),
-          onAddToCart: (productId) => CartHelpers.addToCart(context, productId),
+          isInCart: (productId) =>
+              getIt<CartHelpers>().isInCart(context, productId),
+          onAddToCart: (productId) =>
+              getIt<CartHelpers>().addToCart(context, productId),
           onRemoveFromCart: (productId) =>
-              CartHelpers.removeFromCart(context, productId),
+              getIt<CartHelpers>().removeFromCart(context, productId),
           onCardClicked: (productId) {
-            Navigator.of(context).pushNamed(
-              AppRoutesName.productDetails,
-              arguments: productId,
-            );
+            Navigator.of(
+              context,
+            ).pushNamed(AppRoutesName.productDetails, arguments: productId);
           },
           heroTagBuilder: (productId) =>
               AppStrings.productImageHeroTag(productId),

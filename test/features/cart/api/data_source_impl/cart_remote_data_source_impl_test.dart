@@ -1,6 +1,7 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/cart/api/api_client/cart_api_client.dart';
 import 'package:flower_app/features/cart/api/data_source_impl/cart_remote_data_source_impl.dart';
+import 'package:flower_app/features/cart/api/request_models/cart_request_model.dart';
 import 'package:flower_app/features/cart/data/models/cart_response_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -15,8 +16,10 @@ void main() {
 
   final tCartResponseModel = CartResponseModel();
 
+  const tRequestModel = CartRequestModel(productId: 'product_123', quantity: 2);
+
   const tProductId = 'product_123';
-  const tQuantity = 2;
+
 
   setUp(() {
     mockCartApiClient = MockCartApiClient();
@@ -53,27 +56,27 @@ void main() {
   group('addToCart', () {
     test('returns SuccessBaseResponse with CartResponseModel on success',
         () async {
-      when(mockCartApiClient.addToCart(tProductId, tQuantity))
+      when(mockCartApiClient.addToCart(tRequestModel.productId, tRequestModel.quantity))
           .thenAnswer((_) async => tCartResponseModel);
 
-      final result = await dataSource.addToCart(tProductId, tQuantity);
+      final result = await dataSource.addToCart(tRequestModel);
 
       expect(result, isA<SuccessBaseResponse<CartResponseModel>>());
       expect((result as SuccessBaseResponse).data, tCartResponseModel);
-      verify(mockCartApiClient.addToCart(tProductId, tQuantity)).called(1);
+      verify(mockCartApiClient.addToCart(tRequestModel.productId, tRequestModel.quantity)).called(1);
       verifyNoMoreInteractions(mockCartApiClient);
     });
 
     test('returns ErrorBaseResponse when api throws an exception', () async {
       final tException = Exception('Add to cart failed');
-      when(mockCartApiClient.addToCart(tProductId, tQuantity))
+      when(mockCartApiClient.addToCart(tRequestModel.productId, tRequestModel.quantity))
           .thenThrow(tException);
 
-      final result = await dataSource.addToCart(tProductId, tQuantity);
+      final result = await dataSource.addToCart(tRequestModel);
 
       expect(result, isA<ErrorBaseResponse<CartResponseModel>>());
       expect((result as ErrorBaseResponse).exception, tException);
-      verify(mockCartApiClient.addToCart(tProductId, tQuantity)).called(1);
+      verify(mockCartApiClient.addToCart(tRequestModel.productId, tRequestModel.quantity)).called(1);
       verifyNoMoreInteractions(mockCartApiClient);
     });
   });
@@ -81,27 +84,27 @@ void main() {
   group('updateQuantity', () {
     test('returns SuccessBaseResponse with CartResponseModel on success',
         () async {
-      when(mockCartApiClient.updateQuantity(tProductId, tQuantity))
+      when(mockCartApiClient.updateQuantity(tRequestModel.productId, tRequestModel.quantity))
           .thenAnswer((_) async => tCartResponseModel);
 
-      final result = await dataSource.updateQuantity(tProductId, tQuantity);
+      final result = await dataSource.updateQuantity(tRequestModel);
 
       expect(result, isA<SuccessBaseResponse<CartResponseModel>>());
       expect((result as SuccessBaseResponse).data, tCartResponseModel);
-      verify(mockCartApiClient.updateQuantity(tProductId, tQuantity)).called(1);
+      verify(mockCartApiClient.updateQuantity(tRequestModel.productId, tRequestModel.quantity)).called(1);
       verifyNoMoreInteractions(mockCartApiClient);
     });
 
     test('returns ErrorBaseResponse when api throws an exception', () async {
       final tException = Exception('Update failed');
-      when(mockCartApiClient.updateQuantity(tProductId, tQuantity))
+      when(mockCartApiClient.updateQuantity(tRequestModel.productId, tRequestModel.quantity))
           .thenThrow(tException);
 
-      final result = await dataSource.updateQuantity(tProductId, tQuantity);
+      final result = await dataSource.updateQuantity(tRequestModel);
 
       expect(result, isA<ErrorBaseResponse<CartResponseModel>>());
       expect((result as ErrorBaseResponse).exception, tException);
-      verify(mockCartApiClient.updateQuantity(tProductId, tQuantity)).called(1);
+      verify(mockCartApiClient.updateQuantity(tRequestModel.productId, tRequestModel.quantity)).called(1);
       verifyNoMoreInteractions(mockCartApiClient);
     });
   });

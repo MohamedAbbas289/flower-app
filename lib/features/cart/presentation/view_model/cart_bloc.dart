@@ -28,21 +28,21 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<AddToCartEvent>(_onAddToCart);
     on<UpdateLocalQuantityEvent>((event, emit) {
       final updated = Map<String, int>.from(state.localQuantities);
-      updated[event.productId] = event.quantity;
+      updated[event.requestModel.productId] = event.requestModel.quantity;
       emit(state.copyWith(localQuantities: updated));
     });
 
     on<UpdateQuantityEvent>(
       _onUpdateQuantity,
       transformer: (events, mapper) => events
-          .groupBy((e) => e.productId)
+          .groupBy((e) => e.requestModel.productId)
           .flatMap(
             (group) => group
                 .debounceTime(const Duration(milliseconds: 500))
                 .switchMap(mapper),
           ),
     );
-    on<RemoveProductfromCart>(_onRemoveProductfromCart);
+    on<RemoveProductfromCartEvent>(_onRemoveProductfromCart);
   }
 
   Future<void> _onLoadCart(LoadCartEvent event, Emitter<CartState> emit) async {
@@ -61,7 +61,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     Emitter<CartState> emit,
   ) async {
     emit(state.copyWith(addToCartState: BaseState.loading()));
-    final response = await _addToCartUseCase(event.productId, event.quantity);
+    final response = await _addToCartUseCase(event.requestModel);
     switch (response) {
       case SuccessBaseResponse<CartEntity>():
         emit(
@@ -79,14 +79,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     }
   }
 
- Future<void> _onUpdateQuantity(
+  Future<void> _onUpdateQuantity(
     UpdateQuantityEvent event,
     Emitter<CartState> emit,
   ) async {
-    final response = await _updateQuantityUseCase(
-      event.productId,
-      event.quantity,
-    );
+    final response = await _updateQuantityUseCase(event.requestModel);
     switch (response) {
       case SuccessBaseResponse<CartEntity>():
         emit(
@@ -105,8 +102,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         );
     }
   }
+
   Future<void> _onRemoveProductfromCart(
-    RemoveProductfromCart event,
+    RemoveProductfromCartEvent event,
     Emitter<CartState> emit,
   ) async {
     emit(state.copyWith(removeItemState: BaseState.loading()));

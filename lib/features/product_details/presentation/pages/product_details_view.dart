@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
@@ -338,10 +339,13 @@ class _AddToCartButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CartBloc, CartState>(
-      buildWhen: (prev, curr) => prev.cartState != curr.cartState,
-      builder: (context, state) {
-        final isInCart = CartHelpers.isInCart(context, productId);
+    return BlocSelector<CartBloc, CartState, bool>(
+      selector: (state) =>
+          state.cartState.data?.cartItems.any(
+            (item) => item.product.id == productId,
+          ) ??
+          false,
+      builder: (context, isInCart) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: SizedBox(
@@ -356,9 +360,9 @@ class _AddToCartButton extends StatelessWidget {
                 ),
                 onPressed: () {
                   if (isInCart) {
-                    CartHelpers.removeFromCart(context, productId);
+                    getIt<CartHelpers>().removeFromCart(context, productId);
                   } else {
-                    CartHelpers.addToCart(context, productId);
+                    getIt<CartHelpers>().addToCart(context, productId);
                   }
                 },
                 child: Row(

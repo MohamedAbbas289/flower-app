@@ -7,6 +7,7 @@ import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
+import 'package:flower_app/features/cart/api/request_models/cart_request_model.dart';
 import 'package:flower_app/features/cart/domain/entities/cart_entity.dart';
 import 'package:flower_app/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
@@ -229,7 +230,7 @@ class _CartItemCard extends StatelessWidget {
       confirmButtonColor: AppColors.red,
       cancelButtonColor: AppColors.pink,
       onConfirm: () => context.read<CartBloc>().add(
-        RemoveProductfromCart(productId: item.product.id),
+        RemoveProductfromCartEvent(productId: item.product.id),
       ),
     );
   }
@@ -329,11 +330,11 @@ class _QuantityControl extends StatelessWidget {
       confirmButtonColor: AppColors.red,
       cancelButtonColor: AppColors.pink,
       onConfirm: () => context.read<CartBloc>().add(
-        RemoveProductfromCart(productId: item.product.id),
+        RemoveProductfromCartEvent(productId: item.product.id),
       ),
       onCancel: () => context.read<CartBloc>()
-        ..add(UpdateLocalQuantityEvent(productId: item.product.id, quantity: 1))
-        ..add(UpdateQuantityEvent(productId: item.product.id, quantity: 1)),
+        ..add(UpdateLocalQuantityEvent(requestModel: CartRequestModel(productId: item.product.id, quantity: 1)))
+        ..add(UpdateQuantityEvent(requestModel: CartRequestModel(productId: item.product.id, quantity: 1))),
     );
   }
 
@@ -356,14 +357,18 @@ class _QuantityControl extends StatelessWidget {
                   context.read<CartBloc>()
                     ..add(
                       UpdateLocalQuantityEvent(
-                        productId: item.product.id,
-                        quantity: quantity - 1,
+                        requestModel: CartRequestModel(
+                          productId: item.product.id,
+                          quantity: quantity - 1,
+                        ),
                       ),
                     )
                     ..add(
                       UpdateQuantityEvent(
-                        productId: item.product.id,
-                        quantity: quantity - 1,
+                        requestModel: CartRequestModel(
+                          productId: item.product.id,
+                          quantity: quantity - 1,
+                        ),
                       ),
                     );
                 }
@@ -383,14 +388,18 @@ class _QuantityControl extends StatelessWidget {
               onPressed: () => context.read<CartBloc>()
                 ..add(
                   UpdateLocalQuantityEvent(
-                    productId: item.product.id,
-                    quantity: quantity + 1,
+                    requestModel: CartRequestModel(
+                      productId: item.product.id,
+                      quantity: quantity + 1,
+                    ),
                   ),
                 )
                 ..add(
                   UpdateQuantityEvent(
-                    productId: item.product.id,
-                    quantity: quantity + 1,
+                    requestModel: CartRequestModel(
+                      productId: item.product.id,
+                      quantity: quantity + 1,
+                    ),
                   ),
                 ),
             ),

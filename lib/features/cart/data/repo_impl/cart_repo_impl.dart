@@ -1,4 +1,5 @@
 import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/features/cart/api/request_models/cart_request_model.dart';
 import 'package:flower_app/features/cart/data/data_source_contract/cart_remote_data_source_contract.dart';
 import 'package:flower_app/features/cart/data/models/cart_model.dart';
 import 'package:flower_app/features/cart/data/models/cart_response_model.dart';
@@ -20,24 +21,24 @@ class CartRepoImpl implements CartRepoContract {
 
   @override
   Future<BaseResponse<CartEntity>> addToCart(
-    String productId,
-    int quantity,
+    CartRequestModel requestModel,
   ) async {
-    final response = await _dataSource.addToCart(productId, quantity);
+    final response = await _dataSource.addToCart(requestModel);
     return _mapResponse(response);
   }
 
   @override
   Future<BaseResponse<CartEntity>> updateQuantity(
-    String productId,
-    int quantity,
+    CartRequestModel requestModel,
   ) async {
-    final response = await _dataSource.updateQuantity(productId, quantity);
+    final response = await _dataSource.updateQuantity(requestModel);
     return _mapResponse(response);
   }
 
   @override
-  Future<BaseResponse<CartEntity>> removeProductfromCart(String productId) async {
+  Future<BaseResponse<CartEntity>> removeProductfromCart(
+    String productId,
+  ) async {
     final response = await _dataSource.removeProductfromCart(productId);
     return _mapResponse(response);
   }

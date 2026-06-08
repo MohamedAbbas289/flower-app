@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flower_app/features/cart/api/request_models/cart_request_model.dart';
 
 sealed class CartEvent extends Equatable {
   const CartEvent();
@@ -12,41 +13,36 @@ class LoadCartEvent extends CartEvent {
 }
 
 class AddToCartEvent extends CartEvent {
-  final String productId;
-  final int quantity;
+  final CartRequestModel requestModel;
 
-  const AddToCartEvent({required this.productId, required this.quantity});
+  const AddToCartEvent({required this.requestModel});
 
   @override
-  List<Object?> get props => [productId, quantity];
+  List<Object?> get props => [requestModel];
 }
 
 class UpdateLocalQuantityEvent extends CartEvent {
-  final String productId;
-  final int quantity;
-  const UpdateLocalQuantityEvent({
-    required this.productId,
-    required this.quantity,
-  });
+  final CartRequestModel requestModel;
+
+  const UpdateLocalQuantityEvent({required this.requestModel});
 
   @override
-  List<Object?> get props => [productId, quantity];
+  List<Object?> get props => [requestModel];
 }
 
 class UpdateQuantityEvent extends CartEvent {
-  final String productId;
-  final int quantity;
+  final CartRequestModel requestModel;
 
-  const UpdateQuantityEvent({required this.productId, required this.quantity});
+  const UpdateQuantityEvent({required this.requestModel});
 
   @override
-  List<Object?> get props => [productId, quantity];
+  List<Object?> get props => [requestModel];
 }
 
-class RemoveProductfromCart extends CartEvent {
+class RemoveProductfromCartEvent extends CartEvent {
   final String productId;
 
-  const RemoveProductfromCart({required this.productId});
+  const RemoveProductfromCartEvent({required this.productId});
 
   @override
   List<Object?> get props => [productId];
