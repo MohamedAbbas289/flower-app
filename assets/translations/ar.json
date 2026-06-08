@@ -171,4 +171,11 @@
   "removeItem": "حذف المنتج",
   "removeItemConfirmation": "هل أنت متأكد أنك تريد حذف هذا المنتج من سلتك؟",
   "remove": "حذف"
+  "confirmLogout": "تأكيد تسجيل الخروج",
+  "activeOrders": "نشطة",
+  "completedOrders": "مكتملة",
+  "trackOrder": "تتبع الطلب",
+  "reorder": "إعادة الطلب",
+  "noActiveOrders": "لا توجد طلبات نشطة",
+  "noCompletedOrders": "لا توجد طلبات مكتملة"
 }

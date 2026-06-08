@@ -25,4 +25,5 @@ abstract class Endpoints {
 static const String cart = '$baseUrl/cart';
 static const String addOrEditOnCart = '$baseUrl/cart/{productId}';
 
+  static const String getOrders = '$baseUrl/orders';
 }

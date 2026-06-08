@@ -170,5 +170,11 @@
   "checkout": "Checkout",
   "removeItem": "Remove Item",
   "removeItemConfirmation": "Are you sure you want to remove this item from your cart?",
-  "remove": "Remove"
+  "remove": "Remove",
+  "activeOrders": "Active",
+  "completedOrders": "Completed",
+  "trackOrder": "Track order",
+  "reorder": "Reorder",
+  "noActiveOrders": "No active orders",
+  "noCompletedOrders": "No completed orders"
 }

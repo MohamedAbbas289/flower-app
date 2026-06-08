@@ -10,6 +10,7 @@ import 'package:flower_app/features/profile/presentation/widgets/web_view_screen
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/values/endpoints.dart';
@@ -127,7 +128,8 @@ class ProfileDetails extends StatelessWidget {
                 RowSection.arrow(
                   title: AppStrings.myOrders,
                   iconPath: Assets.assetsIconsOrder,
-                  onTap: () {},
+                  onTap: () =>
+                      Navigator.pushNamed(context, AppRoutesName.orders),
                 ),
                 RowSection.arrow(
                   title: AppStrings.savedAddress,
