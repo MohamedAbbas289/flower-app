@@ -90,6 +90,8 @@ class Assets {
 
   static const String assetsImagesPen = "assets/images/pen.svg";
 
+  static const String assetsTranslationsAr = "assets/translations/ar.json";
 
+  static const String assetsTranslationsEn = "assets/translations/en.json";
 }
 
