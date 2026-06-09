@@ -23,6 +23,7 @@ abstract class CategoriesApiClient {
   @GET(Endpoints.getProducts)
   Future<ProductsResponse> getProductsByCategory({
     @Query('category') String? categoryId,
+    @Query('sort') String? sort,
     @Query('page') int? page,
     @Query('limit') int? limit,
   });

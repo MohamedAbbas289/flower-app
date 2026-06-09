@@ -10,6 +10,7 @@ abstract interface class CategoriesRepository {
 
   Future<BaseResponse<ProductsResponseEntity>> getProductsByCategory({
     String? categoryId,
+    String? sort,
     int? page,
     int? limit,
   });

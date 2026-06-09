@@ -6,6 +6,7 @@ import 'package:flower_app/core/reusable_widgets/app_tab_bar_widget.dart';
 import 'package:flower_app/core/reusable_widgets/products_grid_view.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
+import 'package:flower_app/core/utils/cart_helpers.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
@@ -15,7 +16,6 @@ import 'package:flower_app/features/categories/presentation/view/categories_filt
 import 'package:flower_app/features/categories/presentation/view_model/categories_events.dart';
 import 'package:flower_app/features/categories/presentation/view_model/categories_states.dart';
 import 'package:flower_app/features/categories/presentation/view_model/categories_view_model.dart';
-import 'package:flower_app/core/utils/cart_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,11 +32,15 @@ class _CategoriesViewState extends State<CategoriesView> {
   bool _showFab = true;
 
   void _openFilter() {
+    final vm = context.read<CategoriesViewModel>();
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (_) => const CategoriesFilterBottomSheet(),
+      builder: (_) => BlocProvider.value(
+        value: vm,
+        child: const CategoriesFilterBottomSheet(),
+      ),
     );
   }
 

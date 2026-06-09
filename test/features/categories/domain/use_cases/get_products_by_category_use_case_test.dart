@@ -42,6 +42,7 @@ void main() {
 
         when(mockCategoriesRepository.getProductsByCategory(
           categoryId: "123",
+          sort: null,
           page: 1,
           limit: 10,
         )).thenAnswer((_) async => successResponse);
@@ -58,6 +59,7 @@ void main() {
         expect(success.data.products.first.id, "1");
         verify(mockCategoriesRepository.getProductsByCategory(
           categoryId: "123",
+          sort: null,
           page: 1,
           limit: 10,
         )).called(1);
@@ -75,6 +77,7 @@ void main() {
 
         when(mockCategoriesRepository.getProductsByCategory(
           categoryId: '123',
+          sort: null,
           page: 1,
           limit: 10,
         )).thenAnswer((_) async => errorResponse);
@@ -90,6 +93,7 @@ void main() {
         expect(error.exception, exception);
         verify(mockCategoriesRepository.getProductsByCategory(
           categoryId: '123',
+          sort: null,
           page: 1,
           limit: 10,
         )).called(1);
