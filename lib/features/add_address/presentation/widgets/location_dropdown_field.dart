@@ -61,7 +61,7 @@ class LocationDropdownField extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
       isExpanded: true,
-      value: value,
+      initialValue: value,
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         labelText: label,
