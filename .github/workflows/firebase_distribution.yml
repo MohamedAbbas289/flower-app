@@ -53,3 +53,4 @@ jobs:
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           groups: Flower-App-Testers
           file: build/app/outputs/flutter-apk/app-release.apk
+          debug: true
