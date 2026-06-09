@@ -35,6 +35,12 @@ jobs:
           FIREBASE_OPTIONS: ${{ secrets.FIREBASE_OPTIONS }}
         run: echo "$FIREBASE_OPTIONS" > lib/firebase_options.dart
 
+      - name: Create secrets.properties
+        run: echo "MAPS_API_KEY=${{ secrets.MAPS_API_KEY }}" > android/secrets.properties
+
+      - name: Create secrets.xcconfig
+        run: echo "MAPS_API_KEY=${{ secrets.MAPS_API_KEY }}" > ios/Flutter/secrets.xcconfig
+
       - name: Install dependencies
         run: flutter pub get
 
