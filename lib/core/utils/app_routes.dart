@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flower_app/features/product_details/presentation/pages/product_details_view.dart';
 import 'package:flower_app/features/product_details/presentation/view_model/product_details_cubit.dart';
+import '../../features/add_address/presentation/screens/add_new_address.dart';
 import '../../features/auth/forget-password/presentation/flow/forget_password_routes.dart';
 import '../../features/auth/login/presentation/screens/login_screen.dart';
 import '../../features/auth/signup/presentation/pages/signup_view.dart';
@@ -34,6 +35,8 @@ class AppRoutes {
       case AppRoutesName.signUp:
         return MaterialPageRoute(builder: (_) => const SignupView());
 
+      case AppRoutesName.addresses:
+        return MaterialPageRoute(builder: (_) =>  AddNewAddress());
       case AppRoutesName.occasions:
         final occasionId = settings.arguments as String?;
         return MaterialPageRoute(

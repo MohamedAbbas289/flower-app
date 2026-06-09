@@ -179,4 +179,15 @@ abstract class AppStrings {
   static String get removeItem => 'removeItem'.tr();
   static String get removeItemConfirmation => 'removeItemConfirmation'.tr();
   static String get remove => 'remove'.tr();
+  static String get address => 'address'.tr();
+  static String get addressMissingOrNull => 'addressMissingOrNull'.tr();
+  static String get recipientName => 'recipientName'.tr();
+  static String get enterTheAddress => 'EnterTheAddress'.tr();
+  static String get enterThePhoneNumber => 'EnterThePhoneNumber'.tr();
+  static String get enterTheRecipientName => 'EnterTheRecipientName'.tr();
+  static String get cityRequired => 'CityRequired'.tr();
+  static String get areaRequired => 'AreaRequired'.tr();
+  static String get saveAddress => 'SaveAddress'.tr();
+  static String get city => 'City'.tr();
+  static String get area => 'Area'.tr();
 }

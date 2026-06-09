@@ -1,0 +1,73 @@
+
+import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/features/add_address/data/models/add_address_dto.dart';
+import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
+import 'package:flower_app/features/add_address/domain/repositories/add_address_repo_contract.dart';
+import 'package:flower_app/features/add_address/domain/use_cases/add_address_use_cases.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+
+import 'add_address_use_cases_test.mocks.dart';
+
+@GenerateMocks([AddAddressRepoContract])
+void main () {
+  late MockAddAddressRepoContract addAddressRepoContract;
+  late AddAddressUseCases addAddressUseCases;
+
+  final request = AddAddressDto(
+    street: 'Ahmed',
+    phone: '0102419753',
+    city: 'cairo',
+    lat: '30.08525452318584',
+    long: '31.282610287469513',
+    username: 'ahmed',
+  );
+  setUpAll(() {
+    provideDummy<BaseResponse<List<AddressEntity>>>(
+      SuccessBaseResponse<List<AddressEntity>>(data: [AddressEntity()]),
+    );
+    provideDummy<BaseResponse<List<AddressEntity>>>(
+      ErrorBaseResponse<List<AddressEntity>>(exception: Exception()),
+    );
+  });
+  setUp(() {
+    addAddressRepoContract = MockAddAddressRepoContract();
+    addAddressUseCases = AddAddressUseCases(addAddressRepoContract);
+  });
+
+  group('AddAddressUseCases', () {
+    test('returns success response when repository succeeds', () async {
+      final response = SuccessBaseResponse<List<AddressEntity>>(
+          data: [AddressEntity()]);
+      when(
+        addAddressRepoContract.addNewAddress(request: request),
+      ).thenAnswer((_) async => response);
+      final result = await addAddressUseCases(request);
+      expect(result, isA<SuccessBaseResponse<List<AddressEntity>>>());
+      expect((result as SuccessBaseResponse<List<AddressEntity>>).data,
+          [AddressEntity()]);
+      verify(addAddressRepoContract.addNewAddress(request: request)).called(1);
+      verifyNoMoreInteractions(addAddressRepoContract);
+    });
+    test('returns error response when repository fails', () async {
+      final exception = Exception();
+      final response = ErrorBaseResponse<List<AddressEntity>>(
+          exception: exception);
+      when(
+        addAddressRepoContract.addNewAddress(request: request),
+      ).thenAnswer((_) async => response);
+      final result = await addAddressUseCases(request);
+      expect(result, isA<ErrorBaseResponse<List<AddressEntity>>>());
+      expect((result as ErrorBaseResponse<List<AddressEntity>>).exception,
+          exception);
+      verify(addAddressRepoContract.addNewAddress(request: request)).called(1);
+      verifyNoMoreInteractions(addAddressRepoContract);
+    });
+  });
+}
+
+
+
+
+

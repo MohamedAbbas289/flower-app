@@ -170,5 +170,16 @@
   "checkout": "إتمام الشراء",
   "removeItem": "حذف المنتج",
   "removeItemConfirmation": "هل أنت متأكد أنك تريد حذف هذا المنتج من سلتك؟",
-  "remove": "حذف"
+  "remove": "حذف",
+  "address": "العنوان",
+  "addressMissingOrNull": "العنوان مفقود أو فارغ",
+  "recipientName": "اسم المستلم",
+  "enterTheAddress": "أدخل العنوان",
+  "enterThePhoneNumber": "أدخل رقم الهاتف",
+  "enterTheRecipientName": "أدخل اسم المستلم",
+  "saveAddress": "حفظ العنوان",
+  "CityRequired": "من فضلك اختر المحافظة",
+  "AreaRequired": "من فضلك اختر المنطقة",
+  "city": "المدينة",
+  "area": "المنطقة"
 }

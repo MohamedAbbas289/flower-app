@@ -2,6 +2,10 @@
 class Assets {
   Assets._();
   
+  static const String assetsFilesCities = "assets/files/cities.json";
+
+  static const String assetsFilesStates = "assets/files/states.json";
+
   static const String assetsIconsAdd = "assets/icons/add.svg";
 
   static const String assetsIconsAddress = "assets/icons/address.svg";
