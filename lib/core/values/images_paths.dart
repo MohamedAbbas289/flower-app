@@ -70,6 +70,8 @@ class Assets {
 
   static const String assetsIconsTranslate = "assets/icons/translate.svg";
 
+  static const String assetsIconsTrash = "assets/icons/trash.svg";
+
   static const String assetsIconsTulip = "assets/icons/tulip.svg";
 
   static const String assetsIconsTune = "assets/icons/tune.svg";
@@ -83,5 +85,9 @@ class Assets {
   static const String assetsImagesAppIcon = "assets/images/app_icon.png";
 
   static const String assetsImagesPen = "assets/images/pen.svg";
+
+  static const String assetsTranslationsAr = "assets/translations/ar.json";
+
+  static const String assetsTranslationsEn = "assets/translations/en.json";
 }
 

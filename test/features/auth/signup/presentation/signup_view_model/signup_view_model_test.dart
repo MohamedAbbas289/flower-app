@@ -7,7 +7,6 @@ import 'package:flower_app/features/auth/signup/domain/usecases/signup_user_use_
 import 'package:flower_app/features/auth/signup/presentation/signup_view_model/signup_event.dart';
 import 'package:flower_app/features/auth/signup/presentation/signup_view_model/signup_state.dart';
 import 'package:flower_app/features/auth/signup/presentation/signup_view_model/signup_view_model.dart';
-
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -18,6 +17,16 @@ import 'signup_view_model_test.mocks.dart';
 void main() {
   late MockSignupUserUseCase mockSignupUserUseCase;
   late SignupViewModel viewModel;
+
+  final tRequest = SignupRequestModel(
+    firstName: "AbdElRahman",
+    lastName: "Shalaan",
+    email: "abdelrahman@gmail.com",
+    password: "password",
+    rePassword: "password",
+    phone: "01000000000",
+    gender: "male",
+  );
 
   setUpAll(() {
     provideDummy<BaseResponse<AuthResponseEntity>>(
@@ -31,43 +40,26 @@ void main() {
   });
 
   group('SignupViewModel', () {
-    test('initial state should be const SignupStates()', () {
+    test('initial state should be const SignupState()', () {
       expect(viewModel.state, equals(const SignupState()));
     });
-    final request = SignupRequestModel(
-      firstName: "AbdElRahman",
-      lastName: "Shalaan",
-      email: "abdelrahman@gmail.com",
-      password: "password",
-      rePassword: "password",
-      phone: "01000000000",
-      gender: "male",
-    );
+
     blocTest<SignupViewModel, SignupState>(
       'should emit loading then success when signup succeeds',
-
       build: () {
-        final successResponse = SuccessBaseResponse<AuthResponseEntity>(
-          data: const AuthResponseEntity(
-            message: 'Signup successful',
-            token: 'token_123',
+        when(mockSignupUserUseCase.execute(requestModel: tRequest)).thenAnswer(
+          (_) async => SuccessBaseResponse<AuthResponseEntity>(
+            data: const AuthResponseEntity(
+              message: 'Signup successful',
+              token: 'token_123',
+            ),
           ),
         );
-
-        when(
-          mockSignupUserUseCase.execute(requestModel: request),
-        ).thenAnswer((_) async => successResponse);
-
         return viewModel;
       },
-
-      act: (cubit) {
-        cubit.doEvent(SignupRequestEvent(requestModel: request));
-      },
-
+      act: (cubit) => cubit.doEvent(SignupRequestEvent(requestModel: tRequest)),
       expect: () => [
         SignupState(signupState: BaseState.loading()),
-
         SignupState(
           signupState: BaseState.success(
             const AuthResponseEntity(
@@ -77,39 +69,26 @@ void main() {
           ),
         ),
       ],
-
       verify: (_) {
-        verify(mockSignupUserUseCase.execute(requestModel: request)).called(1);
+        verify(mockSignupUserUseCase.execute(requestModel: tRequest)).called(1);
         verifyNoMoreInteractions(mockSignupUserUseCase);
       },
     );
 
     blocTest<SignupViewModel, SignupState>(
       'should emit loading then error when signup fails',
-
       build: () {
-        final errorResponse = ErrorBaseResponse<AuthResponseEntity>(
-          exception: Exception('network error'),
+        when(mockSignupUserUseCase.execute(requestModel: tRequest)).thenAnswer(
+          (_) async => ErrorBaseResponse<AuthResponseEntity>(
+            exception: Exception('network error'),
+          ),
         );
-
-        when(
-          mockSignupUserUseCase.execute(requestModel: request),
-        ).thenAnswer((_) async => errorResponse);
-
         return viewModel;
       },
-
-      act: (cubit) {
-        cubit.doEvent(SignupRequestEvent(requestModel: request));
-      },
-
+      act: (cubit) => cubit.doEvent(SignupRequestEvent(requestModel: tRequest)),
       expect: () => [
         SignupState(signupState: BaseState.loading()),
-        SignupState(
-          signupState: BaseState.error(
-            'Something went wrong. Please try again later',
-          ),
-        ),
+        SignupState(signupState: BaseState.error('somethingWentWrong')),
       ],
     );
   });

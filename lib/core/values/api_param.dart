@@ -17,4 +17,7 @@ class ApiParam {
   static const String limit = "limit";
   static const String id = "_id";
   static const String photo = "photo";
+  static const String product = "product";
+  static const String quantity = "quantity";
+  static const String productId = "productId";
 }

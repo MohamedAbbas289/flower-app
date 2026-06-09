@@ -74,7 +74,7 @@ void main() {
         ),
         GetProfileState(
           getProfileState: BaseState<AuthResponseEntity>.error(
-            'Something went wrong. Please try again later',
+            'somethingWentWrong',
           ),
         ),
       ],

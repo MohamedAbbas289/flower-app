@@ -1,3 +1,4 @@
+import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/entities/tab_item_data.dart';
 import 'package:flower_app/core/reusable_widgets/app_refresh_indicator.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
@@ -8,10 +9,13 @@ import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
+import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
+import 'package:flower_app/features/cart/presentation/view_model/cart_state.dart';
 import 'package:flower_app/features/categories/presentation/view/categories_filter_bottom_sheet.dart';
 import 'package:flower_app/features/categories/presentation/view_model/categories_events.dart';
 import 'package:flower_app/features/categories/presentation/view_model/categories_states.dart';
 import 'package:flower_app/features/categories/presentation/view_model/categories_view_model.dart';
+import 'package:flower_app/core/utils/cart_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -171,24 +175,38 @@ class _CategoriesViewState extends State<CategoriesView> {
                         }
 
                         final vm = context.read<CategoriesViewModel>();
-                        return ProductsGridView(
-                          products: products,
-                          onAddToCart: (_) {},
-                          onCardClicked: (productId) {
-                            Navigator.of(context).pushNamed(
-                              AppRoutesName.productDetails,
-                              arguments: productId,
+                        return BlocBuilder<CartBloc, CartState>(
+                          buildWhen: (prev, curr) =>
+                              prev.cartState != curr.cartState,
+                          builder: (context, cartState) {
+                            return ProductsGridView(
+                              products: products,
+                              isInCart: (productId) => getIt<CartHelpers>()
+                                  .isInCart(context, productId),
+                              onAddToCart: (productId) => getIt<CartHelpers>()
+                                  .addToCart(context, productId),
+                              onRemoveFromCart: (productId) =>
+                                  getIt<CartHelpers>().removeFromCart(
+                                    context,
+                                    productId,
+                                  ),
+                              onCardClicked: (productId) {
+                                Navigator.of(context).pushNamed(
+                                  AppRoutesName.productDetails,
+                                  arguments: productId,
+                                );
+                              },
+                              heroTagBuilder: (productId) =>
+                                  AppStrings.productImageHeroTag(productId),
+                              currentPage: ps.data?.metadata?.currentPage ?? 1,
+                              totalPages: ps.data?.metadata?.totalPages ?? 1,
+                              paginationResetKey: vm.paginationResetKey,
+                              isLoading: ps.isLoading && products.isEmpty,
+                              hasError: ps.msg != null,
+                              onLoadMore: () =>
+                                  vm.doEvent(LoadMoreProductsEvent()),
                             );
                           },
-                          // ToDo: eng.Loay
-                          heroTagBuilder: (productId) =>
-                              AppStrings.productImageHeroTag(productId),
-                          currentPage: ps.data?.metadata?.currentPage ?? 1,
-                          totalPages: ps.data?.metadata?.totalPages ?? 1,
-                          paginationResetKey: vm.paginationResetKey,
-                          isLoading: ps.isLoading && products.isEmpty,
-                          hasError: ps.msg != null,
-                          onLoadMore: () => vm.doEvent(LoadMoreProductsEvent()),
                         );
                       },
                     ),

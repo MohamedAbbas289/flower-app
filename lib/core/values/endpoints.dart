@@ -14,10 +14,15 @@ abstract class Endpoints {
   static const String home = "$baseUrl/home";
   static const String changePassword = '$baseUrl/auth/change-password';
   static const String getProfile = '$baseUrl/auth/profile-data';
-  static const String uploadPhoto='$baseUrl/auth/upload-photo';
+  static const String uploadPhoto = '$baseUrl/auth/upload-photo';
   static const String editProfile = '$baseUrl/auth/editProfile';
-  static const String aboutFlowerApp = 'https://elevate-flutter-team.github.io/flower_app_web_views/about.html';
-  static const String termsFlowerApp = 'https://elevate-flutter-team.github.io/flower_app_web_views/terms.html';
+  static const String aboutFlowerApp =
+      'https://elevate-flutter-team.github.io/flower_app_web_views/about.html';
+  static const String termsFlowerApp =
+      'https://elevate-flutter-team.github.io/flower_app_web_views/terms.html';
 
+  // Cart
+static const String cart = '$baseUrl/cart';
+static const String addOrEditOnCart = '$baseUrl/cart/{productId}';
 
 }

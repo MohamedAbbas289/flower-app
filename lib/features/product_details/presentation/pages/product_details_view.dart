@@ -1,9 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
+import 'package:flower_app/core/utils/cart_helpers.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
+import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
+import 'package:flower_app/features/cart/presentation/view_model/cart_state.dart';
 import 'package:flower_app/features/product_details/domain/entities/product_details_entity.dart';
 import 'package:flower_app/features/product_details/presentation/view_model/product_details_cubit.dart';
 import 'package:flower_app/features/product_details/presentation/view_model/product_details_events.dart';
@@ -81,7 +85,7 @@ class _ProductDetailsScaffold extends StatelessWidget {
           return const SizedBox.shrink();
         },
       ),
-      bottomNavigationBar: const _AddToCartButton(),
+      bottomNavigationBar: _AddToCartButton(productId: productId),
     );
   }
 }
@@ -329,22 +333,64 @@ class _BouquetIncludeSection extends StatelessWidget {
 }
 
 class _AddToCartButton extends StatelessWidget {
-  const _AddToCartButton();
+  const _AddToCartButton({required this.productId});
+
+  final String productId;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      child: SizedBox(
-        width: double.infinity,
-        height: 55,
-        child: ElevatedButton(
-          onPressed: () {
-            // TODO: implement add to cart navigation
-          },
-          child: Text(AppStrings.addToCart),
-        ),
-      ),
+    return BlocSelector<CartBloc, CartState, bool>(
+      selector: (state) =>
+          state.cartState.data?.cartItems.any(
+            (item) => item.product.id == productId,
+          ) ??
+          false,
+      builder: (context, isInCart) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: SizedBox(
+            width: double.infinity,
+            height: 55,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: ElevatedButton(
+                key: ValueKey(isInCart),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isInCart ? AppColors.red : AppColors.pink,
+                ),
+                onPressed: () {
+                  if (isInCart) {
+                    getIt<CartHelpers>().removeFromCart(context, productId);
+                  } else {
+                    getIt<CartHelpers>().addToCart(context, productId);
+                  }
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      isInCart
+                          ? Assets.assetsIconsTrash
+                          : Assets.assetsIconsShoppingCart,
+                      height: 20,
+                      width: 20,
+                      colorFilter: const ColorFilter.mode(
+                        AppColors.white,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      isInCart ? AppStrings.remove : AppStrings.addToCart,
+                      style: TextStyles.buttonTextStyle,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -9,11 +9,13 @@ class AppTheme {
       seedColor: AppColors.pink,
       primary: AppColors.pink,
     ),
+    scaffoldBackgroundColor: AppColors.white,
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: AppColors.lightPink,
     ),
     appBarTheme: AppBarTheme(
       titleTextStyle: TextStyles.appBarTextStyle,
+      backgroundColor: AppColors.white,
       titleSpacing: 0,
       iconTheme: IconThemeData(color: AppColors.black, size: 24),
       leadingWidth: 40,

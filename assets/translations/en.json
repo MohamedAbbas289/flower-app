@@ -160,5 +160,15 @@
   "lastName": "Last name",
   "phoneNumber": "Phone number",
   "changeLanguage": "Change Language",
-  "confirmLogout": "Confirm logout"
+  "confirmLogout": "Confirm logout",
+  "items": "items",
+  "cartEmpty": "Your cart is empty",
+  "pleaseLoginToViewCart": "Please login to view your cart",
+  "subTotal": "Sub Total",
+  "deliveryFee": "Delivery Fee",
+  "total": "Total",
+  "checkout": "Checkout",
+  "removeItem": "Remove Item",
+  "removeItemConfirmation": "Are you sure you want to remove this item from your cart?",
+  "remove": "Remove"
 }
