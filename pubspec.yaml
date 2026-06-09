@@ -2,12 +2,11 @@ name: flower_app
 description: "A new Flutter project."
 publish_to: "none"
 version: 1.0.0+1
-
 environment:
   sdk: ^3.12.0
-
 dependencies:
   cached_network_image: ^3.4.1
+  collection: ^1.18.0
   cupertino_icons: ^1.0.8
   dart_either: ^2.1.0
   dio: ^5.9.2
@@ -15,6 +14,9 @@ dependencies:
   dio_cache_interceptor_hive_store: ^3.2.1
   easy_localization: ^3.0.8
   equatable: ^2.0.8
+  firebase_analytics: ^12.4.2
+  firebase_core: ^4.10.0
+  firebase_crashlytics: ^5.2.3
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
@@ -36,9 +38,6 @@ dependencies:
   rxdart: ^0.28.0
   skeletonizer: ^2.1.3
   webview_flutter: ^4.13.1
-  collection: ^1.18.0
-
-
 dev_dependencies:
   bloc_test: ^10.0.0
   build_runner: ^2.13.1
@@ -51,20 +50,17 @@ dev_dependencies:
   mocktail: ^1.0.4
   retrofit_generator: ^10.0.1
   test: ^1.29.0
-
 flutter:
   uses-material-design: true
   assets:
     - assets/icons/
     - assets/images/
     - assets/translations/
-
 flutter_assets:
   assets_path: assets/
   output_path: lib/core/values/
   filename: images_paths.dart
   ignore_comments: true
-
 flutter_launcher_icons:
   android: true
   ios: true
