@@ -1,0 +1,22 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "flowers-app-8f846",
+          "appId": "1:739525911147:android:5357a1e62c642669a2072e",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "flowers-app-8f846",
+          "configurations": {
+            "android": "1:739525911147:android:5357a1e62c642669a2072e",
+            "ios": "1:739525911147:ios:64a724e6908cbdbfa2072e"
+          }
+        }
+      }
+    }
+  }
+}

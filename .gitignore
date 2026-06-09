@@ -49,3 +49,8 @@ app.*.map.json
 **/di.config.dart
 **/*.mocks.dart
 pubspec.lock
+
+# Firebase sensitive files (contain API keys / project credentials)
+google-services.json
+**/google-services.json
+lib/firebase_options.dart
