@@ -162,11 +162,14 @@
   "changeLanguage": "Change Language",
   "confirmLogout": "Confirm logout",
   "address": "Address",
+  "addressMissingOrNull": "Address is missing or null",
   "recipientName": "Recipient Name",
   "enterTheAddress": "Enter the address",
   "enterThePhoneNumber": "Enter the phone number",
   "enterTheRecipientName": "Enter the recipient name",
   "saveAddress": "Save Address",
+  "CityRequired": "Please select a city",
+  "AreaRequired": "Please select an area",
   "city": "City",
   "area": "Area"
 }

@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import '../../../../config/di/di.dart';
 import '../../../../core/reusable_widgets/app_snack_bar.dart';
+import '../../../../core/utils/validation/app_regex.dart';
 import '../../../../core/values/app_strings.dart';
 import '../../data/models/add_address_dto.dart';
+import '../../domain/entities/location_entity.dart';
 import '../view_model/cubit/add_address_cubit.dart';
 import '../view_model/states/add_address_events.dart';
 import '../view_model/states/add_address_states.dart';
-import '../widgets/drop_down_item.dart';
-import '../widgets/map.dart';
+import '../widgets/location_dropdown_field.dart';
+import '../widgets/address_map_picker.dart';
 
 class AddNewAddress extends StatefulWidget {
   const AddNewAddress({super.key});
@@ -25,8 +27,8 @@ class _AddNewAddressState extends State<AddNewAddress> {
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController recipientNameController = TextEditingController();
 
-  List<LocationOption> governorates = [];
-  List<LocationOption> cities = [];
+  List<LocationEntity> governorates = [];
+  List<LocationEntity> cities = [];
   String? selectedGovernorateId;
   String? selectedCityId;
   LatLng selectedPosition = const LatLng(30.08525452318584, 31.282610287469513);
@@ -35,11 +37,35 @@ class _AddNewAddressState extends State<AddNewAddress> {
   void initState() {
     super.initState();
     _loadLocations();
+    _initUserLocation();
+  }
+
+  Future<void> _initUserLocation() async {
+    try {
+      final permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        final requested = await Geolocator.requestPermission();
+        if (requested == LocationPermission.denied ||
+            requested == LocationPermission.deniedForever) {
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) return;
+
+      final position = await Geolocator.getCurrentPosition();
+      if (!mounted) return;
+
+      setState(() {
+        selectedPosition = LatLng(position.latitude, position.longitude);
+      });
+    } catch (_) {}
   }
 
   Future<void> _loadLocations() async {
-    final loadedGovernorates = await AddressJsonLoader.loadGovernorates();
-    final loadedCities = await AddressJsonLoader.loadCities();
+    final loadedGovernorates =
+        await AddressLocationJsonParser.loadGovernorates();
+    final loadedCities = await AddressLocationJsonParser.loadCities();
 
     if (!mounted) return;
 
@@ -52,7 +78,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
     });
   }
 
-  List<LocationOption> get filteredCities {
+  List<LocationEntity> get filteredCities {
     return cities.where((city) {
       return city.governorateId == selectedGovernorateId;
     }).toList();
@@ -75,7 +101,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     return BlocProvider(
       create: (_) => getIt<AddAddressCubit>(),
       child: Scaffold(
@@ -99,128 +125,145 @@ class _AddNewAddressState extends State<AddNewAddress> {
 
               return Form(
                 key: formKey,
-                child: Column(
-                  spacing: 16,
-                  children: [
-                    Container(
-                      height: size.height * .25,
-                      color: Colors.pink,
-                      child: MapSample(
-                        onLocationSelected: (position) {
-                          selectedPosition = position;
+                child: SingleChildScrollView(
+                  child: Column(
+                    spacing: 16,
+                    children: [
+                      SizedBox(
+                        height: size.height * .25,
+                        child: AddressMapPicker(
+                          initialPosition: selectedPosition,
+                          onLocationSelected: (position) {
+                            selectedPosition = position;
+                          },
+                        ),
+                      ),
+                      TextFormField(
+                        controller: addressController,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return AppStrings.enterTheAddress;
+                          }
+                          return null;
                         },
-                      ),
-                    ),
-                    TextFormField(
-                      controller: addressController,
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return AppStrings.enterTheAddress;
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: AppStrings.address,
-                        hintText: AppStrings.enterTheAddress,
-                      ),
-                    ),
-                    TextFormField(
-                      controller: phoneNumberController,
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return AppStrings.enterThePhoneNumber;
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: AppStrings.phoneLabel,
-                        hintText: AppStrings.enterThePhoneNumber,
-                      ),
-                      keyboardType: TextInputType.phone,
-                    ),
-                    TextFormField(
-                      controller: recipientNameController,
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return AppStrings.enterTheRecipientName;
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: AppStrings.recipientName,
-                        hintText: AppStrings.enterTheRecipientName,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: DropDownItem(
-                            label: AppStrings.city,
-                            value: selectedGovernorateId,
-                            items: governorates,
-                            onChanged: (value) {
-                              setState(() {
-                                selectedGovernorateId = value;
-                                final availableCities = filteredCities;
-                                selectedCityId = availableCities.isEmpty
-                                    ? null
-                                    : availableCities.first.id;
-                              });
-                            },
-                          ),
+                        decoration: InputDecoration(
+                          labelText: AppStrings.address,
+                          hintText: AppStrings.enterTheAddress,
                         ),
-                        SizedBox(width: 16),
-                        Expanded(
-                          child: DropDownItem(
-                            label: AppStrings.area,
-                            value: selectedCityId,
-                            items: filteredCities,
-                            onChanged: (value) {
-                              setState(() {
-                                selectedCityId = value;
-                              });
-                            },
-                          ),
+                      ),
+                      TextFormField(
+                        controller: phoneNumberController,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return AppStrings.enterThePhoneNumber;
+                          }
+                          if (!AppRegex.isValidPhoneNumber(value)) {
+                            return AppStrings.phoneInvalid;
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: AppStrings.phoneLabel,
+                          hintText: AppStrings.enterThePhoneNumber,
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: addAddressState.isLoading
-                            ? null
-                            : () {
-                                if (formKey.currentState!.validate()) {
-                                  context.read<AddAddressCubit>().doEvent(
-                                    AddAddressDataEvent(
-                                      AddAddressDto(
-                                        street: addressController.text.trim(),
-                                        phone: phoneNumberController.text
-                                            .trim(),
-                                        city: selectedCityName,
-                                        lat: selectedPosition.latitude
-                                            .toString(),
-                                        long: selectedPosition.longitude
-                                            .toString(),
-                                        username: recipientNameController.text
-                                            .trim(),
-                                      ),
-                                    ),
-                                  );
+                        keyboardType: TextInputType.phone,
+                      ),
+                      TextFormField(
+                        controller: recipientNameController,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return AppStrings.enterTheRecipientName;
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: AppStrings.recipientName,
+                          hintText: AppStrings.enterTheRecipientName,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: LocationDropdownField(
+                              label: AppStrings.city,
+                              value: selectedGovernorateId,
+                              items: governorates,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return AppStrings.cityRequired;
                                 }
+                                return null;
                               },
-                        child: addAddressState.isLoading
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : Text(AppStrings.saveAddress),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedGovernorateId = value;
+                                  final availableCities = filteredCities;
+                                  selectedCityId = availableCities.isEmpty
+                                      ? null
+                                      : availableCities.first.id;
+                                });
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: LocationDropdownField(
+                              label: AppStrings.area,
+                              value: selectedCityId,
+                              items: filteredCities,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return AppStrings.areaRequired;
+                                }
+                                return null;
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedCityId = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: addAddressState.isLoading
+                              ? null
+                              : () {
+                                  if (formKey.currentState!.validate()) {
+                                    context.read<AddAddressCubit>().doEvent(
+                                      AddAddressDataEvent(
+                                        AddAddressDto(
+                                          street: addressController.text.trim(),
+                                          phone: phoneNumberController.text
+                                              .trim(),
+                                          city: selectedCityName,
+                                          lat: selectedPosition.latitude
+                                              .toString(),
+                                          long: selectedPosition.longitude
+                                              .toString(),
+                                          username: recipientNameController.text
+                                              .trim(),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                          child: addAddressState.isLoading
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(AppStrings.saveAddress),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

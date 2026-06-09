@@ -5,7 +5,6 @@ import '../entities/address_entity.dart';
 
 abstract interface class AddAddressRepoContract {
   Future<BaseResponse<List<AddressEntity>>> addNewAddress({
-    String? token,
     required AddAddressDto request,
   });
 }

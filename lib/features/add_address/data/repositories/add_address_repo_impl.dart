@@ -15,11 +15,9 @@ class AddAddressRepoImpl implements AddAddressRepoContract {
 
   @override
   Future<BaseResponse<List<AddressEntity>>> addNewAddress({
-    String? token,
     required AddAddressDto request,
   }) async {
     final response = await addAddressDataSourceContract.addNewAddress(
-      token: token,
       request: request,
     );
     switch (response) {

@@ -170,11 +170,14 @@ abstract class AppStrings {
   static String get changeLanguage => 'changeLanguage'.tr();
   static String get confirmLogout => 'confirmLogout'.tr();
   static String get address => 'address'.tr();
+  static String get addressMissingOrNull => 'addressMissingOrNull'.tr();
   static String get recipientName => 'recipientName'.tr();
-  static String get enterTheAddress => 'Enter the address'.tr();
-  static String get enterThePhoneNumber => 'Enter the phone number'.tr();
-  static String get enterTheRecipientName => 'Enter the recipient name'.tr();
-  static String get saveAddress => 'Save address'.tr();
+  static String get enterTheAddress => 'EnterTheAddress'.tr();
+  static String get enterThePhoneNumber => 'EnterThePhoneNumber'.tr();
+  static String get enterTheRecipientName => 'EnterTheRecipientName'.tr();
+  static String get cityRequired => 'CityRequired'.tr();
+  static String get areaRequired => 'AreaRequired'.tr();
+  static String get saveAddress => 'SaveAddress'.tr();
   static String get city => 'City'.tr();
   static String get area => 'Area'.tr();
 }

@@ -28,10 +28,12 @@ class AddAddressCubit extends Cubit<AddAddressStates> {
   void _retryLoadAddressData() {}
 
   Future<void> _addAddress(AddAddressDto request) async {
+    if (isClosed) return;
     emit(
       state.copyWith(addAddressState: BaseState<List<AddressEntity>>.loading()),
     );
     final response = await _addAddressUseCase(request);
+    if (isClosed) return;
     switch (response) {
       case SuccessBaseResponse():
         emit(

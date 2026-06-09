@@ -1,39 +1,27 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flower_app/features/add_address/domain/entities/location_entity.dart';
 
-class LocationOption {
-  final String id;
-  final String name;
-  final String? governorateId;
+class AddressLocationJsonParser {
+  const AddressLocationJsonParser._();
 
-  const LocationOption({
-    required this.id,
-    required this.name,
-    this.governorateId,
-  });
-}
-
-class AddressJsonLoader {
-  const AddressJsonLoader._();
-
-  static Future<List<LocationOption>> loadGovernorates() async {
+  static Future<List<LocationEntity>> loadGovernorates() async {
     final jsonData = await _loadJsonData('assets/files/cities.json');
 
     return jsonData.map((item) {
-      return LocationOption(
+      return LocationEntity(
         id: item['id'] as String,
         name: item['governorate_name_en'] as String,
       );
     }).toList();
   }
 
-  static Future<List<LocationOption>> loadCities() async {
+  static Future<List<LocationEntity>> loadCities() async {
     final jsonData = await _loadJsonData('assets/files/states.json');
 
     return jsonData.map((item) {
-      return LocationOption(
+      return LocationEntity(
         id: item['id'] as String,
         name: item['city_name_en'] as String,
         governorateId: item['governorate_id'] as String,
@@ -46,33 +34,34 @@ class AddressJsonLoader {
     final decoded = json.decode(response) as List<dynamic>;
     final table =
         decoded.firstWhere(
-              (item) => item is Map<String, dynamic> && item['type'] == 'table',
-            )
-            as Map<String, dynamic>;
+          (item) => item is Map<String, dynamic> && item['type'] == 'table',
+        ) as Map<String, dynamic>;
 
     return (table['data'] as List<dynamic>).cast<Map<String, dynamic>>();
   }
 }
 
-class DropDownItem extends StatelessWidget {
+class LocationDropdownField extends StatelessWidget {
   final String label;
   final String? value;
-  final List<LocationOption> items;
+  final List<LocationEntity> items;
   final ValueChanged<String?> onChanged;
+  final FormFieldValidator<String>? validator;
 
-  const DropDownItem({
+  const LocationDropdownField({
     super.key,
     required this.label,
     required this.value,
     required this.items,
     required this.onChanged,
+    this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
       isExpanded: true,
-      initialValue: value,
+      value: value,
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         labelText: label,
@@ -81,6 +70,7 @@ class DropDownItem extends StatelessWidget {
         return DropdownMenuItem<String>(value: item.id, child: Text(item.name));
       }).toList(),
       onChanged: items.isEmpty ? null : onChanged,
+      validator: validator,
     );
   }
 }

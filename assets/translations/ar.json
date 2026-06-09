@@ -162,11 +162,14 @@
   "changeLanguage": "تغيير اللغة",
   "confirmLogout": "تأكيد تسجيل الخروج",
   "address": "العنوان",
+  "addressMissingOrNull": "العنوان مفقود أو فارغ",
   "recipientName": "اسم المستلم",
   "enterTheAddress": "أدخل العنوان",
   "enterThePhoneNumber": "أدخل رقم الهاتف",
   "enterTheRecipientName": "أدخل اسم المستلم",
   "saveAddress": "حفظ العنوان",
+  "CityRequired": "من فضلك اختر المحافظة",
+  "AreaRequired": "من فضلك اختر المنطقة",
   "city": "المدينة",
   "area": "المنطقة"
 }
