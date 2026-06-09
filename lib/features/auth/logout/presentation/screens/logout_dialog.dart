@@ -25,10 +25,8 @@ class LogoutDialog extends StatelessWidget {
       description: AppStrings.confirmLogout,
       confirmText: AppStrings.logout,
       cancelText: AppStrings.cancel,
-      confirmButtonColor: AppColors.pink,
-      cancelButtonColor: AppColors.white,
-      confirmTextColor: AppColors.white,
-      cancelTextColor: AppColors.gray,
+      confirmButtonColor: AppColors.red,
+      cancelButtonColor: AppColors.pink,
       barrierDismissible: false,
       onConfirm: () =>
           context.read<LogoutViewModel>().doEvent(LogoutRequestEvent()),

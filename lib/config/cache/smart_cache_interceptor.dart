@@ -3,17 +3,15 @@ import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flower_app/core/values/endpoints.dart';
 
 class SmartCacheInterceptor extends Interceptor {
-  final CacheOptions _categoriesOptions;
-  final CacheOptions _productsOptions;
-  final CacheOptions _homeOptions;
+  final CacheOptions categoriesOptions;
+  final CacheOptions productsOptions;
+  final CacheOptions homeOptions;
 
   SmartCacheInterceptor({
-    required CacheOptions categoriesOptions,
-    required CacheOptions productsOptions,
-    required CacheOptions homeOptions,
-  }) : _categoriesOptions = categoriesOptions,
-       _productsOptions = productsOptions,
-       _homeOptions = homeOptions;
+    required this.categoriesOptions,
+    required this.productsOptions,
+    required this.homeOptions,
+  });
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -25,12 +23,12 @@ class SmartCacheInterceptor extends Interceptor {
     final path = options.uri.path;
 
     if (path.contains(_categoriesSegment)) {
-      options.extra.addAll(_categoriesOptions.toExtra());
+      options.extra.addAll(categoriesOptions.toExtra());
     } else if (path.contains(_productsSegment)) {
-      options.extra.addAll(_productsOptions.toExtra());
+      options.extra.addAll(productsOptions.toExtra());
     } else if (path.contains(_bestSellerSegment) ||
         path.contains(_occasionsSegment)) {
-      options.extra.addAll(_homeOptions.toExtra());
+      options.extra.addAll(homeOptions.toExtra());
     }
 
     handler.next(options);
