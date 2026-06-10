@@ -85,7 +85,6 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => EditProfileView(initialData: authData),
         );
-
       case AppRoutesName.payment:
         final args = settings.arguments as PaymentViewArguments;
         return MaterialPageRoute(
