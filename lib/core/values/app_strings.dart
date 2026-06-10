@@ -190,4 +190,18 @@ abstract class AppStrings {
   static String get saveAddress => 'SaveAddress'.tr();
   static String get city => 'City'.tr();
   static String get area => 'Area'.tr();
+  static String get paymentMehtod => 'Payment method'.tr();
+  static String get cashOnDelivery => 'Cash on delivery'.tr();
+  static String get creditCard => 'Credit card'.tr();
+  static String get cash => 'cash'.tr();
+  static String get credit => 'credit'.tr();
+  static String get placeOrder => 'Place order'.tr();
+  static String get cashOrderPlacedSuccessfully =>
+      'Cash Order Placed Successfully!'.tr();
+  static String get couldNotLaunchPaymentGateway =>
+      'Could not launch payment gateway'.tr();
+  static String get payment => 'Payment'.tr();
+  static String get trackOrder => 'Track order'.tr();
+  static String get stepMustBeBetween1And3 =>
+      'Step must be between 1 and 3'.tr();
 }

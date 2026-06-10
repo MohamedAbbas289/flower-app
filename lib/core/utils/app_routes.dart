@@ -10,6 +10,9 @@ import 'package:flower_app/features/occasions/presentation/occasions_view_model/
 import 'package:flower_app/features/occasions/presentation/pages/occasions_view.dart';
 import 'package:flower_app/features/change_password/presentation/pages/change_password_view.dart';
 import 'package:flower_app/features/change_password/presentation/change_password_view_model/cubit/change_password_view_model.dart';
+import 'package:flower_app/features/payment/presentation/view/payment_view.dart';
+import 'package:flower_app/features/payment/presentation/model/payment_view_arguments.dart';
+import 'package:flower_app/features/payment/presentation/view_model/payment_cubit.dart';
 import 'package:flower_app/features/splash/presentation/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +39,7 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const SignupView());
 
       case AppRoutesName.addresses:
-        return MaterialPageRoute(builder: (_) =>  AddNewAddress());
+        return MaterialPageRoute(builder: (_) => AddNewAddress());
       case AppRoutesName.occasions:
         final occasionId = settings.arguments as String?;
         return MaterialPageRoute(
@@ -83,11 +86,26 @@ class AppRoutes {
           builder: (_) => EditProfileView(initialData: authData),
         );
 
+      case AppRoutesName.payment:
+        final args = settings.arguments as PaymentViewArguments;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<PaymentCubit>(),
+            child: Builder(
+              builder: (context) => PaymentView(
+                requestModel: args.requestModel,
+                subTotal: args.subTotal,
+                deliveryFee: args.deliveryFee,
+                total: args.total,
+              ),
+            ),
+          ),
+        );
+
       default:
         return MaterialPageRoute(
-          builder: (_) => Scaffold(
-            body: Center(child: Text(AppStrings.routeNotFound)),
-          ),
+          builder: (_) =>
+              Scaffold(body: Center(child: Text(AppStrings.routeNotFound))),
         );
     }
   }

@@ -23,7 +23,10 @@ abstract class Endpoints {
       'https://elevate-flutter-team.github.io/flower_app_web_views/terms.html';
 
   // Cart
-static const String cart = '$baseUrl/cart';
-static const String addOrEditOnCart = '$baseUrl/cart/{productId}';
+  static const String cart = '$baseUrl/cart';
+  static const String addOrEditOnCart = '$baseUrl/cart/{productId}';
 
+  static const String createCashOrder = '$baseUrl/orders/{cartId}';
+  static const String createCheckoutSession =
+      '$baseUrl/orders/checkout-session/{cartId}';
 }

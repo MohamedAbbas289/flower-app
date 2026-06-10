@@ -18,4 +18,5 @@ abstract class AppRoutesName {
   static const editProfile = '/editProfile';
   static const addresses = '/addresses';
 
+  static const payment = '/paymentView';
 }
