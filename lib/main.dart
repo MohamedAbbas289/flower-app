@@ -6,10 +6,12 @@ import 'package:flower_app/my_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'config/firebase/firebase_api.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FirebaseService.initialize();
-
+  await FirebaseApi().initNotification();
   await EasyLocalization.ensureInitialized();
   await configureDependencies();
   final authManager = getIt<AuthManager>();
