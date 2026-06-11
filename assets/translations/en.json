@@ -181,5 +181,6 @@
   "CityRequired": "Please select a city",
   "AreaRequired": "Please select an area",
   "city": "City",
-  "area": "Area"
+  "area": "Area",
+  "searchForAnyProduct": "Search For Any Product You Want"
 }

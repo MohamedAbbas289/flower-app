@@ -181,5 +181,6 @@
   "CityRequired": "من فضلك اختر المحافظة",
   "AreaRequired": "من فضلك اختر المنطقة",
   "city": "المدينة",
-  "area": "المنطقة"
+  "area": "المنطقة",
+  "searchForAnyProduct": "ابحث عن أي منتج تريده"
 }

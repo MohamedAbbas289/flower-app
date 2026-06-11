@@ -6,6 +6,7 @@ import 'package:flower_app/core/reusable_widgets/app_tab_bar_widget.dart';
 import 'package:flower_app/core/reusable_widgets/products_grid_view.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
+import 'package:flower_app/core/utils/cart_helpers.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
@@ -15,7 +16,6 @@ import 'package:flower_app/features/categories/presentation/view/categories_filt
 import 'package:flower_app/features/categories/presentation/view_model/categories_events.dart';
 import 'package:flower_app/features/categories/presentation/view_model/categories_states.dart';
 import 'package:flower_app/features/categories/presentation/view_model/categories_view_model.dart';
-import 'package:flower_app/core/utils/cart_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -267,36 +267,44 @@ class _SearchBar extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: SizedBox(
-              height: 48,
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: AppStrings.search,
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: SvgPicture.asset(
-                      Assets.assetsIconsSearch,
-                      colorFilter: const ColorFilter.mode(
-                        AppColors.gray,
-                        BlendMode.srcIn,
+            child: GestureDetector(
+              onTap: () =>
+                  Navigator.of(context).pushNamed(AppRoutesName.search),
+              child: AbsorbPointer(
+                child: SizedBox(
+                  height: 48,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: AppStrings.search,
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: SvgPicture.asset(
+                          Assets.assetsIconsSearch,
+                          colorFilter: const ColorFilter.mode(
+                            AppColors.gray,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide:
+                        const BorderSide(color: AppColors.placeHolder),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide:
+                        const BorderSide(color: AppColors.placeHolder),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: AppColors.pink),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 0,
+                        horizontal: 16,
                       ),
                     ),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: AppColors.placeHolder),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: AppColors.placeHolder),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: AppColors.pink),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 0,
-                    horizontal: 16,
                   ),
                 ),
               ),
@@ -333,6 +341,7 @@ class _SearchBar extends StatelessWidget {
     );
   }
 }
+
 
 class _ErrorView extends StatelessWidget {
   const _ErrorView({required this.message, required this.onRetry});

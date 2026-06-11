@@ -190,4 +190,6 @@ abstract class AppStrings {
   static String get saveAddress => 'SaveAddress'.tr();
   static String get city => 'City'.tr();
   static String get area => 'Area'.tr();
+
+  static String get searchForAnyProduct => 'searchForAnyProduct'.tr();
 }
