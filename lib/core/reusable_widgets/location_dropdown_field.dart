@@ -6,24 +6,32 @@ import 'package:flower_app/features/add_address/domain/entities/location_entity.
 class AddressLocationJsonParser {
   const AddressLocationJsonParser._();
 
-  static Future<List<LocationEntity>> loadGovernorates() async {
+  static Future<List<LocationEntity>> loadGovernorates(
+    String languageCode,
+  ) async {
     final jsonData = await _loadJsonData('assets/files/cities.json');
+    final isArabic = languageCode == 'ar';
 
     return jsonData.map((item) {
       return LocationEntity(
         id: item['id'] as String,
-        name: item['governorate_name_en'] as String,
+        name: isArabic
+            ? item['governorate_name_ar'] as String
+            : item['governorate_name_en'] as String,
       );
     }).toList();
   }
 
-  static Future<List<LocationEntity>> loadCities() async {
+  static Future<List<LocationEntity>> loadCities(String languageCode) async {
     final jsonData = await _loadJsonData('assets/files/states.json');
+    final isArabic = languageCode == 'ar';
 
     return jsonData.map((item) {
       return LocationEntity(
         id: item['id'] as String,
-        name: item['city_name_en'] as String,
+        name: isArabic
+            ? item['city_name_ar'] as String
+            : item['city_name_en'] as String,
         governorateId: item['governorate_id'] as String,
       );
     }).toList();
@@ -34,8 +42,9 @@ class AddressLocationJsonParser {
     final decoded = json.decode(response) as List<dynamic>;
     final table =
         decoded.firstWhere(
-          (item) => item is Map<String, dynamic> && item['type'] == 'table',
-        ) as Map<String, dynamic>;
+              (item) => item is Map<String, dynamic> && item['type'] == 'table',
+            )
+            as Map<String, dynamic>;
 
     return (table['data'] as List<dynamic>).cast<Map<String, dynamic>>();
   }

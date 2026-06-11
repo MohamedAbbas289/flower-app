@@ -2,9 +2,11 @@ import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
 import 'package:flower_app/features/app_section/presentation/view/app_section_view.dart';
 import 'package:flower_app/features/best_seller/presentation/view/best_seller_view.dart';
 import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
+import 'package:flower_app/features/edit_address/presentation/screens/edit_address_screen.dart';
 import 'package:flower_app/features/edit_profile/presentation/pages/edit_profile_view.dart';
 import 'package:flower_app/features/occasions/presentation/occasions_view_model/occasions_view_model.dart';
 import 'package:flower_app/features/occasions/presentation/pages/occasions_view.dart';
@@ -35,11 +37,17 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const AppSectionView());
       case AppRoutesName.signUp:
         return MaterialPageRoute(builder: (_) => const SignupView());
-        case AppRoutesName.savedAddress:
-        return MaterialPageRoute(builder: (_) =>  SavedAddressScreen());
+      case AppRoutesName.savedAddress:
+        return MaterialPageRoute(builder: (_) => SavedAddressScreen());
 
-      case AppRoutesName.addresses:
-        return MaterialPageRoute(builder: (_) =>  AddNewAddress());
+      case AppRoutesName.addAddress:
+        return MaterialPageRoute(builder: (_) => AddNewAddress());
+      case AppRoutesName.editAddress:
+        final address = settings.arguments as AddressEntity;
+        return MaterialPageRoute(
+          builder: (_) => EditAddressScreen(address: address),
+        );
+
       case AppRoutesName.occasions:
         final occasionId = settings.arguments as String?;
         return MaterialPageRoute(
@@ -88,9 +96,8 @@ class AppRoutes {
 
       default:
         return MaterialPageRoute(
-          builder: (_) => Scaffold(
-            body: Center(child: Text(AppStrings.routeNotFound)),
-          ),
+          builder: (_) =>
+              Scaffold(body: Center(child: Text(AppStrings.routeNotFound))),
         );
     }
   }

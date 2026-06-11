@@ -1,18 +1,17 @@
+import 'package:flower_app/core/reusable_widgets/address_form_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../config/di/di.dart';
 import '../../../../core/reusable_widgets/app_snack_bar.dart';
-import '../../../../core/utils/validation/app_regex.dart';
 import '../../../../core/values/app_strings.dart';
 import '../../data/models/add_address_dto.dart';
 import '../../domain/entities/location_entity.dart';
 import '../view_model/cubit/add_address_cubit.dart';
 import '../view_model/states/add_address_events.dart';
 import '../view_model/states/add_address_states.dart';
-import '../widgets/location_dropdown_field.dart';
-import '../widgets/address_map_picker.dart';
+import '../../../../core/reusable_widgets/location_dropdown_field.dart';
 
 class AddNewAddress extends StatefulWidget {
   const AddNewAddress({super.key});
@@ -33,11 +32,21 @@ class _AddNewAddressState extends State<AddNewAddress> {
   String? selectedCityId;
   LatLng selectedPosition = const LatLng(30.08525452318584, 31.282610287469513);
 
+  bool _isLoaded = false;
   @override
   void initState() {
     super.initState();
-    _loadLocations();
     _initUserLocation();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!_isLoaded) {
+      _isLoaded = true;
+      _loadLocations();
+    }
   }
 
   Future<void> _initUserLocation() async {
@@ -63,9 +72,15 @@ class _AddNewAddressState extends State<AddNewAddress> {
   }
 
   Future<void> _loadLocations() async {
-    final loadedGovernorates =
-        await AddressLocationJsonParser.loadGovernorates();
-    final loadedCities = await AddressLocationJsonParser.loadCities();
+    final languageCode = Localizations.localeOf(context).languageCode;
+
+    final loadedGovernorates = await AddressLocationJsonParser.loadGovernorates(
+      languageCode,
+    );
+
+    final loadedCities = await AddressLocationJsonParser.loadCities(
+      languageCode,
+    );
 
     if (!mounted) return;
 
@@ -101,7 +116,6 @@ class _AddNewAddressState extends State<AddNewAddress> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return BlocProvider(
       create: (_) => getIt<AddAddressCubit>(),
       child: Scaffold(
@@ -129,102 +143,36 @@ class _AddNewAddressState extends State<AddNewAddress> {
                   child: Column(
                     spacing: 16,
                     children: [
-                      SizedBox(
-                        height: size.height * .25,
-                        child: AddressMapPicker(
-                          initialPosition: selectedPosition,
-                          onLocationSelected: (position) {
-                            selectedPosition = position;
-                          },
-                        ),
-                      ),
-                      TextFormField(
-                        controller: addressController,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return AppStrings.enterTheAddress;
-                          }
-                          return null;
+                      AddressFormFields(
+                        addressController: addressController,
+                        phoneController: phoneNumberController,
+                        recipientNameController: recipientNameController,
+                        governorates: governorates,
+                        filteredCities: filteredCities,
+                        selectedGovernorateId: selectedGovernorateId,
+                        selectedCityId: selectedCityId,
+                        selectedPosition: selectedPosition,
+                        onLocationSelected: (position) {
+                          selectedPosition = position;
                         },
-                        decoration: InputDecoration(
-                          labelText: AppStrings.address,
-                          hintText: AppStrings.enterTheAddress,
-                        ),
-                      ),
-                      TextFormField(
-                        controller: phoneNumberController,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return AppStrings.enterThePhoneNumber;
-                          }
-                          if (!AppRegex.isValidPhoneNumber(value)) {
-                            return AppStrings.phoneInvalid;
-                          }
-                          return null;
+                        onGovernorateChanged: (governorateId) {
+                          setState(() {
+                            selectedGovernorateId = governorateId;
+                            final citiesForGovernorate = filteredCities;
+                            if (!citiesForGovernorate.any(
+                              (city) => city.id == selectedCityId,
+                            )) {
+                              selectedCityId = citiesForGovernorate.isEmpty
+                                  ? null
+                                  : citiesForGovernorate.first.id;
+                            }
+                          });
                         },
-                        decoration: InputDecoration(
-                          labelText: AppStrings.phoneLabel,
-                          hintText: AppStrings.enterThePhoneNumber,
-                        ),
-                        keyboardType: TextInputType.phone,
-                      ),
-                      TextFormField(
-                        controller: recipientNameController,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return AppStrings.enterTheRecipientName;
-                          }
-                          return null;
+                        onCityChanged: (cityId) {
+                          setState(() {
+                            selectedCityId = cityId;
+                          });
                         },
-                        decoration: InputDecoration(
-                          labelText: AppStrings.recipientName,
-                          hintText: AppStrings.enterTheRecipientName,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: LocationDropdownField(
-                              label: AppStrings.city,
-                              value: selectedGovernorateId,
-                              items: governorates,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return AppStrings.cityRequired;
-                                }
-                                return null;
-                              },
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedGovernorateId = value;
-                                  final availableCities = filteredCities;
-                                  selectedCityId = availableCities.isEmpty
-                                      ? null
-                                      : availableCities.first.id;
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: LocationDropdownField(
-                              label: AppStrings.area,
-                              value: selectedCityId,
-                              items: filteredCities,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return AppStrings.areaRequired;
-                                }
-                                return null;
-                              },
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedCityId = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
                       ),
                       SizedBox(
                         width: double.infinity,

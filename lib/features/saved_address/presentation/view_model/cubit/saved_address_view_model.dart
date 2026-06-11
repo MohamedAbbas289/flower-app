@@ -1,47 +1,46 @@
+import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/config/base_state/base_state.dart';
+import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
+import 'package:flower_app/features/saved_address/domain/use_cases/delete_address_use_case.dart';
 import 'package:flower_app/features/saved_address/domain/use_cases/saved_address_use_case.dart';
+import 'package:flower_app/features/saved_address/presentation/view_model/states/saved_address_events.dart';
+import 'package:flower_app/features/saved_address/presentation/view_model/states/saved_address_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../../config/base_response/base_response.dart';
-import '../../../../../config/base_state/base_state.dart';
-import '../../../../../core/models/auth_response.dart';
-import '../states/saved_address_event.dart';
-import '../states/saved_address_state.dart';
 @injectable
+class SavedAddressViewModel extends Cubit<SavedAddressStates> {
+  final GetAddressesUseCase _getAddressesUseCase;
+  final DeleteAddressUseCase _deleteAddressUseCase;
 
-class SavedAddressViewModel extends Cubit<SavedAddressState> {
-  final SavedAddressUseCase _savedAddressUseCase;
-  SavedAddressViewModel(this._savedAddressUseCase )
-      : super(const SavedAddressState());
+  SavedAddressViewModel(this._getAddressesUseCase, this._deleteAddressUseCase)
+    : super(const SavedAddressStates());
+
   void doEvent(SavedAddressEvent event) {
     switch (event) {
-      case LoadSavedAddressEvent():
-        _loadSavedAddress();
-      case RetryLoadSavedAddressEvent():
-        _retryLoadSavedAddress();
-      case RefreshSavedAddressEvent():
-        _getSavedAddress();
+      case LoadAddressesEvent():
+        _getAddresses();
+      case DeleteAddressEvent():
+        _deleteAddress(event.id);
     }
   }
 
-  void _loadSavedAddress() {
-    _getSavedAddress();
-  }
-
-  void _retryLoadSavedAddress() {
-    _getSavedAddress();
-  }
-
-  void _getSavedAddress() async{
+  Future<void> _getAddresses() async {
+    if (isClosed) return;
     emit(
-      state.copyWith(getSavedAddressState: BaseState<AuthResponse>.loading()),
+      state.copyWith(
+        getAddressesState: BaseState<List<AddressEntity>>.loading(),
+      ),
     );
-    final response = await _savedAddressUseCase();
+
+    final response = await _getAddressesUseCase();
+    if (isClosed) return;
+
     switch (response) {
       case SuccessBaseResponse():
         emit(
           state.copyWith(
-            getSavedAddressState: BaseState<AuthResponse>.success(
+            getAddressesState: BaseState<List<AddressEntity>>.success(
               response.data,
             ),
           ),
@@ -49,15 +48,39 @@ class SavedAddressViewModel extends Cubit<SavedAddressState> {
       case ErrorBaseResponse():
         emit(
           state.copyWith(
-            getSavedAddressState: BaseState<AuthResponse>.error(
+            getAddressesState: BaseState<List<AddressEntity>>.error(
               response.errorMessage,
             ),
           ),
         );
     }
-
-
-
   }
 
+ Future<void> _deleteAddress(String id) async {
+  if (isClosed) return;
+  emit(state.copyWith(
+    deleteAddressState: BaseState<bool>.loading(),
+  ));
+
+  final response = await _deleteAddressUseCase(id);
+  if (isClosed) return;
+
+  switch (response) {
+    case SuccessBaseResponse():
+      final updatedList = state.getAddressesState.data
+              ?.where((e) => e.id != id)
+              .toList() ??
+          [];
+      emit(state.copyWith(
+        deleteAddressState: BaseState<bool>.success(true),
+        getAddressesState: BaseState<List<AddressEntity>>.success(
+          updatedList,
+        ),
+      ));
+    case ErrorBaseResponse():
+      emit(state.copyWith(
+        deleteAddressState: BaseState<bool>.error(response.errorMessage),
+      ));
+  }
+}
 }

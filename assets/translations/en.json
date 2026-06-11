@@ -177,9 +177,18 @@
   "enterTheAddress": "Enter the address",
   "enterThePhoneNumber": "Enter the phone number",
   "enterTheRecipientName": "Enter the recipient name",
-  "saveAddress": "Save Address",
   "CityRequired": "Please select a city",
   "AreaRequired": "Please select an area",
-  "city": "City",
-  "area": "Area"
+  "SaveAddress": "Save Address",
+  "City": "City",
+  "Area": "Area",
+  "deleteAddress": "Delete Address",
+  "deleteAddressConfirmation": "Are you sure you want to delete this address?",
+  "delete": "Delete",
+  "noAddresses": "No addresses found",
+  "addNewAddress": "Add new address",
+  "editAddress": "Edit Address",
+  "addressDeletedSuccess": "Address deleted successfully",
+  "addressUpdatedSuccess": "Address updated successfully",
+  "updateAddress": "Update Address"
 }

@@ -181,5 +181,14 @@
   "CityRequired": "من فضلك اختر المحافظة",
   "AreaRequired": "من فضلك اختر المنطقة",
   "city": "المدينة",
-  "area": "المنطقة"
+  "area": "المنطقة",
+  "deleteAddress": "حذف العنوان",
+  "deleteAddressConfirmation": "هل أنت متأكد من حذف هذا العنوان؟",
+  "delete": "حذف",
+  "noAddresses": "لا توجد عناوين",
+  "addNewAddress": "إضافة عنوان جديد",
+  "editAddress": "تعديل العنوان",
+  "addressDeletedSuccess": "تم حذف العنوان بنجاح",
+  "addressUpdatedSuccess": "تم تعديل العنوان بنجاح",
+  "updateAddress": "تحديث العنوان"
 }

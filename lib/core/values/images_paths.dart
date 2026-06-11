@@ -34,6 +34,8 @@ class Assets {
 
   static const String assetsIconsEgypt = "assets/icons/egypt.svg";
 
+  static const String assetsIconsEidtPen = "assets/icons/eidt_pen.svg";
+
   static const String assetsIconsError = "assets/icons/error.svg";
 
   static const String assetsIconsFactCheck = "assets/icons/fact_check.svg";
