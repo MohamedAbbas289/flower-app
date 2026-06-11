@@ -4,7 +4,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flower_app/firebase_options.dart';
 import 'package:flutter/material.dart';
 
-
 class FirebaseService {
   FirebaseService._();
 

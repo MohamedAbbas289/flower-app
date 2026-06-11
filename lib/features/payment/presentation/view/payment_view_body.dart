@@ -118,9 +118,6 @@ class _PaymentViewBodyState extends State<PaymentViewBody> {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Private const widgets
-// ---------------------------------------------------------------------------
 class _PaymentMethodCard extends StatelessWidget {
   const _PaymentMethodCard({
     required this.title,

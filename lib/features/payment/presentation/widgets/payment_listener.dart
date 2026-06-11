@@ -28,7 +28,6 @@ class PaymentListener {
       AppSnackBar.showSuccess(context, AppStrings.cashOrderPlacedSuccessfully);
     }
 
-    // Checkout session error
     if (state.checkoutSessionState.msg != null &&
         state.checkoutSessionState.data == null) {
       AppSnackBar.showError(
@@ -43,7 +42,6 @@ class PaymentListener {
       );
     }
 
-    // Checkout session success — open Stripe in WebView
     if (state.checkoutSessionState.data != null) {
       final sessionUrl = state.checkoutSessionState.data!.sessionUrl;
 
