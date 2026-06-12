@@ -255,7 +255,9 @@ class _GuestButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.pushReplacementNamed(context, AppRoutesName.home);
+      },
       child: Text(AppStrings.continueAsGuest),
     );
   }
