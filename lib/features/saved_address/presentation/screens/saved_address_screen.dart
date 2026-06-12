@@ -80,11 +80,18 @@ class _SavedAddressView extends StatelessWidget {
                       return AddressCard(
                         address: address,
                         onDelete: () => _confirmDelete(context, address),
-                        onEdit: () => Navigator.pushNamed(
-                          context,
-                          AppRoutesName.editAddress,
-                          arguments: address,
-                        ),
+                        onEdit: () async {
+                          final result = await Navigator.pushNamed(
+                            context,
+                            AppRoutesName.editAddress,
+                            arguments: address,
+                          );
+                          if (result == true && context.mounted) {
+                            context.read<SavedAddressViewModel>().doEvent(
+                              const LoadAddressesEvent(),
+                            );
+                          }
+                        },
                       );
                     },
                   ),
@@ -92,8 +99,17 @@ class _SavedAddressView extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () =>
-                        Navigator.pushNamed(context, AppRoutesName.addAddress),
+                    onPressed: () async {
+                      final result = await Navigator.pushNamed(
+                        context,
+                        AppRoutesName.addAddress,
+                      );
+                      if (result == true && context.mounted) {
+                        context.read<SavedAddressViewModel>().doEvent(
+                          const LoadAddressesEvent(),
+                        );
+                      }
+                    },
                     child: Text(AppStrings.addNewAddress),
                   ),
                 ),

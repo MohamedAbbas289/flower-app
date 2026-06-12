@@ -3,6 +3,7 @@ import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/features/cart/presentation/pages/cart_view.dart';
 import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
 import 'package:flower_app/features/cart/presentation/view_model/cart_event.dart';
+import 'package:flower_app/features/delivery_location/presentation/view_model/cubit/delivery_address_view_model.dart';
 import 'package:flower_app/features/home_screen/presentation/view_model/cubit/home_view_model.dart';
 import 'package:flower_app/features/profile/presentation/screens/profile_view.dart';
 import 'package:flutter/material.dart';
@@ -73,8 +74,11 @@ class _AppSectionViewState extends State<AppSectionView> {
         body: IndexedStack(
           index: _currentTabIndex,
           children: [
-            BlocProvider(
-              create: (context) => getIt<HomeViewModel>(),
+            MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (_) => getIt<HomeViewModel>()),
+                BlocProvider(create: (_) => getIt<DeliveryAddressViewModel>()),
+              ],
               child: HomeScreen(
                 onCategoryViewAll: () => _navigateToCategories(),
                 onCategoryTap: (id) => _navigateToCategories(categoryId: id),

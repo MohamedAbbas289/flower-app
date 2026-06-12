@@ -1,7 +1,7 @@
 import 'package:flower_app/core/reusable_widgets/address_form_fields.dart';
+import 'package:flower_app/core/reusable_widgets/address_geocoding_sync_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../config/di/di.dart';
 import '../../../../core/reusable_widgets/app_snack_bar.dart';
@@ -20,23 +20,32 @@ class AddNewAddress extends StatefulWidget {
   State<AddNewAddress> createState() => _AddNewAddressState();
 }
 
-class _AddNewAddressState extends State<AddNewAddress> {
+class _AddNewAddressState extends State<AddNewAddress>
+    with AddressGeocodingSyncMixin<AddNewAddress> {
   final formKey = GlobalKey<FormState>();
+  @override
   final TextEditingController addressController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController recipientNameController = TextEditingController();
 
+  @override
   List<LocationEntity> governorates = [];
+  @override
   List<LocationEntity> cities = [];
+  @override
   String? selectedGovernorateId;
+  @override
   String? selectedCityId;
+  @override
   LatLng selectedPosition = const LatLng(30.08525452318584, 31.282610287469513);
 
   bool _isLoaded = false;
+  bool _hasRunAutofill = false;
+
   @override
   void initState() {
     super.initState();
-    _initUserLocation();
+    initGeocodingSync();
   }
 
   @override
@@ -47,28 +56,6 @@ class _AddNewAddressState extends State<AddNewAddress> {
       _isLoaded = true;
       _loadLocations();
     }
-  }
-
-  Future<void> _initUserLocation() async {
-    try {
-      final permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        final requested = await Geolocator.requestPermission();
-        if (requested == LocationPermission.denied ||
-            requested == LocationPermission.deniedForever) {
-          return;
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) return;
-
-      final position = await Geolocator.getCurrentPosition();
-      if (!mounted) return;
-
-      setState(() {
-        selectedPosition = LatLng(position.latitude, position.longitude);
-      });
-    } catch (_) {}
   }
 
   Future<void> _loadLocations() async {
@@ -91,6 +78,36 @@ class _AddNewAddressState extends State<AddNewAddress> {
       final initialCities = filteredCities;
       selectedCityId = initialCities.isEmpty ? null : initialCities.first.id;
     });
+
+    if (!_hasRunAutofill) {
+      _hasRunAutofill = true;
+      runReverseGeocodeAutofill();
+    }
+  }
+
+  @override
+  void onGeocodingSyncUpdate({
+    LatLng? position,
+    String? governorateId,
+    String? cityId,
+    String? streetText,
+    bool areaNotAvailable = false,
+  }) {
+    setState(() {
+      if (position != null) selectedPosition = position;
+      if (governorateId != null) selectedGovernorateId = governorateId;
+      if (cityId != null) selectedCityId = cityId;
+      if (streetText != null) addressController.text = streetText;
+
+      final available = filteredCities;
+      if (!available.any((city) => city.id == selectedCityId)) {
+        selectedCityId = available.isEmpty ? null : available.first.id;
+      }
+    });
+
+    if (areaNotAvailable) {
+      AppSnackBar.showError(context, AppStrings.areaNotAvailable);
+    }
   }
 
   List<LocationEntity> get filteredCities {
@@ -108,6 +125,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
 
   @override
   void dispose() {
+    disposeGeocodingSync();
     addressController.dispose();
     phoneNumberController.dispose();
     recipientNameController.dispose();
@@ -132,6 +150,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
               }
               if (state.addAddressState.data != null) {
                 AppSnackBar.showSuccess(context, AppStrings.saveAddress);
+                Navigator.pop(context, true);
               }
             },
             builder: (context, state) {
@@ -154,8 +173,10 @@ class _AddNewAddressState extends State<AddNewAddress> {
                         selectedPosition: selectedPosition,
                         onLocationSelected: (position) {
                           selectedPosition = position;
+                          onMapPositionChanged(position);
                         },
                         onGovernorateChanged: (governorateId) {
+                          addressController.clear();
                           setState(() {
                             selectedGovernorateId = governorateId;
                             final citiesForGovernorate = filteredCities;
@@ -167,11 +188,14 @@ class _AddNewAddressState extends State<AddNewAddress> {
                                   : citiesForGovernorate.first.id;
                             }
                           });
+                          onLocationDropdownChanged();
                         },
                         onCityChanged: (cityId) {
+                          addressController.clear();
                           setState(() {
                             selectedCityId = cityId;
                           });
+                          onLocationDropdownChanged();
                         },
                       ),
                       SizedBox(

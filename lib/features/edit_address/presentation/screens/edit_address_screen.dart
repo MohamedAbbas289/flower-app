@@ -1,5 +1,6 @@
 import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/reusable_widgets/address_form_fields.dart';
+import 'package:flower_app/core/reusable_widgets/address_geocoding_sync_mixin.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/add_address/data/models/add_address_dto.dart';
@@ -23,16 +24,23 @@ class EditAddressScreen extends StatefulWidget {
   State<EditAddressScreen> createState() => _EditAddressScreenState();
 }
 
-class _EditAddressScreenState extends State<EditAddressScreen> {
+class _EditAddressScreenState extends State<EditAddressScreen>
+    with AddressGeocodingSyncMixin<EditAddressScreen> {
   final formKey = GlobalKey<FormState>();
+  @override
   late final TextEditingController addressController;
   late final TextEditingController phoneController;
   late final TextEditingController recipientNameController;
 
+  @override
   List<LocationEntity> governorates = [];
+  @override
   List<LocationEntity> cities = [];
+  @override
   String? selectedGovernorateId;
+  @override
   String? selectedCityId;
+  @override
   late LatLng selectedPosition;
 
   @override
@@ -49,6 +57,32 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
       double.tryParse(widget.address.long ?? '') ?? 31.282610287469513,
     );
     _initUserLocation();
+    initGeocodingSync();
+  }
+
+  @override
+  void onGeocodingSyncUpdate({
+    LatLng? position,
+    String? governorateId,
+    String? cityId,
+    String? streetText,
+    bool areaNotAvailable = false,
+  }) {
+    setState(() {
+      if (position != null) selectedPosition = position;
+      if (governorateId != null) selectedGovernorateId = governorateId;
+      if (cityId != null) selectedCityId = cityId;
+      if (streetText != null) addressController.text = streetText;
+
+      final available = filteredCities;
+      if (!available.any((city) => city.id == selectedCityId)) {
+        selectedCityId = available.isEmpty ? null : available.first.id;
+      }
+    });
+
+    if (areaNotAvailable) {
+      AppSnackBar.showError(context, AppStrings.areaNotAvailable);
+    }
   }
 
   @override
@@ -117,6 +151,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
 
   @override
   void dispose() {
+    disposeGeocodingSync();
     addressController.dispose();
     phoneController.dispose();
     recipientNameController.dispose();
@@ -164,8 +199,10 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         selectedPosition: selectedPosition,
                         onLocationSelected: (position) {
                           selectedPosition = position;
+                          onMapPositionChanged(position);
                         },
                         onGovernorateChanged: (value) {
+                          addressController.clear();
                           setState(() {
                             selectedGovernorateId = value;
                             final available = filteredCities;
@@ -173,9 +210,12 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                                 ? null
                                 : available.first.id;
                           });
+                          onLocationDropdownChanged();
                         },
                         onCityChanged: (value) {
+                          addressController.clear();
                           setState(() => selectedCityId = value);
+                          onLocationDropdownChanged();
                         },
                       ),
                       SizedBox(

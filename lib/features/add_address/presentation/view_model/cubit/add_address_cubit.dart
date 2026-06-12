@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flower_app/config/firebase/last_address_firestore_service.dart';
 import 'package:flower_app/features/add_address/data/models/add_address_dto.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -11,7 +14,10 @@ import '../states/add_address_states.dart';
 @injectable
 class AddAddressCubit extends Cubit<AddAddressStates> {
   final AddAddressUseCases _addAddressUseCase;
-  AddAddressCubit(this._addAddressUseCase) : super(const AddAddressStates());
+  final LastAddressFirestoreService _lastAddressFirestoreService;
+
+  AddAddressCubit(this._addAddressUseCase, this._lastAddressFirestoreService)
+    : super(const AddAddressStates());
   void doEvent(AddAddressEvent event) {
     switch (event) {
       case LoadAddressDataEvent():
@@ -43,6 +49,11 @@ class AddAddressCubit extends Cubit<AddAddressStates> {
             ),
           ),
         );
+        if (response.data.isNotEmpty) {
+          unawaited(
+            _lastAddressFirestoreService.saveLastAddress(response.data.last),
+          );
+        }
       case ErrorBaseResponse():
         emit(
           state.copyWith(

@@ -187,6 +187,7 @@ abstract class AppStrings {
   static String get enterTheRecipientName => 'enterTheRecipientName'.tr();
   static String get cityRequired => 'cityRequired'.tr();
   static String get areaRequired => 'areaRequired'.tr();
+  static String get areaNotAvailable => 'areaNotAvailable'.tr();
   static String get saveAddress => 'saveAddress'.tr();
   static String get city => 'city'.tr();
   static String get area => 'area'.tr();
@@ -195,6 +196,7 @@ abstract class AppStrings {
       'deleteAddressConfirmation'.tr();
   static String get delete => 'delete'.tr();
   static String get noAddresses => 'noAddresses'.tr();
+  static String get addAddress => 'addAddress'.tr();
   static String get addNewAddress => 'addNewAddress'.tr();
   static String get editAddress => 'editAddress'.tr();
   static String get addressDeletedSuccess => 'addressDeletedSuccess'.tr();
