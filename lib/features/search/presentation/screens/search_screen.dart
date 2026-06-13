@@ -19,13 +19,7 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<SearchViewModel>(),
-      child: BlocProvider.value(
-        value: getIt<CartBloc>(),
-        child: const _SearchView(),
-      ),
-    );
+    return const _SearchView();
   }
 }
 

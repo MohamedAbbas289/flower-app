@@ -38,16 +38,30 @@ void main() {
         );
 
         when(
-          mockSearchRepository.searchProducts(query: 'rose'),
+          mockSearchRepository.searchProducts(
+            query: 'rose',
+            page: 1,
+            limit: 40,
+          ),
         ).thenAnswer((_) async => successResponse);
 
-        final result = await searchProductsUseCase.execute(query: 'rose');
+        final result = await searchProductsUseCase.execute(
+          query: 'rose',
+          page: 1,
+          limit: 40,
+        );
 
         expect(result, isA<SuccessBaseResponse<ProductsResponseEntity>>());
         final success = result as SuccessBaseResponse<ProductsResponseEntity>;
         expect(success.data.products.length, 1);
         expect(success.data.products.first.id, '1');
-        verify(mockSearchRepository.searchProducts(query: 'rose')).called(1);
+        verify(
+          mockSearchRepository.searchProducts(
+            query: 'rose',
+            page: 1,
+            limit: 40,
+          ),
+        ).called(1);
         verifyNoMoreInteractions(mockSearchRepository);
       },
     );
@@ -61,15 +75,29 @@ void main() {
         );
 
         when(
-          mockSearchRepository.searchProducts(query: 'rose'),
+          mockSearchRepository.searchProducts(
+            query: 'rose',
+            page: 1,
+            limit: 40,
+          ),
         ).thenAnswer((_) async => errorResponse);
 
-        final result = await searchProductsUseCase.execute(query: 'rose');
+        final result = await searchProductsUseCase.execute(
+          query: 'rose',
+          page: 1,
+          limit: 40,
+        );
 
         expect(result, isA<ErrorBaseResponse<ProductsResponseEntity>>());
         final error = result as ErrorBaseResponse<ProductsResponseEntity>;
         expect(error.exception, exception);
-        verify(mockSearchRepository.searchProducts(query: 'rose')).called(1);
+        verify(
+          mockSearchRepository.searchProducts(
+            query: 'rose',
+            page: 1,
+            limit: 40,
+          ),
+        ).called(1);
         verifyNoMoreInteractions(mockSearchRepository);
       },
     );

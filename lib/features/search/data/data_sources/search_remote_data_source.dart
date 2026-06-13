@@ -4,5 +4,7 @@ import 'package:flower_app/features/categories/api/responses/products_response.d
 abstract interface class SearchRemoteDataSource {
   Future<BaseResponse<ProductsResponse>> searchProducts({
     required String query,
+    required int page,
+    required int limit,
   });
 }

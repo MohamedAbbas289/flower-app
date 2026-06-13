@@ -25,17 +25,23 @@ void main() {
         const response = ProductsResponse(message: 'Success');
 
         when(
-          mockApiClient.searchProducts(query: 'rose'),
+          mockApiClient.searchProducts(query: 'rose', page: 1, limit: 40),
         ).thenAnswer((_) async => response);
 
-        final result = await dataSource.searchProducts(query: 'rose');
+        final result = await dataSource.searchProducts(
+          query: 'rose',
+          page: 1,
+          limit: 40,
+        );
 
         expect(result, isA<SuccessBaseResponse<ProductsResponse>>());
         expect(
           (result as SuccessBaseResponse<ProductsResponse>).data,
           response,
         );
-        verify(mockApiClient.searchProducts(query: 'rose')).called(1);
+        verify(
+          mockApiClient.searchProducts(query: 'rose', page: 1, limit: 40),
+        ).called(1);
       },
     );
 
@@ -43,10 +49,14 @@ void main() {
       'searchProducts returns ErrorBaseResponse when api throws exception',
       () async {
         when(
-          mockApiClient.searchProducts(query: 'rose'),
+          mockApiClient.searchProducts(query: 'rose', page: 1, limit: 40),
         ).thenThrow(Exception('network error'));
 
-        final result = await dataSource.searchProducts(query: 'rose');
+        final result = await dataSource.searchProducts(
+          query: 'rose',
+          page: 1,
+          limit: 40,
+        );
 
         expect(result, isA<ErrorBaseResponse<ProductsResponse>>());
       },

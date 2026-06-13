@@ -15,5 +15,7 @@ abstract class SearchApiClient {
   @GET(Endpoints.searchProducts)
   Future<ProductsResponse> searchProducts({
     @Query('search') required String query,
+    @Query('page') int? page,
+    @Query('limit') int? limit,
   });
 }

@@ -9,18 +9,23 @@ import 'package:flower_app/features/search/presentation/view_model/search_events
 import 'package:flower_app/features/search/presentation/view_model/search_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/rxdart.dart';
 
 @injectable
 class SearchViewModel extends Cubit<SearchState> {
-  SearchViewModel(this._searchProductsUseCase) : super(const SearchState());
+  SearchViewModel(this._searchProductsUseCase) : super(const SearchState()) {
+    _querySubject
+        .debounceTime(const Duration(milliseconds: 500))
+        .listen(_onSearchSubmitted);
+  }
 
   final SearchProductsUseCase _searchProductsUseCase;
-  Timer? _debounceTimer;
+  final _querySubject = BehaviorSubject<String>();
 
   void doEvent(SearchEvents event) {
     switch (event) {
       case SearchSubmittedEvent():
-        _cancelDebounce();
+        _querySubject.close();
         _onSearchSubmitted(event.query);
         break;
       case SearchClearedEvent():
@@ -34,24 +39,15 @@ class SearchViewModel extends Cubit<SearchState> {
   }
 
   void onQueryChanged(String query) {
-    _cancelDebounce();
     if (query.trim().isEmpty) {
       _onSearchCleared();
       return;
     }
-    _debounceTimer = Timer(
-      const Duration(milliseconds: 500),
-      () => _onSearchSubmitted(query),
-    );
+    _querySubject.add(query);
   }
 
   void onClearSearch() {
     doEvent(SearchClearedEvent());
-  }
-
-  void _cancelDebounce() {
-    _debounceTimer?.cancel();
-    _debounceTimer = null;
   }
 
   Future<void> _onSearchSubmitted(String query) async {
@@ -80,13 +76,13 @@ class SearchViewModel extends Cubit<SearchState> {
   }
 
   void _onSearchCleared() {
-    _cancelDebounce();
+    if (!_querySubject.isClosed) _querySubject.add('');
     emit(const SearchState());
   }
 
   @override
   Future<void> close() {
-    _cancelDebounce();
+    _querySubject.close();
     return super.close();
   }
 }

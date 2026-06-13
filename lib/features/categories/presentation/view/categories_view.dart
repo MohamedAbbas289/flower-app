@@ -4,10 +4,10 @@ import 'package:flower_app/core/reusable_widgets/app_refresh_indicator.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/reusable_widgets/app_tab_bar_widget.dart';
 import 'package:flower_app/core/reusable_widgets/products_grid_view.dart';
+import 'package:flower_app/core/reusable_widgets/search_navigation_bar.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/utils/cart_helpers.dart';
-import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
 import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
@@ -20,6 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../../core/values/app_routes_name.dart';
 
 class CategoriesView extends StatefulWidget {
   const CategoriesView({super.key});
@@ -266,50 +268,7 @@ class _SearchBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () =>
-                  Navigator.of(context).pushNamed(AppRoutesName.search),
-              child: AbsorbPointer(
-                child: SizedBox(
-                  height: 48,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: AppStrings.search,
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: SvgPicture.asset(
-                          Assets.assetsIconsSearch,
-                          colorFilter: const ColorFilter.mode(
-                            AppColors.gray,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                        const BorderSide(color: AppColors.placeHolder),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                        const BorderSide(color: AppColors.placeHolder),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: AppColors.pink),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 0,
-                        horizontal: 16,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          const Expanded(child: SearchNavigationBar()),
           const SizedBox(width: 10),
           SizedBox(
             width: 48,

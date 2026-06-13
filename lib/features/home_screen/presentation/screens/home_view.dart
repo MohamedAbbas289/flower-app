@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flower_app/core/reusable_widgets/app_refresh_indicator.dart';
+import 'package:flower_app/core/reusable_widgets/search_navigation_bar.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
@@ -95,42 +96,11 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(width: 4),
           Text(AppStrings.appName, style: TextStyles.appNameTextStyle),
           const SizedBox(width: 8),
-          Expanded(
-            child: GestureDetector(
-              onTap: () =>
-                  Navigator.of(context).pushNamed(AppRoutesName.search),
-              child: AbsorbPointer(
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: AppStrings.search,
-                    constraints: const BoxConstraints(maxHeight: 40),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 8,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(22),
-                      borderSide:
-                      const BorderSide(color: AppColors.placeHolder),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(22),
-                      borderSide: const BorderSide(color: AppColors.pink),
-                    ),
-                    prefixIconConstraints: const BoxConstraints(maxHeight: 18),
-                    prefixIcon: Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 12.0),
-                      child: SvgPicture.asset(
-                        Assets.assetsIconsSearch,
-                        colorFilter: const ColorFilter.mode(
-                          AppColors.gray,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+          const Expanded(
+            child: SearchNavigationBar(
+              borderRadius: 22,
+              height: 40,
+              contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             ),
           ),
         ],

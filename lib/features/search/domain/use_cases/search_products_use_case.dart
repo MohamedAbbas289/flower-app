@@ -11,7 +11,13 @@ class SearchProductsUseCase {
 
   Future<BaseResponse<ProductsResponseEntity>> execute({
     required String query,
+    int page = 1,
+    int limit = 40,
   }) async {
-    return await _repository.searchProducts(query: query);
+    return await _repository.searchProducts(
+      query: query,
+      page: page,
+      limit: limit,
+    );
   }
 }

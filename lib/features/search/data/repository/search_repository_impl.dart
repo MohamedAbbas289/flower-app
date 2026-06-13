@@ -16,17 +16,27 @@ class SearchRepositoryImpl implements SearchRepository {
   @override
   Future<BaseResponse<ProductsResponseEntity>> searchProducts({
     required String query,
+    required int page,
+    required int limit,
   }) async {
-    final response = await _remoteDataSource.searchProducts(query: query);
+    final response = await _remoteDataSource.searchProducts(
+      query: query,
+      page: page,
+      limit: limit,
+    );
 
     switch (response) {
       case SuccessBaseResponse<ProductsResponse>():
-        final entities =
-            response.data.products
-                ?.map((e) => e.toEntity())
-                .toList()
-                .cast<ProductEntity>() ??
-            <ProductEntity>[];
+        final products = response.data.products;
+        if (products == null) {
+          return ErrorBaseResponse(
+            exception: Exception('No products returned from server'),
+          );
+        }
+        final entities = products
+            .map((e) => e.toEntity())
+            .toList()
+            .cast<ProductEntity>();
         final metadata = response.data.metadata?.toEntity();
         return SuccessBaseResponse(
           data: ProductsResponseEntity(products: entities, metadata: metadata),

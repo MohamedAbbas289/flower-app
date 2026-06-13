@@ -48,17 +48,23 @@ void main() {
         );
 
         when(
-          mockDataSource.searchProducts(query: 'rose'),
+          mockDataSource.searchProducts(query: 'rose', page: 1, limit: 40),
         ).thenAnswer((_) async => SuccessBaseResponse(data: response));
 
-        final result = await repository.searchProducts(query: 'rose');
+        final result = await repository.searchProducts(
+          query: 'rose',
+          page: 1,
+          limit: 40,
+        );
 
         expect(result, isA<SuccessBaseResponse<ProductsResponseEntity>>());
         final success = result as SuccessBaseResponse<ProductsResponseEntity>;
         expect(success.data.products.length, 1);
         expect(success.data.products.first.id, '1');
         expect(success.data.metadata?.currentPage, 1);
-        verify(mockDataSource.searchProducts(query: 'rose')).called(1);
+        verify(
+          mockDataSource.searchProducts(query: 'rose', page: 1, limit: 40),
+        ).called(1);
         verifyNoMoreInteractions(mockDataSource);
       },
     );
@@ -69,14 +75,39 @@ void main() {
         final exception = Exception('Network error');
 
         when(
-          mockDataSource.searchProducts(query: 'rose'),
+          mockDataSource.searchProducts(query: 'rose', page: 1, limit: 40),
         ).thenAnswer((_) async => ErrorBaseResponse(exception: exception));
 
-        final result = await repository.searchProducts(query: 'rose');
+        final result = await repository.searchProducts(
+          query: 'rose',
+          page: 1,
+          limit: 40,
+        );
 
         expect(result, isA<ErrorBaseResponse<ProductsResponseEntity>>());
-        verify(mockDataSource.searchProducts(query: 'rose')).called(1);
+        verify(
+          mockDataSource.searchProducts(query: 'rose', page: 1, limit: 40),
+        ).called(1);
         verifyNoMoreInteractions(mockDataSource);
+      },
+    );
+
+    test(
+      'searchProducts returns ErrorBaseResponse when products list is null',
+      () async {
+        const response = ProductsResponse(products: null);
+
+        when(
+          mockDataSource.searchProducts(query: 'rose', page: 1, limit: 40),
+        ).thenAnswer((_) async => SuccessBaseResponse(data: response));
+
+        final result = await repository.searchProducts(
+          query: 'rose',
+          page: 1,
+          limit: 40,
+        );
+
+        expect(result, isA<ErrorBaseResponse<ProductsResponseEntity>>());
       },
     );
   });

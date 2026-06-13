@@ -4,5 +4,7 @@ import 'package:flower_app/features/categories/domain/entities/products_response
 abstract interface class SearchRepository {
   Future<BaseResponse<ProductsResponseEntity>> searchProducts({
     required String query,
+    required int page,
+    required int limit,
   });
 }

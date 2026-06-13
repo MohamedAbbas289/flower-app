@@ -12,6 +12,7 @@ import 'package:flower_app/features/occasions/presentation/occasions_view_model/
 import 'package:flower_app/features/occasions/presentation/pages/occasions_view.dart';
 import 'package:flower_app/features/product_details/presentation/pages/product_details_view.dart';
 import 'package:flower_app/features/product_details/presentation/view_model/product_details_cubit.dart';
+import 'package:flower_app/features/search/presentation/view_model/search_view_model.dart';
 import 'package:flower_app/features/splash/presentation/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,8 +89,11 @@ class AppRoutes {
       case AppRoutesName.search:
         return MaterialPageRoute(
           builder: (_) =>
-              BlocProvider.value(
-                value: getIt<CartBloc>(),
+              MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (_) => getIt<SearchViewModel>()),
+                  BlocProvider.value(value: getIt<CartBloc>()),
+                ],
                 child: const SearchScreen(),
               ),
         );
