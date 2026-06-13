@@ -1,5 +1,6 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
+import 'package:flower_app/core/values/api_param.dart';
 import 'package:flower_app/features/categories/api/request_models/get_products_by_category_request_model.dart';
 import 'package:flower_app/features/categories/domain/entities/categories_response_entity.dart';
 import 'package:flower_app/features/categories/domain/entities/category_entity.dart';
@@ -95,6 +96,7 @@ class CategoriesViewModel extends Cubit<CategoriesState> {
   Future<void> _fetchProducts({
     String? categoryId,
     bool isLoadMore = false,
+    SortType? sortType,
   }) async {
     if (isLoadMore) {
       if (_productsPage >= _productsTotalPages) return;
@@ -109,14 +111,22 @@ class CategoriesViewModel extends Cubit<CategoriesState> {
           productsState: BaseState<ProductsResponseEntity>.loading(),
           selectedCategoryId: categoryId,
           clearSelectedCategoryId: categoryId == null,
+          selectedSortType: sortType,
+          clearSelectedSortType: sortType == null &&
+              state.selectedSortType == null,
         ),
       );
     }
 
     final myVersion = _fetchVersion;
+    final activeSortType = sortType ?? state.selectedSortType;
+    final requestModel = _buildRequestModel(
+      categoryId: categoryId ?? state.selectedCategoryId,
+      sortType: activeSortType,
+    );
 
     final response = await _getProductsByCategoryUseCase.execute(
-      requestModel: GetProductsByCategoryRequestModel(categoryId: categoryId),
+      requestModel: requestModel,
       page: _productsPage,
       limit: 10,
     );
@@ -152,6 +162,49 @@ class CategoriesViewModel extends Cubit<CategoriesState> {
   }
 
   void _onSortSelected({required SortType sortType}) {
-    // TODO: implement sort
+    _fetchProducts(
+      categoryId: state.selectedCategoryId,
+      sortType: sortType,
+    );
+  }
+
+  GetProductsByCategoryRequestModel _buildRequestModel({
+    String? categoryId,
+    SortType? sortType,
+  }) {
+    switch (sortType) {
+      case SortType.lowestPrice:
+        return GetProductsByCategoryRequestModel(
+          categoryId: categoryId,
+          sort: ApiParam.sortPrice,
+          reverseResults: false,
+        );
+      case SortType.highestPrice:
+        return GetProductsByCategoryRequestModel(
+          categoryId: categoryId,
+          sort: ApiParam.sortPrice,
+          reverseResults: true,
+        );
+      case SortType.newest:
+        return GetProductsByCategoryRequestModel(
+          categoryId: categoryId,
+          sort: ApiParam.sortDate,
+          reverseResults: true,
+        );
+      case SortType.oldest:
+        return GetProductsByCategoryRequestModel(
+          categoryId: categoryId,
+          sort: ApiParam.sortDate,
+          reverseResults: false,
+        );
+      case SortType.discount:
+        return GetProductsByCategoryRequestModel(
+          categoryId: categoryId,
+          sort: ApiParam.sortDiscounted,
+          reverseResults: false,
+        );
+      case null:
+        return GetProductsByCategoryRequestModel(categoryId: categoryId);
+    }
   }
 }

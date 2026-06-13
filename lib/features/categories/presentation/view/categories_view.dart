@@ -32,11 +32,15 @@ class _CategoriesViewState extends State<CategoriesView> {
   bool _showFab = true;
 
   void _openFilter() {
+    final vm = context.read<CategoriesViewModel>();
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (_) => const CategoriesFilterBottomSheet(),
+      builder: (_) => BlocProvider.value(
+        value: vm,
+        child: const CategoriesFilterBottomSheet(),
+      ),
     );
   }
 

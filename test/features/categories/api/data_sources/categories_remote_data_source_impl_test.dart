@@ -53,7 +53,7 @@ void main() {
           const response = ProductsResponse(message: 'Success');
 
           when(mockApiClient.getProductsByCategory(
-              categoryId: '123', page: 1, limit: 10))
+              categoryId: '123', sort: null, page: 1, limit: 10))
               .thenAnswer((_) async => response);
 
           final result = await dataSource.getProductsByCategory(
@@ -69,7 +69,7 @@ void main() {
           );
           verify(
             mockApiClient.getProductsByCategory(
-                categoryId: '123', page: 1, limit: 10),
+                categoryId: '123', sort: null, page: 1, limit: 10),
           ).called(1);
         });
 
@@ -77,7 +77,7 @@ void main() {
         'getProductsByCategory returns ErrorBaseResponse when api throws exception',
             () async {
           when(mockApiClient.getProductsByCategory(
-              categoryId: '123', page: 1, limit: 10))
+              categoryId: '123', sort: null, page: 1, limit: 10))
               .thenThrow(Exception('network error'));
 
           final result = await dataSource.getProductsByCategory(

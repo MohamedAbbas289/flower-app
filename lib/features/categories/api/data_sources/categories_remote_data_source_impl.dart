@@ -27,12 +27,14 @@ class CategoriesRemoteDataSourceImpl implements CategoriesRemoteDataSource {
   @override
   Future<BaseResponse<ProductsResponse>> getProductsByCategory({
     String? categoryId,
+    String? sort,
     required int page,
     required int limit,
   }) async {
     try {
       final response = await _apiClient.getProductsByCategory(
         categoryId: categoryId,
+        sort: sort,
         page: page,
         limit: limit,
       );

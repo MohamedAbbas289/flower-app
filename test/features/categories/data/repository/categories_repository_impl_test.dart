@@ -102,7 +102,7 @@ void main() {
         );
 
         when(mockDataSource.getProductsByCategory(
-            categoryId: '123', page: 1, limit: 10))
+            categoryId: '123', sort: null, page: 1, limit: 10))
             .thenAnswer((_) async => SuccessBaseResponse(data: response));
 
         final result = await repository.getProductsByCategory(
@@ -117,7 +117,7 @@ void main() {
         expect(success.data.products.first.id, '1');
         expect(success.data.metadata?.currentPage, 1);
         verify(mockDataSource.getProductsByCategory(
-            categoryId: '123', page: 1, limit: 10))
+            categoryId: '123', sort: null, page: 1, limit: 10))
             .called(1);
         verifyNoMoreInteractions(mockDataSource);
       },
@@ -129,7 +129,7 @@ void main() {
         final exception = Exception('Network error');
 
         when(mockDataSource.getProductsByCategory(
-            categoryId: '123', page: 1, limit: 10))
+            categoryId: '123', sort: null, page: 1, limit: 10))
             .thenAnswer((_) async => ErrorBaseResponse(exception: exception));
 
         final result = await repository.getProductsByCategory(
@@ -140,7 +140,7 @@ void main() {
 
         expect(result, isA<ErrorBaseResponse<ProductsResponseEntity>>());
         verify(mockDataSource.getProductsByCategory(
-            categoryId: '123', page: 1, limit: 10))
+            categoryId: '123', sort: null, page: 1, limit: 10))
             .called(1);
         verifyNoMoreInteractions(mockDataSource);
       },

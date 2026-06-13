@@ -21,4 +21,8 @@ class ApiParam {
   static const String quantity = "quantity";
   static const String productId = "productId";
   static const String addressId = "id";
+  static const String sort = "sort";
+  static const String sortPrice = "price";
+  static const String sortDate = "date";
+  static const String sortDiscounted = "discounted";
 }

@@ -49,11 +49,13 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
   @override
   Future<BaseResponse<ProductsResponseEntity>> getProductsByCategory({
     String? categoryId,
+    String? sort,
     int? page,
     int? limit,
   }) async {
     final response = await _remoteDataSource.getProductsByCategory(
       categoryId: categoryId,
+      sort: sort,
       page: page ?? 1,
       limit: limit ?? 10,
     );

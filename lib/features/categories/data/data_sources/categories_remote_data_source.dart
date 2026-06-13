@@ -10,6 +10,7 @@ abstract interface class CategoriesRemoteDataSource {
 
   Future<BaseResponse<ProductsResponse>> getProductsByCategory({
     String? categoryId,
+    String? sort,
     required int page,
     required int limit,
   });
