@@ -63,7 +63,8 @@ class ProfileDetails extends StatelessWidget {
                             borderRadius: BorderRadius.circular(100),
                           ),
                           clipBehavior: Clip.antiAlias,
-                          child: userData?.photo != null &&
+                          child:
+                              userData?.photo != null &&
                                   userData!.photo!.isNotEmpty
                               ? Image.network(
                                   userData.photo!,
@@ -136,7 +137,6 @@ class ProfileDetails extends StatelessWidget {
                   iconPath: Assets.assetsIconsLocation,
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutesName.savedAddress);
-
                   },
                 ),
               ],

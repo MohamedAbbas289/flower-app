@@ -206,5 +206,11 @@
   "deliveryAddress": "Delivery address",
   "addNew": "Add new",
   "addAddressBeforeCheckout": "Please add a delivery address to continue",
-  "orderPlacedSuccessfully": "Order placed successfully"
+  "orderPlacedSuccessfully": "Order placed successfully",
+  "activeOrders": "Active",
+  "completedOrders": "Completed",
+  "trackOrder": "Track order",
+  "reorder": "Reorder",
+  "noActiveOrders": "No active orders",
+  "noCompletedOrders": "No completed orders"
 }

@@ -21,5 +21,4 @@ abstract class AppRoutesName {
   static const editAddress = '/editAddress';
   static const checkout = '/checkoutView';
   static const myOrders = '/myOrdersView';
-
 }

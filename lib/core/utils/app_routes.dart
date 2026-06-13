@@ -7,16 +7,16 @@ import 'package:flower_app/features/app_section/presentation/view/app_section_vi
 import 'package:flower_app/features/best_seller/presentation/view/best_seller_view.dart';
 import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
 import 'package:flower_app/features/edit_address/presentation/screens/edit_address_screen.dart';
+import 'package:flower_app/features/change_password/presentation/change_password_view_model/cubit/change_password_view_model.dart';
+import 'package:flower_app/features/change_password/presentation/pages/change_password_view.dart';
 import 'package:flower_app/features/edit_profile/presentation/pages/edit_profile_view.dart';
 import 'package:flower_app/features/occasions/presentation/occasions_view_model/occasions_view_model.dart';
 import 'package:flower_app/features/occasions/presentation/pages/occasions_view.dart';
-import 'package:flower_app/features/change_password/presentation/pages/change_password_view.dart';
-import 'package:flower_app/features/change_password/presentation/change_password_view_model/cubit/change_password_view_model.dart';
+import 'package:flower_app/features/product_details/presentation/pages/product_details_view.dart';
+import 'package:flower_app/features/product_details/presentation/view_model/product_details_cubit.dart';
 import 'package:flower_app/features/splash/presentation/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flower_app/features/product_details/presentation/pages/product_details_view.dart';
-import 'package:flower_app/features/product_details/presentation/view_model/product_details_cubit.dart';
 import '../../features/add_address/presentation/screens/add_new_address.dart';
 import '../../features/auth/forget-password/presentation/flow/forget_password_routes.dart';
 import '../../features/auth/login/presentation/screens/login_screen.dart';
@@ -24,7 +24,7 @@ import '../../features/auth/signup/presentation/pages/signup_view.dart';
 import '../../features/saved_address/presentation/screens/saved_address_screen.dart';
 import '../../features/checkout/presentation/model/checkout_arguments.dart';
 import '../../features/checkout/presentation/screens/checkout_view.dart';
-import '../../features/orders/presentation/screens/my_orders_view.dart';
+import '../../features/orders/presentation/screens/orders_screen.dart';
 
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -56,9 +56,6 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => CheckoutView(arguments: arguments),
         );
-
-      case AppRoutesName.myOrders:
-        return MaterialPageRoute(builder: (_) => const MyOrdersView());
 
       case AppRoutesName.occasions:
         final occasionId = settings.arguments as String?;
@@ -105,7 +102,8 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => EditProfileView(initialData: authData),
         );
-
+      case AppRoutesName.myOrders:
+        return MaterialPageRoute(builder: (_) => const OrdersScreen());
       default:
         return MaterialPageRoute(
           builder: (_) =>

@@ -206,5 +206,11 @@
   "deliveryAddress": "عنوان التوصيل",
   "addNew": "إضافة جديد",
   "addAddressBeforeCheckout": "يرجى إضافة عنوان توصيل للمتابعة",
-  "orderPlacedSuccessfully": "تم تنفيذ الطلب بنجاح"
+  "orderPlacedSuccessfully": "تم تنفيذ الطلب بنجاح",
+  "activeOrders": "نشطة",
+  "completedOrders": "مكتملة",
+  "trackOrder": "تتبع الطلب",
+  "reorder": "إعادة الطلب",
+  "noActiveOrders": "لا توجد طلبات نشطة",
+  "noCompletedOrders": "لا توجد طلبات مكتملة"
 }
