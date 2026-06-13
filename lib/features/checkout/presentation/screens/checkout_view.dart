@@ -1,5 +1,6 @@
 import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
+import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/endpoints.dart';
 import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
@@ -102,11 +103,15 @@ class _CheckoutBodyState extends State<_CheckoutBody> {
 
             if (isSuccess == true && context.mounted) {
               getIt<CartBloc>().add(const ClearCartEvent());
+              getIt<CartBloc>().add(const LoadCartEvent());
               AppSnackBar.showSuccess(
                 context,
                 AppStrings.orderPlacedSuccessfully,
               );
               Navigator.popUntil(context, (route) => route.isFirst);
+              Navigator.pushNamed(context, AppRoutesName.myOrders);
+            } else if (isSuccess == false && context.mounted) {
+              Navigator.pop(context);
             }
         }
       },

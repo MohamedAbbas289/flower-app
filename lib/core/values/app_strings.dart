@@ -142,6 +142,7 @@ abstract class AppStrings {
   static String get currentPassword => 'currentPassword'.tr();
   static String get changePassword => 'changePassword'.tr();
   static String get myOrders => 'myOrders'.tr();
+  static String get noOrdersYet => 'noOrdersYet'.tr();
   static String get savedAddress => 'savedAddress'.tr();
   static String get notification => 'notification'.tr();
   static String get aboutUs => 'aboutUs'.tr();

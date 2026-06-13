@@ -127,7 +127,9 @@ class ProfileDetails extends StatelessWidget {
                 RowSection.arrow(
                   title: AppStrings.myOrders,
                   iconPath: Assets.assetsIconsOrder,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutesName.myOrders);
+                  },
                 ),
                 RowSection.arrow(
                   title: AppStrings.savedAddress,

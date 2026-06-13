@@ -24,6 +24,7 @@ import '../../features/auth/signup/presentation/pages/signup_view.dart';
 import '../../features/saved_address/presentation/screens/saved_address_screen.dart';
 import '../../features/checkout/presentation/model/checkout_arguments.dart';
 import '../../features/checkout/presentation/screens/checkout_view.dart';
+import '../../features/orders/presentation/screens/my_orders_view.dart';
 
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -55,6 +56,9 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => CheckoutView(arguments: arguments),
         );
+
+      case AppRoutesName.myOrders:
+        return MaterialPageRoute(builder: (_) => const MyOrdersView());
 
       case AppRoutesName.occasions:
         final occasionId = settings.arguments as String?;
