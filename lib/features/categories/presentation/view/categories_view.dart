@@ -8,6 +8,7 @@ import 'package:flower_app/core/reusable_widgets/search_navigation_bar.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/utils/cart_helpers.dart';
+import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
 import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
@@ -21,7 +22,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../core/values/app_routes_name.dart';
 
 class CategoriesView extends StatefulWidget {
   const CategoriesView({super.key});

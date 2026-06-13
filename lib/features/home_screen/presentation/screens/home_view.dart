@@ -100,7 +100,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: SearchNavigationBar(
               borderRadius: 22,
               height: 40,
-              contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+              verticalPadding: 12,
+              horizontalPadding: 8,
             ),
           ),
         ],
