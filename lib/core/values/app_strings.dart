@@ -202,4 +202,19 @@ abstract class AppStrings {
   static String get addressDeletedSuccess => 'addressDeletedSuccess'.tr();
   static String get addressUpdatedSuccess => 'addressUpdatedSuccess'.tr();
   static String get updateAddress => 'updateAddress'.tr();
+  static String get payment => 'payment'.tr();
+  static String get paymentMethod => 'paymentMethod'.tr();
+  static String get cashOnDelivery => 'cashOnDelivery'.tr();
+  static String get creditCard => 'creditCard'.tr();
+  static String get placeOrder => 'placeOrder'.tr();
+  static String get isGift => 'isGift'.tr();
+  static String get deliveryTime => 'deliveryTime'.tr();
+  static String get schedule => 'schedule'.tr();
+  static String get estimatedDeliveryTime => 'estimatedDeliveryTime'.tr();
+  static String get deliveryAddress => 'deliveryAddress'.tr();
+  static String get addNew => 'addNew'.tr();
+  static String get addAddressBeforeCheckout =>
+      'addAddressBeforeCheckout'.tr();
+  static String get orderPlacedSuccessfully =>
+      'orderPlacedSuccessfully'.tr();
 }

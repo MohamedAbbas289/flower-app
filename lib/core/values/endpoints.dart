@@ -28,5 +28,9 @@ abstract class Endpoints {
 static const String cart = '$baseUrl/cart';
 static const String addOrEditOnCart = '$baseUrl/cart/{productId}';
 
+  // Orders / Payment
+  static const String createOrder = '$baseUrl/orders';
+  static const String checkoutSession = '$baseUrl/orders/checkout';
+  static const String stripeRedirectUrl = 'http://localhost:3000';
 
 }

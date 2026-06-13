@@ -242,4 +242,35 @@ void main() {
       verifyNoMoreInteractions(mockDataSource);
     });
   });
+
+  group('clearCart', () {
+    test(
+      'returns SuccessBaseResponse with empty CartEntity when cart is null',
+      () async {
+        when(mockDataSource.clearCart()).thenAnswer(
+          (_) async => SuccessBaseResponse(data: tCartResponseNullCart),
+        );
+
+        final result = await repo.clearCart();
+
+        expect(result, isA<SuccessBaseResponse<CartEntity>>());
+        expect((result as SuccessBaseResponse).data, tEmptyCartEntity);
+        verify(mockDataSource.clearCart()).called(1);
+        verifyNoMoreInteractions(mockDataSource);
+      },
+    );
+
+    test('returns ErrorBaseResponse when data source returns error', () async {
+      when(
+        mockDataSource.clearCart(),
+      ).thenAnswer((_) async => ErrorBaseResponse(exception: tException));
+
+      final result = await repo.clearCart();
+
+      expect(result, isA<ErrorBaseResponse<CartEntity>>());
+      expect((result as ErrorBaseResponse).exception, tException);
+      verify(mockDataSource.clearCart()).called(1);
+      verifyNoMoreInteractions(mockDataSource);
+    });
+  });
 }

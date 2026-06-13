@@ -22,6 +22,8 @@ import '../../features/auth/forget-password/presentation/flow/forget_password_ro
 import '../../features/auth/login/presentation/screens/login_screen.dart';
 import '../../features/auth/signup/presentation/pages/signup_view.dart';
 import '../../features/saved_address/presentation/screens/saved_address_screen.dart';
+import '../../features/checkout/presentation/model/checkout_arguments.dart';
+import '../../features/checkout/presentation/screens/checkout_view.dart';
 
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -46,6 +48,12 @@ class AppRoutes {
         final address = settings.arguments as AddressEntity;
         return MaterialPageRoute(
           builder: (_) => EditAddressScreen(address: address),
+        );
+
+      case AppRoutesName.checkout:
+        final arguments = settings.arguments as CheckoutArguments;
+        return MaterialPageRoute(
+          builder: (_) => CheckoutView(arguments: arguments),
         );
 
       case AppRoutesName.occasions:

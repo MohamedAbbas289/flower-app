@@ -32,5 +32,6 @@ abstract interface class CartApiClient {
     @Path(ApiParam.productId) String productId,
   );
 
-
+  @DELETE(Endpoints.cart)
+  Future<CartResponseModel> clearCart();
 }

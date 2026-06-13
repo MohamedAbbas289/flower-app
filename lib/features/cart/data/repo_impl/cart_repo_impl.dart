@@ -43,6 +43,12 @@ class CartRepoImpl implements CartRepoContract {
     return _mapResponse(response);
   }
 
+  @override
+  Future<BaseResponse<CartEntity>> clearCart() async {
+    final response = await _dataSource.clearCart();
+    return _mapResponse(response);
+  }
+
   BaseResponse<CartEntity> _mapResponse(
     BaseResponse<CartResponseModel> response,
   ) {

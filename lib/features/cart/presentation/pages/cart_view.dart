@@ -1,4 +1,5 @@
 import 'package:flower_app/config/auth/auth_manager.dart';
+import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/reusable_widgets/app_dialog.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
@@ -13,6 +14,8 @@ import 'package:flower_app/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
 import 'package:flower_app/features/cart/presentation/view_model/cart_event.dart';
 import 'package:flower_app/features/cart/presentation/view_model/cart_state.dart';
+import 'package:flower_app/features/checkout/presentation/model/checkout_arguments.dart';
+import 'package:flower_app/features/saved_address/domain/use_cases/saved_address_use_case.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -438,6 +441,33 @@ class _CartSummary extends StatelessWidget {
 
   final CartEntity cart;
 
+  Future<void> _onCheckout(BuildContext context) async {
+    final response = await getIt<GetAddressesUseCase>()();
+
+    if (!context.mounted) return;
+
+    switch (response) {
+      case SuccessBaseResponse():
+        if (response.data.isEmpty) {
+          AppSnackBar.showError(context, AppStrings.addAddressBeforeCheckout);
+          Navigator.pushNamed(context, AppRoutesName.addAddress);
+          return;
+        }
+        Navigator.pushNamed(
+          context,
+          AppRoutesName.checkout,
+          arguments: CheckoutArguments(
+            subTotal: cart.totalPrice,
+            deliveryFee: 0,
+            total: cart.totalPriceAfterDiscount,
+          ),
+        );
+      case ErrorBaseResponse():
+        AppSnackBar.showError(context, AppStrings.addAddressBeforeCheckout);
+        Navigator.pushNamed(context, AppRoutesName.addAddress);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -468,7 +498,7 @@ class _CartSummary extends StatelessWidget {
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () => _onCheckout(context),
               child: Text(AppStrings.checkout),
             ),
           ),

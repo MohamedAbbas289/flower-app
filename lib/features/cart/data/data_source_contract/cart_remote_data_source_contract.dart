@@ -13,4 +13,5 @@ abstract interface class CartRemoteDataSourceContract {
   Future<BaseResponse<CartResponseModel>> removeProductfromCart(
     String productId,
   );
+  Future<BaseResponse<CartResponseModel>> clearCart();
 }

@@ -192,5 +192,18 @@
   "editAddress": "تعديل العنوان",
   "addressDeletedSuccess": "تم حذف العنوان بنجاح",
   "addressUpdatedSuccess": "تم تعديل العنوان بنجاح",
-  "updateAddress": "تحديث العنوان"
+  "updateAddress": "تحديث العنوان",
+  "payment": "الدفع",
+  "paymentMethod": "طريقة الدفع",
+  "cashOnDelivery": "الدفع عند الاستلام",
+  "creditCard": "بطاقة ائتمان",
+  "placeOrder": "إتمام الطلب",
+  "isGift": "إنها هدية",
+  "deliveryTime": "وقت التوصيل",
+  "schedule": "جدولة",
+  "estimatedDeliveryTime": "فوري، يصل بحلول 03 سبتمبر 2024، 11:00 صباحاً",
+  "deliveryAddress": "عنوان التوصيل",
+  "addNew": "إضافة جديد",
+  "addAddressBeforeCheckout": "يرجى إضافة عنوان توصيل للمتابعة",
+  "orderPlacedSuccessfully": "تم تنفيذ الطلب بنجاح"
 }

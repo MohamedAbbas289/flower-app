@@ -136,4 +136,31 @@ void main() {
       verifyNoMoreInteractions(mockCartApiClient);
     });
   });
+
+  group('clearCart', () {
+    test('returns SuccessBaseResponse with CartResponseModel on success',
+        () async {
+      when(mockCartApiClient.clearCart())
+          .thenAnswer((_) async => tCartResponseModel);
+
+      final result = await dataSource.clearCart();
+
+      expect(result, isA<SuccessBaseResponse<CartResponseModel>>());
+      expect((result as SuccessBaseResponse).data, tCartResponseModel);
+      verify(mockCartApiClient.clearCart()).called(1);
+      verifyNoMoreInteractions(mockCartApiClient);
+    });
+
+    test('returns ErrorBaseResponse when api throws an exception', () async {
+      final tException = Exception('Clear cart failed');
+      when(mockCartApiClient.clearCart()).thenThrow(tException);
+
+      final result = await dataSource.clearCart();
+
+      expect(result, isA<ErrorBaseResponse<CartResponseModel>>());
+      expect((result as ErrorBaseResponse).exception, tException);
+      verify(mockCartApiClient.clearCart()).called(1);
+      verifyNoMoreInteractions(mockCartApiClient);
+    });
+  });
 }

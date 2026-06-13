@@ -4,6 +4,7 @@ import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flower_app/features/cart/api/request_models/cart_request_model.dart';
 import 'package:flower_app/features/cart/domain/entities/cart_entity.dart';
 import 'package:flower_app/features/cart/domain/use_cases/add_to_cart_use_case.dart';
+import 'package:flower_app/features/cart/domain/use_cases/clear_cart_use_case.dart';
 import 'package:flower_app/features/cart/domain/use_cases/get_cart_use_case.dart';
 import 'package:flower_app/features/cart/domain/use_cases/remove_product_from_cart_use_case.dart';
 import 'package:flower_app/features/cart/domain/use_cases/update_quantity_use_case.dart';
@@ -21,12 +22,14 @@ import 'cart_bloc_test.mocks.dart';
   AddToCartUseCase,
   UpdateQuantityUseCase,
   RemoveProductFromCartUseCase,
+  ClearCartUseCase,
 ])
 void main() {
   late MockGetCartUseCase mockGetCartUseCase;
   late MockAddToCartUseCase mockAddToCartUseCase;
   late MockUpdateQuantityUseCase mockUpdateQuantityUseCase;
   late MockRemoveProductFromCartUseCase mockRemoveProductFromCartUseCase;
+  late MockClearCartUseCase mockClearCartUseCase;
 
   const tRequestModel = CartRequestModel(productId: 'product_123', quantity: 2);
 
@@ -41,11 +44,21 @@ void main() {
     numOfCartItems: 0,
   );
 
+  const tEmptyCartEntity = CartEntity(
+    id: '',
+    cartItems: [],
+    totalPrice: 0,
+    totalPriceAfterDiscount: 0,
+    discount: 0,
+    numOfCartItems: 0,
+  );
+
   CartBloc buildBloc() => CartBloc(
     mockGetCartUseCase,
     mockAddToCartUseCase,
     mockUpdateQuantityUseCase,
     mockRemoveProductFromCartUseCase,
+    mockClearCartUseCase,
   );
 
   setUp(() {
@@ -53,6 +66,7 @@ void main() {
     mockAddToCartUseCase = MockAddToCartUseCase();
     mockUpdateQuantityUseCase = MockUpdateQuantityUseCase();
     mockRemoveProductFromCartUseCase = MockRemoveProductFromCartUseCase();
+    mockClearCartUseCase = MockClearCartUseCase();
     provideDummy<BaseResponse<CartEntity>>(
       SuccessBaseResponse(data: tCartEntity),
     );
@@ -214,6 +228,41 @@ void main() {
       expect: () => [
         CartState(removeItemState: BaseState.loading()),
         CartState(removeItemState: BaseState.error(tErrorMessage)),
+      ],
+    );
+  });
+
+  group('ClearCartEvent', () {
+    blocTest<CartBloc, CartState>(
+      'emits loading then success when use case returns success',
+      build: buildBloc,
+      setUp: () {
+        when(
+          mockClearCartUseCase(),
+        ).thenAnswer((_) async => SuccessBaseResponse(data: tEmptyCartEntity));
+      },
+      act: (bloc) => bloc.add(const ClearCartEvent()),
+      expect: () => [
+        CartState(clearCartState: BaseState.loading()),
+        CartState(
+          clearCartState: BaseState.success(tEmptyCartEntity),
+          cartState: BaseState.success(tEmptyCartEntity),
+        ),
+      ],
+    );
+
+    blocTest<CartBloc, CartState>(
+      'emits loading then error when use case returns error',
+      build: buildBloc,
+      setUp: () {
+        when(mockClearCartUseCase()).thenAnswer(
+          (_) async => ErrorBaseResponse(exception: Exception(tErrorMessage)),
+        );
+      },
+      act: (bloc) => bloc.add(const ClearCartEvent()),
+      expect: () => [
+        CartState(clearCartState: BaseState.loading()),
+        CartState(clearCartState: BaseState.error(tErrorMessage)),
       ],
     );
   });

@@ -7,7 +7,7 @@ class CartState extends Equatable {
   final BaseState<CartEntity> addToCartState;
   final BaseState<CartEntity> updateQuantityState;
   final BaseState<CartEntity> removeItemState;
-  final BaseState<void> clearCartState;
+  final BaseState<CartEntity> clearCartState;
   final Map<String, int> localQuantities;
 
   const CartState({
@@ -24,7 +24,7 @@ class CartState extends Equatable {
     BaseState<CartEntity>? addToCartState,
     BaseState<CartEntity>? updateQuantityState,
     BaseState<CartEntity>? removeItemState,
-    BaseState<void>? clearCartState,
+    BaseState<CartEntity>? clearCartState,
     Map<String, int>? localQuantities,
   }) {
     return CartState(

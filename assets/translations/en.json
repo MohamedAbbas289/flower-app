@@ -192,5 +192,18 @@
   "editAddress": "Edit Address",
   "addressDeletedSuccess": "Address deleted successfully",
   "addressUpdatedSuccess": "Address updated successfully",
-  "updateAddress": "Update Address"
+  "updateAddress": "Update Address",
+  "payment": "Payment",
+  "paymentMethod": "Payment method",
+  "cashOnDelivery": "Cash on delivery",
+  "creditCard": "Credit card",
+  "placeOrder": "Place order",
+  "isGift": "It is a gift",
+  "deliveryTime": "Delivery time",
+  "schedule": "Schedule",
+  "estimatedDeliveryTime": "Instant, Arrive by 03 Sep 2024, 11:00 AM",
+  "deliveryAddress": "Delivery address",
+  "addNew": "Add new",
+  "addAddressBeforeCheckout": "Please add a delivery address to continue",
+  "orderPlacedSuccessfully": "Order placed successfully"
 }
