@@ -22,10 +22,10 @@ jobs:
           BRANCH_NAME="${{ github.head_ref }}"
           echo "Branch name: $BRANCH_NAME"
           
-          if [[ ! "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix|chore|refactor|test|docs)/.+ ]]; then
+          if [[ ! "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix|chore|refactor|test|release|docs)/.+ ]]; then
             echo "❌ Invalid branch name: $BRANCH_NAME"
             echo "Branch name must follow the pattern: <type>/<description>"
-            echo "Allowed types: feature, bugfix, hotfix, chore, refactor, test, docs"
+            echo "Allowed types: feature, bugfix, hotfix, chore, refactor, test, release, docs"
             echo "Example: feature/product-details"
             exit 1
           fi
