@@ -23,10 +23,11 @@ abstract class Endpoints {
       'https://elevate-flutter-team.github.io/flower_app_web_views/about.html';
   static const String termsFlowerApp =
       'https://elevate-flutter-team.github.io/flower_app_web_views/terms.html';
-static const String cart = '$baseUrl/cart';
-static const String addOrEditOnCart = '$baseUrl/cart/{productId}';
+  static const String cart = '$baseUrl/cart';
+  static const String addOrEditOnCart = '$baseUrl/cart/{productId}';
   static const String createOrder = '$baseUrl/orders';
   static const String checkoutSession = '$baseUrl/orders/checkout';
   static const String stripeRedirectUrl = 'http://localhost:3000';
   static const String getOrders = '$baseUrl/orders';
+  static const String searchProducts = '$baseUrl/products';
 }

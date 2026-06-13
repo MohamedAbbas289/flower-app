@@ -214,10 +214,8 @@ abstract class AppStrings {
   static String get estimatedDeliveryTime => 'estimatedDeliveryTime'.tr();
   static String get deliveryAddress => 'deliveryAddress'.tr();
   static String get addNew => 'addNew'.tr();
-  static String get addAddressBeforeCheckout =>
-      'addAddressBeforeCheckout'.tr();
-  static String get orderPlacedSuccessfully =>
-      'orderPlacedSuccessfully'.tr();
+  static String get addAddressBeforeCheckout => 'addAddressBeforeCheckout'.tr();
+  static String get orderPlacedSuccessfully => 'orderPlacedSuccessfully'.tr();
   static String get activeOrders => 'activeOrders'.tr();
   static String get completedOrders => 'completedOrders'.tr();
   static String get trackOrder => 'trackOrder'.tr();
@@ -225,4 +223,5 @@ abstract class AppStrings {
   static String get noActiveOrders => 'noActiveOrders'.tr();
   static String get noCompletedOrders => 'noCompletedOrders'.tr();
   static String deliveredOnLabel(String date) => 'Delivered on $date';
+  static String get searchForAnyProduct => 'searchForAnyProduct'.tr();
 }

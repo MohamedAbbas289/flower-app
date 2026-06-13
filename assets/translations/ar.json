@@ -212,5 +212,6 @@
   "trackOrder": "تتبع الطلب",
   "reorder": "إعادة الطلب",
   "noActiveOrders": "لا توجد طلبات نشطة",
-  "noCompletedOrders": "لا توجد طلبات مكتملة"
+  "noCompletedOrders": "لا توجد طلبات مكتملة",
+  "searchForAnyProduct": "ابحث عن أي منتج تريده"
 }

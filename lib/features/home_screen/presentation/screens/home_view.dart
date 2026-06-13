@@ -103,30 +103,37 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(AppStrings.appName, style: TextStyles.appNameTextStyle),
           const SizedBox(width: 8),
           Expanded(
-            child: TextFormField(
-              decoration: InputDecoration(
-                hintText: AppStrings.search,
-                constraints: const BoxConstraints(maxHeight: 40),
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 12,
-                  horizontal: 8,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(22),
-                  borderSide: const BorderSide(color: AppColors.placeHolder),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(22),
-                  borderSide: const BorderSide(color: AppColors.pink),
-                ),
-                prefixIconConstraints: const BoxConstraints(maxHeight: 18),
-                prefixIcon: Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 12.0),
-                  child: SvgPicture.asset(
-                    Assets.assetsIconsSearch,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.gray,
-                      BlendMode.srcIn,
+            child: GestureDetector(
+              onTap: () =>
+                  Navigator.of(context).pushNamed(AppRoutesName.search),
+              child: AbsorbPointer(
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: AppStrings.search,
+                    constraints: const BoxConstraints(maxHeight: 40),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 8,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(22),
+                      borderSide:
+                      const BorderSide(color: AppColors.placeHolder),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(22),
+                      borderSide: const BorderSide(color: AppColors.pink),
+                    ),
+                    prefixIconConstraints: const BoxConstraints(maxHeight: 18),
+                    prefixIcon: Padding(
+                      padding: const EdgeInsetsDirectional.only(start: 12.0),
+                      child: SvgPicture.asset(
+                        Assets.assetsIconsSearch,
+                        colorFilter: const ColorFilter.mode(
+                          AppColors.gray,
+                          BlendMode.srcIn,
+                        ),
+                      ),
                     ),
                   ),
                 ),

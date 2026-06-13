@@ -2,6 +2,8 @@ import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
 import 'package:flower_app/features/app_section/presentation/view/app_section_view.dart';
 import 'package:flower_app/features/best_seller/presentation/view/best_seller_view.dart';
@@ -15,8 +17,6 @@ import 'package:flower_app/features/occasions/presentation/pages/occasions_view.
 import 'package:flower_app/features/product_details/presentation/pages/product_details_view.dart';
 import 'package:flower_app/features/product_details/presentation/view_model/product_details_cubit.dart';
 import 'package:flower_app/features/splash/presentation/splash_view.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/add_address/presentation/screens/add_new_address.dart';
 import '../../features/auth/forget-password/presentation/flow/forget_password_routes.dart';
 import '../../features/auth/login/presentation/screens/login_screen.dart';
@@ -25,6 +25,7 @@ import '../../features/saved_address/presentation/screens/saved_address_screen.d
 import '../../features/checkout/presentation/model/checkout_arguments.dart';
 import '../../features/checkout/presentation/screens/checkout_view.dart';
 import '../../features/orders/presentation/screens/orders_screen.dart';
+import '../../features/search/presentation/screens/search_screen.dart';
 
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -34,17 +35,22 @@ class AppRoutes {
     switch (settings.name) {
       case AppRoutesName.splash:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+
       case AppRoutesName.login:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
+
       case AppRoutesName.home:
         return MaterialPageRoute(builder: (_) => const AppSectionView());
+
       case AppRoutesName.signUp:
         return MaterialPageRoute(builder: (_) => const SignupView());
+
       case AppRoutesName.savedAddress:
         return MaterialPageRoute(builder: (_) => SavedAddressScreen());
 
       case AppRoutesName.addAddress:
         return MaterialPageRoute(builder: (_) => AddNewAddress());
+
       case AppRoutesName.editAddress:
         final address = settings.arguments as AddressEntity;
         return MaterialPageRoute(
@@ -104,6 +110,15 @@ class AppRoutes {
         );
       case AppRoutesName.myOrders:
         return MaterialPageRoute(builder: (_) => const OrdersScreen());
+
+      case AppRoutesName.search:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: getIt<CartBloc>(),
+            child: const SearchScreen(),
+          ),
+        );
+
       default:
         return MaterialPageRoute(
           builder: (_) =>

@@ -212,5 +212,8 @@
   "trackOrder": "Track order",
   "reorder": "Reorder",
   "noActiveOrders": "No active orders",
-  "noCompletedOrders": "No completed orders"
+  "noCompletedOrders": "No completed orders",
+  "city": "City",
+  "area": "Area",
+  "searchForAnyProduct": "Search For Any Product You Want"
 }
