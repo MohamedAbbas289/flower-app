@@ -182,12 +182,24 @@ abstract class AppStrings {
   static String get address => 'address'.tr();
   static String get addressMissingOrNull => 'addressMissingOrNull'.tr();
   static String get recipientName => 'recipientName'.tr();
-  static String get enterTheAddress => 'EnterTheAddress'.tr();
-  static String get enterThePhoneNumber => 'EnterThePhoneNumber'.tr();
-  static String get enterTheRecipientName => 'EnterTheRecipientName'.tr();
-  static String get cityRequired => 'CityRequired'.tr();
-  static String get areaRequired => 'AreaRequired'.tr();
-  static String get saveAddress => 'SaveAddress'.tr();
-  static String get city => 'City'.tr();
-  static String get area => 'Area'.tr();
+  static String get enterTheAddress => 'enterTheAddress'.tr();
+  static String get enterThePhoneNumber => 'enterThePhoneNumber'.tr();
+  static String get enterTheRecipientName => 'enterTheRecipientName'.tr();
+  static String get cityRequired => 'cityRequired'.tr();
+  static String get areaRequired => 'areaRequired'.tr();
+  static String get areaNotAvailable => 'areaNotAvailable'.tr();
+  static String get saveAddress => 'saveAddress'.tr();
+  static String get city => 'city'.tr();
+  static String get area => 'area'.tr();
+  static String get deleteAddress => 'deleteAddress'.tr();
+  static String get deleteAddressConfirmation =>
+      'deleteAddressConfirmation'.tr();
+  static String get delete => 'delete'.tr();
+  static String get noAddresses => 'noAddresses'.tr();
+  static String get addAddress => 'addAddress'.tr();
+  static String get addNewAddress => 'addNewAddress'.tr();
+  static String get editAddress => 'editAddress'.tr();
+  static String get addressDeletedSuccess => 'addressDeletedSuccess'.tr();
+  static String get addressUpdatedSuccess => 'addressUpdatedSuccess'.tr();
+  static String get updateAddress => 'updateAddress'.tr();
 }

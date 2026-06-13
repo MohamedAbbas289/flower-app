@@ -20,4 +20,5 @@ class ApiParam {
   static const String product = "product";
   static const String quantity = "quantity";
   static const String productId = "productId";
+  static const String addressId = "id";
 }

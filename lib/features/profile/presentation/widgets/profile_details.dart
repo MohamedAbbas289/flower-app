@@ -132,7 +132,10 @@ class ProfileDetails extends StatelessWidget {
                 RowSection.arrow(
                   title: AppStrings.savedAddress,
                   iconPath: Assets.assetsIconsLocation,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutesName.savedAddress);
+
+                  },
                 ),
               ],
             ),

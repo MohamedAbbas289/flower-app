@@ -16,6 +16,8 @@ abstract class AppRoutesName {
   static const productDetails = "/productDetailsView";
   static const bestSeller = '/bestSellerView';
   static const editProfile = '/editProfile';
-  static const addresses = '/addresses';
+  static const savedAddress = '/savedAddress';
+  static const addAddress = '/addAddress';
+  static const editAddress = '/editAddress';
 
 }

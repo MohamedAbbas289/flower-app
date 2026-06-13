@@ -1,18 +1,17 @@
+import 'package:flower_app/core/reusable_widgets/address_form_fields.dart';
+import 'package:flower_app/core/reusable_widgets/address_geocoding_sync_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../config/di/di.dart';
 import '../../../../core/reusable_widgets/app_snack_bar.dart';
-import '../../../../core/utils/validation/app_regex.dart';
 import '../../../../core/values/app_strings.dart';
 import '../../data/models/add_address_dto.dart';
 import '../../domain/entities/location_entity.dart';
 import '../view_model/cubit/add_address_cubit.dart';
 import '../view_model/states/add_address_events.dart';
 import '../view_model/states/add_address_states.dart';
-import '../widgets/location_dropdown_field.dart';
-import '../widgets/address_map_picker.dart';
+import '../../../../core/reusable_widgets/location_dropdown_field.dart';
 
 class AddNewAddress extends StatefulWidget {
   const AddNewAddress({super.key});
@@ -21,51 +20,54 @@ class AddNewAddress extends StatefulWidget {
   State<AddNewAddress> createState() => _AddNewAddressState();
 }
 
-class _AddNewAddressState extends State<AddNewAddress> {
+class _AddNewAddressState extends State<AddNewAddress>
+    with AddressGeocodingSyncMixin<AddNewAddress> {
   final formKey = GlobalKey<FormState>();
+  @override
   final TextEditingController addressController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController recipientNameController = TextEditingController();
 
+  @override
   List<LocationEntity> governorates = [];
+  @override
   List<LocationEntity> cities = [];
+  @override
   String? selectedGovernorateId;
+  @override
   String? selectedCityId;
+  @override
   LatLng selectedPosition = const LatLng(30.08525452318584, 31.282610287469513);
+
+  bool _isLoaded = false;
+  bool _hasRunAutofill = false;
 
   @override
   void initState() {
     super.initState();
-    _loadLocations();
-    _initUserLocation();
+    initGeocodingSync();
   }
 
-  Future<void> _initUserLocation() async {
-    try {
-      final permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        final requested = await Geolocator.requestPermission();
-        if (requested == LocationPermission.denied ||
-            requested == LocationPermission.deniedForever) {
-          return;
-        }
-      }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-      if (permission == LocationPermission.deniedForever) return;
-
-      final position = await Geolocator.getCurrentPosition();
-      if (!mounted) return;
-
-      setState(() {
-        selectedPosition = LatLng(position.latitude, position.longitude);
-      });
-    } catch (_) {}
+    if (!_isLoaded) {
+      _isLoaded = true;
+      _loadLocations();
+    }
   }
 
   Future<void> _loadLocations() async {
-    final loadedGovernorates =
-        await AddressLocationJsonParser.loadGovernorates();
-    final loadedCities = await AddressLocationJsonParser.loadCities();
+    final languageCode = Localizations.localeOf(context).languageCode;
+
+    final loadedGovernorates = await AddressLocationJsonParser.loadGovernorates(
+      languageCode,
+    );
+
+    final loadedCities = await AddressLocationJsonParser.loadCities(
+      languageCode,
+    );
 
     if (!mounted) return;
 
@@ -76,6 +78,36 @@ class _AddNewAddressState extends State<AddNewAddress> {
       final initialCities = filteredCities;
       selectedCityId = initialCities.isEmpty ? null : initialCities.first.id;
     });
+
+    if (!_hasRunAutofill) {
+      _hasRunAutofill = true;
+      runReverseGeocodeAutofill();
+    }
+  }
+
+  @override
+  void onGeocodingSyncUpdate({
+    LatLng? position,
+    String? governorateId,
+    String? cityId,
+    String? streetText,
+    bool areaNotAvailable = false,
+  }) {
+    setState(() {
+      if (position != null) selectedPosition = position;
+      if (governorateId != null) selectedGovernorateId = governorateId;
+      if (cityId != null) selectedCityId = cityId;
+      if (streetText != null) addressController.text = streetText;
+
+      final available = filteredCities;
+      if (!available.any((city) => city.id == selectedCityId)) {
+        selectedCityId = available.isEmpty ? null : available.first.id;
+      }
+    });
+
+    if (areaNotAvailable) {
+      AppSnackBar.showError(context, AppStrings.areaNotAvailable);
+    }
   }
 
   List<LocationEntity> get filteredCities {
@@ -93,6 +125,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
 
   @override
   void dispose() {
+    disposeGeocodingSync();
     addressController.dispose();
     phoneNumberController.dispose();
     recipientNameController.dispose();
@@ -101,7 +134,6 @@ class _AddNewAddressState extends State<AddNewAddress> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return BlocProvider(
       create: (_) => getIt<AddAddressCubit>(),
       child: Scaffold(
@@ -118,6 +150,7 @@ class _AddNewAddressState extends State<AddNewAddress> {
               }
               if (state.addAddressState.data != null) {
                 AppSnackBar.showSuccess(context, AppStrings.saveAddress);
+                Navigator.pop(context, true);
               }
             },
             builder: (context, state) {
@@ -129,102 +162,41 @@ class _AddNewAddressState extends State<AddNewAddress> {
                   child: Column(
                     spacing: 16,
                     children: [
-                      SizedBox(
-                        height: size.height * .25,
-                        child: AddressMapPicker(
-                          initialPosition: selectedPosition,
-                          onLocationSelected: (position) {
-                            selectedPosition = position;
-                          },
-                        ),
-                      ),
-                      TextFormField(
-                        controller: addressController,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return AppStrings.enterTheAddress;
-                          }
-                          return null;
+                      AddressFormFields(
+                        addressController: addressController,
+                        phoneController: phoneNumberController,
+                        recipientNameController: recipientNameController,
+                        governorates: governorates,
+                        filteredCities: filteredCities,
+                        selectedGovernorateId: selectedGovernorateId,
+                        selectedCityId: selectedCityId,
+                        selectedPosition: selectedPosition,
+                        onLocationSelected: (position) {
+                          selectedPosition = position;
+                          onMapPositionChanged(position);
                         },
-                        decoration: InputDecoration(
-                          labelText: AppStrings.address,
-                          hintText: AppStrings.enterTheAddress,
-                        ),
-                      ),
-                      TextFormField(
-                        controller: phoneNumberController,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return AppStrings.enterThePhoneNumber;
-                          }
-                          if (!AppRegex.isValidPhoneNumber(value)) {
-                            return AppStrings.phoneInvalid;
-                          }
-                          return null;
+                        onGovernorateChanged: (governorateId) {
+                          addressController.clear();
+                          setState(() {
+                            selectedGovernorateId = governorateId;
+                            final citiesForGovernorate = filteredCities;
+                            if (!citiesForGovernorate.any(
+                              (city) => city.id == selectedCityId,
+                            )) {
+                              selectedCityId = citiesForGovernorate.isEmpty
+                                  ? null
+                                  : citiesForGovernorate.first.id;
+                            }
+                          });
+                          onLocationDropdownChanged();
                         },
-                        decoration: InputDecoration(
-                          labelText: AppStrings.phoneLabel,
-                          hintText: AppStrings.enterThePhoneNumber,
-                        ),
-                        keyboardType: TextInputType.phone,
-                      ),
-                      TextFormField(
-                        controller: recipientNameController,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return AppStrings.enterTheRecipientName;
-                          }
-                          return null;
+                        onCityChanged: (cityId) {
+                          addressController.clear();
+                          setState(() {
+                            selectedCityId = cityId;
+                          });
+                          onLocationDropdownChanged();
                         },
-                        decoration: InputDecoration(
-                          labelText: AppStrings.recipientName,
-                          hintText: AppStrings.enterTheRecipientName,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: LocationDropdownField(
-                              label: AppStrings.city,
-                              value: selectedGovernorateId,
-                              items: governorates,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return AppStrings.cityRequired;
-                                }
-                                return null;
-                              },
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedGovernorateId = value;
-                                  final availableCities = filteredCities;
-                                  selectedCityId = availableCities.isEmpty
-                                      ? null
-                                      : availableCities.first.id;
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: LocationDropdownField(
-                              label: AppStrings.area,
-                              value: selectedCityId,
-                              items: filteredCities,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return AppStrings.areaRequired;
-                                }
-                                return null;
-                              },
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedCityId = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
                       ),
                       SizedBox(
                         width: double.infinity,

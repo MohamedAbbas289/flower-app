@@ -6,6 +6,9 @@ import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
+import 'package:flower_app/features/delivery_location/presentation/view_model/cubit/delivery_address_view_model.dart';
+import 'package:flower_app/features/delivery_location/presentation/view_model/states/delivery_address_events.dart';
+import 'package:flower_app/features/delivery_location/presentation/widgets/delivery_location_widget.dart';
 import 'package:flower_app/features/home_screen/domain/entities/best_seller_entity.dart';
 import 'package:flower_app/features/home_screen/domain/entities/category_entity.dart';
 import 'package:flower_app/features/home_screen/domain/entities/occasion_entity.dart';
@@ -32,16 +35,20 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final HomeViewModel _cubit;
+  late final DeliveryAddressViewModel _deliveryAddressCubit;
 
   @override
   void initState() {
     super.initState();
     _cubit = context.read<HomeViewModel>();
     _cubit.doEvent(const LoadHomeDataEvent());
+    _deliveryAddressCubit = context.read<DeliveryAddressViewModel>();
+    _deliveryAddressCubit.doEvent(const LoadDeliveryAddressEvent());
   }
 
   Future<void> _onRefresh() async {
     _cubit.doEvent(const RefreshHomeEvent());
+    _deliveryAddressCubit.doEvent(const LoadDeliveryAddressEvent());
     await _cubit.stream.firstWhere(
       (s) =>
           !s.categoriesState.isLoading &&
@@ -132,34 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildLocationWidget() {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 16.0),
-      child: Row(
-        children: [
-          SvgPicture.asset(
-            Assets.assetsIconsLocationOn,
-            colorFilter: const ColorFilter.mode(
-              AppColors.black,
-              BlendMode.srcIn,
-            ),
-          ),
-          const SizedBox(width: 4),
-          Text(AppStrings.deliverTo, style: TextStyles.bodyRegular12),
-          const SizedBox(width: 4),
-          Text(
-            AppStrings.defaultAddress,
-            style: TextStyles.bodyRegular12.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const Icon(
-            Icons.keyboard_arrow_down,
-            color: AppColors.pink,
-            size: 32,
-          ),
-        ],
-      ),
-    );
+    return const DeliveryLocationWidget();
   }
 
   Widget _buildCategoriesSection(HomeState state) {

@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
 class AddressEntity extends Equatable {
-
-   final String? street;
+  final bool isDefault;
+  final String? street;
   final String? phone;
   final String? city;
   final String? lat;
@@ -17,6 +17,7 @@ class AddressEntity extends Equatable {
     this.long,
     this.username,
     this.id,
+    this.isDefault = false,
   });
   @override
   List<Object?> get props => [
@@ -27,5 +28,6 @@ class AddressEntity extends Equatable {
     long,
     username,
     id,
+    isDefault,
   ];
 }

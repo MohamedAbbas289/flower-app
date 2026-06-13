@@ -8,12 +8,12 @@ import '../repositories/add_address_repo_contract.dart';
 @injectable
 
 class AddAddressUseCases {
-  final AddAddressRepoContract addAddressRepoContract;
-  AddAddressUseCases(this.addAddressRepoContract);
+  final AddAddressRepoContract _addAddressRepoContract;
+  AddAddressUseCases(this._addAddressRepoContract);
   Future<BaseResponse<List<AddressEntity>>> call(
     AddAddressDto request,
   ) async {
-    return await addAddressRepoContract.addNewAddress(
+    return await _addAddressRepoContract.addNewAddress(
       request: request,
     );
   }

@@ -1,0 +1,86 @@
+import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/config/base_state/base_state.dart';
+import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
+import 'package:flower_app/features/saved_address/domain/use_cases/delete_address_use_case.dart';
+import 'package:flower_app/features/saved_address/domain/use_cases/saved_address_use_case.dart';
+import 'package:flower_app/features/saved_address/presentation/view_model/states/saved_address_events.dart';
+import 'package:flower_app/features/saved_address/presentation/view_model/states/saved_address_states.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
+
+@injectable
+class SavedAddressViewModel extends Cubit<SavedAddressStates> {
+  final GetAddressesUseCase _getAddressesUseCase;
+  final DeleteAddressUseCase _deleteAddressUseCase;
+
+  SavedAddressViewModel(this._getAddressesUseCase, this._deleteAddressUseCase)
+    : super(const SavedAddressStates());
+
+  void doEvent(SavedAddressEvent event) {
+    switch (event) {
+      case LoadAddressesEvent():
+        _getAddresses();
+      case DeleteAddressEvent():
+        _deleteAddress(event.id);
+    }
+  }
+
+  Future<void> _getAddresses() async {
+    if (isClosed) return;
+    emit(
+      state.copyWith(
+        getAddressesState: BaseState<List<AddressEntity>>.loading(),
+      ),
+    );
+
+    final response = await _getAddressesUseCase();
+    if (isClosed) return;
+
+    switch (response) {
+      case SuccessBaseResponse():
+        emit(
+          state.copyWith(
+            getAddressesState: BaseState<List<AddressEntity>>.success(
+              response.data,
+            ),
+          ),
+        );
+      case ErrorBaseResponse():
+        emit(
+          state.copyWith(
+            getAddressesState: BaseState<List<AddressEntity>>.error(
+              response.errorMessage,
+            ),
+          ),
+        );
+    }
+  }
+
+ Future<void> _deleteAddress(String id) async {
+  if (isClosed) return;
+  emit(state.copyWith(
+    deleteAddressState: BaseState<bool>.loading(),
+  ));
+
+  final response = await _deleteAddressUseCase(id);
+  if (isClosed) return;
+
+  switch (response) {
+    case SuccessBaseResponse():
+      final updatedList = state.getAddressesState.data
+              ?.where((e) => e.id != id)
+              .toList() ??
+          [];
+      emit(state.copyWith(
+        deleteAddressState: BaseState<bool>.success(true),
+        getAddressesState: BaseState<List<AddressEntity>>.success(
+          updatedList,
+        ),
+      ));
+    case ErrorBaseResponse():
+      emit(state.copyWith(
+        deleteAddressState: BaseState<bool>.error(response.errorMessage),
+      ));
+  }
+}
+}

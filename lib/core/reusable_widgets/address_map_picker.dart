@@ -26,20 +26,32 @@ class _AddressMapPickerState extends State<AddressMapPicker> {
     super.initState();
     _selectedPosition = widget.initialPosition ??
         const LatLng(30.08525452318584, 31.282610287469513);
-    _setMarker(_selectedPosition);
+    _markers = {_markerFor(_selectedPosition)};
+  }
+
+  @override
+  void didUpdateWidget(covariant AddressMapPicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final newPosition = widget.initialPosition;
+    if (newPosition != null &&
+        newPosition != oldWidget.initialPosition &&
+        newPosition != _selectedPosition) {
+      _updateMarker(newPosition);
+    }
+  }
+
+  Marker _markerFor(LatLng position) {
+    return Marker(
+      markerId: const MarkerId('selected'),
+      position: position,
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
+    );
   }
 
   void _setMarker(LatLng position) {
     setState(() {
       _selectedPosition = position;
-
-      _markers = {
-        Marker(
-          markerId: const MarkerId('selected'),
-          position: position,
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
-        ),
-      };
+      _markers = {_markerFor(position)};
     });
 
     if (kDebugMode) {
@@ -47,6 +59,17 @@ class _AddressMapPickerState extends State<AddressMapPicker> {
     }
 
     widget.onLocationSelected?.call(position);
+  }
+
+  void _updateMarker(LatLng position) {
+    setState(() {
+      _selectedPosition = position;
+      _markers = {_markerFor(position)};
+    });
+
+    _controller.future.then((controller) {
+      controller.animateCamera(CameraUpdate.newLatLng(position));
+    });
   }
 
   @override

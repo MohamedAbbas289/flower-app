@@ -1,4 +1,5 @@
 import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/config/firebase/last_address_firestore_service.dart';
 import 'package:flower_app/features/add_address/data/models/add_address_dto.dart';
 import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
 import 'package:flower_app/features/add_address/domain/use_cases/add_address_use_cases.dart';
@@ -10,9 +11,10 @@ import 'package:mockito/mockito.dart';
 
 import 'add_addres_view_model_test.mocks.dart';
 
-@GenerateMocks([AddAddressUseCases])
+@GenerateMocks([AddAddressUseCases, LastAddressFirestoreService])
 void main() {
   late MockAddAddressUseCases addAddressUseCases;
+  late MockLastAddressFirestoreService lastAddressFirestoreService;
   late AddAddressCubit cubit;
 
   final request = AddAddressDto(
@@ -36,7 +38,11 @@ void main() {
 
   setUp(() {
     addAddressUseCases = MockAddAddressUseCases();
-    cubit = AddAddressCubit(addAddressUseCases);
+    lastAddressFirestoreService = MockLastAddressFirestoreService();
+    when(lastAddressFirestoreService.saveLastAddress(any)).thenAnswer(
+      (_) async {},
+    );
+    cubit = AddAddressCubit(addAddressUseCases, lastAddressFirestoreService);
   });
 
   tearDown(() {

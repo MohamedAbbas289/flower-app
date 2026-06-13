@@ -13,6 +13,8 @@ abstract class Endpoints {
   static const String getProducts = "$baseUrl/products";
   static const String home = "$baseUrl/home";
   static const String addresses = "$baseUrl/addresses";
+  static const String editAddress = '$baseUrl/addresses/{id}';
+  static const String deleteAddress = '$baseUrl/addresses/{id}';
   static const String changePassword = '$baseUrl/auth/change-password';
   static const String getProfile = '$baseUrl/auth/profile-data';
   static const String uploadPhoto = '$baseUrl/auth/upload-photo';
@@ -25,5 +27,6 @@ abstract class Endpoints {
   // Cart
 static const String cart = '$baseUrl/cart';
 static const String addOrEditOnCart = '$baseUrl/cart/{productId}';
+
 
 }
