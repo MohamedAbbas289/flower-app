@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'dart:io';
+import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -58,6 +60,16 @@ class FirebaseApi {
       log('User notification permission status: ${settings.authorizationStatus}');
 
       // 2. Fetch and Log FCM Registration Token
+      if (Platform.isIOS) {
+        final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+
+        if (apnsToken == null) {
+          log('APNS token not ready yet, retry later');
+          return ;
+        }
+        log('APNS token ready: $apnsToken');
+      }
+
       final fcmToken = await _firebaseMessaging.getToken();
 
       /// 4. Token refresh listener
@@ -71,6 +83,12 @@ class FirebaseApi {
       log('$fcmToken');
       log('====================================================');
 
+
+
+
+
+
+
       // 3. Initialize Local Notifications
       await initLocalNotifications();
 
@@ -80,13 +98,7 @@ class FirebaseApi {
         badge: true,
         sound: true,
       );
-      final apnsToken = await _firebaseMessaging.getAPNSToken();
 
-      if (apnsToken == null) {
-        log('⚠️ APNS Token not available yet');
-      } else {
-        log('✅ APNS Token: $apnsToken');
-      }
 
       // 5. Configure Android High Importance Channel for heads-up notifications
       const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -122,9 +134,12 @@ class FirebaseApi {
                 channel.name,
                 channelDescription: channel.description,
                 icon: '@mipmap/ic_launcher',
+                importance: Importance.max,
+                priority: Priority.high,
+                playSound: true,
               ),
             ),
-            payload: message.data.toString(),
+            payload: jsonEncode(message.data),
           );
         }
 
