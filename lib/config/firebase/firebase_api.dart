@@ -54,11 +54,18 @@ class FirebaseApi {
         provisional: false,
         sound: true,
       );
-      
+
       log('User notification permission status: ${settings.authorizationStatus}');
 
       // 2. Fetch and Log FCM Registration Token
       final fcmToken = await _firebaseMessaging.getToken();
+
+      /// 4. Token refresh listener
+      _firebaseMessaging.onTokenRefresh.listen((newToken) {
+        log('🔄 Token Refreshed: $newToken');
+
+        /// send to backend here
+      });
       log('====================================================');
       log('FCM REGISTRATION TOKEN:');
       log('$fcmToken');
@@ -73,6 +80,13 @@ class FirebaseApi {
         badge: true,
         sound: true,
       );
+      final apnsToken = await _firebaseMessaging.getAPNSToken();
+
+      if (apnsToken == null) {
+        log('⚠️ APNS Token not available yet');
+      } else {
+        log('✅ APNS Token: $apnsToken');
+      }
 
       // 5. Configure Android High Importance Channel for heads-up notifications
       const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -93,7 +107,7 @@ class FirebaseApi {
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         log('--- Foreground Message Received ---');
         log('Message ID: ${message.messageId}');
-        
+
         final RemoteNotification? notification = message.notification;
         final AndroidNotification? android = message.notification?.android;
 
@@ -113,7 +127,7 @@ class FirebaseApi {
             payload: message.data.toString(),
           );
         }
-        
+
         if (message.data.isNotEmpty) {
           log('Data Payload: ${message.data}');
         }
