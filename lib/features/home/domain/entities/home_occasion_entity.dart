@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-class OccasionEntity extends Equatable {
+class HomeOccasionEntity extends Equatable {
   final String? id;
   final String? name;
   final String? image;
   final int? productsCount;
 
-  const OccasionEntity({
+  const HomeOccasionEntity({
     this.id,
     this.name,
     this.image,

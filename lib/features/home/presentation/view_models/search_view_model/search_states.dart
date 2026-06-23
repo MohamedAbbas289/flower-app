@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/categories/domain/entities/product_entity.dart';
+import 'package:flower_app/features/home/domain/entities/product_entity.dart';
 
 class SearchState extends Equatable {
   final BaseState<List<ProductEntity>> productsState;

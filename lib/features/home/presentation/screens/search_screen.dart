@@ -6,10 +6,10 @@ import 'package:flower_app/core/utils/cart_helpers.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
-import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
-import 'package:flower_app/features/cart/presentation/view_model/cart_state.dart';
-import 'package:flower_app/features/search/presentation/view_model/search_states.dart';
-import 'package:flower_app/features/search/presentation/view_model/search_view_model.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_bloc.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_state.dart';
+import 'package:flower_app/features/home/presentation/view_models/search_view_model/search_states.dart';
+import 'package:flower_app/features/home/presentation/view_models/search_view_model/search_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -61,6 +61,14 @@ class _SearchViewState extends State<_SearchView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

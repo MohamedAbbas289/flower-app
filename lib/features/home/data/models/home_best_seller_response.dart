@@ -1,21 +1,21 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'best_seller.dart';
-part 'best_seller_response.g.dart';
+import 'home_best_seller_dto.dart';
+part 'home_best_seller_response.g.dart';
 
 @JsonSerializable()
-class BestSellerResponse {
+class HomeBestSellerResponse {
   @JsonKey(name: "message")
   String? message;
   @JsonKey(name: "bestSeller")
   List<BestSellerDto>? bestSeller;
 
-  BestSellerResponse({
+  HomeBestSellerResponse({
     this.message,
     this.bestSeller,
   });
 
-  factory BestSellerResponse.fromJson(Map<String, dynamic> json) => _$BestSellerResponseFromJson(json);
+  factory HomeBestSellerResponse.fromJson(Map<String, dynamic> json) => _$HomeBestSellerResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$BestSellerResponseToJson(this);
+  Map<String, dynamic> toJson() => _$HomeBestSellerResponseToJson(this);
 }

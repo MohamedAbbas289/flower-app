@@ -1,5 +1,5 @@
-import 'package:flower_app/features/product_details/data/model/product_details_response.dart';
-import 'package:flower_app/features/product_details/domain/entities/product_details_entity.dart';
+import 'package:flower_app/features/shopping/data/models/product_details_response.dart';
+import 'package:flower_app/features/shopping/domain/entities/product_details_entity.dart';
 
 extension ProductDetailsMapper on ProductDetailsResponse {
   ProductDetailsEntity toEntity() {

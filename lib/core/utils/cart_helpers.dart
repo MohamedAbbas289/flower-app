@@ -1,6 +1,6 @@
-import 'package:flower_app/features/cart/api/request_models/cart_request_model.dart';
-import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
-import 'package:flower_app/features/cart/presentation/view_model/cart_event.dart';
+import 'package:flower_app/features/shopping/api/request_models/cart_request_model.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_bloc.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';

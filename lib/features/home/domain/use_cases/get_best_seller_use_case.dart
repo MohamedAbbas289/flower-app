@@ -1,12 +1,12 @@
-import 'package:flower_app/features/home_screen/domain/entities/best_seller_entity.dart';
+import 'package:flower_app/features/home/domain/entities/home_best_seller_entity.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../config/base_response/base_response.dart';
-import '../repositories/home_repo_contract.dart';
+import '../repository_contract/home_repository_contract.dart';
 
 @injectable
 class GetBestSellerUseCase {
-  final HomeRepoContract homeRepoContract;
+  final HomeRepositoryContract homeRepoContract;
 
   GetBestSellerUseCase(this.homeRepoContract);
 

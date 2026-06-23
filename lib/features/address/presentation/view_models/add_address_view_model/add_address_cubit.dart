@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:flower_app/config/firebase/last_address_firestore_service.dart';
-import 'package:flower_app/features/add_address/data/models/add_address_dto.dart';
+import 'package:flower_app/features/address/data/models/add_address_dto.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../../config/base_response/base_response.dart';
 import '../../../../../config/base_state/base_state.dart';
 import '../../../domain/entities/address_entity.dart';
 import '../../../domain/use_cases/add_address_use_cases.dart';
-import '../states/add_address_events.dart';
-import '../states/add_address_states.dart';
+import 'add_address_events.dart';
+import 'add_address_states.dart';
 
 @injectable
 class AddAddressCubit extends Cubit<AddAddressStates> {

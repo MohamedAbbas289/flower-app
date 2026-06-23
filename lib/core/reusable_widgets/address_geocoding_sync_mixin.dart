@@ -4,7 +4,7 @@ import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/reusable_widgets/location_dropdown_field.dart';
 import 'package:flower_app/core/services/geocoding_service.dart';
 import 'package:flower_app/core/services/location_service.dart';
-import 'package:flower_app/features/add_address/domain/entities/location_entity.dart';
+import 'package:flower_app/features/address/domain/entities/location_entity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';

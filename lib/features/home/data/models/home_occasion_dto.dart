@@ -1,7 +1,7 @@
-import 'package:flower_app/features/home_screen/domain/entities/occasion_entity.dart';
+import 'package:flower_app/features/home/domain/entities/home_occasion_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'occasion.g.dart';
+part 'home_occasion_dto.g.dart';
 
 @JsonSerializable()
 class OccasionDto {
@@ -37,8 +37,8 @@ class OccasionDto {
 
   Map<String, dynamic> toJson() => _$OccasionDtoToJson(this);
 
-  OccasionEntity toDomain() {
-    return OccasionEntity(
+  HomeOccasionEntity toDomain() {
+    return HomeOccasionEntity(
       id: id,
       name: name,
       image: image,

@@ -1,14 +1,14 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/home_screen/domain/entities/best_seller_entity.dart';
-import 'package:flower_app/features/home_screen/domain/entities/category_entity.dart';
-import 'package:flower_app/features/home_screen/domain/entities/occasion_entity.dart';
-import 'package:flower_app/features/home_screen/domain/use_cases/get_best_seller_use_case.dart';
-import 'package:flower_app/features/home_screen/domain/use_cases/get_category_use_cases.dart';
-import 'package:flower_app/features/home_screen/domain/use_cases/get_occasion_use_case.dart';
-import 'package:flower_app/features/home_screen/presentation/view_model/cubit/home_view_model.dart';
-import 'package:flower_app/features/home_screen/presentation/view_model/states/home_events.dart';
-import 'package:flower_app/features/home_screen/presentation/view_model/states/home_state.dart';
+import 'package:flower_app/features/home/domain/entities/home_best_seller_entity.dart';
+import 'package:flower_app/features/home/domain/entities/home_category_entity.dart';
+import 'package:flower_app/features/home/domain/entities/home_occasion_entity.dart';
+import 'package:flower_app/features/home/domain/use_cases/get_best_seller_use_case.dart';
+import 'package:flower_app/features/home/domain/use_cases/get_category_use_cases.dart';
+import 'package:flower_app/features/home/domain/use_cases/get_occasion_use_case.dart';
+import 'package:flower_app/features/home/presentation/view_models/home_view_model/home_view_model.dart';
+import 'package:flower_app/features/home/presentation/view_models/home_view_model/home_events.dart';
+import 'package:flower_app/features/home/presentation/view_models/home_view_model/home_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -25,14 +25,14 @@ void main() {
   late MockGetOccasionUseCase mockGetOccasionUseCase;
   late MockGetBestSellerUseCase mockGetBestSellerUseCase;
 
-  final tCategory = CategoryEntity(
+  final tCategory = HomeCategoryEntity(
     id: '1',
     name: 'test',
     image: 'test',
     productsCount: 1,
   );
 
-  final tOccasion = OccasionEntity(
+  final tOccasion = HomeOccasionEntity(
     id: '1',
     name: 'test',
     image: 'test',
@@ -53,11 +53,11 @@ void main() {
 
 
   setUp(() {
-    provideDummy<BaseResponse<List<CategoryEntity>>>(
-      SuccessBaseResponse<List<CategoryEntity>>(data: []),
+    provideDummy<BaseResponse<List<HomeCategoryEntity>>>(
+      SuccessBaseResponse<List<HomeCategoryEntity>>(data: []),
     );
-    provideDummy<BaseResponse<List<OccasionEntity>>>(
-      SuccessBaseResponse<List<OccasionEntity>>(data: []),
+    provideDummy<BaseResponse<List<HomeOccasionEntity>>>(
+      SuccessBaseResponse<List<HomeOccasionEntity>>(data: []),
     );
     provideDummy<BaseResponse<List<BestSellerEntity>>>(
       SuccessBaseResponse<List<BestSellerEntity>>(data: []),
@@ -70,8 +70,8 @@ void main() {
 
 
   void stubAllSuccess({
-    List<CategoryEntity> categories = const [],
-    List<OccasionEntity> occasions = const [],
+    List<HomeCategoryEntity> categories = const [],
+    List<HomeOccasionEntity> occasions = const [],
     List<BestSellerEntity> bestSellers = const [],
   }) {
     when(mockGetCategoryUseCases())
@@ -84,12 +84,12 @@ void main() {
 
   void stubAllError() {
     when(mockGetCategoryUseCases()).thenAnswer(
-      (_) async => ErrorBaseResponse<List<CategoryEntity>>(
+      (_) async => ErrorBaseResponse<List<HomeCategoryEntity>>(
         exception: Exception(tErrorMessage),
       ),
     );
     when(mockGetOccasionUseCase()).thenAnswer(
-      (_) async => ErrorBaseResponse<List<OccasionEntity>>(
+      (_) async => ErrorBaseResponse<List<HomeOccasionEntity>>(
         exception: Exception(tErrorMessage),
       ),
     );
@@ -172,7 +172,7 @@ void main() {
       'retries only failed sections and keeps successful ones intact',
       build: () {
         when(mockGetCategoryUseCases()).thenAnswer(
-          (_) async => ErrorBaseResponse<List<CategoryEntity>>(
+          (_) async => ErrorBaseResponse<List<HomeCategoryEntity>>(
             exception: Exception(tErrorMessage),
           ),
         );

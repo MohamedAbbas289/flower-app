@@ -1,9 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/auth/logout/domain/use_cases/logout_use_case.dart';
-import 'package:flower_app/features/auth/logout/presentation/view_model/logout_events.dart';
-import 'package:flower_app/features/auth/logout/presentation/view_model/logout_state.dart';
-import 'package:flower_app/features/auth/logout/presentation/view_model/logout_view_model.dart';
+import 'package:flower_app/features/auth/domain/use_cases/logout_use_case.dart';
+import 'package:flower_app/features/auth/presentation/view_models/logout_view_model/logout_events.dart';
+import 'package:flower_app/features/auth/presentation/view_models/logout_view_model/logout_state.dart';
+import 'package:flower_app/features/auth/presentation/view_models/logout_view_model/logout_view_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

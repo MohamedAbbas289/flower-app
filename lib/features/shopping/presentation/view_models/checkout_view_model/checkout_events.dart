@@ -1,5 +1,5 @@
-import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
-import 'package:flower_app/features/checkout/domain/entities/payment_method.dart';
+import 'package:flower_app/features/address/domain/entities/address_entity.dart';
+import 'package:flower_app/features/shopping/domain/entities/payment_method.dart';
 
 sealed class CheckoutEvent {
   const CheckoutEvent();

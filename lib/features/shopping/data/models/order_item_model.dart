@@ -1,4 +1,4 @@
-import 'package:flower_app/features/orders/domain/entities/order_item_entity.dart';
+import 'package:flower_app/features/shopping/domain/entities/order_item_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'order_product_model.dart';

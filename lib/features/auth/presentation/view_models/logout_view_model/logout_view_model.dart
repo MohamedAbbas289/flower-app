@@ -3,7 +3,7 @@ import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../domain/use_cases/logout_use_case.dart';
+import '../../../domain/use_cases/logout_use_case.dart';
 import 'logout_events.dart';
 import 'logout_state.dart';
 

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flower_app/config/auth/auth_manager.dart';
-import 'package:flower_app/features/add_address/data/models/add_address_dto.dart';
-import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
+import 'package:flower_app/features/address/data/models/add_address_dto.dart';
+import 'package:flower_app/features/address/domain/entities/address_entity.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton

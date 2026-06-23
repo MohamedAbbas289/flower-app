@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-part 'metadata.g.dart';
+part 'home_metadata.g.dart';
 @JsonSerializable()
 class Metadata {
   @JsonKey(name: "currentPage")

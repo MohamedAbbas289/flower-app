@@ -1,7 +1,7 @@
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_strings.dart';
-import 'package:flower_app/features/checkout/presentation/model/checkout_arguments.dart';
+import 'package:flower_app/features/shopping/presentation/screens/checkout_arguments.dart';
 import 'package:flutter/material.dart';
 
 class OrderSummarySection extends StatelessWidget {

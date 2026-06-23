@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/best_seller/domain/entity/best_seller_product_entity.dart';
+import 'package:flower_app/features/home/domain/entities/best_seller_product_entity.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable

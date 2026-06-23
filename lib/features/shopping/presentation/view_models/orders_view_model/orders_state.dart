@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/orders/domain/entities/order_entity.dart';
+import 'package:flower_app/features/shopping/domain/entities/order_entity.dart';
 
 class OrdersState extends Equatable {
   final BaseState<List<OrderEntity>> ordersState;

@@ -1,17 +1,17 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/payment/api/request_models/payment_request_model.dart';
-import 'package:flower_app/features/payment/domain/entities/checkout_session_entity.dart';
-import 'package:flower_app/features/payment/domain/repo_contract/payment_repo_contract.dart';
-import 'package:flower_app/features/payment/domain/use_cases/get_checkout_session_use_case.dart';
+import 'package:flower_app/features/shopping/api/request_models/payment_request_model.dart';
+import 'package:flower_app/features/shopping/domain/entities/checkout_session_entity.dart';
+import 'package:flower_app/features/shopping/domain/repository_contract/shopping_repository_contract.dart';
+import 'package:flower_app/features/shopping/domain/use_cases/get_checkout_session_use_case.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'get_checkout_session_use_case_test.mocks.dart';
 
-@GenerateMocks([PaymentRepoContract])
+@GenerateMocks([ShoppingRepositoryContract])
 void main() {
-  late MockPaymentRepoContract mockRepo;
+  late MockShoppingRepositoryContract mockRepo;
   late GetCheckoutSessionUseCase useCase;
 
   const tRequestModel = PaymentRequestModel(
@@ -34,7 +34,7 @@ void main() {
   });
 
   setUp(() {
-    mockRepo = MockPaymentRepoContract();
+    mockRepo = MockShoppingRepositoryContract();
     useCase = GetCheckoutSessionUseCase(mockRepo);
   });
 

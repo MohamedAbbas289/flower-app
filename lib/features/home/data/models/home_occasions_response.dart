@@ -1,11 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../metadata.dart';
-import 'occasion.dart';
-part 'occasions_response.g.dart';
+import 'home_metadata.dart';
+import 'home_occasion_dto.dart';
+part 'home_occasions_response.g.dart';
 
 @JsonSerializable()
-class OccasionsResponse {
+class HomeOccasionsResponse {
   @JsonKey(name: "message")
   String? message;
   @JsonKey(name: "metadata")
@@ -13,15 +13,15 @@ class OccasionsResponse {
   @JsonKey(name: "occasions")
   List<OccasionDto>? occasions;
 
-  OccasionsResponse({
+  HomeOccasionsResponse({
     this.message,
     this.metadata,
     this.occasions,
   });
 
-  factory OccasionsResponse.fromJson(Map<String, dynamic> json) => _$OccasionsResponseFromJson(json);
+  factory HomeOccasionsResponse.fromJson(Map<String, dynamic> json) => _$HomeOccasionsResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$OccasionsResponseToJson(this);
+  Map<String, dynamic> toJson() => _$HomeOccasionsResponseToJson(this);
 }
 
 

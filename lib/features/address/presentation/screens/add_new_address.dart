@@ -8,9 +8,9 @@ import '../../../../core/reusable_widgets/app_snack_bar.dart';
 import '../../../../core/values/app_strings.dart';
 import '../../data/models/add_address_dto.dart';
 import '../../domain/entities/location_entity.dart';
-import '../view_model/cubit/add_address_cubit.dart';
-import '../view_model/states/add_address_events.dart';
-import '../view_model/states/add_address_states.dart';
+import '../view_models/add_address_view_model/add_address_cubit.dart';
+import '../view_models/add_address_view_model/add_address_events.dart';
+import '../view_models/add_address_view_model/add_address_states.dart';
 import '../../../../core/reusable_widgets/location_dropdown_field.dart';
 
 class AddNewAddress extends StatefulWidget {

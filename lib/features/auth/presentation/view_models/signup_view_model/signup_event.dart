@@ -1,4 +1,4 @@
-import '../../api/request_models/signup_request_model.dart';
+import '../../../api/request_models/signup_request_model.dart';
 
 sealed class SignupEvent {}
 

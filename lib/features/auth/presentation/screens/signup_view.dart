@@ -12,9 +12,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../api/request_models/signup_request_model.dart';
-import '../signup_view_model/signup_event.dart';
-import '../signup_view_model/signup_state.dart';
-import '../signup_view_model/signup_view_model.dart';
+import '../view_models/signup_view_model/signup_event.dart';
+import '../view_models/signup_view_model/signup_state.dart';
+import '../view_models/signup_view_model/signup_view_model.dart';
 
 class SignupView extends StatefulWidget {
   const SignupView({super.key});

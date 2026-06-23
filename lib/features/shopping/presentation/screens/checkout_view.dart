@@ -3,17 +3,17 @@ import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/endpoints.dart';
-import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
-import 'package:flower_app/features/cart/presentation/view_model/cart_event.dart';
-import 'package:flower_app/features/checkout/presentation/model/checkout_arguments.dart';
-import 'package:flower_app/features/checkout/presentation/view_model/cubit/checkout_view_model.dart';
-import 'package:flower_app/features/checkout/presentation/view_model/states/checkout_events.dart';
-import 'package:flower_app/features/checkout/presentation/view_model/states/checkout_states.dart';
-import 'package:flower_app/features/checkout/presentation/widgets/address_selection_section.dart';
-import 'package:flower_app/features/checkout/presentation/widgets/delivery_time_section.dart';
-import 'package:flower_app/features/checkout/presentation/widgets/gift_section.dart';
-import 'package:flower_app/features/checkout/presentation/widgets/order_summary_section.dart';
-import 'package:flower_app/features/checkout/presentation/widgets/payment_method_section.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_bloc.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_event.dart';
+import 'package:flower_app/features/shopping/presentation/screens/checkout_arguments.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/checkout_view_model/checkout_view_model.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/checkout_view_model/checkout_events.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/checkout_view_model/checkout_states.dart';
+import 'package:flower_app/features/shopping/presentation/widgets/address_selection_section.dart';
+import 'package:flower_app/features/shopping/presentation/widgets/delivery_time_section.dart';
+import 'package:flower_app/features/shopping/presentation/widgets/gift_section.dart';
+import 'package:flower_app/features/shopping/presentation/widgets/order_summary_section.dart';
+import 'package:flower_app/features/shopping/presentation/widgets/payment_method_section.dart';
 import 'package:flower_app/features/profile/presentation/widgets/web_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -108,7 +108,11 @@ class _CheckoutBodyState extends State<_CheckoutBody> {
                 context,
                 AppStrings.orderPlacedSuccessfully,
               );
-              Navigator.popUntil(context, (route) => route.isFirst);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutesName.home,
+                (route) => false,
+              );
               Navigator.pushNamed(context, AppRoutesName.myOrders);
             } else if (isSuccess == false && context.mounted) {
               Navigator.pop(context);

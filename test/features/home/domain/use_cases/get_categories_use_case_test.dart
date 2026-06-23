@@ -1,17 +1,17 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/categories/domain/entities/categories_response_entity.dart';
-import 'package:flower_app/features/categories/domain/entities/category_entity.dart';
-import 'package:flower_app/features/categories/domain/repository/categories_repository.dart';
-import 'package:flower_app/features/categories/domain/use_cases/get_categories_use_case.dart';
+import 'package:flower_app/features/home/domain/entities/categories_response_entity.dart';
+import 'package:flower_app/features/home/domain/entities/category_entity.dart';
+import 'package:flower_app/features/home/domain/repository_contract/home_repository_contract.dart';
+import 'package:flower_app/features/home/domain/use_cases/get_categories_use_case.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'get_categories_use_case_test.mocks.dart';
 
-@GenerateMocks([CategoriesRepository])
+@GenerateMocks([HomeRepositoryContract])
 void main() {
-  late MockCategoriesRepository mockRepository;
+  late MockHomeRepositoryContract mockRepository;
   late GetCategoriesUseCase getCategoriesUseCase;
 
   setUpAll(() {
@@ -23,7 +23,7 @@ void main() {
   });
 
   setUp(() {
-    mockRepository = MockCategoriesRepository();
+    mockRepository = MockHomeRepositoryContract();
     getCategoriesUseCase = GetCategoriesUseCase(mockRepository);
   });
 

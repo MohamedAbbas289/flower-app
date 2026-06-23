@@ -4,9 +4,9 @@ import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../view_model/logout_events.dart';
-import '../view_model/logout_state.dart';
-import '../view_model/logout_view_model.dart';
+import '../view_models/logout_view_model/logout_events.dart';
+import '../view_models/logout_view_model/logout_state.dart';
+import '../view_models/logout_view_model/logout_view_model.dart';
 
 class LogoutDialog extends StatelessWidget {
   final VoidCallback onSuccess;

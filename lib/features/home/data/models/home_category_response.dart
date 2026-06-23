@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'category.dart';
-import '../metadata.dart';
-part 'category_response.g.dart';
+import 'home_category_dto.dart';
+import 'home_metadata.dart';
+part 'home_category_response.g.dart';
 @JsonSerializable()
 class CategoryResponse {
   @JsonKey(name: "message")

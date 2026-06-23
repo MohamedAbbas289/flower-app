@@ -8,9 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pinput/pinput.dart';
 
-import '../view_model/cubit/forget_password_cubit.dart';
-import '../view_model/states/forget_password_states.dart';
-import '../../../../../core/reusable_widgets/app_snack_bar.dart';
+import '../view_models/forget_password_view_model/forget_password_cubit.dart';
+import '../view_models/forget_password_view_model/forget_password_states.dart';
+import '../../../../core/reusable_widgets/app_snack_bar.dart';
 
 // BlocProvider.value is provided in app_routes.dart — reuses the same cubit
 // instance created on the forgotPassword route.

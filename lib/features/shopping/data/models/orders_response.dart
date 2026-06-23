@@ -1,5 +1,5 @@
 import 'package:flower_app/core/models/metadata_model.dart';
-import 'package:flower_app/features/orders/data/models/order_model.dart';
+import 'package:flower_app/features/shopping/data/models/order_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'orders_response.g.dart';

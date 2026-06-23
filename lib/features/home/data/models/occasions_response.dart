@@ -1,4 +1,3 @@
-import 'package:flower_app/features/occasions/domain/entities/occasion_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'occasions_response.g.dart';
@@ -73,28 +72,4 @@ class Occasion {
       _$OccasionFromJson(json);
 
   Map<String, dynamic> toJson() => _$OccasionToJson(this);
-}
-
-extension OccasionsMapper on OccasionsResponse {
-  OccasionsEntity toEntity() {
-    return OccasionsEntity(
-      currentPage: metadata?.currentPage ?? 1,
-      totalPages: metadata?.totalPages ?? 1,
-      occasions:
-          occasions
-              ?.map<OccasionEntity>((e) => e.toOccasionEntity())
-              .toList() ??
-          [],
-    );
-  }
-}
-
-extension OccasionMapper on Occasion {
-  OccasionEntity toOccasionEntity() {
-    return OccasionEntity(
-      id: id ?? '',
-      name: name ?? '',
-      productsCount: productsCount ?? 0,
-    );
-  }
 }

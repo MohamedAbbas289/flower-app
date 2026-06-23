@@ -1,16 +1,16 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/orders/domain/entities/order_entity.dart';
-import 'package:flower_app/features/orders/domain/repository/orders_repository.dart';
-import 'package:flower_app/features/orders/domain/use_cases/get_orders_use_case.dart';
+import 'package:flower_app/features/shopping/domain/entities/order_entity.dart';
+import 'package:flower_app/features/shopping/domain/repository_contract/shopping_repository_contract.dart';
+import 'package:flower_app/features/shopping/domain/use_cases/get_orders_use_case.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'get_orders_use_case_test.mocks.dart';
 
-@GenerateMocks([OrdersRepository])
+@GenerateMocks([ShoppingRepositoryContract])
 void main() {
-  late MockOrdersRepository mockRepository;
+  late MockShoppingRepositoryContract mockRepo;
   late GetOrdersUseCase getOrdersUseCase;
 
   setUpAll(() {
@@ -20,8 +20,8 @@ void main() {
   });
 
   setUp(() {
-    mockRepository = MockOrdersRepository();
-    getOrdersUseCase = GetOrdersUseCase(mockRepository);
+    mockRepo = MockShoppingRepositoryContract();
+    getOrdersUseCase = GetOrdersUseCase(mockRepo);
   });
 
   group('GetOrdersUseCase', () {
@@ -35,7 +35,7 @@ void main() {
         );
 
         when(
-          mockRepository.getOrders(),
+          mockRepo.getOrders(),
         ).thenAnswer((_) async => successResponse);
 
         final result = await getOrdersUseCase.execute();
@@ -45,8 +45,8 @@ void main() {
         expect(success.data.length, 1);
         expect(success.data.first.id, 'order1');
         expect(success.data.first.orderNumber, '#123456');
-        verify(mockRepository.getOrders()).called(1);
-        verifyNoMoreInteractions(mockRepository);
+        verify(mockRepo.getOrders()).called(1);
+        verifyNoMoreInteractions(mockRepo);
       },
     );
 
@@ -58,15 +58,15 @@ void main() {
           exception: exception,
         );
 
-        when(mockRepository.getOrders()).thenAnswer((_) async => errorResponse);
+        when(mockRepo.getOrders()).thenAnswer((_) async => errorResponse);
 
         final result = await getOrdersUseCase.execute();
 
         expect(result, isA<ErrorBaseResponse<List<OrderEntity>>>());
         final error = result as ErrorBaseResponse<List<OrderEntity>>;
         expect(error.exception, exception);
-        verify(mockRepository.getOrders()).called(1);
-        verifyNoMoreInteractions(mockRepository);
+        verify(mockRepo.getOrders()).called(1);
+        verifyNoMoreInteractions(mockRepo);
       },
     );
   });

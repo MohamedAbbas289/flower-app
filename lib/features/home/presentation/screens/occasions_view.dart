@@ -8,11 +8,11 @@ import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/utils/cart_helpers.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
-import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
-import 'package:flower_app/features/cart/presentation/view_model/cart_state.dart';
-import 'package:flower_app/features/occasions/presentation/occasions_view_model/occasions_events.dart';
-import 'package:flower_app/features/occasions/presentation/occasions_view_model/occasions_state.dart';
-import 'package:flower_app/features/occasions/presentation/occasions_view_model/occasions_view_model.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_bloc.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_state.dart';
+import 'package:flower_app/features/home/presentation/view_models/occasions_view_model/occasions_events.dart';
+import 'package:flower_app/features/home/presentation/view_models/occasions_view_model/occasions_state.dart';
+import 'package:flower_app/features/home/presentation/view_models/occasions_view_model/occasions_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

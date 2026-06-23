@@ -8,14 +8,14 @@ import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
-import 'package:flower_app/features/cart/api/request_models/cart_request_model.dart';
-import 'package:flower_app/features/cart/domain/entities/cart_entity.dart';
-import 'package:flower_app/features/cart/domain/entities/cart_item_entity.dart';
-import 'package:flower_app/features/cart/presentation/view_model/cart_bloc.dart';
-import 'package:flower_app/features/cart/presentation/view_model/cart_event.dart';
-import 'package:flower_app/features/cart/presentation/view_model/cart_state.dart';
-import 'package:flower_app/features/checkout/presentation/model/checkout_arguments.dart';
-import 'package:flower_app/features/saved_address/domain/use_cases/saved_address_use_case.dart';
+import 'package:flower_app/features/shopping/api/request_models/cart_request_model.dart';
+import 'package:flower_app/features/shopping/domain/entities/cart_entity.dart';
+import 'package:flower_app/features/shopping/domain/entities/cart_item_entity.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_bloc.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_event.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_state.dart';
+import 'package:flower_app/features/shopping/presentation/screens/checkout_arguments.dart';
+import 'package:flower_app/features/address/domain/use_cases/saved_address_use_case.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -130,7 +130,8 @@ class _NotLoggedInView extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, AppRoutesName.login),
+            onPressed: () =>
+                Navigator.pushReplacementNamed(context, AppRoutesName.login),
             child: Text(AppStrings.loginButton),
           ),
         ],
@@ -449,8 +450,7 @@ class _CartSummary extends StatelessWidget {
     switch (response) {
       case SuccessBaseResponse():
         if (response.data.isEmpty) {
-          AppSnackBar.showError(context, AppStrings.addAddressBeforeCheckout);
-          Navigator.pushNamed(context, AppRoutesName.addAddress);
+          await _promptAddAddress(context);
           return;
         }
         Navigator.pushNamed(
@@ -463,8 +463,16 @@ class _CartSummary extends StatelessWidget {
           ),
         );
       case ErrorBaseResponse():
-        AppSnackBar.showError(context, AppStrings.addAddressBeforeCheckout);
-        Navigator.pushNamed(context, AppRoutesName.addAddress);
+        await _promptAddAddress(context);
+    }
+  }
+
+  Future<void> _promptAddAddress(BuildContext context) async {
+    AppSnackBar.showError(context, AppStrings.addAddressBeforeCheckout);
+    final result = await Navigator.pushNamed(context, AppRoutesName.addAddress);
+
+    if (result == true && context.mounted) {
+      await _onCheckout(context);
     }
   }
 

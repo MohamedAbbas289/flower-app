@@ -1,8 +1,8 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
-import 'package:flower_app/features/auth/signup/api/request_models/signup_request_model.dart';
-import 'package:flower_app/features/auth/signup/domain/repositories_contract/signup_repository_contract.dart';
-import 'package:flower_app/features/auth/signup/domain/usecases/signup_user_use_case.dart';
+import 'package:flower_app/features/auth/api/request_models/signup_request_model.dart';
+import 'package:flower_app/features/auth/domain/repository_contract/auth_repository_contract.dart';
+import 'package:flower_app/features/auth/domain/use_cases/signup_user_use_case.dart';
 
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -11,9 +11,9 @@ import 'package:test/test.dart';
 import 'signup_user_use_case_test.mocks.dart';
 
 
-@GenerateMocks([SignupRepositoryContract])
+@GenerateMocks([AuthRepositoryContract])
 void main() {
-  late MockSignupRepositoryContract mockSignupRepository;
+  late MockAuthRepositoryContract mockSignupRepository;
   late SignupUserUseCase signupUserUseCase;
 
   setUpAll(() {
@@ -23,7 +23,7 @@ void main() {
   });
 
   setUp(() {
-    mockSignupRepository = MockSignupRepositoryContract();
+    mockSignupRepository = MockAuthRepositoryContract();
     signupUserUseCase = SignupUserUseCase(mockSignupRepository);
   });
 

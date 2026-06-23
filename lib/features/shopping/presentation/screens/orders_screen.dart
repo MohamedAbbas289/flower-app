@@ -4,9 +4,9 @@ import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_strings.dart';
-import 'package:flower_app/features/orders/domain/entities/order_entity.dart';
-import 'package:flower_app/features/orders/presentation/view_model/orders_state.dart';
-import 'package:flower_app/features/orders/presentation/view_model/orders_view_model.dart';
+import 'package:flower_app/features/shopping/domain/entities/order_entity.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/orders_view_model/orders_state.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/orders_view_model/orders_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

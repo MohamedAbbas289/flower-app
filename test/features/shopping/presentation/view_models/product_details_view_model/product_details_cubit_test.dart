@@ -1,10 +1,10 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/product_details/domain/entities/product_details_entity.dart';
-import 'package:flower_app/features/product_details/domain/use_case/product_details_use_case.dart';
-import 'package:flower_app/features/product_details/presentation/view_model/product_details_cubit.dart';
-import 'package:flower_app/features/product_details/presentation/view_model/product_details_events.dart';
-import 'package:flower_app/features/product_details/presentation/view_model/product_details_states.dart';
+import 'package:flower_app/features/shopping/domain/entities/product_details_entity.dart';
+import 'package:flower_app/features/shopping/domain/use_cases/product_details_use_case.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/product_details_view_model/product_details_cubit.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/product_details_view_model/product_details_events.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/product_details_view_model/product_details_states.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

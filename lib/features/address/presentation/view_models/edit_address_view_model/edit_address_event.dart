@@ -1,4 +1,4 @@
-import 'package:flower_app/features/add_address/data/models/add_address_dto.dart';
+import 'package:flower_app/features/address/data/models/add_address_dto.dart';
 
 sealed class EditAddressEvent {
   const EditAddressEvent();

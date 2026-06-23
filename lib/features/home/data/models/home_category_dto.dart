@@ -1,7 +1,7 @@
-import 'package:flower_app/features/home_screen/domain/entities/category_entity.dart';
+import 'package:flower_app/features/home/domain/entities/home_category_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'category.g.dart';
+part 'home_category_dto.g.dart';
 
 @JsonSerializable()
 class CategoryDto {
@@ -37,8 +37,8 @@ class CategoryDto {
 
   Map<String, dynamic> toJson() => _$CategoryDtoToJson(this);
 
-  CategoryEntity toDomain() {
-    return CategoryEntity(
+  HomeCategoryEntity toDomain() {
+    return HomeCategoryEntity(
       id: id,
       name: name,      image: image,
       productsCount: productsCount,

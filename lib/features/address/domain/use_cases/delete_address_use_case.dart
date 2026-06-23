@@ -1,10 +1,10 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/saved_address/domain/repositories_contract/saved_address_repo_contract.dart';
+import 'package:flower_app/features/address/domain/repository_contract/address_repository_contract.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class DeleteAddressUseCase {
-  final SavedAddressRepoContract _repo;
+  final AddressRepositoryContract _repo;
 
   DeleteAddressUseCase(this._repo);
 

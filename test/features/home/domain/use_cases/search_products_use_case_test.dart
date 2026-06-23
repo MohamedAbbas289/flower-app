@@ -1,17 +1,17 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/categories/domain/entities/product_entity.dart';
-import 'package:flower_app/features/categories/domain/entities/products_response_entity.dart';
-import 'package:flower_app/features/search/domain/repository/search_repository.dart';
-import 'package:flower_app/features/search/domain/use_cases/search_products_use_case.dart';
+import 'package:flower_app/features/home/domain/entities/product_entity.dart';
+import 'package:flower_app/features/home/domain/entities/products_response_entity.dart';
+import 'package:flower_app/features/home/domain/repository_contract/home_repository_contract.dart';
+import 'package:flower_app/features/home/domain/use_cases/search_products_use_case.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'search_products_use_case_test.mocks.dart';
 
-@GenerateMocks([SearchRepository])
+@GenerateMocks([HomeRepositoryContract])
 void main() {
-  late MockSearchRepository mockSearchRepository;
+  late MockHomeRepositoryContract mockHomeRepositoryContract;
   late SearchProductsUseCase searchProductsUseCase;
 
   setUpAll(() {
@@ -23,8 +23,8 @@ void main() {
   });
 
   setUp(() {
-    mockSearchRepository = MockSearchRepository();
-    searchProductsUseCase = SearchProductsUseCase(mockSearchRepository);
+    mockHomeRepositoryContract = MockHomeRepositoryContract();
+    searchProductsUseCase = SearchProductsUseCase(mockHomeRepositoryContract);
   });
 
   group('SearchProductsUseCase', () {
@@ -38,7 +38,7 @@ void main() {
         );
 
         when(
-          mockSearchRepository.searchProducts(query: 'rose'),
+          mockHomeRepositoryContract.searchProducts(query: 'rose'),
         ).thenAnswer((_) async => successResponse);
 
         final result = await searchProductsUseCase.execute(query: 'rose');
@@ -47,8 +47,8 @@ void main() {
         final success = result as SuccessBaseResponse<ProductsResponseEntity>;
         expect(success.data.products.length, 1);
         expect(success.data.products.first.id, '1');
-        verify(mockSearchRepository.searchProducts(query: 'rose')).called(1);
-        verifyNoMoreInteractions(mockSearchRepository);
+        verify(mockHomeRepositoryContract.searchProducts(query: 'rose')).called(1);
+        verifyNoMoreInteractions(mockHomeRepositoryContract);
       },
     );
 
@@ -61,7 +61,7 @@ void main() {
         );
 
         when(
-          mockSearchRepository.searchProducts(query: 'rose'),
+          mockHomeRepositoryContract.searchProducts(query: 'rose'),
         ).thenAnswer((_) async => errorResponse);
 
         final result = await searchProductsUseCase.execute(query: 'rose');
@@ -69,8 +69,8 @@ void main() {
         expect(result, isA<ErrorBaseResponse<ProductsResponseEntity>>());
         final error = result as ErrorBaseResponse<ProductsResponseEntity>;
         expect(error.exception, exception);
-        verify(mockSearchRepository.searchProducts(query: 'rose')).called(1);
-        verifyNoMoreInteractions(mockSearchRepository);
+        verify(mockHomeRepositoryContract.searchProducts(query: 'rose')).called(1);
+        verifyNoMoreInteractions(mockHomeRepositoryContract);
       },
     );
   });

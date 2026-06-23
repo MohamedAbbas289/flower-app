@@ -1,7 +1,7 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/features/profile/api/request_models/edit_profile_request_model.dart';
-import 'package:flower_app/features/profile/domain/repository_contract/edit_profile_repo_contract.dart';
+import 'package:flower_app/features/profile/domain/repository_contract/profile_repo_contract.dart';
 import 'package:flower_app/features/profile/domain/use_cases/edit_profile_use_case.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -9,9 +9,9 @@ import 'package:mockito/mockito.dart';
 
 import 'edit_profile_use_case_test.mocks.dart';
 
-@GenerateMocks([EditProfileRepoContract])
+@GenerateMocks([ProfileRepoContract])
 void main() {
-  late MockEditProfileRepoContract mockRepo;
+  late MockProfileRepoContract mockRepo;
   late EditProfileUseCase useCase;
 
   final tRequest = EditProfileRequestModel(
@@ -28,7 +28,7 @@ void main() {
   );
 
   setUp(() {
-    mockRepo = MockEditProfileRepoContract();
+    mockRepo = MockProfileRepoContract();
     useCase = EditProfileUseCase(mockRepo);
     provideDummy<BaseResponse<AuthResponseEntity>>(
       SuccessBaseResponse<AuthResponseEntity>(data: tAuthResponseEntity),

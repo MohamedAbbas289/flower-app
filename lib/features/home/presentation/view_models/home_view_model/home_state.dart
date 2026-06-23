@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/home_screen/domain/entities/best_seller_entity.dart';
-import 'package:flower_app/features/home_screen/domain/entities/category_entity.dart';
-import 'package:flower_app/features/home_screen/domain/entities/occasion_entity.dart';
+import 'package:flower_app/features/home/domain/entities/home_best_seller_entity.dart';
+import 'package:flower_app/features/home/domain/entities/home_category_entity.dart';
+import 'package:flower_app/features/home/domain/entities/home_occasion_entity.dart';
 
 class HomeState extends Equatable {
-  final BaseState<List<CategoryEntity>> categoriesState;
+  final BaseState<List<HomeCategoryEntity>> categoriesState;
   final BaseState<List<BestSellerEntity>> bestSellersState;
-  final BaseState<List<OccasionEntity>> occasionsState;
+  final BaseState<List<HomeOccasionEntity>> occasionsState;
 
   const HomeState({
     this.categoriesState = const BaseState(),
@@ -16,9 +16,9 @@ class HomeState extends Equatable {
   });
 
   HomeState copyWith({
-    BaseState<List<CategoryEntity>>? categoriesState,
+    BaseState<List<HomeCategoryEntity>>? categoriesState,
     BaseState<List<BestSellerEntity>>? bestSellersState,
-    BaseState<List<OccasionEntity>>? occasionsState,
+    BaseState<List<HomeOccasionEntity>>? occasionsState,
   }) {
     return HomeState(
       categoriesState: categoriesState ?? this.categoriesState,

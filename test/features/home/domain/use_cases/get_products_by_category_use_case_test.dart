@@ -1,18 +1,18 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/categories/api/request_models/get_products_by_category_request_model.dart';
-import 'package:flower_app/features/categories/domain/entities/product_entity.dart';
-import 'package:flower_app/features/categories/domain/entities/products_response_entity.dart';
-import 'package:flower_app/features/categories/domain/repository/categories_repository.dart';
-import 'package:flower_app/features/categories/domain/use_cases/get_products_by_category_use_case.dart';
+import 'package:flower_app/features/home/api/request_models/get_products_by_category_request_model.dart';
+import 'package:flower_app/features/home/domain/entities/product_entity.dart';
+import 'package:flower_app/features/home/domain/entities/products_response_entity.dart';
+import 'package:flower_app/features/home/domain/repository_contract/home_repository_contract.dart';
+import 'package:flower_app/features/home/domain/use_cases/get_products_by_category_use_case.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'get_products_by_category_use_case_test.mocks.dart';
 
-@GenerateMocks([CategoriesRepository])
+@GenerateMocks([HomeRepositoryContract])
 void main() {
-  late MockCategoriesRepository mockCategoriesRepository;
+  late MockHomeRepositoryContract mockHomeRepositoryContract;
   late GetProductsByCategoryUseCase getProductsByCategoryUseCase;
 
   setUpAll(() {
@@ -24,9 +24,9 @@ void main() {
   });
 
   setUp(() {
-    mockCategoriesRepository = MockCategoriesRepository();
+    mockHomeRepositoryContract = MockHomeRepositoryContract();
     getProductsByCategoryUseCase =
-        GetProductsByCategoryUseCase(mockCategoriesRepository);
+        GetProductsByCategoryUseCase(mockHomeRepositoryContract);
   });
 
   group('GetProductsByCategoryUseCase', () {
@@ -40,7 +40,7 @@ void main() {
               products: [ProductEntity(id: "1")]),
         );
 
-        when(mockCategoriesRepository.getProductsByCategory(
+        when(mockHomeRepositoryContract.getProductsByCategory(
           categoryId: "123",
           sort: null,
           page: 1,
@@ -57,13 +57,13 @@ void main() {
         final success = result as SuccessBaseResponse<ProductsResponseEntity>;
         expect(success.data.products.length, 1);
         expect(success.data.products.first.id, "1");
-        verify(mockCategoriesRepository.getProductsByCategory(
+        verify(mockHomeRepositoryContract.getProductsByCategory(
           categoryId: "123",
           sort: null,
           page: 1,
           limit: 10,
         )).called(1);
-        verifyNoMoreInteractions(mockCategoriesRepository);
+        verifyNoMoreInteractions(mockHomeRepositoryContract);
       },
     );
 
@@ -75,7 +75,7 @@ void main() {
           exception: exception,
         );
 
-        when(mockCategoriesRepository.getProductsByCategory(
+        when(mockHomeRepositoryContract.getProductsByCategory(
           categoryId: '123',
           sort: null,
           page: 1,
@@ -91,13 +91,13 @@ void main() {
         expect(result, isA<ErrorBaseResponse<ProductsResponseEntity>>());
         final error = result as ErrorBaseResponse<ProductsResponseEntity>;
         expect(error.exception, exception);
-        verify(mockCategoriesRepository.getProductsByCategory(
+        verify(mockHomeRepositoryContract.getProductsByCategory(
           categoryId: '123',
           sort: null,
           page: 1,
           limit: 10,
         )).called(1);
-        verifyNoMoreInteractions(mockCategoriesRepository);
+        verifyNoMoreInteractions(mockHomeRepositoryContract);
       },
     );
   });

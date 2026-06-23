@@ -1,5 +1,3 @@
-import 'package:flower_app/features/payment/domain/entities/checkout_session_entity.dart';
-
 class CheckoutSessionResponseModel {
   final String? message;
   final String? sessionId;
@@ -19,7 +17,4 @@ class CheckoutSessionResponseModel {
       sessionUrl: session?['url'] as String?,
     );
   }
-
-  CheckoutSessionEntity toEntity() =>
-      CheckoutSessionEntity(sessionId: sessionId, sessionUrl: sessionUrl);
 }

@@ -1,7 +1,7 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/auth/forget-password/domain/entities/forget_password_entity.dart';
-import 'package:flower_app/features/auth/forget-password/domain/repositories/forget_password_repo.dart';
-import 'package:flower_app/features/auth/forget-password/domain/usecase/forget_password_use_case.dart';
+import 'package:flower_app/features/auth/domain/entities/forget_password_entity.dart';
+import 'package:flower_app/features/auth/domain/repository_contract/auth_repository_contract.dart';
+import 'package:flower_app/features/auth/domain/use_cases/forget_password_use_case.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -9,10 +9,10 @@ import 'package:test/test.dart';
 import 'forget_password_use_case_test.mocks.dart';
 
 
-@GenerateMocks([ForgetPasswordRepo])
+@GenerateMocks([AuthRepositoryContract])
 void main() {
   late ForgetPasswordUseCase useCase;
-  late MockForgetPasswordRepo mockRepo;
+  late MockAuthRepositoryContract mockRepo;
 
   setUpAll(() {
     provideDummy<BaseResponse<ForgetPasswordEntity>>(
@@ -46,7 +46,7 @@ void main() {
   final tException = Exception("Something went wrong. Please try again later.");
 
   setUp(() {
-    mockRepo = MockForgetPasswordRepo();
+    mockRepo = MockAuthRepositoryContract();
     useCase = ForgetPasswordUseCase(mockRepo);
   });
 

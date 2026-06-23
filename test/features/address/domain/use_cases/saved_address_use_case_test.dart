@@ -1,16 +1,16 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
-import 'package:flower_app/features/saved_address/domain/repositories_contract/saved_address_repo_contract.dart';
-import 'package:flower_app/features/saved_address/domain/use_cases/saved_address_use_case.dart';
+import 'package:flower_app/features/address/domain/entities/address_entity.dart';
+import 'package:flower_app/features/address/domain/repository_contract/address_repository_contract.dart';
+import 'package:flower_app/features/address/domain/use_cases/saved_address_use_case.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'saved_address_use_case_test.mocks.dart';
 
-@GenerateMocks([SavedAddressRepoContract])
+@GenerateMocks([AddressRepositoryContract])
 void main() {
-  late MockSavedAddressRepoContract repoContract;
+  late MockAddressRepositoryContract repoContract;
   late GetAddressesUseCase useCase;
 
   setUpAll(() {
@@ -23,7 +23,7 @@ void main() {
   });
 
   setUp(() {
-    repoContract = MockSavedAddressRepoContract();
+    repoContract = MockAddressRepositoryContract();
     useCase = GetAddressesUseCase(repoContract);
   });
 

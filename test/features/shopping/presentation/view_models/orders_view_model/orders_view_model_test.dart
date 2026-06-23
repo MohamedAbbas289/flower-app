@@ -1,9 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/orders/domain/entities/order_entity.dart';
-import 'package:flower_app/features/orders/domain/use_cases/get_orders_use_case.dart';
-import 'package:flower_app/features/orders/presentation/view_model/orders_state.dart';
-import 'package:flower_app/features/orders/presentation/view_model/orders_view_model.dart';
+import 'package:flower_app/features/shopping/domain/entities/order_entity.dart';
+import 'package:flower_app/features/shopping/domain/use_cases/get_orders_use_case.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/orders_view_model/orders_state.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/orders_view_model/orders_view_model.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

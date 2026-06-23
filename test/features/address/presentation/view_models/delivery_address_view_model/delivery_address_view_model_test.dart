@@ -1,11 +1,11 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
-import 'package:flower_app/features/delivery_location/domain/entities/delivery_address_display.dart';
-import 'package:flower_app/features/delivery_location/domain/use_cases/resolve_delivery_address_use_case.dart';
-import 'package:flower_app/features/delivery_location/presentation/view_model/cubit/delivery_address_view_model.dart';
-import 'package:flower_app/features/delivery_location/presentation/view_model/states/delivery_address_events.dart';
-import 'package:flower_app/features/delivery_location/presentation/view_model/states/delivery_address_state.dart';
+import 'package:flower_app/features/address/domain/entities/address_entity.dart';
+import 'package:flower_app/features/address/domain/entities/delivery_address_display.dart';
+import 'package:flower_app/features/address/domain/use_cases/resolve_delivery_address_use_case.dart';
+import 'package:flower_app/features/address/presentation/view_models/delivery_address_view_model/delivery_address_view_model.dart';
+import 'package:flower_app/features/address/presentation/view_models/delivery_address_view_model/delivery_address_events.dart';
+import 'package:flower_app/features/address/presentation/view_models/delivery_address_view_model/delivery_address_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

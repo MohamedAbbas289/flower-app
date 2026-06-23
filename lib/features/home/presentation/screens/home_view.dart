@@ -6,19 +6,19 @@ import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
-import 'package:flower_app/features/delivery_location/presentation/view_model/cubit/delivery_address_view_model.dart';
-import 'package:flower_app/features/delivery_location/presentation/view_model/states/delivery_address_events.dart';
-import 'package:flower_app/features/delivery_location/presentation/widgets/delivery_location_widget.dart';
-import 'package:flower_app/features/home_screen/domain/entities/best_seller_entity.dart';
-import 'package:flower_app/features/home_screen/domain/entities/category_entity.dart';
-import 'package:flower_app/features/home_screen/domain/entities/occasion_entity.dart';
-import 'package:flower_app/features/home_screen/presentation/view_model/cubit/home_view_model.dart';
-import 'package:flower_app/features/home_screen/presentation/view_model/states/home_events.dart';
-import 'package:flower_app/features/home_screen/presentation/view_model/states/home_state.dart';
-import 'package:flower_app/features/home_screen/presentation/widgets/best_seller_item.dart';
-import 'package:flower_app/features/home_screen/presentation/widgets/category_item.dart';
-import 'package:flower_app/features/home_screen/presentation/widgets/occasion_item.dart';
-import 'package:flower_app/features/home_screen/presentation/widgets/section_header.dart';
+import 'package:flower_app/features/address/presentation/view_models/delivery_address_view_model/delivery_address_view_model.dart';
+import 'package:flower_app/features/address/presentation/view_models/delivery_address_view_model/delivery_address_events.dart';
+import 'package:flower_app/features/address/presentation/widgets/delivery_location_widget.dart';
+import 'package:flower_app/features/home/domain/entities/home_best_seller_entity.dart';
+import 'package:flower_app/features/home/domain/entities/home_category_entity.dart';
+import 'package:flower_app/features/home/domain/entities/home_occasion_entity.dart';
+import 'package:flower_app/features/home/presentation/view_models/home_view_model/home_view_model.dart';
+import 'package:flower_app/features/home/presentation/view_models/home_view_model/home_events.dart';
+import 'package:flower_app/features/home/presentation/view_models/home_view_model/home_state.dart';
+import 'package:flower_app/features/home/presentation/widgets/best_seller_item.dart';
+import 'package:flower_app/features/home/presentation/widgets/category_item.dart';
+import 'package:flower_app/features/home/presentation/widgets/occasion_item.dart';
+import 'package:flower_app/features/home/presentation/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCategoriesContent(BaseState<List<CategoryEntity>> state) {
+  Widget _buildCategoriesContent(BaseState<List<HomeCategoryEntity>> state) {
     if (state.isLoading) return _buildHorizontalLoader();
 
     if (state.msg != null) {
@@ -269,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildOccasionsContent(BaseState<List<OccasionEntity>> state) {
+  Widget _buildOccasionsContent(BaseState<List<HomeOccasionEntity>> state) {
     if (state.isLoading) return _buildHorizontalLoader();
 
     if (state.msg != null) {

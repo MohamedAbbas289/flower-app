@@ -1,8 +1,8 @@
 import 'package:flower_app/core/models/metadata_model.dart';
-import 'package:flower_app/features/categories/data/models/product_model.dart';
+import 'package:flower_app/features/home/data/models/product_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'products_response.g.dart';
+part 'category_products_response.g.dart';
 
 @JsonSerializable()
 class ProductsResponse {

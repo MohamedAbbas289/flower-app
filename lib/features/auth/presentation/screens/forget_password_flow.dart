@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/utils/app_routes.dart';
 
-import '../view_model/cubit/forget_password_cubit.dart';
+import '../view_models/forget_password_view_model/forget_password_cubit.dart';
 
 class ForgetPasswordFlow extends StatelessWidget {
   const ForgetPasswordFlow({super.key});

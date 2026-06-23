@@ -1,17 +1,17 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/product_details/domain/entities/product_details_entity.dart';
-import 'package:flower_app/features/product_details/domain/repo_contract/product_details_repo_contract.dart';
-import 'package:flower_app/features/product_details/domain/use_case/product_details_use_case.dart';
+import 'package:flower_app/features/shopping/domain/entities/product_details_entity.dart';
+import 'package:flower_app/features/shopping/domain/repository_contract/shopping_repository_contract.dart';
+import 'package:flower_app/features/shopping/domain/use_cases/product_details_use_case.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'product_details_use_case_test.mocks.dart';
 
-@GenerateMocks([ProductDetailsRepoContract])
+@GenerateMocks([ShoppingRepositoryContract])
 void main() {
   late ProductDetailsUseCase useCase;
-  late MockProductDetailsRepoContract mockRepo;
+  late MockShoppingRepositoryContract mockRepo;
 
   const tProductId = '69d988754461df0f939b581a';
 
@@ -38,7 +38,7 @@ void main() {
   });
 
   setUp(() {
-    mockRepo = MockProductDetailsRepoContract();
+    mockRepo = MockShoppingRepositoryContract();
     useCase = ProductDetailsUseCase(mockRepo);
   });
 

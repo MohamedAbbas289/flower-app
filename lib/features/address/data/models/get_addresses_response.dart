@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import '../../../add_address/data/models/add_address_dto.dart';
+import 'add_address_dto.dart';
 
 part 'get_addresses_response.g.dart';
 

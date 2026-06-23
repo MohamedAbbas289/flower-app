@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/profile/domain/repository_contract/edit_profile_repo_contract.dart';
+import 'package:flower_app/features/profile/domain/repository_contract/profile_repo_contract.dart';
 import 'package:flower_app/features/profile/domain/use_cases/upload_photo_use_case.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -8,15 +8,15 @@ import 'package:mockito/mockito.dart';
 
 import 'upload_photo_use_case_test.mocks.dart';
 
-@GenerateMocks([EditProfileRepoContract])
+@GenerateMocks([ProfileRepoContract])
 void main() {
-  late MockEditProfileRepoContract mockRepo;
+  late MockProfileRepoContract mockRepo;
   late UploadPhotoUseCase useCase;
 
   final tFile = File('test/assets/test_image.png');
 
   setUp(() {
-    mockRepo = MockEditProfileRepoContract();
+    mockRepo = MockProfileRepoContract();
     useCase = UploadPhotoUseCase(mockRepo);
     provideDummy<BaseResponse<void>>(
       SuccessBaseResponse<void>(data: null),

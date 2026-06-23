@@ -5,8 +5,8 @@ import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 
 import '../../../domain/entities/forget_password_entity.dart';
-import '../../../domain/usecase/forget_password_use_case.dart';
-import '../states/forget_password_states.dart';
+import '../../../domain/use_cases/forget_password_use_case.dart';
+import 'forget_password_states.dart';
 
 @injectable
 class ForgetPasswordCubit extends Cubit<ForgetPasswordBaseState> {

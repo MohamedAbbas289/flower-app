@@ -1,5 +1,5 @@
 
-import '../../api/request_models/login_request_model.dart';
+import '../../../api/request_models/login_request_model.dart';
 
 sealed class LoginEvents {}
 

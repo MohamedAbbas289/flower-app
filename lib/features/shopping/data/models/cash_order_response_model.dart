@@ -1,5 +1,3 @@
-import 'package:flower_app/features/payment/domain/entities/cash_order_entity.dart';
-
 class CashOrderResponseModel {
   final String? message;
   final String? orderId;
@@ -25,11 +23,4 @@ class CashOrderResponseModel {
       state: order?['state'] as String?,
     );
   }
-
-  CashOrderEntity toEntity() => CashOrderEntity(
-    id: orderId,
-    orderNumber: orderNumber,
-    totalPrice: totalPrice,
-    state: state,
-  );
 }

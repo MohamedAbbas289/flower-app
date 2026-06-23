@@ -1,9 +1,9 @@
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_strings.dart';
-import 'package:flower_app/features/checkout/domain/entities/payment_method.dart';
-import 'package:flower_app/features/checkout/presentation/view_model/cubit/checkout_view_model.dart';
-import 'package:flower_app/features/checkout/presentation/view_model/states/checkout_events.dart';
+import 'package:flower_app/features/shopping/domain/entities/payment_method.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/checkout_view_model/checkout_view_model.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/checkout_view_model/checkout_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flower_app/core/utils/validation/app_regex.dart';
 import 'package:flower_app/core/values/app_strings.dart';
-import 'package:flower_app/features/add_address/domain/entities/location_entity.dart';
+import 'package:flower_app/features/address/domain/entities/location_entity.dart';
 import 'package:flower_app/core/reusable_widgets/address_map_picker.dart';
 import 'package:flower_app/core/reusable_widgets/location_dropdown_field.dart';
 import 'package:flutter/material.dart';

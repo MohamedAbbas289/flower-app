@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-class CategoryEntity extends Equatable {
+class HomeCategoryEntity extends Equatable {
   final String? id;
   final String? name;
   final String? image;
   final int? productsCount;
 
-  const CategoryEntity({
+  const HomeCategoryEntity({
     this.id,
     this.name,
     this.image,

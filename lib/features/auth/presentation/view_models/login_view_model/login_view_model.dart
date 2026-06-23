@@ -5,8 +5,8 @@ import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../api/request_models/login_request_model.dart';
-import '../../domain/use_cases/login_use_case.dart';
+import '../../../api/request_models/login_request_model.dart';
+import '../../../domain/use_cases/login_use_case.dart';
 import 'login_events.dart';
 import 'login_state.dart';
 

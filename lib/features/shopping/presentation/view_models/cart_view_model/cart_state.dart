@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/cart/domain/entities/cart_entity.dart';
+import 'package:flower_app/features/shopping/domain/entities/cart_entity.dart';
 
 class CartState extends Equatable {
   final BaseState<CartEntity> cartState;

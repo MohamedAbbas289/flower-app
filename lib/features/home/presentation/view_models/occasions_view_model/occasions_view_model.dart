@@ -1,11 +1,11 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/occasions/domain/entities/occasion_entity.dart';
-import 'package:flower_app/features/occasions/domain/entities/products_entity.dart';
-import 'package:flower_app/features/occasions/domain/usecases/get_occasions_use_case.dart';
-import 'package:flower_app/features/occasions/domain/usecases/get_products_by_occasiousecase.dart';
-import 'package:flower_app/features/occasions/presentation/occasions_view_model/occasions_events.dart';
-import 'package:flower_app/features/occasions/presentation/occasions_view_model/occasions_state.dart';
+import 'package:flower_app/features/home/domain/entities/occasion_entity.dart';
+import 'package:flower_app/features/home/domain/entities/products_entity.dart';
+import 'package:flower_app/features/home/domain/use_cases/get_occasions_use_case.dart';
+import 'package:flower_app/features/home/domain/use_cases/get_products_by_occasiousecase.dart';
+import 'package:flower_app/features/home/presentation/view_models/occasions_view_model/occasions_events.dart';
+import 'package:flower_app/features/home/presentation/view_models/occasions_view_model/occasions_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

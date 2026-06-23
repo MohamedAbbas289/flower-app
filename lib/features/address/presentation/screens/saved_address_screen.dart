@@ -4,11 +4,11 @@ import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
-import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
-import 'package:flower_app/features/saved_address/presentation/view_model/cubit/saved_address_view_model.dart';
-import 'package:flower_app/features/saved_address/presentation/view_model/states/saved_address_events.dart';
-import 'package:flower_app/features/saved_address/presentation/view_model/states/saved_address_states.dart';
-import 'package:flower_app/features/saved_address/presentation/widgets/address_card.dart';
+import 'package:flower_app/features/address/domain/entities/address_entity.dart';
+import 'package:flower_app/features/address/presentation/view_models/saved_address_view_model/saved_address_view_model.dart';
+import 'package:flower_app/features/address/presentation/view_models/saved_address_view_model/saved_address_events.dart';
+import 'package:flower_app/features/address/presentation/view_models/saved_address_view_model/saved_address_states.dart';
+import 'package:flower_app/features/address/presentation/widgets/address_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -74,7 +74,7 @@ class _SavedAddressView extends StatelessWidget {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: addresses.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    separatorBuilder: (_, _) => const SizedBox(height: 12),
                     itemBuilder: (context, index) {
                       final address = addresses[index];
                       return AddressCard(

@@ -1,7 +1,7 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/orders/domain/entities/order_entity.dart';
-import 'package:flower_app/features/orders/domain/use_cases/get_orders_use_case.dart';
+import 'package:flower_app/features/shopping/domain/entities/order_entity.dart';
+import 'package:flower_app/features/shopping/domain/use_cases/get_orders_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

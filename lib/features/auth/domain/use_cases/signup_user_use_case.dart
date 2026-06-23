@@ -3,16 +3,16 @@ import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../api/request_models/signup_request_model.dart';
-import '../repositories_contract/signup_repository_contract.dart';
+import '../repository_contract/auth_repository_contract.dart';
 
 @injectable
 class SignupUserUseCase {
-  SignupUserUseCase(this._signupRepository);
-  final SignupRepositoryContract _signupRepository;
+  SignupUserUseCase(this._authRepositoryContract);
+  final AuthRepositoryContract _authRepositoryContract;
 
   Future<BaseResponse<AuthResponseEntity>> execute({
     required SignupRequestModel requestModel,
   }) async {
-    return await _signupRepository.signup(requestModel: requestModel);
+    return await _authRepositoryContract.signup(requestModel: requestModel);
   }
 }

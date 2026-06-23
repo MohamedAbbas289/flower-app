@@ -1,14 +1,14 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/occasions/domain/entities/occasion_entity.dart';
-import 'package:flower_app/features/occasions/domain/repositories_contract/occasions_repository_contract.dart';
-import 'package:flower_app/features/occasions/domain/usecases/get_occasions_use_case.dart';
+import 'package:flower_app/features/home/domain/entities/occasion_entity.dart';
+import 'package:flower_app/features/home/domain/repository_contract/home_repository_contract.dart';
+import 'package:flower_app/features/home/domain/use_cases/get_occasions_use_case.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'get_occasions_use_case_test.mocks.dart';
 
-@GenerateMocks([OccasionsRepositoryContract])
+@GenerateMocks([HomeRepositoryContract])
 void main() {
   provideDummy<BaseResponse<OccasionsEntity>>(
     SuccessBaseResponse<OccasionsEntity>(
@@ -16,11 +16,11 @@ void main() {
     ),
   );
 
-  late MockOccasionsRepositoryContract mockRepository;
+  late MockHomeRepositoryContract mockRepository;
   late GetOccasionsUseCase useCase;
 
   setUp(() {
-    mockRepository = MockOccasionsRepositoryContract();
+    mockRepository = MockHomeRepositoryContract();
     useCase = GetOccasionsUseCase(mockRepository);
   });
 

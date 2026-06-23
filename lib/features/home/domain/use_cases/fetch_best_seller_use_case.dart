@@ -1,14 +1,14 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/best_seller/domain/entity/best_seller_product_entity.dart';
-import 'package:flower_app/features/best_seller/domain/repo/best_seller_repo_contract.dart';
+import 'package:flower_app/features/home/domain/entities/best_seller_product_entity.dart';
+import 'package:flower_app/features/home/domain/repository_contract/home_repository_contract.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class FetchBestSellerUseCase {
-  final BestSellerRepoContract bestSellerRepo;
+  final HomeRepositoryContract homeRepositoryContract;
 
-  FetchBestSellerUseCase(this.bestSellerRepo);
+  FetchBestSellerUseCase(this.homeRepositoryContract);
   Future<BaseResponse<List<BestSellerProductEntity>>> call() async {
-    return await bestSellerRepo.fetchBestSellers();
+    return await homeRepositoryContract.fetchBestSellers();
   }
 }

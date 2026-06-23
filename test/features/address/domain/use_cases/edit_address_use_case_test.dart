@@ -1,17 +1,17 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/add_address/data/models/add_address_dto.dart';
-import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
-import 'package:flower_app/features/edit_address/domain/repositories_contract/edit_address_repo_contract.dart';
-import 'package:flower_app/features/edit_address/domain/use_cases/edit_address_use_case.dart';
+import 'package:flower_app/features/address/data/models/add_address_dto.dart';
+import 'package:flower_app/features/address/domain/entities/address_entity.dart';
+import 'package:flower_app/features/address/domain/repository_contract/address_repository_contract.dart';
+import 'package:flower_app/features/address/domain/use_cases/edit_address_use_case.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'edit_address_use_case_test.mocks.dart';
 
-@GenerateMocks([EditAddressRepoContract])
+@GenerateMocks([AddressRepositoryContract])
 void main() {
-  late MockEditAddressRepoContract repoContract;
+  late MockAddressRepositoryContract repoContract;
   late EditAddressUseCase useCase;
 
   final request = AddAddressDto(
@@ -33,7 +33,7 @@ void main() {
   });
 
   setUp(() {
-    repoContract = MockEditAddressRepoContract();
+    repoContract = MockAddressRepositoryContract();
     useCase = EditAddressUseCase(repoContract);
   });
 

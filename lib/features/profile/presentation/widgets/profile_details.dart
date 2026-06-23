@@ -3,7 +3,7 @@ import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
-import 'package:flower_app/features/auth/logout/presentation/screens/logout_dialog.dart';
+import 'package:flower_app/features/auth/presentation/screens/logout_dialog.dart';
 import 'package:flower_app/features/profile/presentation/widgets/language_bottom_sheet.dart';
 import 'package:flower_app/features/profile/presentation/widgets/row_section.dart';
 import 'package:flower_app/features/profile/presentation/widgets/web_view_screen.dart';
@@ -14,9 +14,9 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/values/endpoints.dart';
 import '../../../../core/values/images_paths.dart';
-import '../view_model/cubit/profile_view_model.dart';
-import '../view_model/states/get_profile_events.dart';
-import '../view_model/states/get_profile_state.dart';
+import '../view_models/profile_view_model/profile_view_model.dart';
+import '../view_models/profile_view_model/get_profile_events.dart';
+import '../view_models/profile_view_model/get_profile_state.dart';
 
 class ProfileDetails extends StatelessWidget {
   const ProfileDetails({super.key, required this.authResponse});

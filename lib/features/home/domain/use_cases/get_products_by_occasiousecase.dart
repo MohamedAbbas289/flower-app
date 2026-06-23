@@ -1,12 +1,12 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/occasions/domain/entities/products_entity.dart';
-import 'package:flower_app/features/occasions/domain/repositories_contract/occasions_repository_contract.dart';
+import 'package:flower_app/features/home/domain/entities/products_entity.dart';
+import 'package:flower_app/features/home/domain/repository_contract/home_repository_contract.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class GetProductsByOccasionUseCase {
   GetProductsByOccasionUseCase(this._repository);
-  final OccasionsRepositoryContract _repository;
+  final HomeRepositoryContract _repository;
 
   Future<BaseResponse<ProductsEntity>> execute({
     required String occasionId,

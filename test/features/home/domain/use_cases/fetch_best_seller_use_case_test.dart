@@ -1,16 +1,16 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/best_seller/domain/entity/best_seller_product_entity.dart';
-import 'package:flower_app/features/best_seller/domain/repo/best_seller_repo_contract.dart';
-import 'package:flower_app/features/best_seller/domain/use_case/fetch_best_seller_use_case.dart';
+import 'package:flower_app/features/home/domain/entities/best_seller_product_entity.dart';
+import 'package:flower_app/features/home/domain/repository_contract/home_repository_contract.dart';
+import 'package:flower_app/features/home/domain/use_cases/fetch_best_seller_use_case.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'fetch_best_seller_use_case_test.mocks.dart';
 
-@GenerateMocks([BestSellerRepoContract])
+@GenerateMocks([HomeRepositoryContract])
 void main() {
-  late MockBestSellerRepoContract mockBestSellerRepo;
+  late MockHomeRepositoryContract mockHomeRepositoryContract;
   late FetchBestSellerUseCase fetchBestSellerUseCase;
 
   setUpAll(() {
@@ -20,8 +20,8 @@ void main() {
   });
 
   setUp(() {
-    mockBestSellerRepo = MockBestSellerRepoContract();
-    fetchBestSellerUseCase = FetchBestSellerUseCase(mockBestSellerRepo);
+    mockHomeRepositoryContract = MockHomeRepositoryContract();
+    fetchBestSellerUseCase = FetchBestSellerUseCase(mockHomeRepositoryContract);
   });
 
   group('FetchBestSellerUseCase', () {
@@ -45,7 +45,7 @@ void main() {
             );
 
         when(
-          mockBestSellerRepo.fetchBestSellers(),
+          mockHomeRepositoryContract.fetchBestSellers(),
         ).thenAnswer((_) async => successResponse);
 
         // Act
@@ -65,8 +65,8 @@ void main() {
         expect(success.data.first.title, "Wdding Flower");
         expect(success.data.first.price, 300);
 
-        verify(mockBestSellerRepo.fetchBestSellers()).called(1);
-        verifyNoMoreInteractions(mockBestSellerRepo);
+        verify(mockHomeRepositoryContract.fetchBestSellers()).called(1);
+        verifyNoMoreInteractions(mockHomeRepositoryContract);
       },
     );
 
@@ -80,7 +80,7 @@ void main() {
         );
 
         when(
-          mockBestSellerRepo.fetchBestSellers(),
+          mockHomeRepositoryContract.fetchBestSellers(),
         ).thenAnswer((_) async => errorResponse);
 
         // Act
@@ -93,8 +93,8 @@ void main() {
             result as ErrorBaseResponse<List<BestSellerProductEntity>>;
         expect(error.exception, exception);
 
-        verify(mockBestSellerRepo.fetchBestSellers()).called(1);
-        verifyNoMoreInteractions(mockBestSellerRepo);
+        verify(mockHomeRepositoryContract.fetchBestSellers()).called(1);
+        verifyNoMoreInteractions(mockHomeRepositoryContract);
       },
     );
   });

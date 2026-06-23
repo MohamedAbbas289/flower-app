@@ -1,10 +1,9 @@
-import 'package:flower_app/features/occasions/domain/entities/products_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'products_response.g.dart';
+part 'occasion_products_response.g.dart';
 
 @JsonSerializable()
-class ProductsResponse {
+class OccasionProductsResponse {
   @JsonKey(name: "message")
   String? message;
   @JsonKey(name: "metadata")
@@ -12,12 +11,12 @@ class ProductsResponse {
   @JsonKey(name: "products")
   List<Product>? products;
 
-  ProductsResponse({this.message, this.metadata, this.products});
+  OccasionProductsResponse({this.message, this.metadata, this.products});
 
-  factory ProductsResponse.fromJson(Map<String, dynamic> json) =>
-      _$ProductsResponseFromJson(json);
+  factory OccasionProductsResponse.fromJson(Map<String, dynamic> json) =>
+      _$OccasionProductsResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ProductsResponseToJson(this);
+  Map<String, dynamic> toJson() => _$OccasionProductsResponseToJson(this);
 }
 
 @JsonSerializable()
@@ -112,29 +111,4 @@ class Product {
       _$ProductFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductToJson(this);
-}
-
-extension ProductsMapper on ProductsResponse {
-  ProductsEntity toEntity() {
-    return ProductsEntity(
-      currentPage: metadata?.currentPage ?? 1,
-      totalPages: metadata?.totalPages ?? 1,
-      products:
-          products?.map<ProductEntity>((e) => e.toProductEntity()).toList() ??
-          [],
-    );
-  }
-}
-
-extension ProductMapper on Product {
-  ProductEntity toProductEntity() {
-    return ProductEntity(
-      id: id ?? '',
-      name: title ?? '',
-      imageUrl: imgCover ?? '',
-      price: priceAfterDiscount ?? price ?? 0,
-      originalPrice: priceAfterDiscount != null ? price : null,
-      discountPercent: discount,
-    );
-  }
 }

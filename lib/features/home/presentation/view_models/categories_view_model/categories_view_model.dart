@@ -1,15 +1,15 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flower_app/core/values/api_param.dart';
-import 'package:flower_app/features/categories/api/request_models/get_products_by_category_request_model.dart';
-import 'package:flower_app/features/categories/domain/entities/categories_response_entity.dart';
-import 'package:flower_app/features/categories/domain/entities/category_entity.dart';
-import 'package:flower_app/features/categories/domain/entities/product_entity.dart';
-import 'package:flower_app/features/categories/domain/entities/products_response_entity.dart';
-import 'package:flower_app/features/categories/domain/use_cases/get_categories_use_case.dart';
-import 'package:flower_app/features/categories/domain/use_cases/get_products_by_category_use_case.dart';
-import 'package:flower_app/features/categories/presentation/view_model/categories_events.dart';
-import 'package:flower_app/features/categories/presentation/view_model/categories_states.dart';
+import 'package:flower_app/features/home/api/request_models/get_products_by_category_request_model.dart';
+import 'package:flower_app/features/home/domain/entities/categories_response_entity.dart';
+import 'package:flower_app/features/home/domain/entities/category_entity.dart';
+import 'package:flower_app/features/home/domain/entities/product_entity.dart';
+import 'package:flower_app/features/home/domain/entities/products_response_entity.dart';
+import 'package:flower_app/features/home/domain/use_cases/get_categories_use_case.dart';
+import 'package:flower_app/features/home/domain/use_cases/get_products_by_category_use_case.dart';
+import 'package:flower_app/features/home/presentation/view_models/categories_view_model/categories_events.dart';
+import 'package:flower_app/features/home/presentation/view_models/categories_view_model/categories_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

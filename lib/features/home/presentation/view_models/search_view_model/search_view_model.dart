@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/categories/domain/entities/product_entity.dart';
-import 'package:flower_app/features/categories/domain/entities/products_response_entity.dart';
-import 'package:flower_app/features/search/domain/use_cases/search_products_use_case.dart';
-import 'package:flower_app/features/search/presentation/view_model/search_events.dart';
-import 'package:flower_app/features/search/presentation/view_model/search_states.dart';
+import 'package:flower_app/features/home/domain/entities/product_entity.dart';
+import 'package:flower_app/features/home/domain/entities/products_response_entity.dart';
+import 'package:flower_app/features/home/domain/use_cases/search_products_use_case.dart';
+import 'package:flower_app/features/home/presentation/view_models/search_view_model/search_events.dart';
+import 'package:flower_app/features/home/presentation/view_models/search_view_model/search_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

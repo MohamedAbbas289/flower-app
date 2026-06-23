@@ -1,9 +1,9 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/best_seller/domain/entity/best_seller_product_entity.dart';
-import 'package:flower_app/features/best_seller/domain/use_case/fetch_best_seller_use_case.dart';
-import 'package:flower_app/features/best_seller/presentation/view_model/best_seller_event.dart';
-import 'package:flower_app/features/best_seller/presentation/view_model/best_seller_state.dart';
+import 'package:flower_app/features/home/domain/entities/best_seller_product_entity.dart';
+import 'package:flower_app/features/home/domain/use_cases/fetch_best_seller_use_case.dart';
+import 'package:flower_app/features/home/presentation/view_models/best_seller_view_model/best_seller_event.dart';
+import 'package:flower_app/features/home/presentation/view_models/best_seller_view_model/best_seller_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

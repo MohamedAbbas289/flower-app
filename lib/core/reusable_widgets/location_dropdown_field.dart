@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flower_app/features/add_address/domain/entities/location_entity.dart';
+import 'package:flower_app/features/address/domain/entities/location_entity.dart';
 
 class AddressLocationJsonParser {
   const AddressLocationJsonParser._();

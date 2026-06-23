@@ -12,9 +12,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../api/request_models/login_request_model.dart';
-import '../view_model/login_events.dart';
-import '../view_model/login_state.dart';
-import '../view_model/login_view_model.dart';
+import '../view_models/login_view_model/login_events.dart';
+import '../view_models/login_view_model/login_state.dart';
+import '../view_models/login_view_model/login_view_model.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});

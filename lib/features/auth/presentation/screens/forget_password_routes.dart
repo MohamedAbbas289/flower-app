@@ -3,10 +3,10 @@ import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../pages/email_verification_view.dart';
-import '../pages/forget_password_view.dart';
-import '../pages/reset_password_view.dart';
-import '../view_model/cubit/forget_password_cubit.dart';
+import 'email_verification_view.dart';
+import 'forget_password_view.dart';
+import 'reset_password_view.dart';
+import '../view_models/forget_password_view_model/forget_password_cubit.dart';
 
 class ForgetPasswordRoutes {
   /// Returns the matched route for the forget-password flow,

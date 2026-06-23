@@ -1,14 +1,14 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/occasions/domain/entities/products_entity.dart';
-import 'package:flower_app/features/occasions/domain/repositories_contract/occasions_repository_contract.dart';
-import 'package:flower_app/features/occasions/domain/usecases/get_products_by_occasiousecase.dart';
+import 'package:flower_app/features/home/domain/entities/products_entity.dart';
+import 'package:flower_app/features/home/domain/repository_contract/home_repository_contract.dart';
+import 'package:flower_app/features/home/domain/use_cases/get_products_by_occasiousecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'get_occasions_use_case_test.mocks.dart';
+import 'get_products_by_occasiousecase_test.mocks.dart';
 
-@GenerateMocks([OccasionsRepositoryContract])
+@GenerateMocks([HomeRepositoryContract])
 void main() {
   provideDummy<BaseResponse<ProductsEntity>>(
     SuccessBaseResponse<ProductsEntity>(
@@ -16,11 +16,11 @@ void main() {
     ),
   );
 
-  late MockOccasionsRepositoryContract mockRepository;
+  late MockHomeRepositoryContract mockRepository;
   late GetProductsByOccasionUseCase useCase;
 
   setUp(() {
-    mockRepository = MockOccasionsRepositoryContract();
+    mockRepository = MockHomeRepositoryContract();
     useCase = GetProductsByOccasionUseCase(mockRepository);
   });
 

@@ -1,15 +1,15 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:injectable/injectable.dart';
 
-import '../repository/logout_repository.dart';
+import '../repository_contract/auth_repository_contract.dart';
 
 @injectable
 class LogoutUseCase {
-  final LogoutRepository _logoutRepository;
+  final AuthRepositoryContract _authRepositoryContract;
 
-  LogoutUseCase(this._logoutRepository);
+  LogoutUseCase(this._authRepositoryContract);
 
   Future<BaseResponse<void>> execute() {
-    return _logoutRepository.logout();
+    return _authRepositoryContract.logout();
   }
 }

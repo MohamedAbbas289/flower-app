@@ -1,10 +1,10 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/home_screen/domain/use_cases/get_best_seller_use_case.dart';
-import 'package:flower_app/features/home_screen/domain/use_cases/get_category_use_cases.dart';
-import 'package:flower_app/features/home_screen/domain/use_cases/get_occasion_use_case.dart';
-import 'package:flower_app/features/home_screen/presentation/view_model/states/home_events.dart';
-import 'package:flower_app/features/home_screen/presentation/view_model/states/home_state.dart';
+import 'package:flower_app/features/home/domain/use_cases/get_best_seller_use_case.dart';
+import 'package:flower_app/features/home/domain/use_cases/get_category_use_cases.dart';
+import 'package:flower_app/features/home/domain/use_cases/get_occasion_use_case.dart';
+import 'package:flower_app/features/home/presentation/view_models/home_view_model/home_events.dart';
+import 'package:flower_app/features/home/presentation/view_models/home_view_model/home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

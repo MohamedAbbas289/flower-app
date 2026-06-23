@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/delivery_location/domain/entities/delivery_address_display.dart';
+import 'package:flower_app/features/address/domain/entities/delivery_address_display.dart';
 
 class DeliveryAddressState extends Equatable {
   final BaseState<DeliveryAddressDisplay> deliveryAddressState;

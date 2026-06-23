@@ -1,7 +1,7 @@
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/images_paths.dart';
-import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
+import 'package:flower_app/features/address/domain/entities/address_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

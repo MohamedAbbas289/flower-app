@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flower_app/core/entities/metadata_entity.dart';
-import 'package:flower_app/features/categories/domain/entities/product_entity.dart';
+import 'package:flower_app/features/home/domain/entities/product_entity.dart';
 
 class ProductsResponseEntity extends Equatable {
   final List<ProductEntity> products;

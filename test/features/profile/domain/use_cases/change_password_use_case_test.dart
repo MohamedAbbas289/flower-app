@@ -1,6 +1,6 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/profile/domain/entities/change_password_entity.dart';
-import 'package:flower_app/features/profile/domain/repository_contract/change_password_repo_contract.dart';
+import 'package:flower_app/features/profile/domain/repository_contract/profile_repo_contract.dart';
 import 'package:flower_app/features/profile/domain/use_cases/change_password_use_case.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -8,10 +8,10 @@ import 'package:test/test.dart';
 
 import 'change_password_use_case_test.mocks.dart';
 
-@GenerateMocks([ChangePasswordRepoContract])
+@GenerateMocks([ProfileRepoContract])
 void main() {
   late ChangePasswordUseCase useCase;
-  late MockChangePasswordRepoContract mockRepo;
+  late MockProfileRepoContract mockRepo;
 
   final tEntity = ChangePasswordEntity(
     message: 'Password changed successfully',
@@ -28,7 +28,7 @@ void main() {
   });
 
   setUp(() {
-    mockRepo = MockChangePasswordRepoContract();
+    mockRepo = MockProfileRepoContract();
     useCase = ChangePasswordUseCase(mockRepo);
   });
 

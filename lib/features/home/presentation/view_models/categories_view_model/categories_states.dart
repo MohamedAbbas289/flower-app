@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/categories/domain/entities/category_entity.dart';
-import 'package:flower_app/features/categories/domain/entities/products_response_entity.dart';
-import 'package:flower_app/features/categories/presentation/view_model/categories_events.dart';
+import 'package:flower_app/features/home/domain/entities/category_entity.dart';
+import 'package:flower_app/features/home/domain/entities/products_response_entity.dart';
+import 'package:flower_app/features/home/presentation/view_models/categories_view_model/categories_events.dart';
 
 class CategoriesState extends Equatable {
   final BaseState<List<CategoryEntity>> categoriesState;

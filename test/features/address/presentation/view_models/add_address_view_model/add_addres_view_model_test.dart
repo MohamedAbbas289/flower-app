@@ -1,10 +1,10 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/firebase/last_address_firestore_service.dart';
-import 'package:flower_app/features/add_address/data/models/add_address_dto.dart';
-import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
-import 'package:flower_app/features/add_address/domain/use_cases/add_address_use_cases.dart';
-import 'package:flower_app/features/add_address/presentation/view_model/cubit/add_address_cubit.dart';
-import 'package:flower_app/features/add_address/presentation/view_model/states/add_address_events.dart';
+import 'package:flower_app/features/address/data/models/add_address_dto.dart';
+import 'package:flower_app/features/address/domain/entities/address_entity.dart';
+import 'package:flower_app/features/address/domain/use_cases/add_address_use_cases.dart';
+import 'package:flower_app/features/address/presentation/view_models/add_address_view_model/add_address_cubit.dart';
+import 'package:flower_app/features/address/presentation/view_models/add_address_view_model/add_address_events.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

@@ -2,11 +2,11 @@ import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:injectable/injectable.dart';
 
 import '../entities/forget_password_entity.dart';
-import '../repositories/forget_password_repo.dart';
+import '../repository_contract/auth_repository_contract.dart';
 
 @injectable
 class ForgetPasswordUseCase {
-  final ForgetPasswordRepo repository;
+  final AuthRepositoryContract repository;
 
   ForgetPasswordUseCase(this.repository);
 

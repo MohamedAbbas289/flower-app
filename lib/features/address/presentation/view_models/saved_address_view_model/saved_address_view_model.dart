@@ -1,10 +1,10 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/features/add_address/domain/entities/address_entity.dart';
-import 'package:flower_app/features/saved_address/domain/use_cases/delete_address_use_case.dart';
-import 'package:flower_app/features/saved_address/domain/use_cases/saved_address_use_case.dart';
-import 'package:flower_app/features/saved_address/presentation/view_model/states/saved_address_events.dart';
-import 'package:flower_app/features/saved_address/presentation/view_model/states/saved_address_states.dart';
+import 'package:flower_app/features/address/domain/entities/address_entity.dart';
+import 'package:flower_app/features/address/domain/use_cases/delete_address_use_case.dart';
+import 'package:flower_app/features/address/domain/use_cases/saved_address_use_case.dart';
+import 'package:flower_app/features/address/presentation/view_models/saved_address_view_model/saved_address_events.dart';
+import 'package:flower_app/features/address/presentation/view_models/saved_address_view_model/saved_address_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

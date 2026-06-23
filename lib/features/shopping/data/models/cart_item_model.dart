@@ -1,5 +1,5 @@
-import 'package:flower_app/features/cart/domain/entities/cart_item_entity.dart';
-import 'package:flower_app/features/cart/domain/entities/cart_product_entity.dart';
+import 'package:flower_app/features/shopping/domain/entities/cart_item_entity.dart';
+import 'package:flower_app/features/shopping/domain/entities/cart_product_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'cart_product_model.dart';
 
