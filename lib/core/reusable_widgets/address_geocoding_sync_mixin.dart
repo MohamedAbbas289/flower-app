@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/reusable_widgets/location_dropdown_field.dart';
 import 'package:flower_app/core/services/geocoding_service.dart';
@@ -224,46 +225,48 @@ mixin AddressGeocodingSyncMixin<T extends StatefulWidget> on State<T> {
         .toList();
     if (normalizedCandidates.isEmpty) return null;
 
+    final normalizedNames = items
+        .expand(
+          (item) => _namesForItem(item).map(
+            (rawName) => (item: item, name: _normalize(rawName)),
+          ),
+        )
+        .toList();
+
     for (final candidate in normalizedCandidates) {
       final candidateCompact = candidate.replaceAll(' ', '');
-      for (final item in items) {
-        for (final rawName in _namesForItem(item)) {
-          final name = _normalize(rawName);
-          if (name == candidate ||
-              name.replaceAll(' ', '') == candidateCompact) {
-            return item;
-          }
-        }
-      }
+      final match = normalizedNames.firstWhereOrNull(
+        (entry) =>
+            entry.name == candidate ||
+            entry.name.replaceAll(' ', '') == candidateCompact,
+      );
+      if (match != null) return match.item;
     }
 
+    final strippedNames = normalizedNames
+        .map((entry) => (item: entry.item, name: _stripAdminWords(entry.name)))
+        .toList();
     final strippedCandidates = normalizedCandidates
         .map(_stripAdminWords)
         .where((candidate) => candidate.isNotEmpty)
         .toList();
     for (final candidate in strippedCandidates) {
       final candidateCompact = candidate.replaceAll(' ', '');
-      for (final item in items) {
-        for (final rawName in _namesForItem(item)) {
-          final name = _stripAdminWords(_normalize(rawName));
-          if (name == candidate ||
-              name.replaceAll(' ', '') == candidateCompact) {
-            return item;
-          }
-        }
-      }
+      final match = strippedNames.firstWhereOrNull(
+        (entry) =>
+            entry.name == candidate ||
+            entry.name.replaceAll(' ', '') == candidateCompact,
+      );
+      if (match != null) return match.item;
     }
 
     for (final candidate in normalizedCandidates) {
-      for (final item in items) {
-        for (final rawName in _namesForItem(item)) {
-          final name = _normalize(rawName);
-          if (name.isEmpty) continue;
-          if (name.contains(candidate) || candidate.contains(name)) {
-            return item;
-          }
-        }
-      }
+      final match = normalizedNames.firstWhereOrNull(
+        (entry) =>
+            entry.name.isNotEmpty &&
+            (entry.name.contains(candidate) || candidate.contains(entry.name)),
+      );
+      if (match != null) return match.item;
     }
 
     return null;

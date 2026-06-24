@@ -1,4 +1,5 @@
 import 'package:flower_app/config/base_state/base_state.dart';
+import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/address/domain/entities/delivery_address_display.dart';
 import 'package:flower_app/features/address/domain/use_cases/resolve_delivery_address_use_case.dart';
 import 'package:flower_app/features/address/presentation/view_models/delivery_address_view_model/delivery_address_events.dart';
@@ -24,19 +25,29 @@ class DeliveryAddressViewModel extends Cubit<DeliveryAddressState> {
     if (isClosed) return;
     emit(
       state.copyWith(
-        deliveryAddressState: BaseState<DeliveryAddressDisplay>.loading(),
+        deliveryAddressState: BaseState<DeliveryAddressDisplayState>.loading(),
       ),
     );
 
-    final result = await _resolveDeliveryAddressUseCase();
-
-    if (isClosed) return;
-    emit(
-      state.copyWith(
-        deliveryAddressState: BaseState<DeliveryAddressDisplay>.success(
-          result,
+    try {
+      final result = await _resolveDeliveryAddressUseCase();
+      if (isClosed) return;
+      emit(
+        state.copyWith(
+          deliveryAddressState: BaseState<DeliveryAddressDisplayState>.success(
+            result,
+          ),
         ),
-      ),
-    );
+      );
+    } catch (_) {
+      if (isClosed) return;
+      emit(
+        state.copyWith(
+          deliveryAddressState: BaseState<DeliveryAddressDisplayState>.error(
+            AppStrings.somethingWentWrong,
+          ),
+        ),
+      );
+    }
   }
 }

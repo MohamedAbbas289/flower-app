@@ -28,7 +28,7 @@ void main() {
       DeliveryAddressViewModel(resolveDeliveryAddressUseCase);
 
   setUpAll(() {
-    provideDummy<DeliveryAddressDisplay>(const NoAddressDisplay());
+    provideDummy<DeliveryAddressDisplayState>(const NoAddressDisplay());
   });
 
   setUp(() {
@@ -55,12 +55,12 @@ void main() {
       act: (vm) => vm.doEvent(const LoadDeliveryAddressEvent()),
       expect: () => [
         const DeliveryAddressState(
-          deliveryAddressState: BaseState<DeliveryAddressDisplay>(
+          deliveryAddressState: BaseState<DeliveryAddressDisplayState>(
             isLoading: true,
           ),
         ),
         const DeliveryAddressState(
-          deliveryAddressState: BaseState<DeliveryAddressDisplay>(
+          deliveryAddressState: BaseState<DeliveryAddressDisplayState>(
             data: NoAddressDisplay(),
           ),
         ),
@@ -78,12 +78,12 @@ void main() {
       act: (vm) => vm.doEvent(const LoadDeliveryAddressEvent()),
       expect: () => [
         const DeliveryAddressState(
-          deliveryAddressState: BaseState<DeliveryAddressDisplay>(
+          deliveryAddressState: BaseState<DeliveryAddressDisplayState>(
             isLoading: true,
           ),
         ),
         const DeliveryAddressState(
-          deliveryAddressState: BaseState<DeliveryAddressDisplay>(
+          deliveryAddressState: BaseState<DeliveryAddressDisplayState>(
             data: SavedAddressDisplay(tAddress, isNearest: true),
           ),
         ),

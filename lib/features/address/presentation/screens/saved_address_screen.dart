@@ -62,39 +62,39 @@ class _SavedAddressView extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                if (addresses.isEmpty)
-                  Center(
-                    child: Text(
-                      AppStrings.noAddresses,
-                      style: TextStyles.bodyRegular14,
-                    ),
-                  )
-                else
-                  ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: addresses.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      final address = addresses[index];
-                      return AddressCard(
-                        address: address,
-                        onDelete: () => _confirmDelete(context, address),
-                        onEdit: () async {
-                          final result = await Navigator.pushNamed(
-                            context,
-                            AppRoutesName.editAddress,
-                            arguments: address,
-                          );
-                          if (result == true && context.mounted) {
-                            context.read<SavedAddressViewModel>().doEvent(
-                              const LoadAddressesEvent(),
+                Expanded(
+                  child: addresses.isEmpty
+                      ? Center(
+                          child: Text(
+                            AppStrings.noAddresses,
+                            style: TextStyles.bodyRegular14,
+                          ),
+                        )
+                      : ListView.separated(
+                          itemCount: addresses.length,
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: 12),
+                          itemBuilder: (context, index) {
+                            final address = addresses[index];
+                            return AddressCard(
+                              address: address,
+                              onDelete: () => _confirmDelete(context, address),
+                              onEdit: () async {
+                                final result = await Navigator.pushNamed(
+                                  context,
+                                  AppRoutesName.editAddress,
+                                  arguments: address,
+                                );
+                                if (result == true && context.mounted) {
+                                  context.read<SavedAddressViewModel>().doEvent(
+                                    const LoadAddressesEvent(),
+                                  );
+                                }
+                              },
                             );
-                          }
-                        },
-                      );
-                    },
-                  ),
+                          },
+                        ),
+                ),
                 const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,

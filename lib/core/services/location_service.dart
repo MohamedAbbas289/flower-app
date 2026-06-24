@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:injectable/injectable.dart';
 
@@ -29,10 +30,12 @@ class LocationService {
           timeLimit: Duration(seconds: 10),
         ),
       );
-    } catch (_) {
+    } catch (e, stackTrace) {
+      FirebaseCrashlytics.instance.recordError(e, stackTrace, fatal: false);
       try {
         return await Geolocator.getLastKnownPosition();
-      } catch (_) {
+      } catch (e, stackTrace) {
+        FirebaseCrashlytics.instance.recordError(e, stackTrace, fatal: false);
         return null;
       }
     }

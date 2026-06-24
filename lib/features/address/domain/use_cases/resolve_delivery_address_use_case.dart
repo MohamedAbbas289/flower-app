@@ -22,13 +22,15 @@ class ResolveDeliveryAddressUseCase {
     this._lastAddressFirestoreService,
   );
 
-  Future<DeliveryAddressDisplay> call() async {
+  Future<DeliveryAddressDisplayState> call() async {
     final hasPermission = await _locationService.resolvePermission();
 
     final response = await _getAddressesUseCase();
     final addresses = switch (response) {
       SuccessBaseResponse(data: final data) => data,
-      ErrorBaseResponse() => const <AddressEntity>[],
+      ErrorBaseResponse(errorMessage: final errorMessage) => throw Exception(
+        errorMessage,
+      ),
     };
 
     if (!hasPermission) {
@@ -91,7 +93,7 @@ class ResolveDeliveryAddressUseCase {
     return nearest;
   }
 
-  Future<DeliveryAddressDisplay> _resolveWithoutLocation(
+  Future<DeliveryAddressDisplayState> _resolveWithoutLocation(
     List<AddressEntity> addresses,
   ) async {
     if (addresses.isEmpty) return const NoAddressDisplay();

@@ -1,18 +1,18 @@
 import 'package:equatable/equatable.dart';
 import 'package:flower_app/features/address/domain/entities/address_entity.dart';
 
-sealed class DeliveryAddressDisplay extends Equatable {
-  const DeliveryAddressDisplay();
+sealed class DeliveryAddressDisplayState extends Equatable {
+  const DeliveryAddressDisplayState();
 
   @override
   List<Object?> get props => [];
 }
 
-class NoAddressDisplay extends DeliveryAddressDisplay {
+class NoAddressDisplay extends DeliveryAddressDisplayState {
   const NoAddressDisplay();
 }
 
-class CurrentLocationDisplay extends DeliveryAddressDisplay {
+class CurrentLocationDisplay extends DeliveryAddressDisplayState {
   final String label;
 
   const CurrentLocationDisplay(this.label);
@@ -21,7 +21,7 @@ class CurrentLocationDisplay extends DeliveryAddressDisplay {
   List<Object?> get props => [label];
 }
 
-class SavedAddressDisplay extends DeliveryAddressDisplay {
+class SavedAddressDisplay extends DeliveryAddressDisplayState {
   final AddressEntity address;
   final bool isNearest;
 

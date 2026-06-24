@@ -83,6 +83,8 @@ class _CheckoutBodyState extends State<_CheckoutBody> {
 
         switch (result) {
           case CashOrderPlaced():
+            getIt<CartBloc>().add(const ClearCartEvent());
+            getIt<CartBloc>().add(const LoadCartEvent());
             AppSnackBar.showSuccess(
               context,
               AppStrings.orderPlacedSuccessfully,

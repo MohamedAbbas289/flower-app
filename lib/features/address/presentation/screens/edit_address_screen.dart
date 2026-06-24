@@ -1,4 +1,3 @@
-import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/reusable_widgets/address_form_fields.dart';
 import 'package:flower_app/core/reusable_widgets/address_geocoding_sync_mixin.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
@@ -68,16 +67,20 @@ class _EditAddressScreenState extends State<EditAddressScreen>
     String? streetText,
     bool areaNotAvailable = false,
   }) {
+    final nextGovernorateId = governorateId ?? selectedGovernorateId;
+    final available = cities
+        .where((city) => city.governorateId == nextGovernorateId)
+        .toList();
+    final nextCityId = cityId ?? selectedCityId;
+    final resolvedCityId = available.any((city) => city.id == nextCityId)
+        ? nextCityId
+        : (available.isEmpty ? null : available.first.id);
+
     setState(() {
       if (position != null) selectedPosition = position;
-      if (governorateId != null) selectedGovernorateId = governorateId;
-      if (cityId != null) selectedCityId = cityId;
+      selectedGovernorateId = nextGovernorateId;
+      selectedCityId = resolvedCityId;
       if (streetText != null) addressController.text = streetText;
-
-      final available = filteredCities;
-      if (!available.any((city) => city.id == selectedCityId)) {
-        selectedCityId = available.isEmpty ? null : available.first.id;
-      }
     });
 
     if (areaNotAvailable) {
@@ -160,13 +163,11 @@ class _EditAddressScreenState extends State<EditAddressScreen>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<EditAddressViewModel>(),
-      child: Scaffold(
-        appBar: AppBar(title: Text(AppStrings.editAddress)),
-        body: Padding(
-          padding: const EdgeInsets.all(16),
-          child: BlocConsumer<EditAddressViewModel, EditAddressStates>(
+    return Scaffold(
+      appBar: AppBar(title: Text(AppStrings.editAddress)),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: BlocConsumer<EditAddressViewModel, EditAddressStates>(
             listenWhen: (previous, current) =>
                 previous.editAddressState != current.editAddressState,
             listener: (context, state) {
@@ -224,12 +225,21 @@ class _EditAddressScreenState extends State<EditAddressScreen>
                           onPressed: state.editAddressState.isLoading
                               ? null
                               : () {
+                                  final addressId = widget.address.id;
+                                  if (addressId == null) {
+                                    AppSnackBar.showError(
+                                      context,
+                                      AppStrings.somethingWentWrong,
+                                    );
+                                    return;
+                                  }
+
                                   if (formKey.currentState!.validate()) {
                                     context
                                         .read<EditAddressViewModel>()
                                         .doEvent(
                                           SubmitEditAddressEvent(
-                                            id: widget.address.id!,
+                                            id: addressId,
                                             request: AddAddressDto(
                                               street: addressController.text
                                                   .trim(),
@@ -266,7 +276,6 @@ class _EditAddressScreenState extends State<EditAddressScreen>
             },
           ),
         ),
-      ),
-    );
+      );
   }
 }

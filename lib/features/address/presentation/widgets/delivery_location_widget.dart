@@ -23,19 +23,7 @@ class DeliveryLocationWidget extends StatelessWidget {
         final isNoAddress = display is NoAddressDisplay;
 
         return InkWell(
-          onTap: () async {
-            await Navigator.pushNamed(
-              context,
-              isNoAddress
-                  ? AppRoutesName.addAddress
-                  : AppRoutesName.savedAddress,
-            );
-            if (context.mounted) {
-              context.read<DeliveryAddressViewModel>().doEvent(
-                const LoadDeliveryAddressEvent(),
-              );
-            }
-          },
+          onTap: () => _navigateToAddress(context, isNoAddress: isNoAddress),
           child: Padding(
             padding: const EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
             child: Row(
@@ -50,7 +38,9 @@ class DeliveryLocationWidget extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(AppStrings.deliverTo, style: TextStyles.bodyRegular12),
                 const SizedBox(width: 4),
-                Expanded(child: _buildContent(state.deliveryAddressState)),
+                Expanded(
+                  child: _buildContent(context, state.deliveryAddressState),
+                ),
                 const Icon(
                   Icons.keyboard_arrow_down,
                   color: AppColors.pink,
@@ -64,38 +54,42 @@ class DeliveryLocationWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(BaseState<DeliveryAddressDisplay> state) {
+  Future<void> _navigateToAddress(
+    BuildContext context, {
+    required bool isNoAddress,
+  }) async {
+    await Navigator.pushNamed(
+      context,
+      isNoAddress ? AppRoutesName.addAddress : AppRoutesName.savedAddress,
+    );
+    if (context.mounted) {
+      context.read<DeliveryAddressViewModel>().doEvent(
+        const LoadDeliveryAddressEvent(),
+      );
+    }
+  }
+
+  Widget _buildContent(
+    BuildContext context,
+    BaseState<DeliveryAddressDisplayState> state,
+  ) {
     final textStyle = TextStyles.bodyRegular12.copyWith(
       fontWeight: FontWeight.w600,
     );
 
     final display = state.data;
     if (state.isLoading || display == null) {
-      return Container(
-        height: 10,
-        width: 100,
-        decoration: BoxDecoration(
-          color: AppColors.placeHolder,
-          borderRadius: BorderRadius.circular(4),
-        ),
-      );
+      return const _LoadingPlaceholder();
     }
 
     switch (display) {
       case NoAddressDisplay():
-        return Text(
-          AppStrings.addAddress,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+        return _NoAddressButton(
           style: textStyle.copyWith(color: AppColors.pink),
+          onPressed: () => _navigateToAddress(context, isNoAddress: true),
         );
       case CurrentLocationDisplay(label: final label):
-        return Text(
-          label,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: textStyle,
-        );
+        return _DisplayText(text: label, style: textStyle);
       case SavedAddressDisplay(address: final address):
         final parts = [
           address.street,
@@ -103,12 +97,64 @@ class DeliveryLocationWidget extends StatelessWidget {
         ].whereType<String>().where((part) => part.trim().isNotEmpty);
         final text = parts.join(', ');
 
-        return Text(
-          text.isEmpty ? AppStrings.defaultAddress : text,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+        return _DisplayText(
+          text: text.isEmpty ? AppStrings.defaultAddress : text,
           style: textStyle,
         );
     }
+  }
+}
+
+class _LoadingPlaceholder extends StatelessWidget {
+  const _LoadingPlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 10,
+      width: 100,
+      decoration: BoxDecoration(
+        color: AppColors.placeHolder,
+        borderRadius: BorderRadius.circular(4),
+      ),
+    );
+  }
+}
+
+class _NoAddressButton extends StatelessWidget {
+  final TextStyle style;
+  final VoidCallback onPressed;
+
+  const _NoAddressButton({required this.style, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onPressed,
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.zero,
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        alignment: Alignment.centerLeft,
+      ),
+      child: Text(
+        AppStrings.addAddress,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: style,
+      ),
+    );
+  }
+}
+
+class _DisplayText extends StatelessWidget {
+  final String text;
+  final TextStyle style;
+
+  const _DisplayText({required this.text, required this.style});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: style);
   }
 }

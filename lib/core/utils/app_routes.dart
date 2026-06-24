@@ -22,6 +22,7 @@ import '../../features/auth/presentation/screens/forget_password_routes.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/signup_view.dart';
 import '../../features/address/presentation/screens/saved_address_screen.dart';
+import '../../features/address/presentation/view_models/edit_address_view_model/edit_address_view_model.dart';
 import '../../features/shopping/presentation/screens/checkout_arguments.dart';
 import '../../features/shopping/presentation/screens/checkout_view.dart';
 import '../../features/shopping/presentation/screens/orders_screen.dart';
@@ -54,7 +55,10 @@ class AppRoutes {
       case AppRoutesName.editAddress:
         final address = settings.arguments as AddressEntity;
         return MaterialPageRoute(
-          builder: (_) => EditAddressScreen(address: address),
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<EditAddressViewModel>(),
+            child: EditAddressScreen(address: address),
+          ),
         );
 
       case AppRoutesName.checkout:

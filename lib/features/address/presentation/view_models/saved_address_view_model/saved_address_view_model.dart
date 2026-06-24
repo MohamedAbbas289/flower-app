@@ -16,6 +16,12 @@ class SavedAddressViewModel extends Cubit<SavedAddressStates> {
   SavedAddressViewModel(this._getAddressesUseCase, this._deleteAddressUseCase)
     : super(const SavedAddressStates());
 
+  @override
+  void emit(SavedAddressStates state) {
+    if (isClosed) return;
+    super.emit(state);
+  }
+
   void doEvent(SavedAddressEvent event) {
     switch (event) {
       case LoadAddressesEvent():
@@ -34,7 +40,6 @@ class SavedAddressViewModel extends Cubit<SavedAddressStates> {
     );
 
     final response = await _getAddressesUseCase();
-    if (isClosed) return;
 
     switch (response) {
       case SuccessBaseResponse():
@@ -63,7 +68,6 @@ class SavedAddressViewModel extends Cubit<SavedAddressStates> {
   ));
 
   final response = await _deleteAddressUseCase(id);
-  if (isClosed) return;
 
   switch (response) {
     case SuccessBaseResponse():
