@@ -56,3 +56,4 @@ google-services.json
 **/google-services.json
 lib/firebase_options.dart
 ios/Flutter/secrets.xcconfig
+android/app/keystore.jks

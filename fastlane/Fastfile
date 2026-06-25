@@ -1,0 +1,31 @@
+default_platform(:android)
+
+KEYSTORE_PATH = File.expand_path("../android/app/keystore.jks", __dir__)
+
+platform :android do
+  private_lane :decode_keystore do
+    keystore_base64 = ENV["KEYSTORE_FILE"]
+    UI.user_error!("KEYSTORE_FILE env var is not set") if keystore_base64.nil?
+
+    File.binwrite(KEYSTORE_PATH, Base64.decode64(keystore_base64))
+    ENV["KEYSTORE_PATH"] = KEYSTORE_PATH
+  end
+
+  desc "Build signed release APK"
+  lane :build_apk do
+    decode_keystore
+    sh("flutter", "build", "apk", "--release")
+  end
+
+  desc "Build signed release APK and upload it to Firebase App Distribution"
+  lane :distribute_android do
+    build_apk
+
+    firebase_app_distribution(
+      app: ENV["FIREBASE_ANDROID_APP_ID"],
+      groups: "Flower-App-Testers",
+      apk_path: File.expand_path("../build/app/outputs/flutter-apk/app-release.apk", __dir__),
+      service_credentials_file: ENV["GOOGLE_APPLICATION_CREDENTIALS"],
+    )
+  end
+end

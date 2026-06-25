@@ -15,7 +15,7 @@ dependencies:
   dio_cache_interceptor_hive_store: ^3.2.1
   easy_localization: ^3.0.8
   equatable: ^2.0.8
-  firebase_analytics: ^12.4.2
+  firebase_analytics: ^12.4.3
   firebase_core: ^4.10.0
   firebase_crashlytics: ^5.2.3
   flutter:
@@ -24,7 +24,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.4
   flutter_secure_storage: ^10.0.0
   flutter_svg: ^2.2.4
-  fluttertoast: ^9.0.0
+  fluttertoast: ^9.1.0
   geocoding: ^4.0.0
   geolocator: ^14.0.2
   get_it: ^9.2.1
