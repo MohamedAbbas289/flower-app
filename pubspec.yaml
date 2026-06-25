@@ -63,6 +63,7 @@ flutter:
     - assets/images/
     - assets/translations/
     - assets/files/
+    - shorebird.yaml
 
 flutter_assets:
   assets_path: assets/
