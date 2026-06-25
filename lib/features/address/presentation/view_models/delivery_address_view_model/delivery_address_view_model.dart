@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/address/domain/entities/delivery_address_display.dart';
@@ -36,6 +38,15 @@ class DeliveryAddressViewModel extends Cubit<DeliveryAddressState> {
         state.copyWith(
           deliveryAddressState: BaseState<DeliveryAddressDisplayState>.success(
             result,
+          ),
+        ),
+      );
+    } on TimeoutException {
+      if (isClosed) return;
+      emit(
+        state.copyWith(
+          deliveryAddressState: BaseState<DeliveryAddressDisplayState>.error(
+            AppStrings.locationTimeout,
           ),
         ),
       );

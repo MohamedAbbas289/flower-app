@@ -157,6 +157,7 @@ abstract class AppStrings {
       'profileUpdatedSuccessfully'.tr();
   static String get doYouWantToEdit => 'doYouWantToEdit'.tr();
   static String get permissionDenied => 'permissionDenied'.tr();
+  static String get locationTimeout => 'locationTimeout'.tr();
   static String get editField => 'editField'.tr();
   static String get changePhoto => 'changePhoto'.tr();
   static String get chooseImageSource => 'chooseImageSource'.tr();

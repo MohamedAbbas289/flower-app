@@ -150,6 +150,7 @@
   "profileUpdatedSuccessfully": "تم تحديث الملف الشخصي بنجاح",
   "doYouWantToEdit": "هل تريد تعديل",
   "permissionDenied": "تم رفض الإذن. يرجى السماح بالوصول من الإعدادات.",
+  "locationTimeout": "انتهت مهلة طلب تحديد الموقع. يرجى التحقق من اتصال الإنترنت أو GPS والمحاولة مرة أخرى.",
   "editField": "تعديل الحقل",
   "changePhoto": "تغيير الصورة",
   "chooseImageSource": "اختر مصدر الصورة",

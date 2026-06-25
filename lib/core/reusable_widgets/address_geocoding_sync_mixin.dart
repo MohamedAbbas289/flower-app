@@ -8,6 +8,7 @@ import 'package:flower_app/core/services/location_service.dart';
 import 'package:flower_app/features/address/domain/entities/location_entity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 mixin AddressGeocodingSyncMixin<T extends StatefulWidget> on State<T> {
@@ -94,7 +95,12 @@ mixin AddressGeocodingSyncMixin<T extends StatefulWidget> on State<T> {
     if (kDebugMode) debugPrint('[GeocodingSync] hasPermission=$hasPermission');
     if (!hasPermission || !mounted) return;
 
-    final position = await _locationService.getCurrentPosition();
+    Position? position;
+    try {
+      position = await _locationService.getCurrentPosition();
+    } on TimeoutException {
+      return;
+    }
     if (kDebugMode) {
       debugPrint(
         '[GeocodingSync] position=${position?.latitude}, ${position?.longitude}',

@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
+import 'package:flower_app/config/firebase/last_address_firestore_service.dart';
 import 'package:flower_app/features/address/data/models/add_address_dto.dart';
 import 'package:flower_app/features/address/domain/entities/address_entity.dart';
 import 'package:flower_app/features/address/domain/use_cases/edit_address_use_case.dart';
@@ -13,9 +14,10 @@ import 'package:mockito/mockito.dart';
 
 import 'edit_address_view_model_test.mocks.dart';
 
-@GenerateMocks([EditAddressUseCase])
+@GenerateMocks([EditAddressUseCase, LastAddressFirestoreService])
 void main() {
   late MockEditAddressUseCase editAddressUseCase;
+  late MockLastAddressFirestoreService lastAddressFirestoreService;
 
   final request = AddAddressDto(
     id: '1',
@@ -38,6 +40,10 @@ void main() {
 
   setUp(() {
     editAddressUseCase = MockEditAddressUseCase();
+    lastAddressFirestoreService = MockLastAddressFirestoreService();
+    when(lastAddressFirestoreService.saveLastAddress(any)).thenAnswer(
+      (_) async {},
+    );
   });
 
   group('EditAddressViewModel', () {
@@ -49,7 +55,10 @@ void main() {
             data: [AddressEntity(id: '1')],
           ),
         );
-        return EditAddressViewModel(editAddressUseCase);
+        return EditAddressViewModel(
+          editAddressUseCase,
+          lastAddressFirestoreService,
+        );
       },
       act: (cubit) => cubit.doEvent(
         SubmitEditAddressEvent(id: '1', request: request),
@@ -76,7 +85,10 @@ void main() {
         when(editAddressUseCase(id: '1', request: request)).thenAnswer(
           (_) async => ErrorBaseResponse<List<AddressEntity>>(exception: Exception()),
         );
-        return EditAddressViewModel(editAddressUseCase);
+        return EditAddressViewModel(
+          editAddressUseCase,
+          lastAddressFirestoreService,
+        );
       },
       act: (cubit) => cubit.doEvent(
         SubmitEditAddressEvent(id: '1', request: request),

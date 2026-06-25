@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
+import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/address/domain/entities/address_entity.dart';
 import 'package:flower_app/features/address/domain/entities/delivery_address_display.dart';
 import 'package:flower_app/features/address/domain/use_cases/resolve_delivery_address_use_case.dart';
@@ -85,6 +88,50 @@ void main() {
         const DeliveryAddressState(
           deliveryAddressState: BaseState<DeliveryAddressDisplayState>(
             data: SavedAddressDisplay(tAddress, isNearest: true),
+          ),
+        ),
+      ],
+    );
+
+    blocTest<DeliveryAddressViewModel, DeliveryAddressState>(
+      'emits loading then locationTimeout error when location fetch times out',
+      build: () {
+        when(resolveDeliveryAddressUseCase()).thenThrow(
+          TimeoutException('Location request timed out'),
+        );
+        return buildViewModel();
+      },
+      act: (vm) => vm.doEvent(const LoadDeliveryAddressEvent()),
+      expect: () => [
+        const DeliveryAddressState(
+          deliveryAddressState: BaseState<DeliveryAddressDisplayState>(
+            isLoading: true,
+          ),
+        ),
+        DeliveryAddressState(
+          deliveryAddressState: BaseState<DeliveryAddressDisplayState>.error(
+            AppStrings.locationTimeout,
+          ),
+        ),
+      ],
+    );
+
+    blocTest<DeliveryAddressViewModel, DeliveryAddressState>(
+      'emits loading then somethingWentWrong error on other failures',
+      build: () {
+        when(resolveDeliveryAddressUseCase()).thenThrow(Exception('boom'));
+        return buildViewModel();
+      },
+      act: (vm) => vm.doEvent(const LoadDeliveryAddressEvent()),
+      expect: () => [
+        const DeliveryAddressState(
+          deliveryAddressState: BaseState<DeliveryAddressDisplayState>(
+            isLoading: true,
+          ),
+        ),
+        DeliveryAddressState(
+          deliveryAddressState: BaseState<DeliveryAddressDisplayState>.error(
+            AppStrings.somethingWentWrong,
           ),
         ),
       ],

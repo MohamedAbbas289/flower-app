@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:injectable/injectable.dart';
@@ -30,6 +32,9 @@ class LocationService {
           timeLimit: Duration(seconds: 10),
         ),
       );
+    } on TimeoutException catch (e, stackTrace) {
+      FirebaseCrashlytics.instance.recordError(e, stackTrace, fatal: false);
+      rethrow;
     } catch (e, stackTrace) {
       FirebaseCrashlytics.instance.recordError(e, stackTrace, fatal: false);
       try {

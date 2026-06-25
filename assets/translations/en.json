@@ -150,6 +150,7 @@
   "profileUpdatedSuccessfully": "Profile updated successfully",
   "doYouWantToEdit": "Do you want to edit your",
   "permissionDenied": "Permission denied. Please allow access from settings.",
+  "locationTimeout": "Location request timed out. Please check your internet or GPS connection and try again.",
   "editField": "Edit Field",
   "changePhoto": "Change Photo",
   "chooseImageSource": "Choose image source",
