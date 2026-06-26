@@ -20,7 +20,6 @@ class OrdersViewModel extends Cubit<OrdersState> {
     switch (event) {
       case GetOrdersEvent():
         _fetchOrders();
-        break;
     }
   }
 
@@ -38,12 +37,10 @@ class OrdersViewModel extends Cubit<OrdersState> {
     switch (response) {
       case SuccessBaseResponse<List<OrderEntity>>():
         emit(state.copyWith(ordersState: BaseState.success(response.data)));
-        break;
       case ErrorBaseResponse<List<OrderEntity>>():
         emit(
           state.copyWith(ordersState: BaseState.error(response.errorMessage)),
         );
-        break;
     }
   }
 }

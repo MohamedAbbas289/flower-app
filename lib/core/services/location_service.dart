@@ -32,9 +32,9 @@ class LocationService {
           timeLimit: Duration(seconds: 10),
         ),
       );
-    } on TimeoutException catch (e, stackTrace) {
-      FirebaseCrashlytics.instance.recordError(e, stackTrace, fatal: false);
-      rethrow;
+    } on TimeoutException {
+      // GPS timeout is expected (indoors / weak signal) — fallback silently
+      return Geolocator.getLastKnownPosition();
     } catch (e, stackTrace) {
       FirebaseCrashlytics.instance.recordError(e, stackTrace, fatal: false);
       try {

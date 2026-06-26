@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/shopping/domain/entities/product_details_entity.dart';
 import 'package:flower_app/features/shopping/domain/use_cases/product_details_use_case.dart';
-import 'package:flower_app/features/shopping/presentation/view_models/product_details_view_model/product_details_cubit.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/product_details_view_model/product_details_view_model.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/product_details_view_model/product_details_events.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/product_details_view_model/product_details_states.dart';
 import 'package:mockito/annotations.dart';
@@ -13,7 +13,7 @@ import 'product_details_cubit_test.mocks.dart';
 
 @GenerateMocks([ProductDetailsUseCase])
 void main() {
-  late ProductDetailsCubit cubit;
+  late ProductDetailsViewModel cubit;
   late MockProductDetailsUseCase mockUseCase;
 
   const tProductId = '69d988754461df0f939b581a';
@@ -42,17 +42,17 @@ void main() {
 
   setUp(() {
     mockUseCase = MockProductDetailsUseCase();
-    cubit = ProductDetailsCubit(mockUseCase);
+    cubit = ProductDetailsViewModel(mockUseCase);
   });
 
   tearDown(() => cubit.close());
 
   group('GetProductDetailsEvent', () {
-    blocTest<ProductDetailsCubit, ProductDetailsBaseState>(
+    blocTest<ProductDetailsViewModel, ProductDetailsBaseState>(
       'emits loading then success on success',
       build: () {
         when(
-          mockUseCase.getProductDetails(productId: anyNamed('productId')),
+          mockUseCase.execute(productId: anyNamed('productId')),
         ).thenAnswer((_) async => SuccessBaseResponse(data: tEntity));
         return cubit;
       },
@@ -70,11 +70,11 @@ void main() {
       ],
     );
 
-    blocTest<ProductDetailsCubit, ProductDetailsBaseState>(
+    blocTest<ProductDetailsViewModel, ProductDetailsBaseState>(
       'emits loading then error on failure',
       build: () {
         when(
-          mockUseCase.getProductDetails(productId: anyNamed('productId')),
+          mockUseCase.execute(productId: anyNamed('productId')),
         ).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception('error')),
         );

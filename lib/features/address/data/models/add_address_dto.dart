@@ -1,7 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../../domain/entities/address_entity.dart';
-
 part 'add_address_dto.g.dart';
 
 @JsonSerializable(includeIfNull: false)
@@ -35,16 +33,4 @@ class AddAddressDto {
       _$AddAddressDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$AddAddressDtoToJson(this);
-
-  AddressEntity toDomain() {
-    return AddressEntity(
-      street: street,
-      phone: phone,
-      city: city,
-      lat: lat,
-      long: long,
-      username: username,
-      id: id,
-    );
-  }
 }

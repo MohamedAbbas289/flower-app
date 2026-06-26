@@ -51,7 +51,7 @@ class CheckoutViewModel extends Cubit<CheckoutStates> {
       ),
     );
 
-    final response = await _getAddressesUseCase();
+    final response = await _getAddressesUseCase.execute();
     if (isClosed) return;
 
     switch (response) {
@@ -106,7 +106,7 @@ class CheckoutViewModel extends Cubit<CheckoutStates> {
     final requestModel = PaymentRequestModel.fromAddress(address);
 
     if (state.paymentMethod == PaymentMethod.cash) {
-      final response = await _createCashOrderUseCase(requestModel);
+      final response = await _createCashOrderUseCase.execute(request: requestModel);
       if (isClosed) return;
       switch (response) {
         case SuccessBaseResponse():
@@ -128,7 +128,7 @@ class CheckoutViewModel extends Cubit<CheckoutStates> {
           );
       }
     } else {
-      final response = await _getCheckoutSessionUseCase(requestModel);
+      final response = await _getCheckoutSessionUseCase.execute(request: requestModel);
       if (isClosed) return;
       switch (response) {
         case SuccessBaseResponse():

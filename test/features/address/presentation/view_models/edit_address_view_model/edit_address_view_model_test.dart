@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flower_app/config/firebase/last_address_firestore_service.dart';
-import 'package:flower_app/features/address/data/models/add_address_dto.dart';
+import 'package:flower_app/features/address/api/request_models/add_address_request_model.dart';
 import 'package:flower_app/features/address/domain/entities/address_entity.dart';
 import 'package:flower_app/features/address/domain/use_cases/edit_address_use_case.dart';
 import 'package:flower_app/features/address/presentation/view_models/edit_address_view_model/edit_address_view_model.dart';
@@ -19,8 +19,7 @@ void main() {
   late MockEditAddressUseCase editAddressUseCase;
   late MockLastAddressFirestoreService lastAddressFirestoreService;
 
-  final request = AddAddressDto(
-    id: '1',
+  final request = AddAddressRequestModel(
     street: 'Ahmed',
     phone: '0102419753',
     city: 'cairo',
@@ -50,7 +49,7 @@ void main() {
     blocTest<EditAddressViewModel, EditAddressStates>(
       'emits loading then success when use case succeeds',
       build: () {
-        when(editAddressUseCase(id: '1', request: request)).thenAnswer(
+        when(editAddressUseCase.execute(id: '1', request: request)).thenAnswer(
           (_) async => SuccessBaseResponse<List<AddressEntity>>(
             data: [AddressEntity(id: '1')],
           ),
@@ -74,7 +73,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(editAddressUseCase(id: '1', request: request)).called(1);
+        verify(editAddressUseCase.execute(id: '1', request: request)).called(1);
         verifyNoMoreInteractions(editAddressUseCase);
       },
     );
@@ -82,7 +81,7 @@ void main() {
     blocTest<EditAddressViewModel, EditAddressStates>(
       'emits loading then error when use case fails',
       build: () {
-        when(editAddressUseCase(id: '1', request: request)).thenAnswer(
+        when(editAddressUseCase.execute(id: '1', request: request)).thenAnswer(
           (_) async => ErrorBaseResponse<List<AddressEntity>>(exception: Exception()),
         );
         return EditAddressViewModel(
@@ -102,7 +101,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(editAddressUseCase(id: '1', request: request)).called(1);
+        verify(editAddressUseCase.execute(id: '1', request: request)).called(1);
         verifyNoMoreInteractions(editAddressUseCase);
       },
     );

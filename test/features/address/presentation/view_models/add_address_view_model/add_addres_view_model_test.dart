@@ -1,24 +1,25 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flower_app/config/firebase/last_address_firestore_service.dart';
-import 'package:flower_app/features/address/data/models/add_address_dto.dart';
+import 'package:flower_app/features/address/api/request_models/add_address_request_model.dart';
 import 'package:flower_app/features/address/domain/entities/address_entity.dart';
-import 'package:flower_app/features/address/domain/use_cases/add_address_use_cases.dart';
-import 'package:flower_app/features/address/presentation/view_models/add_address_view_model/add_address_cubit.dart';
+import 'package:flower_app/features/address/domain/use_cases/add_address_use_case.dart';
 import 'package:flower_app/features/address/presentation/view_models/add_address_view_model/add_address_events.dart';
+import 'package:flower_app/features/address/presentation/view_models/add_address_view_model/add_address_states.dart';
+import 'package:flower_app/features/address/presentation/view_models/add_address_view_model/add_address_view_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'add_addres_view_model_test.mocks.dart';
 
-@GenerateMocks([AddAddressUseCases, LastAddressFirestoreService])
+@GenerateMocks([AddAddressUseCase, LastAddressFirestoreService])
 void main() {
-  late MockAddAddressUseCases addAddressUseCases;
+  late MockAddAddressUseCase addAddressUseCase;
   late MockLastAddressFirestoreService lastAddressFirestoreService;
-  late AddAddressCubit cubit;
 
-  final request = AddAddressDto(
-    id: '1',
+  final request = AddAddressRequestModel(
     street: 'shalpy',
     phone: '0102419753',
     city: 'cairo',
@@ -29,7 +30,7 @@ void main() {
 
   setUpAll(() {
     provideDummy<BaseResponse<List<AddressEntity>>>(
-      SuccessBaseResponse<List<AddressEntity>>(data: [AddressEntity()]),
+      SuccessBaseResponse<List<AddressEntity>>(data: const [AddressEntity()]),
     );
     provideDummy<BaseResponse<List<AddressEntity>>>(
       ErrorBaseResponse<List<AddressEntity>>(exception: Exception()),
@@ -37,54 +38,73 @@ void main() {
   });
 
   setUp(() {
-    addAddressUseCases = MockAddAddressUseCases();
+    addAddressUseCase = MockAddAddressUseCase();
     lastAddressFirestoreService = MockLastAddressFirestoreService();
     when(lastAddressFirestoreService.saveLastAddress(any)).thenAnswer(
       (_) async {},
     );
-    cubit = AddAddressCubit(addAddressUseCases, lastAddressFirestoreService);
   });
 
-  tearDown(() {
-    cubit.close();
-  });
+  AddAddressViewModel buildViewModel() =>
+      AddAddressViewModel(addAddressUseCase, lastAddressFirestoreService);
 
-  group('AddAddressCubit', () {
-    test('emits loading then success when use case succeeds', () async {
-      final entities = [AddressEntity()];
+  group('AddAddressViewModel', () {
+    blocTest<AddAddressViewModel, AddAddressStates>(
+      'emits loading then success when use case succeeds',
+      build: () {
+        when(addAddressUseCase.execute(request: request)).thenAnswer(
+          (_) async => SuccessBaseResponse<List<AddressEntity>>(
+            data: const [AddressEntity(id: '1')],
+          ),
+        );
+        return buildViewModel();
+      },
+      act: (cubit) => cubit.doEvent(AddAddressDataEvent(request)),
+      expect: () => [
+        const AddAddressStates(
+          addAddressState: BaseState<List<AddressEntity>>(isLoading: true),
+        ),
+        AddAddressStates(
+          addAddressState: BaseState<List<AddressEntity>>.success(
+            const [AddressEntity(id: '1')],
+          ),
+        ),
+      ],
+      verify: (_) {
+        verify(addAddressUseCase.execute(request: request)).called(1);
+        verify(
+          lastAddressFirestoreService.saveLastAddress(
+            const AddressEntity(id: '1'),
+          ),
+        ).called(1);
+        verifyNoMoreInteractions(addAddressUseCase);
+      },
+    );
 
-      when(addAddressUseCases(request)).thenAnswer(
-        (_) async => SuccessBaseResponse<List<AddressEntity>>(data: entities),
-      );
-
-      cubit.doEvent(AddAddressDataEvent(request));
-
-      await untilCalled(addAddressUseCases(request));
-
-      expect(
-        cubit.state.addAddressState.data,
-        entities,
-      );
-
-      verify(addAddressUseCases(request)).called(1);
-      verifyNoMoreInteractions(addAddressUseCases);
-    });
-
-    test('emits loading then error when use case fails', () async {
-      final exception = Exception('error');
-
-      when(addAddressUseCases(request)).thenAnswer(
-        (_) async => ErrorBaseResponse<List<AddressEntity>>(exception: exception),
-      );
-
-      cubit.doEvent(AddAddressDataEvent(request));
-
-      await untilCalled(addAddressUseCases(request));
-
-      expect(cubit.state.addAddressState.msg, isNotNull);
-
-      verify(addAddressUseCases(request)).called(1);
-      verifyNoMoreInteractions(addAddressUseCases);
-    });
+    blocTest<AddAddressViewModel, AddAddressStates>(
+      'emits loading then error when use case fails',
+      build: () {
+        when(addAddressUseCase.execute(request: request)).thenAnswer(
+          (_) async =>
+              ErrorBaseResponse<List<AddressEntity>>(exception: Exception()),
+        );
+        return buildViewModel();
+      },
+      act: (cubit) => cubit.doEvent(AddAddressDataEvent(request)),
+      expect: () => [
+        const AddAddressStates(
+          addAddressState: BaseState<List<AddressEntity>>(isLoading: true),
+        ),
+        AddAddressStates(
+          addAddressState: BaseState<List<AddressEntity>>.error(
+            'somethingWentWrong',
+          ),
+        ),
+      ],
+      verify: (_) {
+        verify(addAddressUseCase.execute(request: request)).called(1);
+        verifyNoMoreInteractions(addAddressUseCase);
+      },
+    );
   });
 }

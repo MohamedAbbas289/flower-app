@@ -35,7 +35,7 @@ void main() {
         (_) async => SuccessBaseResponse<List<AddressEntity>>(data: addresses),
       );
 
-      final result = await useCase();
+      final result = await useCase.execute();
 
       expect(result, isA<SuccessBaseResponse<List<AddressEntity>>>());
       expect((result as SuccessBaseResponse<List<AddressEntity>>).data, addresses);
@@ -51,7 +51,7 @@ void main() {
         (_) async => ErrorBaseResponse<List<AddressEntity>>(exception: exception),
       );
 
-      final result = await useCase();
+      final result = await useCase.execute();
 
       expect(result, isA<ErrorBaseResponse<List<AddressEntity>>>());
       expect((result as ErrorBaseResponse<List<AddressEntity>>).exception, exception);

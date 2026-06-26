@@ -7,6 +7,7 @@ import 'package:flower_app/features/shopping/data/models/cart_response_model.dar
 import 'package:flower_app/features/shopping/data/models/cash_order_response_model.dart';
 import 'package:flower_app/features/shopping/data/models/checkout_session_response_model.dart';
 import 'package:flower_app/features/shopping/data/models/order_model.dart';
+import 'package:flower_app/features/shopping/data/models/orders_response.dart';
 import 'package:flower_app/features/shopping/data/models/product_details_response.dart';
 import 'package:flower_app/features/shopping/domain/entities/cart_entity.dart';
 import 'package:flower_app/features/shopping/domain/entities/cash_order_entity.dart';
@@ -84,18 +85,17 @@ class ShoppingRepositoryImpl implements ShoppingRepositoryContract {
 
   @override
   Future<BaseResponse<List<OrderEntity>>> getOrders() async {
-    try {
-      final response = await _dataSource.getOrders();
-      final entities =
-          response.orders
-              ?.map((e) => e.toEntity())
-              .toList()
-              .cast<OrderEntity>() ??
-          <OrderEntity>[];
-      return SuccessBaseResponse(data: entities);
-    } catch (e) {
-      return ErrorBaseResponse(exception: e);
-    }
+    final response = await _dataSource.getOrders();
+    return switch (response) {
+      SuccessBaseResponse<OrdersResponse>() => SuccessBaseResponse(
+        data:
+            response.data.orders?.map((e) => e.toEntity()).toList() ??
+            <OrderEntity>[],
+      ),
+      ErrorBaseResponse<OrdersResponse>() => ErrorBaseResponse(
+        exception: response.exception,
+      ),
+    };
   }
 
   @override

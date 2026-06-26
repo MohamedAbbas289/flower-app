@@ -1,25 +1,26 @@
+import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/reusable_widgets/address_geocoding_sync_mixin.dart';
+import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
+import 'package:flower_app/core/reusable_widgets/location_dropdown_field.dart';
+import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/features/address/api/request_models/add_address_request_model.dart';
+import 'package:flower_app/features/address/domain/entities/location_entity.dart';
+import 'package:flower_app/features/address/presentation/view_models/add_address_view_model/add_address_events.dart';
+import 'package:flower_app/features/address/presentation/view_models/add_address_view_model/add_address_view_model.dart';
+import 'package:flower_app/features/address/presentation/widgets/add_address_form_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../../../core/reusable_widgets/app_snack_bar.dart';
-import '../../../../core/values/app_strings.dart';
-import '../../data/models/add_address_dto.dart';
-import '../../domain/entities/location_entity.dart';
-import '../view_models/add_address_view_model/add_address_cubit.dart';
-import '../view_models/add_address_view_model/add_address_events.dart';
-import '../widgets/add_address_form_view.dart';
-import '../../../../core/reusable_widgets/location_dropdown_field.dart';
 
-class AddNewAddress extends StatefulWidget {
-  const AddNewAddress({super.key});
+class AddAddressScreen extends StatefulWidget {
+  const AddAddressScreen({super.key});
 
   @override
-  State<AddNewAddress> createState() => _AddNewAddressState();
+  State<AddAddressScreen> createState() => _AddAddressScreenState();
 }
 
-class _AddNewAddressState extends State<AddNewAddress>
-    with AddressGeocodingSyncMixin<AddNewAddress> {
+class _AddAddressScreenState extends State<AddAddressScreen>
+    with AddressGeocodingSyncMixin<AddAddressScreen> {
   final formKey = GlobalKey<FormState>();
   @override
   final TextEditingController addressController = TextEditingController();
@@ -49,7 +50,6 @@ class _AddNewAddressState extends State<AddNewAddress>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     if (!_isLoaded) {
       _isLoaded = true;
       _loadLocations();
@@ -136,58 +136,63 @@ class _AddNewAddressState extends State<AddNewAddress>
 
   @override
   Widget build(BuildContext context) {
-    return AddAddressFormView(
-      formKey: formKey,
-      addressController: addressController,
-      phoneController: phoneNumberController,
-      recipientNameController: recipientNameController,
-      governorates: governorates,
-      filteredCities: filteredCities,
-      selectedGovernorateId: selectedGovernorateId,
-      selectedCityId: selectedCityId,
-      selectedPosition: selectedPosition,
-      onLocationSelected: (position) {
-        selectedPosition = position;
-        onMapPositionChanged(position);
-      },
-      onGovernorateChanged: (governorateId) {
-        addressController.clear();
-        setState(() {
-          selectedGovernorateId = governorateId;
-          final citiesForGovernorate = filteredCities;
-          if (!citiesForGovernorate.any(
-            (city) => city.id == selectedCityId,
-          )) {
-            selectedCityId = citiesForGovernorate.isEmpty
-                ? null
-                : citiesForGovernorate.first.id;
-          }
-        });
-        onLocationDropdownChanged();
-      },
-      onCityChanged: (cityId) {
-        addressController.clear();
-        setState(() {
-          selectedCityId = cityId;
-        });
-        onLocationDropdownChanged();
-      },
-      onSubmit: () {
-        if (formKey.currentState!.validate()) {
-          context.read<AddAddressCubit>().doEvent(
-            AddAddressDataEvent(
-              AddAddressDto(
-                street: addressController.text.trim(),
-                phone: phoneNumberController.text.trim(),
-                city: selectedCityName,
-                lat: selectedPosition.latitude.toString(),
-                long: selectedPosition.longitude.toString(),
-                username: recipientNameController.text.trim(),
-              ),
-            ),
-          );
-        }
-      },
+    return BlocProvider(
+      create: (_) => getIt<AddAddressViewModel>(),
+      child: Builder(
+        builder: (innerContext) => AddAddressFormView(
+          formKey: formKey,
+          addressController: addressController,
+          phoneController: phoneNumberController,
+          recipientNameController: recipientNameController,
+          governorates: governorates,
+          filteredCities: filteredCities,
+          selectedGovernorateId: selectedGovernorateId,
+          selectedCityId: selectedCityId,
+          selectedPosition: selectedPosition,
+          onLocationSelected: (position) {
+            selectedPosition = position;
+            onMapPositionChanged(position);
+          },
+          onGovernorateChanged: (governorateId) {
+            addressController.clear();
+            setState(() {
+              selectedGovernorateId = governorateId;
+              final citiesForGovernorate = filteredCities;
+              if (!citiesForGovernorate.any(
+                (city) => city.id == selectedCityId,
+              )) {
+                selectedCityId = citiesForGovernorate.isEmpty
+                    ? null
+                    : citiesForGovernorate.first.id;
+              }
+            });
+            onLocationDropdownChanged();
+          },
+          onCityChanged: (cityId) {
+            addressController.clear();
+            setState(() {
+              selectedCityId = cityId;
+            });
+            onLocationDropdownChanged();
+          },
+          onSubmit: () {
+            if (formKey.currentState!.validate()) {
+              innerContext.read<AddAddressViewModel>().doEvent(
+                AddAddressDataEvent(
+                  AddAddressRequestModel(
+                    street: addressController.text.trim(),
+                    phone: phoneNumberController.text.trim(),
+                    city: selectedCityName,
+                    lat: selectedPosition.latitude.toString(),
+                    long: selectedPosition.longitude.toString(),
+                    username: recipientNameController.text.trim(),
+                  ),
+                ),
+              );
+            }
+          },
+        ),
+      ),
     );
   }
 }

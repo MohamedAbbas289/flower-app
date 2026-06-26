@@ -1,6 +1,7 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/address/api/api_client/address_api_client.dart';
 import 'package:flower_app/features/address/api/data_sources_impl/address_remote_data_source_impl.dart';
+import 'package:flower_app/features/address/api/request_models/add_address_request_model.dart';
 import 'package:flower_app/features/address/data/models/add_address_dto.dart';
 import 'package:flower_app/features/address/data/models/add_address_response.dart';
 import 'package:flower_app/features/address/data/models/delete_address_response.dart';
@@ -17,7 +18,7 @@ void main() {
   late MockAddressApiClient addressApiClient;
   late AddressRemoteDataSourceImpl dataSource;
 
-  final request = AddAddressDto(
+  final request = AddAddressRequestModel(
     street: 'Ahmed',
     phone: '0102419753',
     city: 'cairo',

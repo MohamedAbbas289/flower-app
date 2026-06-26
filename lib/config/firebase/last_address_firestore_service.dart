@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flower_app/config/auth/auth_manager.dart';
 import 'package:flower_app/features/address/data/models/add_address_dto.dart';
 import 'package:flower_app/features/address/domain/entities/address_entity.dart';
+import 'package:flower_app/features/address/domain/mappers/address_mapper.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
@@ -52,7 +53,7 @@ class LastAddressFirestoreService {
       final data = snapshot.data();
       if (data == null) return null;
 
-      return AddAddressDto.fromJson(data).toDomain();
+      return AddAddressDto.fromJson(data).toEntity();
     } catch (e, stackTrace) {
       FirebaseCrashlytics.instance.recordError(e, stackTrace, fatal: false);
       return null;

@@ -1,4 +1,5 @@
 import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/features/address/api/request_models/add_address_request_model.dart';
 import 'package:flower_app/features/address/data/data_sources_contract/address_remote_data_source_contract.dart';
 import 'package:flower_app/features/address/data/models/add_address_dto.dart';
 import 'package:flower_app/features/address/data/models/edit_address_response.dart';
@@ -16,7 +17,7 @@ void main() {
   late MockAddressRemoteDataSourceContract dataSourceContract;
   late AddressRepositoryImpl repo;
 
-  final request = AddAddressDto(
+  final request = AddAddressRequestModel(
     street: 'Ahmed',
     phone: '0102419753',
     city: 'cairo',

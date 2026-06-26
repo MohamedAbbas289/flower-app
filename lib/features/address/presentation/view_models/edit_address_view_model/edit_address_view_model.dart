@@ -36,7 +36,7 @@ class EditAddressViewModel extends Cubit<EditAddressStates> {
       editAddressState: BaseState<List<AddressEntity>>.loading(),
     ));
 
-    final response = await _editAddressUseCase(
+    final response = await _editAddressUseCase.execute(
       id: id,
       request: event.request,
     );

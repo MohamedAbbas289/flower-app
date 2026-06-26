@@ -9,7 +9,9 @@ class RemoveProductFromCartUseCase {
 
   RemoveProductFromCartUseCase(this._shoppingRepositoryContract);
 
-  Future<BaseResponse<CartEntity>> call(String productId) async {
+  Future<BaseResponse<CartEntity>> execute({
+    required String productId,
+  }) async {
     return await _shoppingRepositoryContract.removeProductfromCart(productId);
   }
 }

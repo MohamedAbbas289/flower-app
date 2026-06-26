@@ -1,21 +1,10 @@
-
-import '../../../data/models/add_address_dto.dart';
+import 'package:flower_app/features/address/api/request_models/add_address_request_model.dart';
 
 sealed class AddAddressEvent {
-  const AddAddressEvent ();
-}
-
-class LoadAddressDataEvent extends AddAddressEvent {
-  const LoadAddressDataEvent();
-}
-
-class RetryLoadAddressDataEvent extends AddAddressEvent {
-  const RetryLoadAddressDataEvent();
+  const AddAddressEvent();
 }
 
 class AddAddressDataEvent extends AddAddressEvent {
-   final AddAddressDto request;
+  final AddAddressRequestModel request;
   AddAddressDataEvent(this.request);
 }
-
-

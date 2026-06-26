@@ -6,10 +6,10 @@ import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/utils/cart_helpers.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
-import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_bloc.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_view_model.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_state.dart';
 import 'package:flower_app/features/shopping/domain/entities/product_details_entity.dart';
-import 'package:flower_app/features/shopping/presentation/view_models/product_details_view_model/product_details_cubit.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/product_details_view_model/product_details_view_model.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/product_details_view_model/product_details_events.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/product_details_view_model/product_details_states.dart';
 import 'package:flutter/material.dart';
@@ -28,14 +28,14 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   @override
   void initState() {
     super.initState();
-    context.read<ProductDetailsCubit>().doEvent(
+    context.read<ProductDetailsViewModel>().doEvent(
       GetProductDetailsEvent(productId: widget.productId),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ProductDetailsCubit, ProductDetailsBaseState>(
+    return BlocListener<ProductDetailsViewModel, ProductDetailsBaseState>(
       listener: (context, state) {
         if (!state.productDetailsState.isLoading &&
             state.productDetailsState.data == null) {
@@ -68,7 +68,7 @@ class _ProductDetailsScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      body: BlocBuilder<ProductDetailsCubit, ProductDetailsBaseState>(
+      body: BlocBuilder<ProductDetailsViewModel, ProductDetailsBaseState>(
         builder: (context, state) {
           if (state.productDetailsState.isLoading == true) {
             return const Center(
@@ -339,56 +339,81 @@ class _AddToCartButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<CartBloc, CartState, bool>(
-      selector: (state) =>
-          state.cartState.data?.cartItems.any(
-            (item) => item.product.id == productId,
-          ) ??
-          false,
-      builder: (context, isInCart) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          child: SizedBox(
-            width: double.infinity,
-            height: 55,
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: ElevatedButton(
-                key: ValueKey(isInCart),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: isInCart ? AppColors.red : AppColors.pink,
-                ),
-                onPressed: () {
-                  if (isInCart) {
-                    getIt<CartHelpers>().removeFromCart(context, productId);
-                  } else {
-                    getIt<CartHelpers>().addToCart(context, productId);
-                  }
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      isInCart
-                          ? Assets.assetsIconsTrash
-                          : Assets.assetsIconsShoppingCart,
-                      height: 20,
-                      width: 20,
-                      colorFilter: const ColorFilter.mode(
-                        AppColors.white,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      isInCart ? AppStrings.remove : AppStrings.addToCart,
-                      style: TextStyles.buttonTextStyle,
-                    ),
-                  ],
+    return BlocSelector<ProductDetailsViewModel, ProductDetailsBaseState, int?>(
+      selector: (state) => state.productDetailsState.data?.quantity,
+      builder: (context, quantity) {
+        final isOutOfStock = quantity != null && quantity <= 0;
+
+        return BlocSelector<CartViewModel, CartState, bool>(
+          selector: (state) =>
+              state.cartState.data?.cartItems.any(
+                (item) => item.product.id == productId,
+              ) ??
+              false,
+          builder: (context, isInCart) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: SizedBox(
+                width: double.infinity,
+                height: 55,
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: isOutOfStock && !isInCart
+                      ? ElevatedButton(
+                          key: const ValueKey('out_of_stock'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.gray,
+                            disabledBackgroundColor: AppColors.gray,
+                          ),
+                          onPressed: null,
+                          child: Text(
+                            AppStrings.outOfStock,
+                            style: TextStyles.buttonTextStyle,
+                          ),
+                        )
+                      : ElevatedButton(
+                          key: ValueKey(isInCart),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                isInCart ? AppColors.red : AppColors.pink,
+                          ),
+                          onPressed: () {
+                            if (isInCart) {
+                              getIt<CartHelpers>()
+                                  .removeFromCart(context, productId);
+                            } else {
+                              getIt<CartHelpers>()
+                                  .addToCart(context, productId);
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                isInCart
+                                    ? Assets.assetsIconsTrash
+                                    : Assets.assetsIconsShoppingCart,
+                                height: 20,
+                                width: 20,
+                                colorFilter: const ColorFilter.mode(
+                                  AppColors.white,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                isInCart
+                                    ? AppStrings.remove
+                                    : AppStrings.addToCart,
+                                style: TextStyles.buttonTextStyle,
+                              ),
+                            ],
+                          ),
+                        ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );

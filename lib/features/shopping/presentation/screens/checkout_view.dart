@@ -3,14 +3,13 @@ import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/endpoints.dart';
-import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_bloc.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_view_model.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_event.dart';
 import 'package:flower_app/features/shopping/presentation/screens/checkout_arguments.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/checkout_view_model/checkout_view_model.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/checkout_view_model/checkout_events.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/checkout_view_model/checkout_states.dart';
 import 'package:flower_app/features/shopping/presentation/widgets/address_selection_section.dart';
-import 'package:flower_app/features/shopping/presentation/widgets/delivery_time_section.dart';
 import 'package:flower_app/features/shopping/presentation/widgets/gift_section.dart';
 import 'package:flower_app/features/shopping/presentation/widgets/order_summary_section.dart';
 import 'package:flower_app/features/shopping/presentation/widgets/payment_method_section.dart';
@@ -83,8 +82,8 @@ class _CheckoutBodyState extends State<_CheckoutBody> {
 
         switch (result) {
           case CashOrderPlaced():
-            getIt<CartBloc>().add(const ClearCartEvent());
-            getIt<CartBloc>().add(const LoadCartEvent());
+            getIt<CartViewModel>().doEvent(const ClearCartEvent());
+            getIt<CartViewModel>().doEvent(const LoadCartEvent());
             AppSnackBar.showSuccess(
               context,
               AppStrings.orderPlacedSuccessfully,
@@ -104,8 +103,8 @@ class _CheckoutBodyState extends State<_CheckoutBody> {
             );
 
             if (isSuccess == true && context.mounted) {
-              getIt<CartBloc>().add(const ClearCartEvent());
-              getIt<CartBloc>().add(const LoadCartEvent());
+              getIt<CartViewModel>().doEvent(const ClearCartEvent());
+              getIt<CartViewModel>().doEvent(const LoadCartEvent());
               AppSnackBar.showSuccess(
                 context,
                 AppStrings.orderPlacedSuccessfully,
@@ -129,8 +128,6 @@ class _CheckoutBodyState extends State<_CheckoutBody> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                const DeliveryTimeSection(),
-                const SizedBox(height: 24),
                 AddressSelectionSection(
                   addressesState: state.addressesState,
                   selectedAddress: state.selectedAddress,

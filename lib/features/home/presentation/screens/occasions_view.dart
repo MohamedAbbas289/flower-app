@@ -8,7 +8,7 @@ import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/utils/cart_helpers.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
-import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_bloc.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_view_model.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_state.dart';
 import 'package:flower_app/features/home/presentation/view_models/occasions_view_model/occasions_events.dart';
 import 'package:flower_app/features/home/presentation/view_models/occasions_view_model/occasions_state.dart';
@@ -191,7 +191,7 @@ class _OccasionsBody extends StatelessWidget {
 
     final products = productsState.data ?? [];
 
-    return BlocBuilder<CartBloc, CartState>(
+    return BlocBuilder<CartViewModel, CartState>(
       buildWhen: (prev, curr) => prev.cartState != curr.cartState,
       builder: (context, cartState) {
         return ProductsGridView(
@@ -201,7 +201,7 @@ class _OccasionsBody extends StatelessWidget {
           onAddToCart: (productId) =>
               getIt<CartHelpers>().addToCart(context, productId),
           onRemoveFromCart: (productId) =>
-              getIt<CartHelpers>().removeFromCart(context, productId),
+              getIt<CartHelpers>().removeFromCartWithDialog(context, productId),
           onCardClicked: (productId) {
             Navigator.of(
               context,

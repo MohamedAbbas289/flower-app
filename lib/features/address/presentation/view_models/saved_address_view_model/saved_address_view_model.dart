@@ -39,7 +39,7 @@ class SavedAddressViewModel extends Cubit<SavedAddressStates> {
       ),
     );
 
-    final response = await _getAddressesUseCase();
+    final response = await _getAddressesUseCase.execute();
 
     switch (response) {
       case SuccessBaseResponse():
@@ -67,7 +67,7 @@ class SavedAddressViewModel extends Cubit<SavedAddressStates> {
     deleteAddressState: BaseState<bool>.loading(),
   ));
 
-  final response = await _deleteAddressUseCase(id);
+  final response = await _deleteAddressUseCase.execute(id: id);
 
   switch (response) {
     case SuccessBaseResponse():

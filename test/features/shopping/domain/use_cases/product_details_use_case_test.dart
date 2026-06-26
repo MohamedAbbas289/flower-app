@@ -48,7 +48,7 @@ void main() {
         mockRepo.getProductDetails(productId: anyNamed('productId')),
       ).thenAnswer((_) async => SuccessBaseResponse(data: tEntity));
 
-      final result = await useCase.getProductDetails(productId: tProductId);
+      final result = await useCase.execute(productId: tProductId);
 
       expect(result, isA<SuccessBaseResponse<ProductDetailsEntity>>());
       expect(
@@ -66,7 +66,7 @@ void main() {
         (_) async => ErrorBaseResponse(exception: Exception('error')),
       );
 
-      final result = await useCase.getProductDetails(productId: tProductId);
+      final result = await useCase.execute(productId: tProductId);
 
       expect(result, isA<ErrorBaseResponse<ProductDetailsEntity>>());
       expect(

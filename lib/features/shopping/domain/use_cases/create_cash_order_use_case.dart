@@ -10,9 +10,9 @@ class CreateCashOrderUseCase {
 
   CreateCashOrderUseCase(this._repo);
 
-  Future<BaseResponse<CashOrderEntity>> call(
-    PaymentRequestModel requestModel,
-  ) async {
-    return await _repo.createCashOrder(requestModel);
+  Future<BaseResponse<CashOrderEntity>> execute({
+    required PaymentRequestModel request,
+  }) async {
+    return await _repo.createCashOrder(request);
   }
 }

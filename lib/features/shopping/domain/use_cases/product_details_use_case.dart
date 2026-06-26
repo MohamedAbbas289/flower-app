@@ -7,7 +7,7 @@ import 'package:injectable/injectable.dart';
 class ProductDetailsUseCase {
   ProductDetailsUseCase(this._shoppingRepositoryContract);
   final ShoppingRepositoryContract _shoppingRepositoryContract;
-  Future<BaseResponse<ProductDetailsEntity>> getProductDetails({
+  Future<BaseResponse<ProductDetailsEntity>> execute({
     required String productId,
   }) async {
     return await _shoppingRepositoryContract.getProductDetails(

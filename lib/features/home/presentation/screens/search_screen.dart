@@ -6,7 +6,7 @@ import 'package:flower_app/core/utils/cart_helpers.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
-import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_bloc.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_view_model.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_state.dart';
 import 'package:flower_app/features/home/presentation/view_models/search_view_model/search_states.dart';
 import 'package:flower_app/features/home/presentation/view_models/search_view_model/search_view_model.dart';
@@ -22,7 +22,7 @@ class SearchScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => getIt<SearchViewModel>(),
       child: BlocProvider.value(
-        value: getIt<CartBloc>(),
+        value: getIt<CartViewModel>(),
         child: const _SearchView(),
       ),
     );
@@ -217,7 +217,7 @@ class _SearchBody extends StatelessWidget {
           return _SearchErrorState(message: AppStrings.noProductsAvailable);
         }
 
-        return BlocBuilder<CartBloc, CartState>(
+        return BlocBuilder<CartViewModel, CartState>(
           buildWhen: (prev, curr) => prev.cartState != curr.cartState,
           builder: (context, cartState) {
             return ProductsGridView(
@@ -227,7 +227,7 @@ class _SearchBody extends StatelessWidget {
               onAddToCart: (productId) =>
                   getIt<CartHelpers>().addToCart(context, productId),
               onRemoveFromCart: (productId) =>
-                  getIt<CartHelpers>().removeFromCart(context, productId),
+                  getIt<CartHelpers>().removeFromCartWithDialog(context, productId),
               onCardClicked: (productId) {
                 Navigator.of(
                   context,

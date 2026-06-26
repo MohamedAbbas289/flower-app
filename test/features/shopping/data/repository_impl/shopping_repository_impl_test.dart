@@ -30,7 +30,9 @@ void main() {
     provideDummy<BaseResponse<CartResponseModel>>(
       SuccessBaseResponse(data: const CartResponseModel(cart: null)),
     );
-    provideDummy<OrdersResponse>(const OrdersResponse());
+    provideDummy<BaseResponse<OrdersResponse>>(
+      SuccessBaseResponse(data: const OrdersResponse()),
+    );
     provideDummy<BaseResponse<CashOrderResponseModel>>(
       SuccessBaseResponse(
         data: const CashOrderResponseModel(
@@ -313,7 +315,9 @@ void main() {
         );
         const response = OrdersResponse(orders: [orderModel]);
 
-        when(mockDataSource.getOrders()).thenAnswer((_) async => response);
+        when(mockDataSource.getOrders()).thenAnswer(
+          (_) async => SuccessBaseResponse(data: response),
+        );
 
         final result = await repo.getOrders();
 
@@ -332,7 +336,9 @@ void main() {
       () async {
         const response = OrdersResponse(orders: []);
 
-        when(mockDataSource.getOrders()).thenAnswer((_) async => response);
+        when(mockDataSource.getOrders()).thenAnswer(
+          (_) async => SuccessBaseResponse(data: response),
+        );
 
         final result = await repo.getOrders();
 
@@ -348,7 +354,9 @@ void main() {
       () async {
         const response = OrdersResponse(orders: null);
 
-        when(mockDataSource.getOrders()).thenAnswer((_) async => response);
+        when(mockDataSource.getOrders()).thenAnswer(
+          (_) async => SuccessBaseResponse(data: response),
+        );
 
         final result = await repo.getOrders();
 
@@ -360,9 +368,12 @@ void main() {
     );
 
     test(
-      'returns ErrorBaseResponse<List<OrderEntity>> when datasource throws',
+      'returns ErrorBaseResponse<List<OrderEntity>> when datasource returns error',
       () async {
-        when(mockDataSource.getOrders()).thenThrow(Exception('Network error'));
+        when(mockDataSource.getOrders()).thenAnswer(
+          (_) async =>
+              ErrorBaseResponse(exception: Exception('Network error')),
+        );
 
         final result = await repo.getOrders();
 

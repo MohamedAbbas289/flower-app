@@ -227,7 +227,7 @@ void main() {
   });
 
   group('getOrders', () {
-    test('returns OrdersResponse when api call succeeds', () async {
+    test('returns SuccessBaseResponse with OrdersResponse on success', () async {
       const response = OrdersResponse(message: 'Success');
 
       when(
@@ -236,16 +236,19 @@ void main() {
 
       final result = await dataSource.getOrders();
 
-      expect(result, response);
+      expect(result, isA<SuccessBaseResponse<OrdersResponse>>());
+      expect((result as SuccessBaseResponse).data, response);
       verify(mockShoppingApiClient.getOrders()).called(1);
     });
 
-    test('propagates exception when api throws', () async {
-      when(
-        mockShoppingApiClient.getOrders(),
-      ).thenThrow(Exception('network error'));
+    test('returns ErrorBaseResponse when api throws an exception', () async {
+      final tException = Exception('network error');
+      when(mockShoppingApiClient.getOrders()).thenThrow(tException);
 
-      expect(() => dataSource.getOrders(), throwsException);
+      final result = await dataSource.getOrders();
+
+      expect(result, isA<ErrorBaseResponse<OrdersResponse>>());
+      expect((result as ErrorBaseResponse).exception, tException);
       verify(mockShoppingApiClient.getOrders()).called(1);
     });
   });

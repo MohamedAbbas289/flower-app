@@ -11,11 +11,12 @@ import 'package:flower_app/core/values/images_paths.dart';
 import 'package:flower_app/features/shopping/api/request_models/cart_request_model.dart';
 import 'package:flower_app/features/shopping/domain/entities/cart_entity.dart';
 import 'package:flower_app/features/shopping/domain/entities/cart_item_entity.dart';
-import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_bloc.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_event.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_state.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_view_model.dart';
 import 'package:flower_app/features/shopping/presentation/screens/checkout_arguments.dart';
 import 'package:flower_app/features/address/domain/use_cases/saved_address_use_case.dart';
+import 'package:flower_app/features/address/presentation/widgets/delivery_location_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -34,7 +35,7 @@ class CartView extends StatelessWidget {
       );
     }
 
-    return BlocConsumer<CartBloc, CartState>(
+    return BlocConsumer<CartViewModel, CartState>(
       listenWhen: (previous, current) =>
           previous.removeItemState != current.removeItemState &&
           current.removeItemState.msg != null,
@@ -172,37 +173,7 @@ class _CartContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            children: [
-              SvgPicture.asset(
-                Assets.assetsIconsLocationOn,
-                colorFilter: const ColorFilter.mode(
-                  AppColors.black,
-                  BlendMode.srcIn,
-                ),
-              ),
-              const SizedBox(width: 4),
-              Text(AppStrings.deliverTo, style: TextStyles.bodyRegular12),
-              const SizedBox(width: 4),
-              Expanded(
-                child: Text(
-                  AppStrings.defaultAddress,
-                  style: TextStyles.bodyRegular12.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              const Icon(
-                Icons.keyboard_arrow_down,
-                color: AppColors.pink,
-                size: 24,
-              ),
-            ],
-          ),
-        ),
+        const DeliveryLocationWidget(),
         Expanded(
           child: ListView.separated(
             padding: const EdgeInsets.all(16),
@@ -233,7 +204,7 @@ class _CartItemCard extends StatelessWidget {
       cancelText: AppStrings.cancel,
       confirmButtonColor: AppColors.red,
       cancelButtonColor: AppColors.pink,
-      onConfirm: () => context.read<CartBloc>().add(
+      onConfirm: () => context.read<CartViewModel>().doEvent(
         RemoveProductfromCartEvent(productId: item.product.id),
       ),
     );
@@ -301,11 +272,25 @@ class _CartItemCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      AppStrings.priceText(item.price),
-                      style: TextStyles.bodyRegular14.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (item.product.price > item.price)
+                          Text(
+                            AppStrings.priceText(item.product.price),
+                            style: TextStyles.bodyRegular12.copyWith(
+                              color: AppColors.gray,
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                          ),
+                        Text(
+                          AppStrings.priceText(item.price),
+                          style: TextStyles.bodyRegular14.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.pink,
+                          ),
+                        ),
+                      ],
                     ),
                     _QuantityControl(item: item),
                   ],
@@ -333,18 +318,18 @@ class _QuantityControl extends StatelessWidget {
       cancelText: AppStrings.cancel,
       confirmButtonColor: AppColors.red,
       cancelButtonColor: AppColors.pink,
-      onConfirm: () => context.read<CartBloc>().add(
+      onConfirm: () => context.read<CartViewModel>().doEvent(
         RemoveProductfromCartEvent(productId: item.product.id),
       ),
-      onCancel: () => context.read<CartBloc>()
-        ..add(UpdateLocalQuantityEvent(requestModel: CartRequestModel(productId: item.product.id, quantity: 1)))
-        ..add(UpdateQuantityEvent(requestModel: CartRequestModel(productId: item.product.id, quantity: 1))),
+      onCancel: () => context.read<CartViewModel>()
+        ..doEvent(UpdateLocalQuantityEvent(requestModel: CartRequestModel(productId: item.product.id, quantity: 1)))
+        ..doEvent(UpdateQuantityEvent(requestModel: CartRequestModel(productId: item.product.id, quantity: 1))),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CartBloc, CartState>(
+    return BlocBuilder<CartViewModel, CartState>(
       buildWhen: (prev, curr) =>
           prev.localQuantities[item.product.id] !=
           curr.localQuantities[item.product.id],
@@ -358,8 +343,8 @@ class _QuantityControl extends StatelessWidget {
                 if (quantity == 1) {
                   _showDeleteDialog(context);
                 } else {
-                  context.read<CartBloc>()
-                    ..add(
+                  context.read<CartViewModel>()
+                    ..doEvent(
                       UpdateLocalQuantityEvent(
                         requestModel: CartRequestModel(
                           productId: item.product.id,
@@ -367,7 +352,7 @@ class _QuantityControl extends StatelessWidget {
                         ),
                       ),
                     )
-                    ..add(
+                    ..doEvent(
                       UpdateQuantityEvent(
                         requestModel: CartRequestModel(
                           productId: item.product.id,
@@ -389,8 +374,8 @@ class _QuantityControl extends StatelessWidget {
             ),
             _QuantityButton(
               icon: Icons.add,
-              onPressed: () => context.read<CartBloc>()
-                ..add(
+              onPressed: () => context.read<CartViewModel>()
+                ..doEvent(
                   UpdateLocalQuantityEvent(
                     requestModel: CartRequestModel(
                       productId: item.product.id,
@@ -398,7 +383,7 @@ class _QuantityControl extends StatelessWidget {
                     ),
                   ),
                 )
-                ..add(
+                ..doEvent(
                   UpdateQuantityEvent(
                     requestModel: CartRequestModel(
                       productId: item.product.id,
@@ -443,9 +428,14 @@ class _CartSummary extends StatelessWidget {
   final CartEntity cart;
 
   Future<void> _onCheckout(BuildContext context) async {
-    final response = await getIt<GetAddressesUseCase>()();
+    final response = await getIt<GetAddressesUseCase>().execute();
 
     if (!context.mounted) return;
+
+    final effectiveTotal = cart.totalPriceAfterDiscount > 0 &&
+            cart.totalPriceAfterDiscount < cart.totalPrice
+        ? cart.totalPriceAfterDiscount
+        : cart.totalPrice;
 
     switch (response) {
       case SuccessBaseResponse():
@@ -459,7 +449,7 @@ class _CartSummary extends StatelessWidget {
           arguments: CheckoutArguments(
             subTotal: cart.totalPrice,
             deliveryFee: 0,
-            total: cart.totalPriceAfterDiscount,
+            total: effectiveTotal,
           ),
         );
       case ErrorBaseResponse():
@@ -495,10 +485,25 @@ class _CartSummary extends StatelessWidget {
             title: AppStrings.deliveryFee,
             value: AppStrings.priceText(0),
           ),
+          if (cart.totalPriceAfterDiscount > 0 &&
+              cart.totalPriceAfterDiscount < cart.totalPrice) ...[
+            const SizedBox(height: 8),
+            _SummaryRow(
+              title: AppStrings.discount,
+              value:
+                  '- ${AppStrings.priceText(cart.totalPrice - cart.totalPriceAfterDiscount)}',
+              valueColor: AppColors.pink,
+            ),
+          ],
           const Divider(height: 24),
           _SummaryRow(
             title: AppStrings.total,
-            value: AppStrings.priceText(cart.totalPriceAfterDiscount),
+            value: AppStrings.priceText(
+              cart.totalPriceAfterDiscount > 0 &&
+                      cart.totalPriceAfterDiscount < cart.totalPrice
+                  ? cart.totalPriceAfterDiscount
+                  : cart.totalPrice,
+            ),
             isBold: true,
           ),
           const SizedBox(height: 16),
@@ -521,11 +526,13 @@ class _SummaryRow extends StatelessWidget {
     required this.title,
     required this.value,
     this.isBold = false,
+    this.valueColor,
   });
 
   final String title;
   final String value;
   final bool isBold;
+  final Color? valueColor;
 
   @override
   Widget build(BuildContext context) {
@@ -537,7 +544,12 @@ class _SummaryRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(title, style: style),
-        Text(value, style: style),
+        Text(
+          value,
+          style: valueColor != null
+              ? style.copyWith(color: valueColor)
+              : style,
+        ),
       ],
     );
   }

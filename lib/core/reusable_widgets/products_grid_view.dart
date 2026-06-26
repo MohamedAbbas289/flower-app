@@ -25,6 +25,9 @@ final class _FakeProduct implements ProductCardData {
   int? get originalPrice => null;
 
   @override
+  int? get availableQuantity => null;
+
+  @override
   int? get discountPercent => null;
 }
 

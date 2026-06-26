@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/features/shopping/presentation/screens/cart_view.dart';
-import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_bloc.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_view_model.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_event.dart';
 import 'package:flower_app/features/address/presentation/view_models/delivery_address_view_model/delivery_address_view_model.dart';
 import 'package:flower_app/features/home/presentation/view_models/home_view_model/home_view_model.dart';
@@ -30,7 +30,7 @@ class _AppSectionViewState extends State<AppSectionView> {
   @override
   void initState() {
     super.initState();
-    getIt<CartBloc>().add(const LoadCartEvent());
+    getIt<CartViewModel>().doEvent(const LoadCartEvent());
   }
 
   void _navigateToCategories({String? categoryId}) {
@@ -82,19 +82,17 @@ class _AppSectionViewState extends State<AppSectionView> {
           _initialCategoryId = null;
         });
       },
-      child: BlocProvider.value(
-        value: getIt<CartBloc>(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: getIt<CartViewModel>()),
+          BlocProvider(create: (_) => getIt<DeliveryAddressViewModel>()),
+        ],
         child: Scaffold(
           body: IndexedStack(
             index: _currentTabIndex,
             children: [
-              MultiBlocProvider(
-                providers: [
-                  BlocProvider(create: (_) => getIt<HomeViewModel>()),
-                  BlocProvider(
-                    create: (_) => getIt<DeliveryAddressViewModel>(),
-                  ),
-                ],
+              BlocProvider(
+                create: (_) => getIt<HomeViewModel>(),
                 child: HomeScreen(
                   onCategoryViewAll: () => _navigateToCategories(),
                   onCategoryTap: (id) => _navigateToCategories(categoryId: id),
@@ -104,7 +102,7 @@ class _AppSectionViewState extends State<AppSectionView> {
                 key: ValueKey(_initialCategoryId),
                 initialCategoryId: _initialCategoryId,
               ),
-              CartView(),
+              const CartView(),
               ProfileView(),
             ],
           ),

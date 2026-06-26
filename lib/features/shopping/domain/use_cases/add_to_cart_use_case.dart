@@ -10,9 +10,9 @@ class AddToCartUseCase {
 
   AddToCartUseCase(this._shoppingRepositoryContract);
 
-  Future<BaseResponse<CartEntity>> call(
-    CartRequestModel requestModel,
-  ) async {
-    return await _shoppingRepositoryContract.addToCart(requestModel);
+  Future<BaseResponse<CartEntity>> execute({
+    required CartRequestModel request,
+  }) async {
+    return await _shoppingRepositoryContract.addToCart(request);
   }
 }

@@ -84,8 +84,13 @@ class ShoppingRemoteDataSourceImpl
   }
 
   @override
-  Future<OrdersResponse> getOrders() {
-    return _shoppingApiClient.getOrders();
+  Future<BaseResponse<OrdersResponse>> getOrders() async {
+    try {
+      final response = await _shoppingApiClient.getOrders();
+      return SuccessBaseResponse(data: response);
+    } catch (e) {
+      return ErrorBaseResponse(exception: e);
+    }
   }
 
   @override

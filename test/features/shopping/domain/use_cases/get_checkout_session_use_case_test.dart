@@ -43,7 +43,7 @@ void main() {
       (_) async => SuccessBaseResponse(data: tCheckoutSessionEntity),
     );
 
-    final result = await useCase(tRequestModel);
+    final result = await useCase.execute(request: tRequestModel);
 
     expect(result, isA<SuccessBaseResponse<CheckoutSessionEntity>>());
     expect((result as SuccessBaseResponse).data, tCheckoutSessionEntity);
@@ -57,7 +57,7 @@ void main() {
       (_) async => ErrorBaseResponse(exception: tException),
     );
 
-    final result = await useCase(tRequestModel);
+    final result = await useCase.execute(request: tRequestModel);
 
     expect(result, isA<ErrorBaseResponse<CheckoutSessionEntity>>());
     expect((result as ErrorBaseResponse).exception, tException);

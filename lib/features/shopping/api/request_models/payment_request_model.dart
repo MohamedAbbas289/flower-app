@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flower_app/core/values/api_param.dart';
 import 'package:flower_app/features/address/domain/entities/address_entity.dart';
 
 class PaymentRequestModel extends Equatable {
@@ -27,12 +28,12 @@ class PaymentRequestModel extends Equatable {
   }
 
   Map<String, dynamic> toJson() => {
-    'shippingAddress': {
-      'street': street,
-      'phone': phone,
-      'city': city,
-      'lat': lat,
-      'long': long,
+    ApiParam.shippingAddress: {
+      ApiParam.street: street,
+      ApiParam.phone: phone,
+      ApiParam.city: city,
+      ApiParam.lat: lat,
+      ApiParam.long: long,
     },
   };
 

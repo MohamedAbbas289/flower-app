@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/core/values/app_strings.dart';
-import 'package:flower_app/features/address/domain/entities/delivery_address_display.dart';
+import 'package:flower_app/features/address/domain/display_states/delivery_address_display.dart';
 import 'package:flower_app/features/address/domain/use_cases/resolve_delivery_address_use_case.dart';
 import 'package:flower_app/features/address/presentation/view_models/delivery_address_view_model/delivery_address_events.dart';
 import 'package:flower_app/features/address/presentation/view_models/delivery_address_view_model/delivery_address_state.dart';
@@ -30,35 +27,14 @@ class DeliveryAddressViewModel extends Cubit<DeliveryAddressState> {
         deliveryAddressState: BaseState<DeliveryAddressDisplayState>.loading(),
       ),
     );
-
-    try {
-      final result = await _resolveDeliveryAddressUseCase();
-      if (isClosed) return;
-      emit(
-        state.copyWith(
-          deliveryAddressState: BaseState<DeliveryAddressDisplayState>.success(
-            result,
-          ),
+    final result = await _resolveDeliveryAddressUseCase.execute();
+    if (isClosed) return;
+    emit(
+      state.copyWith(
+        deliveryAddressState: BaseState<DeliveryAddressDisplayState>.success(
+          result,
         ),
-      );
-    } on TimeoutException {
-      if (isClosed) return;
-      emit(
-        state.copyWith(
-          deliveryAddressState: BaseState<DeliveryAddressDisplayState>.error(
-            AppStrings.locationTimeout,
-          ),
-        ),
-      );
-    } catch (_) {
-      if (isClosed) return;
-      emit(
-        state.copyWith(
-          deliveryAddressState: BaseState<DeliveryAddressDisplayState>.error(
-            AppStrings.somethingWentWrong,
-          ),
-        ),
-      );
-    }
+      ),
+    );
   }
 }

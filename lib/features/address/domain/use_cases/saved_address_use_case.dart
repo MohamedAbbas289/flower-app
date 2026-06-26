@@ -9,7 +9,7 @@ class GetAddressesUseCase {
 
   GetAddressesUseCase(this._repo);
 
-  Future<BaseResponse<List<AddressEntity>>> call() async {
+  Future<BaseResponse<List<AddressEntity>>> execute() async {
     return await _repo.getAddresses();
   }
 }

@@ -2,13 +2,14 @@ import 'package:flower_app/core/reusable_widgets/address_form_fields.dart';
 import 'package:flower_app/core/reusable_widgets/address_geocoding_sync_mixin.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/values/app_strings.dart';
-import 'package:flower_app/features/address/data/models/add_address_dto.dart';
+import 'package:flower_app/features/address/api/request_models/add_address_request_model.dart';
 import 'package:flower_app/features/address/domain/entities/address_entity.dart';
 import 'package:flower_app/features/address/domain/entities/location_entity.dart';
 import 'package:flower_app/core/reusable_widgets/location_dropdown_field.dart';
 import 'package:flower_app/features/address/presentation/view_models/edit_address_view_model/edit_address_view_model.dart';
 import 'package:flower_app/features/address/presentation/view_models/edit_address_view_model/edit_address_event.dart';
 import 'package:flower_app/features/address/presentation/view_models/edit_address_view_model/edit_address_states.dart';
+import 'package:flower_app/features/address/presentation/widgets/save_address_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -41,6 +42,8 @@ class _EditAddressScreenState extends State<EditAddressScreen>
   String? selectedCityId;
   @override
   late LatLng selectedPosition;
+
+  bool _isLoaded = false;
 
   @override
   void initState() {
@@ -91,8 +94,8 @@ class _EditAddressScreenState extends State<EditAddressScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    if (governorates.isEmpty) {
+    if (!_isLoaded) {
+      _isLoaded = true;
       _loadLocations();
     }
   }
@@ -107,7 +110,9 @@ class _EditAddressScreenState extends State<EditAddressScreen>
           return;
         }
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('Location permission check failed: $e');
+    }
   }
 
   Future<void> _loadLocations() async {
@@ -168,114 +173,89 @@ class _EditAddressScreenState extends State<EditAddressScreen>
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: BlocConsumer<EditAddressViewModel, EditAddressStates>(
-            listenWhen: (previous, current) =>
-                previous.editAddressState != current.editAddressState,
-            listener: (context, state) {
-              if (state.editAddressState.msg != null) {
-                AppSnackBar.showError(context, state.editAddressState.msg!);
-              }
-              if (state.editAddressState.data != null) {
-                AppSnackBar.showSuccess(
-                  context,
-                  AppStrings.addressUpdatedSuccess,
-                );
-                Navigator.pop(context, true);
-              }
-            },
-            builder: (context, state) {
-              return Form(
-                key: formKey,
-                child: SingleChildScrollView(
-                  child: Column(
-                    spacing: 16,
-                    children: [
-                      AddressFormFields(
-                        addressController: addressController,
-                        phoneController: phoneController,
-                        recipientNameController: recipientNameController,
-                        governorates: governorates,
-                        filteredCities: filteredCities,
-                        selectedGovernorateId: selectedGovernorateId,
-                        selectedCityId: selectedCityId,
-                        selectedPosition: selectedPosition,
-                        onLocationSelected: (position) {
-                          selectedPosition = position;
-                          onMapPositionChanged(position);
-                        },
-                        onGovernorateChanged: (value) {
-                          addressController.clear();
-                          setState(() {
-                            selectedGovernorateId = value;
-                            final available = filteredCities;
-                            selectedCityId = available.isEmpty
-                                ? null
-                                : available.first.id;
-                          });
-                          onLocationDropdownChanged();
-                        },
-                        onCityChanged: (value) {
-                          addressController.clear();
-                          setState(() => selectedCityId = value);
-                          onLocationDropdownChanged();
-                        },
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: state.editAddressState.isLoading
-                              ? null
-                              : () {
-                                  final addressId = widget.address.id;
-                                  if (addressId == null) {
-                                    AppSnackBar.showError(
-                                      context,
-                                      AppStrings.somethingWentWrong,
-                                    );
-                                    return;
-                                  }
-
-                                  if (formKey.currentState!.validate()) {
-                                    context
-                                        .read<EditAddressViewModel>()
-                                        .doEvent(
-                                          SubmitEditAddressEvent(
-                                            id: addressId,
-                                            request: AddAddressDto(
-                                              street: addressController.text
-                                                  .trim(),
-                                              phone: phoneController.text
-                                                  .trim(),
-                                              city: selectedCityName,
-                                              lat: selectedPosition.latitude
-                                                  .toString(),
-                                              long: selectedPosition.longitude
-                                                  .toString(),
-                                              username: recipientNameController
-                                                  .text
-                                                  .trim(),
-                                            ),
-                                          ),
-                                        );
-                                  }
-                                },
-                          child: state.editAddressState.isLoading
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : Text(AppStrings.updateAddress),
-                        ),
-                      ),
-                    ],
-                  ),
+          listenWhen: (previous, current) =>
+              previous.editAddressState != current.editAddressState,
+          listener: (context, state) {
+            if (state.editAddressState.msg != null) {
+              AppSnackBar.showError(context, state.editAddressState.msg!);
+            }
+            if (state.editAddressState.data != null) {
+              AppSnackBar.showSuccess(context, AppStrings.addressUpdatedSuccess);
+              Navigator.pop(context, true);
+            }
+          },
+          builder: (context, state) {
+            return Form(
+              key: formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  spacing: 16,
+                  children: [
+                    AddressFormFields(
+                      addressController: addressController,
+                      phoneController: phoneController,
+                      recipientNameController: recipientNameController,
+                      governorates: governorates,
+                      filteredCities: filteredCities,
+                      selectedGovernorateId: selectedGovernorateId,
+                      selectedCityId: selectedCityId,
+                      selectedPosition: selectedPosition,
+                      onLocationSelected: (position) {
+                        selectedPosition = position;
+                        onMapPositionChanged(position);
+                      },
+                      onGovernorateChanged: (value) {
+                        addressController.clear();
+                        setState(() {
+                          selectedGovernorateId = value;
+                          final available = filteredCities;
+                          selectedCityId =
+                              available.isEmpty ? null : available.first.id;
+                        });
+                        onLocationDropdownChanged();
+                      },
+                      onCityChanged: (value) {
+                        addressController.clear();
+                        setState(() => selectedCityId = value);
+                        onLocationDropdownChanged();
+                      },
+                    ),
+                    SaveAddressButton(
+                      isLoading: state.editAddressState.isLoading,
+                      label: AppStrings.updateAddress,
+                      onPressed: () {
+                        final addressId = widget.address.id;
+                        if (addressId == null) {
+                          AppSnackBar.showError(
+                            context,
+                            AppStrings.somethingWentWrong,
+                          );
+                          return;
+                        }
+                        if (formKey.currentState!.validate()) {
+                          context.read<EditAddressViewModel>().doEvent(
+                            SubmitEditAddressEvent(
+                              id: addressId,
+                              request: AddAddressRequestModel(
+                                street: addressController.text.trim(),
+                                phone: phoneController.text.trim(),
+                                city: selectedCityName,
+                                lat: selectedPosition.latitude.toString(),
+                                long: selectedPosition.longitude.toString(),
+                                username: recipientNameController.text.trim(),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ],
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
-      );
+      ),
+    );
   }
 }

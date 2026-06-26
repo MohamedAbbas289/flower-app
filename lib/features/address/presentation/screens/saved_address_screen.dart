@@ -122,6 +122,11 @@ class _SavedAddressView extends StatelessWidget {
   }
 
   void _confirmDelete(BuildContext context, AddressEntity address) {
+    final id = address.id;
+    if (id == null) {
+      AppSnackBar.showError(context, AppStrings.somethingWentWrong);
+      return;
+    }
     AppDialog.show(
       context: context,
       title: AppStrings.deleteAddress,
@@ -129,7 +134,7 @@ class _SavedAddressView extends StatelessWidget {
       confirmText: AppStrings.delete,
       cancelText: AppStrings.cancel,
       onConfirm: () => context.read<SavedAddressViewModel>().doEvent(
-        DeleteAddressEvent(address.id!),
+        DeleteAddressEvent(id),
       ),
     );
   }

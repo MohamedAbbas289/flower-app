@@ -62,6 +62,9 @@ class ProductEntity extends Equatable implements ProductCardData {
   int? get discountPercent => discount?.toInt();
 
   @override
+  int? get availableQuantity => quantity?.toInt();
+
+  @override
   List<Object?> get props => [
     rawId,
     title,

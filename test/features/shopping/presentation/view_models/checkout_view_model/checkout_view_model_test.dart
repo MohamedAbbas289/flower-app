@@ -94,7 +94,7 @@ void main() {
       'selects the address matching the cached last address',
       build: buildCubit,
       setUp: () {
-        when(getAddressesUseCase()).thenAnswer(
+        when(getAddressesUseCase.execute()).thenAnswer(
           (_) async =>
               SuccessBaseResponse(data: const [tAddress1, tAddress2]),
         );
@@ -119,7 +119,7 @@ void main() {
       'falls back to the last address when firestore has nothing cached',
       build: buildCubit,
       setUp: () {
-        when(getAddressesUseCase()).thenAnswer(
+        when(getAddressesUseCase.execute()).thenAnswer(
           (_) async =>
               SuccessBaseResponse(data: const [tAddress1, tAddress2]),
         );
@@ -144,7 +144,7 @@ void main() {
       'falls back to the last address when the cached address is not in the list',
       build: buildCubit,
       setUp: () {
-        when(getAddressesUseCase()).thenAnswer(
+        when(getAddressesUseCase.execute()).thenAnswer(
           (_) async =>
               SuccessBaseResponse(data: const [tAddress1, tAddress2]),
         );
@@ -170,7 +170,7 @@ void main() {
       build: buildCubit,
       setUp: () {
         when(
-          getAddressesUseCase(),
+          getAddressesUseCase.execute(),
         ).thenAnswer((_) async => SuccessBaseResponse(data: const []));
       },
       act: (cubit) => cubit.doEvent(const LoadCheckoutDataEvent()),
@@ -189,7 +189,7 @@ void main() {
       'emits an error state when the use case fails',
       build: buildCubit,
       setUp: () {
-        when(getAddressesUseCase()).thenAnswer(
+        when(getAddressesUseCase.execute()).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception('boom')),
         );
       },
@@ -242,8 +242,8 @@ void main() {
       act: (cubit) => cubit.doEvent(const PlaceOrderEvent()),
       expect: () => [],
       verify: (_) {
-        verifyNever(createCashOrderUseCase(any));
-        verifyNever(getCheckoutSessionUseCase(any));
+        verifyNever(createCashOrderUseCase.execute(request: anyNamed('request')));
+        verifyNever(getCheckoutSessionUseCase.execute(request: anyNamed('request')));
       },
     );
 
@@ -252,7 +252,7 @@ void main() {
       build: buildCubit,
       seed: () => const CheckoutStates(selectedAddress: tAddress1),
       setUp: () {
-        when(createCashOrderUseCase(any)).thenAnswer(
+        when(createCashOrderUseCase.execute(request: anyNamed('request'))).thenAnswer(
           (_) async => SuccessBaseResponse(data: tCashOrderEntity),
         );
       },
@@ -271,7 +271,9 @@ void main() {
       ],
       verify: (_) {
         verify(
-          createCashOrderUseCase(PaymentRequestModel.fromAddress(tAddress1)),
+          createCashOrderUseCase.execute(
+            request: PaymentRequestModel.fromAddress(tAddress1),
+          ),
         ).called(1);
         verify(lastAddressFirestoreService.saveLastAddress(tAddress1)).called(1);
       },
@@ -282,7 +284,7 @@ void main() {
       build: buildCubit,
       seed: () => const CheckoutStates(selectedAddress: tAddress1),
       setUp: () {
-        when(createCashOrderUseCase(any)).thenAnswer(
+        when(createCashOrderUseCase.execute(request: anyNamed('request'))).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception('boom')),
         );
       },
@@ -311,7 +313,7 @@ void main() {
         paymentMethod: PaymentMethod.card,
       ),
       setUp: () {
-        when(getCheckoutSessionUseCase(any)).thenAnswer(
+        when(getCheckoutSessionUseCase.execute(request: anyNamed('request'))).thenAnswer(
           (_) async => SuccessBaseResponse(data: tCheckoutSessionEntity),
         );
       },
@@ -332,8 +334,8 @@ void main() {
       ],
       verify: (_) {
         verify(
-          getCheckoutSessionUseCase(
-            PaymentRequestModel.fromAddress(tAddress1),
+          getCheckoutSessionUseCase.execute(
+            request: PaymentRequestModel.fromAddress(tAddress1),
           ),
         ).called(1);
         verifyNever(lastAddressFirestoreService.saveLastAddress(any));
@@ -348,7 +350,7 @@ void main() {
         paymentMethod: PaymentMethod.card,
       ),
       setUp: () {
-        when(getCheckoutSessionUseCase(any)).thenAnswer(
+        when(getCheckoutSessionUseCase.execute(request: anyNamed('request'))).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception('boom')),
         );
       },

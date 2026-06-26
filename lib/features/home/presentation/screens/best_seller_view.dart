@@ -9,7 +9,7 @@ import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/home/presentation/view_models/best_seller_view_model/best_seller_cubit.dart';
 import 'package:flower_app/features/home/presentation/view_models/best_seller_view_model/best_seller_event.dart';
 import 'package:flower_app/features/home/presentation/view_models/best_seller_view_model/best_seller_state.dart';
-import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_bloc.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_view_model.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -74,7 +74,7 @@ class _BestSellerContentState extends State<_BestSellerContent> {
               return Center(child: Text(bs.msg!, textAlign: TextAlign.center));
             }
 
-            return BlocBuilder<CartBloc, CartState>(
+            return BlocBuilder<CartViewModel, CartState>(
               buildWhen: (prev, curr) => prev.cartState != curr.cartState,
               builder: (context, cartState) {
                 return ProductsGridView(
@@ -86,7 +86,7 @@ class _BestSellerContentState extends State<_BestSellerContent> {
                   onAddToCart: (productId) =>
                       getIt<CartHelpers>().addToCart(context, productId),
                   onRemoveFromCart: (productId) =>
-                      getIt<CartHelpers>().removeFromCart(context, productId),
+                      getIt<CartHelpers>().removeFromCartWithDialog(context, productId),
                   onCardClicked: (productId) {
                     Navigator.of(context).pushNamed(
                       AppRoutesName.productDetails,

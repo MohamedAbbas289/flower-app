@@ -38,7 +38,7 @@ void main() {
       mockShoppingRepositoryContract.updateQuantity(tRequestModel),
     ).thenAnswer((_) async => SuccessBaseResponse(data: tCartEntity));
 
-    final result = await useCase(tRequestModel);
+    final result = await useCase.execute(request: tRequestModel);
 
     expect(result, isA<SuccessBaseResponse<CartEntity>>());
     expect((result as SuccessBaseResponse).data, tCartEntity);
@@ -52,7 +52,7 @@ void main() {
       mockShoppingRepositoryContract.updateQuantity(tRequestModel),
     ).thenAnswer((_) async => ErrorBaseResponse(exception: tException));
 
-    final result = await useCase(tRequestModel);
+    final result = await useCase.execute(request: tRequestModel);
 
     expect(result, isA<ErrorBaseResponse<CartEntity>>());
     expect((result as ErrorBaseResponse).exception, tException);

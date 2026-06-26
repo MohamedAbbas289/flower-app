@@ -45,7 +45,7 @@ void main() {
       (_) async => SuccessBaseResponse(data: tCashOrderEntity),
     );
 
-    final result = await useCase(tRequestModel);
+    final result = await useCase.execute(request: tRequestModel);
 
     expect(result, isA<SuccessBaseResponse<CashOrderEntity>>());
     expect((result as SuccessBaseResponse).data, tCashOrderEntity);
@@ -59,7 +59,7 @@ void main() {
       (_) async => ErrorBaseResponse(exception: tException),
     );
 
-    final result = await useCase(tRequestModel);
+    final result = await useCase.execute(request: tRequestModel);
 
     expect(result, isA<ErrorBaseResponse<CashOrderEntity>>());
     expect((result as ErrorBaseResponse).exception, tException);

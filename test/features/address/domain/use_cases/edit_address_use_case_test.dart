@@ -1,5 +1,5 @@
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/features/address/data/models/add_address_dto.dart';
+import 'package:flower_app/features/address/api/request_models/add_address_request_model.dart';
 import 'package:flower_app/features/address/domain/entities/address_entity.dart';
 import 'package:flower_app/features/address/domain/repository_contract/address_repository_contract.dart';
 import 'package:flower_app/features/address/domain/use_cases/edit_address_use_case.dart';
@@ -14,7 +14,7 @@ void main() {
   late MockAddressRepositoryContract repoContract;
   late EditAddressUseCase useCase;
 
-  final request = AddAddressDto(
+  final request = AddAddressRequestModel(
     street: 'Ahmed',
     phone: '0102419753',
     city: 'cairo',
@@ -45,7 +45,7 @@ void main() {
         (_) async => SuccessBaseResponse<List<AddressEntity>>(data: entities),
       );
 
-      final result = await useCase(id: '1', request: request);
+      final result = await useCase.execute(id: '1', request: request);
 
       expect(result, isA<SuccessBaseResponse<List<AddressEntity>>>());
       expect((result as SuccessBaseResponse<List<AddressEntity>>).data, entities);
@@ -61,7 +61,7 @@ void main() {
         (_) async => ErrorBaseResponse<List<AddressEntity>>(exception: exception),
       );
 
-      final result = await useCase(id: '1', request: request);
+      final result = await useCase.execute(id: '1', request: request);
 
       expect(result, isA<ErrorBaseResponse<List<AddressEntity>>>());
       expect((result as ErrorBaseResponse<List<AddressEntity>>).exception, exception);

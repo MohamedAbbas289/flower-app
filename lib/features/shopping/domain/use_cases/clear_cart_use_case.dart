@@ -9,7 +9,7 @@ class ClearCartUseCase {
 
   ClearCartUseCase(this._shoppingRepositoryContract);
 
-  Future<BaseResponse<CartEntity>> call() async {
+  Future<BaseResponse<CartEntity>> execute() async {
     return await _shoppingRepositoryContract.clearCart();
   }
 }

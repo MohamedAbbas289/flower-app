@@ -8,7 +8,7 @@ import 'package:flower_app/features/shopping/domain/use_cases/clear_cart_use_cas
 import 'package:flower_app/features/shopping/domain/use_cases/get_cart_use_case.dart';
 import 'package:flower_app/features/shopping/domain/use_cases/remove_product_from_cart_use_case.dart';
 import 'package:flower_app/features/shopping/domain/use_cases/update_quantity_use_case.dart';
-import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_bloc.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_view_model.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_event.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_state.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -53,7 +53,7 @@ void main() {
     numOfCartItems: 0,
   );
 
-  CartBloc buildBloc() => CartBloc(
+  CartViewModel buildBloc() => CartViewModel(
     mockGetCartUseCase,
     mockAddToCartUseCase,
     mockUpdateQuantityUseCase,
@@ -73,30 +73,30 @@ void main() {
   });
 
   group('LoadCartEvent', () {
-    blocTest<CartBloc, CartState>(
+    blocTest<CartViewModel, CartState>(
       'emits loading then success when use case returns success',
       build: buildBloc,
       setUp: () {
         when(
-          mockGetCartUseCase(),
+          mockGetCartUseCase.execute(),
         ).thenAnswer((_) async => SuccessBaseResponse(data: tCartEntity));
       },
-      act: (bloc) => bloc.add(LoadCartEvent()),
+      act: (bloc) => bloc.doEvent(const LoadCartEvent()),
       expect: () => [
         CartState(cartState: BaseState.loading()),
         CartState(cartState: BaseState.success(tCartEntity)),
       ],
     );
 
-    blocTest<CartBloc, CartState>(
+    blocTest<CartViewModel, CartState>(
       'emits loading then error when use case returns error',
       build: buildBloc,
       setUp: () {
-        when(mockGetCartUseCase()).thenAnswer(
+        when(mockGetCartUseCase.execute()).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception(tErrorMessage)),
         );
       },
-      act: (bloc) => bloc.add(LoadCartEvent()),
+      act: (bloc) => bloc.doEvent(const LoadCartEvent()),
       expect: () => [
         CartState(cartState: BaseState.loading()),
         CartState(cartState: BaseState.error(tErrorMessage)),
@@ -105,16 +105,16 @@ void main() {
   });
 
   group('AddToCartEvent', () {
-    blocTest<CartBloc, CartState>(
+    blocTest<CartViewModel, CartState>(
       'emits loading then success when use case returns success',
       build: buildBloc,
       setUp: () {
         when(
-          mockAddToCartUseCase(tRequestModel),
+          mockAddToCartUseCase.execute(request: tRequestModel),
         ).thenAnswer((_) async => SuccessBaseResponse(data: tCartEntity));
       },
       act: (bloc) =>
-          bloc.add(AddToCartEvent(requestModel: tRequestModel)),
+          bloc.doEvent(AddToCartEvent(requestModel: tRequestModel)),
       expect: () => [
         CartState(addToCartState: BaseState.loading()),
         CartState(
@@ -124,16 +124,16 @@ void main() {
       ],
     );
 
-    blocTest<CartBloc, CartState>(
+    blocTest<CartViewModel, CartState>(
       'emits loading then error when use case returns error',
       build: buildBloc,
       setUp: () {
-        when(mockAddToCartUseCase(tRequestModel)).thenAnswer(
+        when(mockAddToCartUseCase.execute(request: tRequestModel)).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception(tErrorMessage)),
         );
       },
       act: (bloc) =>
-          bloc.add(AddToCartEvent(requestModel: tRequestModel)),
+          bloc.doEvent(AddToCartEvent(requestModel: tRequestModel)),
       expect: () => [
         CartState(addToCartState: BaseState.loading()),
         CartState(addToCartState: BaseState.error(tErrorMessage)),
@@ -142,10 +142,10 @@ void main() {
   });
 
   group('UpdateLocalQuantityEvent', () {
-    blocTest<CartBloc, CartState>(
+    blocTest<CartViewModel, CartState>(
       'emits state with updated localQuantities',
       build: buildBloc,
-      act: (bloc) => bloc.add(
+      act: (bloc) => bloc.doEvent(
         UpdateLocalQuantityEvent(requestModel: tRequestModel),
       ),
       expect: () => [
@@ -155,15 +155,15 @@ void main() {
   });
 
   group('UpdateQuantityEvent', () {
-    blocTest<CartBloc, CartState>(
+    blocTest<CartViewModel, CartState>(
       'emits success and clears localQuantities when use case returns success',
       build: buildBloc,
       setUp: () {
         when(
-          mockUpdateQuantityUseCase(tRequestModel),
+          mockUpdateQuantityUseCase.execute(request: tRequestModel),
         ).thenAnswer((_) async => SuccessBaseResponse(data: tCartEntity));
       },
-      act: (bloc) => bloc.add(
+      act: (bloc) => bloc.doEvent(
         UpdateQuantityEvent(requestModel: tRequestModel),
       ),
       wait: const Duration(milliseconds: 600),
@@ -176,15 +176,15 @@ void main() {
       ],
     );
 
-    blocTest<CartBloc, CartState>(
+    blocTest<CartViewModel, CartState>(
       'emits error and clears localQuantities when use case returns error',
       build: buildBloc,
       setUp: () {
-        when(mockUpdateQuantityUseCase(tRequestModel)).thenAnswer(
+        when(mockUpdateQuantityUseCase.execute(request: tRequestModel)).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception(tErrorMessage)),
         );
       },
-      act: (bloc) => bloc.add(
+      act: (bloc) => bloc.doEvent(
         UpdateQuantityEvent(requestModel: tRequestModel),
       ),
       wait: const Duration(milliseconds: 600),
@@ -198,15 +198,15 @@ void main() {
   });
 
   group('RemoveProductfromCart', () {
-    blocTest<CartBloc, CartState>(
+    blocTest<CartViewModel, CartState>(
       'emits loading then success when use case returns success',
       build: buildBloc,
       setUp: () {
         when(
-          mockRemoveProductFromCartUseCase(tRequestModel.productId),
+          mockRemoveProductFromCartUseCase.execute(productId: tRequestModel.productId),
         ).thenAnswer((_) async => SuccessBaseResponse(data: tCartEntity));
       },
-      act: (bloc) => bloc.add(RemoveProductfromCartEvent(productId: tRequestModel.productId)),
+      act: (bloc) => bloc.doEvent(RemoveProductfromCartEvent(productId: tRequestModel.productId)),
       expect: () => [
         CartState(removeItemState: BaseState.loading()),
         CartState(
@@ -216,15 +216,15 @@ void main() {
       ],
     );
 
-    blocTest<CartBloc, CartState>(
+    blocTest<CartViewModel, CartState>(
       'emits loading then error when use case returns error',
       build: buildBloc,
       setUp: () {
-        when(mockRemoveProductFromCartUseCase(tRequestModel.productId)).thenAnswer(
+        when(mockRemoveProductFromCartUseCase.execute(productId: tRequestModel.productId)).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception(tErrorMessage)),
         );
       },
-      act: (bloc) => bloc.add(RemoveProductfromCartEvent(productId: tRequestModel.productId)),
+      act: (bloc) => bloc.doEvent(RemoveProductfromCartEvent(productId: tRequestModel.productId)),
       expect: () => [
         CartState(removeItemState: BaseState.loading()),
         CartState(removeItemState: BaseState.error(tErrorMessage)),
@@ -233,15 +233,15 @@ void main() {
   });
 
   group('ClearCartEvent', () {
-    blocTest<CartBloc, CartState>(
+    blocTest<CartViewModel, CartState>(
       'emits loading then success when use case returns success',
       build: buildBloc,
       setUp: () {
         when(
-          mockClearCartUseCase(),
+          mockClearCartUseCase.execute(),
         ).thenAnswer((_) async => SuccessBaseResponse(data: tEmptyCartEntity));
       },
-      act: (bloc) => bloc.add(const ClearCartEvent()),
+      act: (bloc) => bloc.doEvent(const ClearCartEvent()),
       expect: () => [
         CartState(clearCartState: BaseState.loading()),
         CartState(
@@ -251,15 +251,15 @@ void main() {
       ],
     );
 
-    blocTest<CartBloc, CartState>(
+    blocTest<CartViewModel, CartState>(
       'emits loading then error when use case returns error',
       build: buildBloc,
       setUp: () {
-        when(mockClearCartUseCase()).thenAnswer(
+        when(mockClearCartUseCase.execute()).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception(tErrorMessage)),
         );
       },
-      act: (bloc) => bloc.add(const ClearCartEvent()),
+      act: (bloc) => bloc.doEvent(const ClearCartEvent()),
       expect: () => [
         CartState(clearCartState: BaseState.loading()),
         CartState(clearCartState: BaseState.error(tErrorMessage)),

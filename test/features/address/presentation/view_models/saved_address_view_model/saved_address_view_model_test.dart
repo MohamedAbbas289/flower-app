@@ -28,8 +28,8 @@ void main() {
     provideDummy<BaseResponse<List<AddressEntity>>>(
       ErrorBaseResponse<List<AddressEntity>>(exception: Exception()),
     );
-    provideDummy<BaseResponse<void>>(SuccessBaseResponse<void>(data: null));
-    provideDummy<BaseResponse<void>>(ErrorBaseResponse<void>(exception: Exception()));
+    provideDummy<BaseResponse<bool>>(SuccessBaseResponse<bool>(data: true));
+    provideDummy<BaseResponse<bool>>(ErrorBaseResponse<bool>(exception: Exception()));
   });
 
   setUp(() {
@@ -44,7 +44,7 @@ void main() {
     blocTest<SavedAddressViewModel, SavedAddressStates>(
       'emits loading then success with the loaded addresses',
       build: () {
-        when(getAddressesUseCase()).thenAnswer(
+        when(getAddressesUseCase.execute()).thenAnswer(
           (_) async => SuccessBaseResponse<List<AddressEntity>>(
             data: const [tAddress1, tAddress2],
           ),
@@ -63,7 +63,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(getAddressesUseCase()).called(1);
+        verify(getAddressesUseCase.execute()).called(1);
         verifyNoMoreInteractions(getAddressesUseCase);
       },
     );
@@ -71,7 +71,7 @@ void main() {
     blocTest<SavedAddressViewModel, SavedAddressStates>(
       'emits loading then error when use case fails',
       build: () {
-        when(getAddressesUseCase()).thenAnswer(
+        when(getAddressesUseCase.execute()).thenAnswer(
           (_) async => ErrorBaseResponse<List<AddressEntity>>(exception: Exception()),
         );
         return buildViewModel();
@@ -86,7 +86,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(getAddressesUseCase()).called(1);
+        verify(getAddressesUseCase.execute()).called(1);
         verifyNoMoreInteractions(getAddressesUseCase);
       },
     );
@@ -101,8 +101,8 @@ void main() {
         ),
       ),
       build: () {
-        when(deleteAddressUseCase('1')).thenAnswer(
-          (_) async => SuccessBaseResponse<void>(data: null),
+        when(deleteAddressUseCase.execute(id: '1')).thenAnswer(
+          (_) async => SuccessBaseResponse<bool>(data: true),
         );
         return buildViewModel();
       },
@@ -122,7 +122,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(deleteAddressUseCase('1')).called(1);
+        verify(deleteAddressUseCase.execute(id: '1')).called(1);
         verifyNoMoreInteractions(deleteAddressUseCase);
       },
     );
@@ -130,8 +130,8 @@ void main() {
     blocTest<SavedAddressViewModel, SavedAddressStates>(
       'emits error state when delete use case fails',
       build: () {
-        when(deleteAddressUseCase('1')).thenAnswer(
-          (_) async => ErrorBaseResponse<void>(exception: Exception()),
+        when(deleteAddressUseCase.execute(id: '1')).thenAnswer(
+          (_) async => ErrorBaseResponse<bool>(exception: Exception()),
         );
         return buildViewModel();
       },
@@ -145,7 +145,7 @@ void main() {
         ),
       ],
       verify: (_) {
-        verify(deleteAddressUseCase('1')).called(1);
+        verify(deleteAddressUseCase.execute(id: '1')).called(1);
         verifyNoMoreInteractions(deleteAddressUseCase);
       },
     );

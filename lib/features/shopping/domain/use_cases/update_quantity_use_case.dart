@@ -10,7 +10,9 @@ class UpdateQuantityUseCase {
 
   UpdateQuantityUseCase(this._shoppingRepositoryContract);
 
-  Future<BaseResponse<CartEntity>> call(CartRequestModel requestModel) async {
-    return await _shoppingRepositoryContract.updateQuantity(requestModel);
+  Future<BaseResponse<CartEntity>> execute({
+    required CartRequestModel request,
+  }) async {
+    return await _shoppingRepositoryContract.updateQuantity(request);
   }
 }

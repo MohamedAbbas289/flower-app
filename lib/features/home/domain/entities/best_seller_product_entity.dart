@@ -31,6 +31,9 @@ class BestSellerProductEntity extends Equatable implements ProductCardData {
   int? get discountPercent => discount;
 
   @override
+  int? get availableQuantity => quantity;
+
+  @override
   String get id => productId ?? '';
 
   @override

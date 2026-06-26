@@ -24,7 +24,7 @@ abstract interface class ShoppingRemoteDataSourceContract {
 
   Future<BaseResponse<CartResponseModel>> clearCart();
 
-  Future<OrdersResponse> getOrders();
+  Future<BaseResponse<OrdersResponse>> getOrders();
 
   Future<BaseResponse<CashOrderResponseModel>> createCashOrder(
     PaymentRequestModel requestModel,

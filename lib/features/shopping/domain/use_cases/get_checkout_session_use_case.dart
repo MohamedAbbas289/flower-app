@@ -10,9 +10,9 @@ class GetCheckoutSessionUseCase {
 
   GetCheckoutSessionUseCase(this._repo);
 
-  Future<BaseResponse<CheckoutSessionEntity>> call(
-    PaymentRequestModel requestModel,
-  ) async {
-    return await _repo.createCheckoutSession(requestModel);
+  Future<BaseResponse<CheckoutSessionEntity>> execute({
+    required PaymentRequestModel request,
+  }) async {
+    return await _repo.createCheckoutSession(request);
   }
 }

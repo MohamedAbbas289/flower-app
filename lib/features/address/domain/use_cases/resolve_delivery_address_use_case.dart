@@ -3,7 +3,7 @@ import 'package:flower_app/config/firebase/last_address_firestore_service.dart';
 import 'package:flower_app/core/services/geocoding_service.dart';
 import 'package:flower_app/core/services/location_service.dart';
 import 'package:flower_app/features/address/domain/entities/address_entity.dart';
-import 'package:flower_app/features/address/domain/entities/delivery_address_display.dart';
+import 'package:flower_app/features/address/domain/display_states/delivery_address_display.dart';
 import 'package:flower_app/features/address/domain/use_cases/saved_address_use_case.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:injectable/injectable.dart';
@@ -22,15 +22,13 @@ class ResolveDeliveryAddressUseCase {
     this._lastAddressFirestoreService,
   );
 
-  Future<DeliveryAddressDisplayState> call() async {
+  Future<DeliveryAddressDisplayState> execute() async {
     final hasPermission = await _locationService.resolvePermission();
 
-    final response = await _getAddressesUseCase();
+    final response = await _getAddressesUseCase.execute();
     final addresses = switch (response) {
       SuccessBaseResponse(data: final data) => data,
-      ErrorBaseResponse(errorMessage: final errorMessage) => throw Exception(
-        errorMessage,
-      ),
+      ErrorBaseResponse() => <AddressEntity>[],
     };
 
     if (!hasPermission) {

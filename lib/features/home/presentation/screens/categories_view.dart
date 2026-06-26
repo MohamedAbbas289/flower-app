@@ -10,7 +10,7 @@ import 'package:flower_app/core/utils/cart_helpers.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
-import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_bloc.dart';
+import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_view_model.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/cart_view_model/cart_state.dart';
 import 'package:flower_app/features/home/presentation/widgets/categories_filter_bottom_sheet.dart';
 import 'package:flower_app/features/home/presentation/view_models/categories_view_model/categories_events.dart';
@@ -179,7 +179,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                         }
 
                         final vm = context.read<CategoriesViewModel>();
-                        return BlocBuilder<CartBloc, CartState>(
+                        return BlocBuilder<CartViewModel, CartState>(
                           buildWhen: (prev, curr) =>
                               prev.cartState != curr.cartState,
                           builder: (context, cartState) {
@@ -190,7 +190,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                               onAddToCart: (productId) => getIt<CartHelpers>()
                                   .addToCart(context, productId),
                               onRemoveFromCart: (productId) =>
-                                  getIt<CartHelpers>().removeFromCart(
+                                  getIt<CartHelpers>().removeFromCartWithDialog(
                                     context,
                                     productId,
                                   ),

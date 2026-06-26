@@ -8,39 +8,37 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class ProductDetailsCubit extends Cubit<ProductDetailsBaseState> {
+class ProductDetailsViewModel extends Cubit<ProductDetailsBaseState> {
   final ProductDetailsUseCase _productDetailsUseCase;
 
-  ProductDetailsCubit(this._productDetailsUseCase)
+  ProductDetailsViewModel(this._productDetailsUseCase)
     : super(const ProductDetailsBaseState());
 
   void doEvent(ProductDetailsEvent event) {
     switch (event) {
       case GetProductDetailsEvent():
         _getProductDetails(event.productId);
-        break;
     }
   }
 
   Future<void> _getProductDetails(String productId) async {
+    if (isClosed) return;
     emit(state.copyWith(productDetailsState: BaseState.loading()));
-    final response = await _productDetailsUseCase.getProductDetails(
-      productId: productId,
-    );
-
+    final response = await _productDetailsUseCase.execute(productId: productId);
+    if (isClosed) return;
     switch (response) {
       case SuccessBaseResponse<ProductDetailsEntity>():
         emit(
-          state.copyWith(productDetailsState: BaseState.success(response.data)),
+          state.copyWith(
+            productDetailsState: BaseState.success(response.data),
+          ),
         );
-        break;
       case ErrorBaseResponse<ProductDetailsEntity>():
         emit(
           state.copyWith(
             productDetailsState: BaseState.error(response.errorMessage),
           ),
         );
-        break;
     }
   }
 }

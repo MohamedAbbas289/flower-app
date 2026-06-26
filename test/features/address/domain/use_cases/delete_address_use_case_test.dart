@@ -28,7 +28,7 @@ void main() {
         (_) async => SuccessBaseResponse<bool>(data: true),
       );
 
-      final dynamic result = await useCase('1');
+      final result = await useCase.execute(id: '1');
 
       expect(result, isA<SuccessBaseResponse<bool>>());
       expect((result as SuccessBaseResponse<bool>).data, true);
@@ -44,7 +44,7 @@ void main() {
         (_) async => ErrorBaseResponse<bool>(exception: exception),
       );
 
-      final dynamic result = await useCase('1');
+      final result = await useCase.execute(id: '1');
 
       expect(result, isA<ErrorBaseResponse<bool>>());
       expect((result as ErrorBaseResponse<bool>).exception, exception);

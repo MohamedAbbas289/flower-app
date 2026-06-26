@@ -8,7 +8,7 @@ class DeleteAddressUseCase {
 
   DeleteAddressUseCase(this._repo);
 
-  Future<BaseResponse<void>> call(String id) async {
+  Future<BaseResponse<bool>> execute({required String id}) async {
     return await _repo.deleteAddress(id);
   }
 }

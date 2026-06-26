@@ -73,7 +73,7 @@ class _ProductCardContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AspectRatio(
-            aspectRatio: 1 / 0.72,
+            aspectRatio: 1 / 0.76,
             child: ProductImage(
               size: size,
               devicePixelRatio: devicePixelRatio,
@@ -86,10 +86,11 @@ class _ProductCardContent extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: _ProductInfo(product: product, size: size),
           ),
-          const SizedBox(height: 8),
+          Spacer(),
           _AddToCartButton(
             size: size,
             isInCart: isInCart,
+            availableQuantity: product.availableQuantity,
             onAddToCart: onAddToCart != null
                 ? () => onAddToCart!(product.id)
                 : null,
@@ -176,17 +177,42 @@ class _AddToCartButton extends StatelessWidget {
   const _AddToCartButton({
     required this.size,
     required this.isInCart,
+    this.availableQuantity,
     this.onAddToCart,
     this.onRemoveFromCart,
   });
 
   final Size size;
   final bool isInCart;
+  final int? availableQuantity;
   final VoidCallback? onAddToCart;
   final VoidCallback? onRemoveFromCart;
 
+  bool get _isOutOfStock =>
+      availableQuantity != null && availableQuantity! <= 0;
+
   @override
   Widget build(BuildContext context) {
+    if (_isOutOfStock && !isInCart) {
+      return SizedBox(
+        width: double.infinity,
+        height: 30,
+        child: FilledButton(
+          onPressed: null,
+          style: FilledButton.styleFrom(
+            backgroundColor: AppColors.gray,
+            disabledBackgroundColor: AppColors.gray,
+          ),
+          child: Text(
+            AppStrings.outOfStock,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: TextStyles.buttonTextStyle,
+          ),
+        ),
+      );
+    }
+
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       child: SizedBox(

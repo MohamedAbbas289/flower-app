@@ -3,7 +3,7 @@ import 'package:flower_app/config/firebase/last_address_firestore_service.dart';
 import 'package:flower_app/core/services/geocoding_service.dart';
 import 'package:flower_app/core/services/location_service.dart';
 import 'package:flower_app/features/address/domain/entities/address_entity.dart';
-import 'package:flower_app/features/address/domain/entities/delivery_address_display.dart';
+import 'package:flower_app/features/address/domain/display_states/delivery_address_display.dart';
 import 'package:flower_app/features/address/domain/use_cases/resolve_delivery_address_use_case.dart';
 import 'package:flower_app/features/address/domain/use_cases/saved_address_use_case.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -75,7 +75,7 @@ void main() {
 
   void stubAddresses(List<AddressEntity> addresses) {
     when(
-      getAddressesUseCase(),
+      getAddressesUseCase.execute(),
     ).thenAnswer((_) async => SuccessBaseResponse(data: addresses));
   }
 
@@ -84,7 +84,7 @@ void main() {
       when(locationService.resolvePermission()).thenAnswer((_) async => false);
       stubAddresses(const []);
 
-      final result = await buildUseCase()();
+      final result = await buildUseCase().execute();
 
       expect(result, const NoAddressDisplay());
       verifyNever(locationService.getCurrentPosition());
@@ -97,7 +97,7 @@ void main() {
         lastAddressFirestoreService.getLastAddress(),
       ).thenAnswer((_) async => tAddress1);
 
-      final result = await buildUseCase()();
+      final result = await buildUseCase().execute();
 
       expect(result, const SavedAddressDisplay(tAddress1, isNearest: false));
     });
@@ -113,7 +113,7 @@ void main() {
           lastAddressFirestoreService.getLastAddress(),
         ).thenAnswer((_) async => null);
 
-        final result = await buildUseCase()();
+        final result = await buildUseCase().execute();
 
         expect(result, const SavedAddressDisplay(tAddress2, isNearest: false));
       },
@@ -125,13 +125,13 @@ void main() {
         when(
           locationService.resolvePermission(),
         ).thenAnswer((_) async => false);
-        when(getAddressesUseCase()).thenAnswer(
+        when(getAddressesUseCase.execute()).thenAnswer(
           (_) async => ErrorBaseResponse<List<AddressEntity>>(
             exception: Exception('boom'),
           ),
         );
 
-        final result = await buildUseCase()();
+        final result = await buildUseCase().execute();
 
         expect(result, const NoAddressDisplay());
       },
@@ -154,7 +154,7 @@ void main() {
         (_) async => const ReverseGeocodeResult(formatted: 'Some Area, City'),
       );
 
-      final result = await buildUseCase()();
+      final result = await buildUseCase().execute();
 
       expect(result, const CurrentLocationDisplay('Some Area, City'));
     });
@@ -172,7 +172,7 @@ void main() {
         ),
       ).thenAnswer((_) async => null);
 
-      final result = await buildUseCase()();
+      final result = await buildUseCase().execute();
 
       expect(
         result,
@@ -190,7 +190,7 @@ void main() {
         locationService.getCurrentPosition(),
       ).thenAnswer((_) async => null);
 
-      final result = await buildUseCase()();
+      final result = await buildUseCase().execute();
 
       expect(result, const NoAddressDisplay());
     });
@@ -220,7 +220,7 @@ void main() {
         ),
       ).thenReturn(100);
 
-      final result = await buildUseCase()();
+      final result = await buildUseCase().execute();
 
       expect(result, const SavedAddressDisplay(tAddress2, isNearest: true));
     });
@@ -244,7 +244,7 @@ void main() {
           lastAddressFirestoreService.getLastAddress(),
         ).thenAnswer((_) async => null);
 
-        final result = await buildUseCase()();
+        final result = await buildUseCase().execute();
 
         expect(
           result,
@@ -267,7 +267,7 @@ void main() {
           lastAddressFirestoreService.getLastAddress(),
         ).thenAnswer((_) async => tAddress1);
 
-        final result = await buildUseCase()();
+        final result = await buildUseCase().execute();
 
         expect(result, const SavedAddressDisplay(tAddress1, isNearest: false));
       },

@@ -5,4 +5,5 @@ abstract interface class ProductCardData {
   int get price;
   int? get originalPrice;
   int? get discountPercent;
+  int? get availableQuantity;
 }

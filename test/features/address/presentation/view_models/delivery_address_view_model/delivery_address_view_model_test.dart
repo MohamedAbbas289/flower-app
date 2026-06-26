@@ -1,14 +1,11 @@
-import 'dart:async';
-
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/features/address/domain/display_states/delivery_address_display.dart';
 import 'package:flower_app/features/address/domain/entities/address_entity.dart';
-import 'package:flower_app/features/address/domain/entities/delivery_address_display.dart';
 import 'package:flower_app/features/address/domain/use_cases/resolve_delivery_address_use_case.dart';
-import 'package:flower_app/features/address/presentation/view_models/delivery_address_view_model/delivery_address_view_model.dart';
 import 'package:flower_app/features/address/presentation/view_models/delivery_address_view_model/delivery_address_events.dart';
 import 'package:flower_app/features/address/presentation/view_models/delivery_address_view_model/delivery_address_state.dart';
+import 'package:flower_app/features/address/presentation/view_models/delivery_address_view_model/delivery_address_view_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -51,7 +48,7 @@ void main() {
       'emits loading then success with NoAddressDisplay',
       build: () {
         when(
-          resolveDeliveryAddressUseCase(),
+          resolveDeliveryAddressUseCase.execute(),
         ).thenAnswer((_) async => const NoAddressDisplay());
         return buildViewModel();
       },
@@ -68,12 +65,16 @@ void main() {
           ),
         ),
       ],
+      verify: (_) {
+        verify(resolveDeliveryAddressUseCase.execute()).called(1);
+        verifyNoMoreInteractions(resolveDeliveryAddressUseCase);
+      },
     );
 
     blocTest<DeliveryAddressViewModel, DeliveryAddressState>(
       'emits loading then success with the resolved SavedAddressDisplay',
       build: () {
-        when(resolveDeliveryAddressUseCase()).thenAnswer(
+        when(resolveDeliveryAddressUseCase.execute()).thenAnswer(
           (_) async => const SavedAddressDisplay(tAddress, isNearest: true),
         );
         return buildViewModel();
@@ -91,13 +92,17 @@ void main() {
           ),
         ),
       ],
+      verify: (_) {
+        verify(resolveDeliveryAddressUseCase.execute()).called(1);
+        verifyNoMoreInteractions(resolveDeliveryAddressUseCase);
+      },
     );
 
     blocTest<DeliveryAddressViewModel, DeliveryAddressState>(
-      'emits loading then locationTimeout error when location fetch times out',
+      'emits loading then success with CurrentLocationDisplay',
       build: () {
-        when(resolveDeliveryAddressUseCase()).thenThrow(
-          TimeoutException('Location request timed out'),
+        when(resolveDeliveryAddressUseCase.execute()).thenAnswer(
+          (_) async => const CurrentLocationDisplay('Some Area, City'),
         );
         return buildViewModel();
       },
@@ -108,33 +113,16 @@ void main() {
             isLoading: true,
           ),
         ),
-        DeliveryAddressState(
-          deliveryAddressState: BaseState<DeliveryAddressDisplayState>.error(
-            AppStrings.locationTimeout,
-          ),
-        ),
-      ],
-    );
-
-    blocTest<DeliveryAddressViewModel, DeliveryAddressState>(
-      'emits loading then somethingWentWrong error on other failures',
-      build: () {
-        when(resolveDeliveryAddressUseCase()).thenThrow(Exception('boom'));
-        return buildViewModel();
-      },
-      act: (vm) => vm.doEvent(const LoadDeliveryAddressEvent()),
-      expect: () => [
         const DeliveryAddressState(
           deliveryAddressState: BaseState<DeliveryAddressDisplayState>(
-            isLoading: true,
-          ),
-        ),
-        DeliveryAddressState(
-          deliveryAddressState: BaseState<DeliveryAddressDisplayState>.error(
-            AppStrings.somethingWentWrong,
+            data: CurrentLocationDisplay('Some Area, City'),
           ),
         ),
       ],
+      verify: (_) {
+        verify(resolveDeliveryAddressUseCase.execute()).called(1);
+        verifyNoMoreInteractions(resolveDeliveryAddressUseCase);
+      },
     );
   });
 }
