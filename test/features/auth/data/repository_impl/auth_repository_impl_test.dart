@@ -1,5 +1,6 @@
 import 'package:flower_app/config/auth/auth_manager.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/config/firebase/firestore_service.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/core/models/auth_response.dart';
 import 'package:flower_app/core/models/user_model.dart';
@@ -14,10 +15,11 @@ import 'package:test/test.dart';
 
 import 'auth_repository_impl_test.mocks.dart';
 
-@GenerateMocks([AuthRemoteDataSourceContract, AuthManager])
+@GenerateMocks([AuthRemoteDataSourceContract, AuthManager, FirestoreService])
 void main() {
   late MockAuthRemoteDataSourceContract mockRemoteDataSource;
   late MockAuthManager mockAuthManager;
+  late MockFirestoreService mockFirestoreService;
   late AuthRepositoryImpl repo;
 
   setUpAll(() {
@@ -40,7 +42,12 @@ void main() {
   setUp(() {
     mockRemoteDataSource = MockAuthRemoteDataSourceContract();
     mockAuthManager = MockAuthManager();
-    repo = AuthRepositoryImpl(mockRemoteDataSource, mockAuthManager);
+    mockFirestoreService = MockFirestoreService();
+    repo = AuthRepositoryImpl(
+      mockRemoteDataSource,
+      mockAuthManager,
+      mockFirestoreService,
+    );
   });
 
   group('signup', () {

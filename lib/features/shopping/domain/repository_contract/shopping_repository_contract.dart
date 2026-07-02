@@ -33,4 +33,5 @@ abstract interface class ShoppingRepositoryContract {
   Future<BaseResponse<ProductDetailsEntity>> getProductDetails({
     required String productId,
   });
+
 }

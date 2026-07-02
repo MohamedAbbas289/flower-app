@@ -29,3 +29,7 @@ class PlaceOrderEvent extends CheckoutEvent {
   final String? giftPhone;
   const PlaceOrderEvent({this.giftName, this.giftPhone});
 }
+
+class ResetPlaceOrderStateEvent extends CheckoutEvent {
+  const ResetPlaceOrderStateEvent();
+}

@@ -26,7 +26,10 @@ import '../../features/address/presentation/view_models/edit_address_view_model/
 import '../../features/shopping/presentation/screens/checkout_arguments.dart';
 import '../../features/shopping/presentation/screens/checkout_view.dart';
 import '../../features/shopping/presentation/screens/orders_screen.dart';
+import '../../features/shopping/presentation/screens/track_order_screen.dart';
+import '../../features/home/presentation/screens/notification_screen.dart';
 import '../../features/home/presentation/screens/search_screen.dart';
+import '../../features/shopping/presentation/screens/order_success_screen.dart';
 
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -121,6 +124,22 @@ class AppRoutes {
             value: getIt<CartViewModel>(),
             child: const SearchScreen(),
           ),
+        );
+
+      case AppRoutesName.trackOrder:
+        final orderId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => TrackOrderScreen(orderId: orderId),
+        );
+
+      case AppRoutesName.notifications:
+        return MaterialPageRoute(
+          builder: (_) => const NotificationScreen(),
+        );
+
+      case AppRoutesName.orderSuccess:
+        return MaterialPageRoute(
+          builder: (_) => const OrderSuccessScreen(),
         );
 
       default:

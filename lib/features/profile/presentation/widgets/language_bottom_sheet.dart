@@ -1,4 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flower_app/config/di/di.dart';
+import 'package:flower_app/config/firebase/firestore_service.dart';
+import 'package:flower_app/config/secure_storage/secure_storage_service.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_strings.dart';
@@ -20,6 +23,19 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
     _selectedLanguage = context.locale.languageCode;
   }
 
+  Future<void> _changeLanguage(String languageCode) async {
+    setState(() => _selectedLanguage = languageCode);
+    context.setLocale(Locale(languageCode));
+    if (context.mounted) Navigator.pop(context);
+    final userId = await getIt<SecureStorageService>().readUserId();
+    if (userId != null && userId.isNotEmpty) {
+      await getIt<FirestoreService>().updateUserLanguage(
+        userId: userId,
+        language: languageCode,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,11 +46,7 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
       ),
       child: RadioGroup<String>(
         groupValue: _selectedLanguage,
-        onChanged: (v) {
-          setState(() => _selectedLanguage = v!);
-          context.setLocale(Locale(v!));
-          Navigator.pop(context);
-        },
+        onChanged: (v) => _changeLanguage(v!),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,11 +79,7 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
 
   Widget _buildLanguageOption({required String label, required String value}) {
     return InkWell(
-      onTap: () {
-        setState(() => _selectedLanguage = value);
-        context.setLocale(Locale(value));
-        Navigator.pop(context);
-      },
+      onTap: () => _changeLanguage(value),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: Row(

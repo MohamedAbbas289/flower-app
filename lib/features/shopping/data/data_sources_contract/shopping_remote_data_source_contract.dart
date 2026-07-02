@@ -37,4 +37,5 @@ abstract interface class ShoppingRemoteDataSourceContract {
   Future<BaseResponse<ProductDetailsResponse>> getProductDetails({
     required String productId,
   });
+
 }

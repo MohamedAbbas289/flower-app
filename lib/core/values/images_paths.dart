@@ -12,8 +12,6 @@ class Assets {
 
   static const String assetsIconsArrowBack = "assets/icons/arrow_back.svg";
 
-  static const String assetsIconsCall = "assets/icons/call.svg";
-
   static const String assetsIconsCancel = "assets/icons/cancel.svg";
 
   static const String assetsIconsCategories = "assets/icons/categories.svg";
@@ -60,6 +58,8 @@ class Assets {
 
   static const String assetsIconsPerson = "assets/icons/person.svg";
 
+  static const String assetsIconsPhoneCall = "assets/icons/phone_call.svg";
+
   static const String assetsIconsPhotoCamera = "assets/icons/photo_camera.svg";
 
   static const String assetsIconsRemove = "assets/icons/remove.svg";
@@ -88,7 +88,11 @@ class Assets {
 
   static const String assetsIconsVisibilityOn = "assets/icons/visibility_on.svg";
 
+  static const String assetsIconsWhatsapp = "assets/icons/whatsapp.svg";
+
   static const String assetsImagesAppIcon = "assets/images/app_icon.png";
+
+  static const String assetsImagesCar = "assets/images/car.png";
 
   static const String assetsImagesPen = "assets/images/pen.svg";
 

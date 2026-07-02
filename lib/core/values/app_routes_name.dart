@@ -23,4 +23,7 @@ abstract class AppRoutesName {
   static const myOrders = '/myOrdersView';
   static const addresses = '/addresses';
   static const search = '/searchView';
+  static const trackOrder = '/trackOrderView';
+  static const notifications = '/notificationsView';
+  static const orderSuccess = '/orderSuccessView';
 }

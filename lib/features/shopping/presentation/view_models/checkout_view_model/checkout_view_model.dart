@@ -40,6 +40,8 @@ class CheckoutViewModel extends Cubit<CheckoutStates> {
         emit(state.copyWith(isGift: event.value));
       case PlaceOrderEvent():
         _placeOrder(giftName: event.giftName, giftPhone: event.giftPhone);
+      case ResetPlaceOrderStateEvent():
+        emit(state.copyWith(placeOrderState: const BaseState()));
     }
   }
 

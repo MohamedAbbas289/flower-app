@@ -4,11 +4,12 @@ import 'package:flower_app/config/auth/auth_manager.dart';
 import 'package:flower_app/features/address/data/models/add_address_dto.dart';
 import 'package:flower_app/features/address/domain/entities/address_entity.dart';
 import 'package:flower_app/features/address/domain/mappers/address_mapper.dart';
+import 'package:flower_app/core/values/firestore_keys.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
 class LastAddressFirestoreService {
-  static const _collection = 'user_last_address';
+  static const _collection = FirestoreKeys.userLastAddressCollection;
   static const _timeout = Duration(seconds: 10);
 
   final FirebaseFirestore _firestore;

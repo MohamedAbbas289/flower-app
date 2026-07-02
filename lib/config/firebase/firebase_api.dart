@@ -1,7 +1,14 @@
 import 'dart:developer';
 import 'dart:io';
 import 'dart:convert';
+import 'dart:ui';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flower_app/config/auth/auth_manager.dart';
+import 'package:flower_app/config/di/di.dart';
+import 'package:flower_app/config/firebase/firestore_service.dart';
+import 'package:flower_app/core/values/firebase_constants.dart';
+import 'package:flower_app/features/home/data/models/notification_model.dart';
+import 'package:flower_app/features/home/data/services/notification_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 @pragma('vm:entry-point')
@@ -43,7 +50,6 @@ class FirebaseApi {
 
   Future<void> initNotification() async {
     try {
-      // 1. Request Permission
       final settings = await _firebaseMessaging.requestPermission(
         alert: true,
         announcement: false,
@@ -55,7 +61,6 @@ class FirebaseApi {
       );
       log('Notification permission: ${settings.authorizationStatus}');
 
-      // 2. iOS: check APNs availability — skip gracefully if not configured
       if (Platform.isIOS) {
         try {
           final apnsToken = await FirebaseMessaging.instance
@@ -63,9 +68,7 @@ class FirebaseApi {
               .timeout(const Duration(seconds: 5));
 
           if (apnsToken == null) {
-            log(
-              '⚠️ iOS Push Notifications: Not available for now (APNs not configured)',
-            );
+            log('⚠️ iOS Push Notifications: Not available for now (APNs not configured)');
             return;
           }
           log('APNs token ready: $apnsToken');
@@ -75,22 +78,39 @@ class FirebaseApi {
         }
       }
 
-      // 3. Get FCM Token
       final fcmToken = await _firebaseMessaging.getToken();
-      log('====================================================');
-      log('FCM TOKEN: $fcmToken');
-      log('====================================================');
+      log('FCM token retrieved: ${fcmToken != null}');
 
-      // 4. Token refresh
+      if (fcmToken != null) {
+        final authManager = getIt<AuthManager>();
+        final userId = authManager.userId;
+        if (userId != null && userId.isNotEmpty) {
+          final rawLang = PlatformDispatcher.instance.locale.languageCode;
+          final language = rawLang == 'ar' ? 'ar' : 'en';
+          await getIt<FirestoreService>().saveUserFcmData(
+            userId: userId,
+            fcmToken: fcmToken,
+            language: language,
+          );
+        }
+      }
+
       _firebaseMessaging.onTokenRefresh.listen((newToken) {
-        log('🔄 FCM Token Refreshed: $newToken');
-        // TODO: send to backend
+        final authManager = getIt<AuthManager>();
+        final userId = authManager.userId;
+        if (userId != null && userId.isNotEmpty) {
+          final rawLang = PlatformDispatcher.instance.locale.languageCode;
+          final language = rawLang == 'ar' ? 'ar' : 'en';
+          getIt<FirestoreService>().saveUserFcmData(
+            userId: userId,
+            fcmToken: newToken,
+            language: language,
+          );
+        }
       });
 
-      // 5. Local Notifications init
       await initLocalNotifications();
 
-      // 6. iOS foreground presentation (iOS only)
       if (Platform.isIOS) {
         await _firebaseMessaging.setForegroundNotificationPresentationOptions(
           alert: true,
@@ -99,11 +119,10 @@ class FirebaseApi {
         );
       }
 
-      // 7. Android high importance channel
       const AndroidNotificationChannel channel = AndroidNotificationChannel(
-        'high_importance_channel',
-        'High Importance Notifications',
-        description: 'This channel is used for important notifications.',
+        FirebaseConstants.highImportanceChannelId,
+        FirebaseConstants.highImportanceChannelName,
+        description: FirebaseConstants.highImportanceChannelDescription,
         importance: Importance.max,
       );
 
@@ -113,7 +132,6 @@ class FirebaseApi {
           >();
       await androidPlugin?.createNotificationChannel(channel);
 
-      // 8. Foreground messages
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         final notification = message.notification;
         final android = message.notification?.android;
@@ -137,18 +155,26 @@ class FirebaseApi {
             payload: jsonEncode(message.data),
           );
         }
+        if (notification != null) {
+          getIt<NotificationService>().addNotification(
+            NotificationModel(
+              id: message.messageId ?? DateTime.now().toIso8601String(),
+              title: notification.title ?? '',
+              body: notification.body ?? '',
+              receivedAt: DateTime.now(),
+              isRead: false,
+            ),
+          );
+        }
         log('Foreground message: ${message.messageId}');
       });
 
-      // 9. Background messages
       FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
 
-      // 10. App opened from background
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
         log('App opened from notification: ${message.messageId}');
       });
 
-      // 11. App opened from terminated state
       final initialMessage = await _firebaseMessaging.getInitialMessage();
       if (initialMessage != null) {
         log('App launched from notification: ${initialMessage.messageId}');
