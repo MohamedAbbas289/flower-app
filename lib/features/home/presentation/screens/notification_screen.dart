@@ -1,6 +1,7 @@
 import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
+import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/home/data/models/notification_model.dart';
 import 'package:flower_app/features/home/presentation/view_models/notification_view_model/notification_event.dart';
 import 'package:flower_app/features/home/presentation/view_models/notification_view_model/notification_state.dart';
