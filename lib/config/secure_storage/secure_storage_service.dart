@@ -148,6 +148,18 @@ class SecureStorageService {
     return value == null ? true : value == 'true';
   }
 
+  Future<void> writeLanguage(String language) async {
+    await _secureStorage.write(
+      key: SecureStorageKeys.language,
+      value: language,
+    );
+  }
+
+  Future<String> readLanguage() async {
+    final value = await _secureStorage.read(key: SecureStorageKeys.language);
+    return value ?? 'en';
+  }
+
   Future<void> clearAll() async {
     try {
       await _secureStorage.deleteAll();

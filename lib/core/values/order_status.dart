@@ -6,4 +6,15 @@ abstract class OrderStatus {
   static const String delivered = 'delivered';
   static const String canceled = 'canceled';
   static const String completed = 'completed';
+
+  static int stepsCompleted(String status) {
+    const map = {
+      accepted: 1,
+      arrivedPickup: 2,
+      outForDelivery: 3,
+      arrivedUser: 4,
+      delivered: 4,
+    };
+    return map[status] ?? 0;
+  }
 }

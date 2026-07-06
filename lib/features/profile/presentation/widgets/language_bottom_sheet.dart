@@ -1,10 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flower_app/config/di/di.dart';
-import 'package:flower_app/config/firebase/firestore_service.dart';
-import 'package:flower_app/config/secure_storage/secure_storage_service.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/features/profile/domain/use_cases/update_language_use_case.dart';
 import 'package:flutter/material.dart';
 
 class LanguageBottomSheet extends StatefulWidget {
@@ -16,6 +15,8 @@ class LanguageBottomSheet extends StatefulWidget {
 
 class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
   late String _selectedLanguage;
+  final UpdateLanguageUseCase _updateLanguageUseCase =
+      getIt<UpdateLanguageUseCase>();
 
   @override
   void didChangeDependencies() {
@@ -27,13 +28,7 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
     setState(() => _selectedLanguage = languageCode);
     context.setLocale(Locale(languageCode));
     if (context.mounted) Navigator.pop(context);
-    final userId = await getIt<SecureStorageService>().readUserId();
-    if (userId != null && userId.isNotEmpty) {
-      await getIt<FirestoreService>().updateUserLanguage(
-        userId: userId,
-        language: languageCode,
-      );
-    }
+    await _updateLanguageUseCase.execute(languageCode);
   }
 
   @override

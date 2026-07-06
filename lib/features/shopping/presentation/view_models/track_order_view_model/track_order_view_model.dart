@@ -4,6 +4,7 @@ import 'package:flower_app/config/base_state/base_state.dart';
 import 'package:flower_app/config/firebase/firestore_service.dart';
 import 'package:flower_app/core/values/firestore_keys.dart';
 import 'package:flower_app/core/values/order_status.dart';
+import 'package:flower_app/features/shopping/domain/use_cases/confirm_delivery_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'track_order_event.dart';
@@ -12,17 +13,10 @@ import 'track_order_state.dart';
 @injectable
 class TrackOrderViewModel extends Bloc<TrackOrderEvent, TrackOrderState> {
   final FirestoreService _firestoreService;
+  final ConfirmDeliveryUseCase _confirmDeliveryUseCase;
   StreamSubscription<DocumentSnapshot>? _orderSubscription;
 
-  static const _statusToSteps = {
-    OrderStatus.accepted: 1,
-    OrderStatus.arrivedPickup: 2,
-    OrderStatus.outForDelivery: 3,
-    OrderStatus.arrivedUser: 4,
-    OrderStatus.delivered: 4,
-  };
-
-  TrackOrderViewModel(this._firestoreService,)
+  TrackOrderViewModel(this._firestoreService, this._confirmDeliveryUseCase)
       : super(const TrackOrderState(isLoading: true)) {
     on<StartListeningEvent>(_onStartListening);
     on<OrderUpdatedEvent>(_onOrderUpdated);
@@ -86,7 +80,7 @@ class TrackOrderViewModel extends Bloc<TrackOrderEvent, TrackOrderState> {
         driverName: event.driverName,
         driverPhone: event.driverPhone,
         userConfirmed: event.userConfirmed,
-        stepsCompleted: _statusToSteps[event.status] ?? 0,
+        stepsCompleted: OrderStatus.stepsCompleted(event.status),
         isLoading: false,
       ),
     );
@@ -98,7 +92,7 @@ class TrackOrderViewModel extends Bloc<TrackOrderEvent, TrackOrderState> {
   ) async {
     emit(state.copyWith(confirmDeliveryState: BaseState.loading()));
     try {
-      await _firestoreService.confirmDelivery(event.orderId);
+      await _confirmDeliveryUseCase.execute(event.orderId);
       emit(state.copyWith(
         userConfirmed: true,
         confirmDeliveryState: BaseState.success(null),

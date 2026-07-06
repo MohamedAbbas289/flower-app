@@ -13,33 +13,29 @@ class FirestoreService {
     required String fcmToken,
     required String language,
   }) async {
-    try {
-      await _firestore
-          .collection(FirestoreKeys.usersCollection)
-          .doc(userId)
-          .set(
-            {
-              FirestoreKeys.fcmToken: fcmToken,
-              FirestoreKeys.language: language,
-            },
-            SetOptions(merge: true),
-          );
-    } catch (_) {}
+    await _firestore
+        .collection(FirestoreKeys.usersCollection)
+        .doc(userId)
+        .set(
+          {
+            FirestoreKeys.fcmToken: fcmToken,
+            FirestoreKeys.language: language,
+          },
+          SetOptions(merge: true),
+        );
   }
 
   Future<void> updateUserLanguage({
     required String userId,
     required String language,
   }) async {
-    try {
-      await _firestore
-          .collection(FirestoreKeys.usersCollection)
-          .doc(userId)
-          .set(
-            {FirestoreKeys.language: language},
-            SetOptions(merge: true),
-          );
-    } catch (_) {}
+    await _firestore
+        .collection(FirestoreKeys.usersCollection)
+        .doc(userId)
+        .set(
+          {FirestoreKeys.language: language},
+          SetOptions(merge: true),
+        );
   }
 
   Stream<DocumentSnapshot> orderStream(String orderId) {

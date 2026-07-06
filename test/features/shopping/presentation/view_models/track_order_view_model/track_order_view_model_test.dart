@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flower_app/config/firebase/firestore_service.dart';
+import 'package:flower_app/features/shopping/domain/use_cases/confirm_delivery_use_case.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/track_order_view_model/track_order_event.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/track_order_view_model/track_order_state.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/track_order_view_model/track_order_view_model.dart';
@@ -12,7 +13,6 @@ import 'package:test/test.dart';
 
 import 'track_order_view_model_test.mocks.dart';
 
-// ignore: subtype_of_sealed_class
 class _FakeDocumentSnapshot extends Fake implements DocumentSnapshot {
   final Map<String, dynamic> _data;
   _FakeDocumentSnapshot(this._data);
@@ -24,23 +24,23 @@ class _FakeDocumentSnapshot extends Fake implements DocumentSnapshot {
   Map<String, dynamic>? data() => _data;
 }
 
-@GenerateMocks([FirestoreService])
+@GenerateMocks([FirestoreService, ConfirmDeliveryUseCase])
 void main() {
   late MockFirestoreService mockFirestoreService;
+  late MockConfirmDeliveryUseCase mockConfirmDeliveryUseCase;
   late TrackOrderViewModel viewModel;
 
   const orderId = 'order123';
 
   setUp(() {
     mockFirestoreService = MockFirestoreService();
+    mockConfirmDeliveryUseCase = MockConfirmDeliveryUseCase();
   });
 
   tearDown(() {
     viewModel.close();
   });
 
-  // Helper — streams a single snapshot (added once a listener subscribes)
-  // then stays open.
   StreamController<DocumentSnapshot> controllerWithSnapshot(
     Map<String, dynamic> data,
   ) {
@@ -55,7 +55,10 @@ void main() {
     test('initial state is loading', () {
       when(mockFirestoreService.orderStream(any))
           .thenAnswer((_) => const Stream.empty());
-      viewModel = TrackOrderViewModel(mockFirestoreService);
+      viewModel = TrackOrderViewModel(
+        mockFirestoreService,
+        mockConfirmDeliveryUseCase,
+      );
       expect(viewModel.state, const TrackOrderState(isLoading: true));
     });
 
@@ -70,7 +73,10 @@ void main() {
         });
         when(mockFirestoreService.orderStream(orderId))
             .thenAnswer((_) => controller.stream);
-        final vm = TrackOrderViewModel(mockFirestoreService);
+        final vm = TrackOrderViewModel(
+          mockFirestoreService,
+          mockConfirmDeliveryUseCase,
+        );
         addTearDown(() => controller.close());
         return vm;
       },
@@ -99,7 +105,10 @@ void main() {
         });
         when(mockFirestoreService.orderStream(orderId))
             .thenAnswer((_) => controller.stream);
-        final vm = TrackOrderViewModel(mockFirestoreService);
+        final vm = TrackOrderViewModel(
+          mockFirestoreService,
+          mockConfirmDeliveryUseCase,
+        );
         addTearDown(() => controller.close());
         return vm;
       },
@@ -123,7 +132,10 @@ void main() {
         });
         when(mockFirestoreService.orderStream(orderId))
             .thenAnswer((_) => controller.stream);
-        final vm = TrackOrderViewModel(mockFirestoreService);
+        final vm = TrackOrderViewModel(
+          mockFirestoreService,
+          mockConfirmDeliveryUseCase,
+        );
         addTearDown(() => controller.close());
         return vm;
       },
@@ -146,7 +158,10 @@ void main() {
         });
         when(mockFirestoreService.orderStream(orderId))
             .thenAnswer((_) => controller.stream);
-        final vm = TrackOrderViewModel(mockFirestoreService);
+        final vm = TrackOrderViewModel(
+          mockFirestoreService,
+          mockConfirmDeliveryUseCase,
+        );
         addTearDown(() => controller.close());
         return vm;
       },
@@ -160,13 +175,16 @@ void main() {
     );
 
     blocTest<TrackOrderViewModel, TrackOrderState>(
-      'ConfirmDeliveryEvent calls FirestoreService and sets userConfirmed=true',
+      'ConfirmDeliveryEvent calls ConfirmDeliveryUseCase and sets userConfirmed=true',
       build: () {
         when(mockFirestoreService.orderStream(orderId))
             .thenAnswer((_) => const Stream.empty());
-        when(mockFirestoreService.confirmDelivery(orderId))
+        when(mockConfirmDeliveryUseCase.execute(orderId))
             .thenAnswer((_) async {});
-        return TrackOrderViewModel(mockFirestoreService);
+        return TrackOrderViewModel(
+          mockFirestoreService,
+          mockConfirmDeliveryUseCase,
+        );
       },
       seed: () => const TrackOrderState(
         status: 'arrived_user',
@@ -192,7 +210,7 @@ void main() {
             ),
       ],
       verify: (_) {
-        verify(mockFirestoreService.confirmDelivery(orderId)).called(1);
+        verify(mockConfirmDeliveryUseCase.execute(orderId)).called(1);
       },
     );
 
@@ -207,7 +225,10 @@ void main() {
         });
         when(mockFirestoreService.orderStream(orderId))
             .thenAnswer((_) => controller.stream);
-        final vm = TrackOrderViewModel(mockFirestoreService);
+        final vm = TrackOrderViewModel(
+          mockFirestoreService,
+          mockConfirmDeliveryUseCase,
+        );
         addTearDown(() => controller.close());
         return vm;
       },
@@ -223,7 +244,10 @@ void main() {
     test('unknown status maps to stepsCompleted=0', () {
       when(mockFirestoreService.orderStream(any))
           .thenAnswer((_) => const Stream.empty());
-      viewModel = TrackOrderViewModel(mockFirestoreService);
+      viewModel = TrackOrderViewModel(
+        mockFirestoreService,
+        mockConfirmDeliveryUseCase,
+      );
       viewModel.add(
         OrderUpdatedEvent(
           status: 'unknown_status',
@@ -232,7 +256,6 @@ void main() {
           userConfirmed: false,
         ),
       );
-      // After microtask, state should reflect stepsCompleted=0
       expect(viewModel.state.stepsCompleted, 0);
     });
   });

@@ -246,4 +246,6 @@ abstract class AppStrings {
   static String get orderReceivedTitle => 'orderReceivedTitle'.tr();
   static String get orderReceivedBody => 'orderReceivedBody'.tr();
   static String get backToHome => 'backToHome'.tr();
+  static String get noNotificationsYet => 'noNotificationsYet'.tr();
+  static String get searchingForDriver => 'searchingForDriver'.tr();
 }

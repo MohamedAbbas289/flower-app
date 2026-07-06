@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flower_app/config/auth/auth_manager.dart';
 import 'package:flower_app/config/di/di.dart';
-import 'package:flower_app/config/firebase/firebase_api.dart';
+import 'package:flower_app/config/firebase/fcm_service.dart';
 import 'package:flower_app/config/firebase/firebase_service.dart';
 import 'package:flower_app/my_app.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ Future<void> main() async {
   final authManager = getIt<AuthManager>();
   await authManager.init();
 
-  await FirebaseApi().initNotification();
+  await getIt<FcmService>().initNotification();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
     EasyLocalization(

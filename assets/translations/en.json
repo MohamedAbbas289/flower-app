@@ -224,5 +224,7 @@
   "driverPlaceholder": "—",
   "orderReceivedTitle": "Thank You!",
   "orderReceivedBody": "We hope you enjoyed your order. See you again soon! 🌸",
-  "backToHome": "Back to Home"
+  "backToHome": "Back to Home",
+  "noNotificationsYet": "No notifications yet",
+  "searchingForDriver": "Searching for a driver..."
 }

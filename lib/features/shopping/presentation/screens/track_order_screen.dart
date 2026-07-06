@@ -1,10 +1,12 @@
 import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/reusable_widgets/app_dialog.dart';
+import 'package:flower_app/core/services/url_launcher_service.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/images_paths.dart';
+import 'package:flower_app/core/values/order_status.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/track_order_view_model/track_order_event.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/track_order_view_model/track_order_state.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/track_order_view_model/track_order_view_model.dart';
@@ -12,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 const double _carImageHeight = 160;
 const double _contactButtonSize = 40;
@@ -81,9 +82,33 @@ class _TrackOrderView extends StatelessWidget {
                 child: CircularProgressIndicator(color: AppColors.pink),
               );
             }
+            if (state.status.isEmpty ||
+                state.status == OrderStatus.accepted &&
+                    state.driverName.isEmpty) {
+              return _SearchingForDriverView();
+            }
             return _TrackOrderBody(orderId: orderId, state: state);
           },
         ),
+      ),
+    );
+  }
+}
+
+class _SearchingForDriverView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const CircularProgressIndicator(color: AppColors.pink),
+          const SizedBox(height: 16),
+          Text(
+            AppStrings.searchingForDriver,
+            style: TextStyles.bodyRegular16.copyWith(color: AppColors.gray),
+          ),
+        ],
       ),
     );
   }
@@ -164,23 +189,9 @@ class _DriverCard extends StatelessWidget {
   final String driverName;
   final String driverPhone;
 
-  Future<void> _call() async {
-    if (driverPhone.isEmpty) return;
-    final uri = Uri.parse('tel:$driverPhone');
-    if (await canLaunchUrl(uri)) await launchUrl(uri);
-  }
-
-  Future<void> _whatsApp() async {
-    if (driverPhone.isEmpty) return;
-    final phone = driverPhone.replaceAll(RegExp(r'[^0-9]'), '');
-    final uri = Uri.parse('https://wa.me/$phone');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final urlLauncher = getIt<UrlLauncherService>();
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -227,13 +238,13 @@ class _DriverCard extends StatelessWidget {
               _ContactIconButton(
                 assetPath: Assets.assetsIconsPhoneCall,
                 semanticsLabel: AppStrings.callLabel,
-                onTap: _call,
+                onTap: () => urlLauncher.call(driverPhone),
               ),
               const SizedBox(width: 8),
               _ContactIconButton(
                 assetPath: Assets.assetsIconsWhatsapp,
                 semanticsLabel: AppStrings.whatsappLabel,
-                onTap: _whatsApp,
+                onTap: () => urlLauncher.whatsApp(driverPhone),
               ),
             ],
           ),
@@ -265,7 +276,7 @@ class _ContactIconButton extends StatelessWidget {
         child: Container(
           width: _contactButtonSize,
           height: _contactButtonSize,
-          decoration: BoxDecoration(shape: BoxShape.circle),
+          decoration: const BoxDecoration(shape: BoxShape.circle),
           child: Center(
             child: SvgPicture.asset(
               assetPath,

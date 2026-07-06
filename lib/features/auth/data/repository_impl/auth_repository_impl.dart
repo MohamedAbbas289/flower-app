@@ -1,9 +1,7 @@
-import 'dart:ui';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flower_app/config/auth/auth_manager.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/config/firebase/firestore_service.dart';
+import 'package:flower_app/config/firebase/fcm_service.dart';
+import 'package:flower_app/config/secure_storage/secure_storage_service.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/core/models/auth_response.dart';
 import 'package:flower_app/features/auth/api/request_models/signup_request_model.dart';
@@ -17,12 +15,14 @@ import '../data_sources_contract/auth_remote_data_source_contract.dart';
 class AuthRepositoryImpl implements AuthRepositoryContract {
   final AuthRemoteDataSourceContract _remoteDataSource;
   final AuthManager _authManager;
-  final FirestoreService _firestoreService;
+  final FcmService _fcmService;
+  final SecureStorageService _storageService;
 
   AuthRepositoryImpl(
     this._remoteDataSource,
     this._authManager,
-    this._firestoreService,
+    this._fcmService,
+    this._storageService,
   );
 
   @override
@@ -44,11 +44,10 @@ class AuthRepositoryImpl implements AuthRepositoryContract {
         userId: userId,
       );
       if (userId != null && userId.isNotEmpty) {
-        final fcmToken = await FirebaseMessaging.instance.getToken();
+        final fcmToken = await _fcmService.getFcmToken();
         if (fcmToken != null && fcmToken.isNotEmpty) {
-          final rawLang = PlatformDispatcher.instance.locale.languageCode;
-          final language = rawLang == 'ar' ? 'ar' : 'en';
-          await _firestoreService.saveUserFcmData(
+          final language = await _storageService.readLanguage();
+          await _fcmService.saveFcmDataForUser(
             userId: userId,
             fcmToken: fcmToken,
             language: language,

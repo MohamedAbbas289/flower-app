@@ -39,7 +39,7 @@ class _NotificationView extends StatelessWidget {
           if (state.notifications.isEmpty) {
             return Center(
               child: Text(
-                'No notifications yet',
+                AppStrings.noNotificationsYet,
                 style: TextStyles.bodyRegular16.copyWith(color: AppColors.gray),
               ),
             );
