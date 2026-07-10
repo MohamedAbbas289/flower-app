@@ -6,8 +6,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flower_app/config/auth/auth_manager.dart';
 import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/config/firebase/firestore_service.dart';
+import 'package:flower_app/config/local_notifications/local_notifications_service.dart';
 import 'package:flower_app/config/secure_storage/secure_storage_service.dart';
-import 'package:flower_app/core/values/firebase_constants.dart';
 import 'package:flower_app/features/home/data/models/notification_model.dart';
 import 'package:flower_app/features/home/data/services/notification_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -27,38 +27,20 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
   log('------------------------------------');
 }
 
-final FlutterLocalNotificationsPlugin localNotifs =
-    FlutterLocalNotificationsPlugin();
-
-Future<void> initLocalNotifications() async {
-  const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
-  const iOSInit = DarwinInitializationSettings();
-
-  const initSettings = InitializationSettings(
-    android: androidInit,
-    iOS: iOSInit,
-  );
-
-  await localNotifs.initialize(
-    settings: initSettings,
-    onDidReceiveNotificationResponse: (NotificationResponse details) {
-      log('Local notification clicked: ${details.payload}');
-    },
-  );
-}
-
 @lazySingleton
 class FcmService {
   final FirebaseMessaging _messaging;
   final FirestoreService _firestoreService;
   final AuthManager _authManager;
   final SecureStorageService _storageService;
+  final LocalNotificationsService _localNotificationsService;
 
   FcmService(
     this._messaging,
     this._firestoreService,
     this._authManager,
     this._storageService,
+    this._localNotificationsService,
   );
 
   Future<String?> getFcmToken() => _messaging.getToken();
@@ -86,9 +68,9 @@ class FcmService {
 
       await _saveFcmTokenForCurrentUser();
       _listenToTokenRefresh();
-      await initLocalNotifications();
+      await _localNotificationsService.initialize();
       await _configureIosPresentationOptions();
-      final channel = await _createAndroidChannel();
+      final channel = await _localNotificationsService.createAndroidChannel();
       _listenToForegroundMessages(channel);
       _registerBackgroundHandler();
       _handleNotificationTap();
@@ -163,21 +145,6 @@ class FcmService {
     );
   }
 
-  Future<AndroidNotificationChannel> _createAndroidChannel() async {
-    const channel = AndroidNotificationChannel(
-      FirebaseConstants.highImportanceChannelId,
-      FirebaseConstants.highImportanceChannelName,
-      description: FirebaseConstants.highImportanceChannelDescription,
-      importance: Importance.max,
-    );
-    final androidPlugin = localNotifs
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >();
-    await androidPlugin?.createNotificationChannel(channel);
-    return channel;
-  }
-
   void _listenToForegroundMessages(AndroidNotificationChannel channel) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       _showLocalNotification(message, channel);
@@ -193,11 +160,11 @@ class FcmService {
     final notification = message.notification;
     final android = message.notification?.android;
     if (notification == null || android == null) return;
-    localNotifs.show(
+    _localNotificationsService.show(
       id: notification.hashCode,
       title: notification.title,
       body: notification.body,
-      notificationDetails: NotificationDetails(
+      details: NotificationDetails(
         android: AndroidNotificationDetails(
           channel.id,
           channel.name,

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flower_app/config/di/di.dart';
+import 'package:flower_app/core/services/url_launcher_service.dart';
 import 'package:flower_app/features/shopping/presentation/screens/track_order_screen.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/track_order_view_model/track_order_state.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/track_order_view_model/track_order_view_model.dart';
@@ -40,6 +41,7 @@ void main() {
     mockVm = MockTrackOrderViewModel();
     await getIt.reset();
     getIt.registerSingleton<TrackOrderViewModel>(mockVm);
+    getIt.registerSingleton<UrlLauncherService>(UrlLauncherService());
   });
 
   tearDown(() async {
@@ -80,6 +82,7 @@ void main() {
 
   testWidgets('shows driver name in driver card', (tester) async {
     setupState(const TrackOrderState(
+      status: 'accepted',
       driverName: 'Ahmed Ali',
       driverPhone: '01012345678',
       stepsCompleted: 1,
@@ -92,7 +95,10 @@ void main() {
   });
 
   testWidgets('shows all 4 timeline step labels', (tester) async {
-    setupState(const TrackOrderState(stepsCompleted: 0));
+    setupState(const TrackOrderState(
+      status: 'arrived_pickup',
+      stepsCompleted: 0,
+    ));
 
     await tester.pumpWidget(buildApp());
     await tester.pumpAndSettle();
@@ -120,7 +126,10 @@ void main() {
 
   testWidgets('"Order Delivered" button NOT visible when stepsCompleted < 4',
       (tester) async {
-    setupState(const TrackOrderState(stepsCompleted: 2));
+    setupState(const TrackOrderState(
+      status: 'arrived_pickup',
+      stepsCompleted: 2,
+    ));
 
     await tester.pumpWidget(buildApp());
     await tester.pumpAndSettle();

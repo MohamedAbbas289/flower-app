@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
-import 'package:flower_app/config/firebase/firestore_service.dart';
 import 'package:flower_app/core/values/firestore_keys.dart';
 import 'package:flower_app/core/values/order_status.dart';
 import 'package:flower_app/features/shopping/domain/use_cases/confirm_delivery_use_case.dart';
+import 'package:flower_app/features/shopping/domain/use_cases/watch_order_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'track_order_event.dart';
@@ -12,11 +12,11 @@ import 'track_order_state.dart';
 
 @injectable
 class TrackOrderViewModel extends Bloc<TrackOrderEvent, TrackOrderState> {
-  final FirestoreService _firestoreService;
+  final WatchOrderUseCase _watchOrderUseCase;
   final ConfirmDeliveryUseCase _confirmDeliveryUseCase;
   StreamSubscription<DocumentSnapshot>? _orderSubscription;
 
-  TrackOrderViewModel(this._firestoreService, this._confirmDeliveryUseCase)
+  TrackOrderViewModel(this._watchOrderUseCase, this._confirmDeliveryUseCase)
       : super(const TrackOrderState(isLoading: true)) {
     on<StartListeningEvent>(_onStartListening);
     on<OrderUpdatedEvent>(_onOrderUpdated);
@@ -28,8 +28,8 @@ class TrackOrderViewModel extends Bloc<TrackOrderEvent, TrackOrderState> {
     Emitter<TrackOrderState> emit,
   ) {
     _orderSubscription?.cancel();
-    _orderSubscription = _firestoreService
-        .orderStream(event.orderId)
+    _orderSubscription = _watchOrderUseCase
+        .execute(event.orderId)
         .listen(
           (snapshot) {
             if (isClosed) return;

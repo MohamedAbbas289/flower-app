@@ -1,6 +1,7 @@
 import 'package:flower_app/config/auth/auth_manager.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
-import 'package:flower_app/config/firebase/firestore_service.dart';
+import 'package:flower_app/config/firebase/fcm_service.dart';
+import 'package:flower_app/config/secure_storage/secure_storage_service.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/core/models/auth_response.dart';
 import 'package:flower_app/core/models/user_model.dart';
@@ -15,11 +16,17 @@ import 'package:test/test.dart';
 
 import 'auth_repository_impl_test.mocks.dart';
 
-@GenerateMocks([AuthRemoteDataSourceContract, AuthManager, FirestoreService])
+@GenerateMocks([
+  AuthRemoteDataSourceContract,
+  AuthManager,
+  FcmService,
+  SecureStorageService,
+])
 void main() {
   late MockAuthRemoteDataSourceContract mockRemoteDataSource;
   late MockAuthManager mockAuthManager;
-  late MockFirestoreService mockFirestoreService;
+  late MockFcmService mockFcmService;
+  late MockSecureStorageService mockStorageService;
   late AuthRepositoryImpl repo;
 
   setUpAll(() {
@@ -42,11 +49,13 @@ void main() {
   setUp(() {
     mockRemoteDataSource = MockAuthRemoteDataSourceContract();
     mockAuthManager = MockAuthManager();
-    mockFirestoreService = MockFirestoreService();
+    mockFcmService = MockFcmService();
+    mockStorageService = MockSecureStorageService();
     repo = AuthRepositoryImpl(
       mockRemoteDataSource,
       mockAuthManager,
-      mockFirestoreService,
+      mockFcmService,
+      mockStorageService,
     );
   });
 
@@ -113,9 +122,86 @@ void main() {
     );
   });
 
-  // =========================
-  // FORGOT PASSWORD
-  // =========================
+  group('login', () {
+    final user = User(id: 'user_1', firstName: 'AbdElRahman');
+    final authResponse = AuthResponse(
+      message: 'Login successful',
+      token: 'token_123',
+      user: user,
+    );
+
+    test('saves auth data and syncs fcm token when userId and token exist', () async {
+      when(
+        mockRemoteDataSource.login(
+          email: anyNamed('email'),
+          password: anyNamed('password'),
+        ),
+      ).thenAnswer((_) async => authResponse);
+      when(
+        mockAuthManager.setAuthData(
+          token: anyNamed('token'),
+          rememberMe: anyNamed('rememberMe'),
+          userId: anyNamed('userId'),
+        ),
+      ).thenAnswer((_) async {});
+      when(mockFcmService.getFcmToken()).thenAnswer((_) async => 'fcm_token');
+      when(mockStorageService.readLanguage()).thenAnswer((_) async => 'en');
+      when(
+        mockFcmService.saveFcmDataForUser(
+          userId: anyNamed('userId'),
+          fcmToken: anyNamed('fcmToken'),
+          language: anyNamed('language'),
+        ),
+      ).thenAnswer((_) async {});
+
+      final result = await repo.login(
+        email: 'test@test.com',
+        password: 'password',
+        rememberMe: true,
+      );
+
+      expect(result, isA<SuccessBaseResponse<AuthResponseEntity>>());
+      verify(
+        mockAuthManager.setAuthData(
+          token: 'token_123',
+          rememberMe: true,
+          userId: 'user_1',
+        ),
+      ).called(1);
+      verify(
+        mockFcmService.saveFcmDataForUser(
+          userId: 'user_1',
+          fcmToken: 'fcm_token',
+          language: 'en',
+        ),
+      ).called(1);
+    });
+
+    test('returns ErrorBaseResponse when datasource throws', () async {
+      when(
+        mockRemoteDataSource.login(
+          email: anyNamed('email'),
+          password: anyNamed('password'),
+        ),
+      ).thenThrow(Exception('network error'));
+
+      final result = await repo.login(
+        email: 'test@test.com',
+        password: 'password',
+        rememberMe: true,
+      );
+
+      expect(result, isA<ErrorBaseResponse<AuthResponseEntity>>());
+      verifyNever(
+        mockFcmService.saveFcmDataForUser(
+          userId: anyNamed('userId'),
+          fcmToken: anyNamed('fcmToken'),
+          language: anyNamed('language'),
+        ),
+      );
+    });
+  });
+
   group("forgotPassword", () {
     final tEntity = ForgetPasswordEntity(
       forgetPasswordRecoveryStep: ForgetPasswordRecoveryStep.forgotPassword,
@@ -147,9 +233,6 @@ void main() {
     });
   });
 
-  // =========================
-  // VERIFY CODE
-  // =========================
   group("verifyCode", () {
     final tVerifyEntity = ForgetPasswordEntity(
       forgetPasswordRecoveryStep: ForgetPasswordRecoveryStep.verifyCode,
@@ -178,9 +261,6 @@ void main() {
     });
   });
 
-  // =========================
-  // RESET PASSWORD
-  // =========================
   group("resetPassword", () {
     final tResetEntity = ForgetPasswordEntity(
       forgetPasswordRecoveryStep: ForgetPasswordRecoveryStep.resetPassword,

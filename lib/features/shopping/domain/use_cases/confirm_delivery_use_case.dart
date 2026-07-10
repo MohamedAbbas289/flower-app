@@ -1,11 +1,11 @@
-import 'package:flower_app/config/firebase/firestore_service.dart';
+import 'package:flower_app/features/shopping/domain/repository_contract/shopping_repository_contract.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class ConfirmDeliveryUseCase {
-  final FirestoreService _firestoreService;
+  final ShoppingRepositoryContract _repository;
 
-  ConfirmDeliveryUseCase(this._firestoreService);
+  ConfirmDeliveryUseCase(this._repository);
 
-  Future<void> execute(String orderId) => _firestoreService.confirmDelivery(orderId);
+  Future<void> execute(String orderId) => _repository.confirmDelivery(orderId);
 }

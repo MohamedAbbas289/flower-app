@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flower_app/config/firebase/firestore_service.dart';
 import 'package:flower_app/features/shopping/domain/use_cases/confirm_delivery_use_case.dart';
+import 'package:flower_app/features/shopping/domain/use_cases/watch_order_use_case.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/track_order_view_model/track_order_event.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/track_order_view_model/track_order_state.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/track_order_view_model/track_order_view_model.dart';
@@ -13,27 +13,16 @@ import 'package:test/test.dart';
 
 import 'track_order_view_model_test.mocks.dart';
 
-class _FakeDocumentSnapshot extends Fake implements DocumentSnapshot {
-  final Map<String, dynamic> _data;
-  _FakeDocumentSnapshot(this._data);
-
-  @override
-  bool get exists => true;
-
-  @override
-  Map<String, dynamic>? data() => _data;
-}
-
-@GenerateMocks([FirestoreService, ConfirmDeliveryUseCase])
+@GenerateMocks([WatchOrderUseCase, ConfirmDeliveryUseCase, DocumentSnapshot])
 void main() {
-  late MockFirestoreService mockFirestoreService;
+  late MockWatchOrderUseCase mockWatchOrderUseCase;
   late MockConfirmDeliveryUseCase mockConfirmDeliveryUseCase;
   late TrackOrderViewModel viewModel;
 
   const orderId = 'order123';
 
   setUp(() {
-    mockFirestoreService = MockFirestoreService();
+    mockWatchOrderUseCase = MockWatchOrderUseCase();
     mockConfirmDeliveryUseCase = MockConfirmDeliveryUseCase();
   });
 
@@ -44,19 +33,22 @@ void main() {
   StreamController<DocumentSnapshot> controllerWithSnapshot(
     Map<String, dynamic> data,
   ) {
+    final snapshot = MockDocumentSnapshot();
+    when(snapshot.exists).thenReturn(true);
+    when(snapshot.data()).thenReturn(data);
     late final StreamController<DocumentSnapshot> controller;
     controller = StreamController<DocumentSnapshot>.broadcast(
-      onListen: () => controller.add(_FakeDocumentSnapshot(data)),
+      onListen: () => controller.add(snapshot),
     );
     return controller;
   }
 
   group('TrackOrderViewModel', () {
     test('initial state is loading', () {
-      when(mockFirestoreService.orderStream(any))
+      when(mockWatchOrderUseCase.execute(any))
           .thenAnswer((_) => const Stream.empty());
       viewModel = TrackOrderViewModel(
-        mockFirestoreService,
+        mockWatchOrderUseCase,
         mockConfirmDeliveryUseCase,
       );
       expect(viewModel.state, const TrackOrderState(isLoading: true));
@@ -71,10 +63,10 @@ void main() {
           'driverPhone': '01012345678',
           'userConfirmed': false,
         });
-        when(mockFirestoreService.orderStream(orderId))
+        when(mockWatchOrderUseCase.execute(orderId))
             .thenAnswer((_) => controller.stream);
         final vm = TrackOrderViewModel(
-          mockFirestoreService,
+          mockWatchOrderUseCase,
           mockConfirmDeliveryUseCase,
         );
         addTearDown(() => controller.close());
@@ -103,10 +95,10 @@ void main() {
           'driverPhone': '01099999999',
           'userConfirmed': false,
         });
-        when(mockFirestoreService.orderStream(orderId))
+        when(mockWatchOrderUseCase.execute(orderId))
             .thenAnswer((_) => controller.stream);
         final vm = TrackOrderViewModel(
-          mockFirestoreService,
+          mockWatchOrderUseCase,
           mockConfirmDeliveryUseCase,
         );
         addTearDown(() => controller.close());
@@ -130,10 +122,10 @@ void main() {
           'driverPhone': '01011111111',
           'userConfirmed': false,
         });
-        when(mockFirestoreService.orderStream(orderId))
+        when(mockWatchOrderUseCase.execute(orderId))
             .thenAnswer((_) => controller.stream);
         final vm = TrackOrderViewModel(
-          mockFirestoreService,
+          mockWatchOrderUseCase,
           mockConfirmDeliveryUseCase,
         );
         addTearDown(() => controller.close());
@@ -156,10 +148,10 @@ void main() {
           'driverPhone': '01022222222',
           'userConfirmed': false,
         });
-        when(mockFirestoreService.orderStream(orderId))
+        when(mockWatchOrderUseCase.execute(orderId))
             .thenAnswer((_) => controller.stream);
         final vm = TrackOrderViewModel(
-          mockFirestoreService,
+          mockWatchOrderUseCase,
           mockConfirmDeliveryUseCase,
         );
         addTearDown(() => controller.close());
@@ -177,12 +169,12 @@ void main() {
     blocTest<TrackOrderViewModel, TrackOrderState>(
       'ConfirmDeliveryEvent calls ConfirmDeliveryUseCase and sets userConfirmed=true',
       build: () {
-        when(mockFirestoreService.orderStream(orderId))
+        when(mockWatchOrderUseCase.execute(orderId))
             .thenAnswer((_) => const Stream.empty());
         when(mockConfirmDeliveryUseCase.execute(orderId))
             .thenAnswer((_) async {});
         return TrackOrderViewModel(
-          mockFirestoreService,
+          mockWatchOrderUseCase,
           mockConfirmDeliveryUseCase,
         );
       },
@@ -223,10 +215,10 @@ void main() {
           'driverPhone': '01033333333',
           'userConfirmed': true,
         });
-        when(mockFirestoreService.orderStream(orderId))
+        when(mockWatchOrderUseCase.execute(orderId))
             .thenAnswer((_) => controller.stream);
         final vm = TrackOrderViewModel(
-          mockFirestoreService,
+          mockWatchOrderUseCase,
           mockConfirmDeliveryUseCase,
         );
         addTearDown(() => controller.close());
@@ -242,10 +234,10 @@ void main() {
     );
 
     test('unknown status maps to stepsCompleted=0', () {
-      when(mockFirestoreService.orderStream(any))
+      when(mockWatchOrderUseCase.execute(any))
           .thenAnswer((_) => const Stream.empty());
       viewModel = TrackOrderViewModel(
-        mockFirestoreService,
+        mockWatchOrderUseCase,
         mockConfirmDeliveryUseCase,
       );
       viewModel.add(

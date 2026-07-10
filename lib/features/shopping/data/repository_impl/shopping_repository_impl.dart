@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/shopping/api/request_models/cart_request_model.dart';
 import 'package:flower_app/features/shopping/api/request_models/payment_request_model.dart';
+import 'package:flower_app/features/shopping/data/data_sources_contract/shopping_firestore_data_source_contract.dart';
 import 'package:flower_app/features/shopping/data/data_sources_contract/shopping_remote_data_source_contract.dart';
 import 'package:flower_app/features/shopping/data/models/cart_model.dart';
 import 'package:flower_app/features/shopping/data/models/cart_response_model.dart';
@@ -22,8 +24,9 @@ import 'package:injectable/injectable.dart';
 @Injectable(as: ShoppingRepositoryContract)
 class ShoppingRepositoryImpl implements ShoppingRepositoryContract {
   final ShoppingRemoteDataSourceContract _dataSource;
+  final ShoppingFirestoreDataSourceContract _firestoreDataSource;
 
-  ShoppingRepositoryImpl(this._dataSource);
+  ShoppingRepositoryImpl(this._dataSource, this._firestoreDataSource);
 
   @override
   Future<BaseResponse<CartEntity>> getCart() async {
@@ -142,5 +145,15 @@ class ShoppingRepositoryImpl implements ShoppingRepositoryContract {
       case ErrorBaseResponse<ProductDetailsResponse>():
         return ErrorBaseResponse(exception: response.exception);
     }
+  }
+
+  @override
+  Stream<DocumentSnapshot> orderStream(String orderId) {
+    return _firestoreDataSource.orderStream(orderId);
+  }
+
+  @override
+  Future<void> confirmDelivery(String orderId) {
+    return _firestoreDataSource.confirmDelivery(orderId);
   }
 }

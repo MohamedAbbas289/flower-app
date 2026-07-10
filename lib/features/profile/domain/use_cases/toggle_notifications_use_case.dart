@@ -2,12 +2,12 @@ import 'package:flower_app/features/profile/domain/repository_contract/profile_r
 import 'package:injectable/injectable.dart';
 
 @injectable
-class UpdateLanguageUseCase {
+class ToggleNotificationsUseCase {
   final ProfileRepoContract _repo;
 
-  UpdateLanguageUseCase(this._repo);
+  ToggleNotificationsUseCase(this._repo);
 
-  Future<void> execute(String languageCode) async {
-    await _repo.updateLanguage(languageCode);
+  Future<void> execute(bool value, String languageCode) async {
+    await _repo.toggleNotifications(value, languageCode);
   }
 }
