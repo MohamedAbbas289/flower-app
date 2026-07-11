@@ -14,6 +14,7 @@ import 'package:flower_app/features/shopping/data/models/product_details_respons
 import 'package:flower_app/features/shopping/domain/entities/cart_entity.dart';
 import 'package:flower_app/features/shopping/domain/entities/cash_order_entity.dart';
 import 'package:flower_app/features/shopping/domain/entities/checkout_session_entity.dart';
+import 'package:flower_app/features/shopping/domain/entities/lat_lng_point.dart';
 import 'package:flower_app/features/shopping/domain/entities/order_entity.dart';
 import 'package:flower_app/features/shopping/domain/entities/product_details_entity.dart';
 import 'package:flower_app/features/shopping/domain/mappers/payment_mapper.dart';
@@ -155,5 +156,15 @@ class ShoppingRepositoryImpl implements ShoppingRepositoryContract {
   @override
   Future<void> confirmDelivery(String orderId) {
     return _firestoreDataSource.confirmDelivery(orderId);
+  }
+
+  @override
+  Stream<LatLngPoint> watchDriverLocation(String orderId) {
+    return _firestoreDataSource.watchDriverLocation(orderId);
+  }
+
+  @override
+  Stream<LatLngPoint> watchDestinationLocation(String orderId) {
+    return _firestoreDataSource.watchDestinationLocation(orderId);
   }
 }
