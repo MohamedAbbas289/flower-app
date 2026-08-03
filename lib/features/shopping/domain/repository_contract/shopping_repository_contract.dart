@@ -5,6 +5,7 @@ import 'package:flower_app/features/shopping/api/request_models/payment_request_
 import 'package:flower_app/features/shopping/domain/entities/cart_entity.dart';
 import 'package:flower_app/features/shopping/domain/entities/cash_order_entity.dart';
 import 'package:flower_app/features/shopping/domain/entities/checkout_session_entity.dart';
+import 'package:flower_app/features/shopping/domain/entities/lat_lng_point.dart';
 import 'package:flower_app/features/shopping/domain/entities/order_entity.dart';
 import 'package:flower_app/features/shopping/domain/entities/product_details_entity.dart';
 
@@ -38,4 +39,8 @@ abstract interface class ShoppingRepositoryContract {
   Stream<DocumentSnapshot> orderStream(String orderId);
 
   Future<void> confirmDelivery(String orderId);
+
+  Stream<LatLngPoint> watchDriverLocation(String orderId);
+
+  Stream<LatLngPoint> watchDestinationLocation(String orderId);
 }

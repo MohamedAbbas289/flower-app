@@ -9,4 +9,8 @@ abstract class FirestoreKeys {
   static const String status = 'status';
   static const String driverName = 'driverName';
   static const String driverPhone = 'driverPhone';
+  static const String driverLat = 'driverLat';
+  static const String driverLng = 'driverLng';
+  static const String buyerLat = 'buyerLat';
+  static const String buyerLng = 'buyerLng';
 }
