@@ -10,6 +10,7 @@ import 'package:flower_app/core/values/order_status.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/track_order_view_model/track_order_event.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/track_order_view_model/track_order_state.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/track_order_view_model/track_order_view_model.dart';
+import 'package:flower_app/features/shopping/presentation/widgets/buyer_live_map_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -82,11 +83,6 @@ class _TrackOrderView extends StatelessWidget {
                 child: CircularProgressIndicator(color: AppColors.pink),
               );
             }
-            if (state.status.isEmpty ||
-                state.status == OrderStatus.accepted &&
-                    state.driverName.isEmpty) {
-              return _SearchingForDriverView();
-            }
             return _TrackOrderBody(orderId: orderId, state: state);
           },
         ),
@@ -95,24 +91,6 @@ class _TrackOrderView extends StatelessWidget {
   }
 }
 
-class _SearchingForDriverView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const CircularProgressIndicator(color: AppColors.pink),
-          const SizedBox(height: 16),
-          Text(
-            AppStrings.searchingForDriver,
-            style: TextStyles.bodyRegular16.copyWith(color: AppColors.gray),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class _TrackOrderBody extends StatelessWidget {
   const _TrackOrderBody({required this.orderId, required this.state});
@@ -414,23 +392,38 @@ class _BottomSection extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: OutlinedButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(AppStrings.comingSoon),
-                  backgroundColor: AppColors.pink,
-                ),
-              );
-            },
+            onPressed: state.stepsCompleted == 3 ? () => _openMap(context) : null,
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 14),
-              side: const BorderSide(color: AppColors.pink),
-              foregroundColor: AppColors.pink,
+              side: BorderSide(
+                color: state.stepsCompleted == 3
+                    ? AppColors.pink
+                    : AppColors.gray,
+              ),
+              foregroundColor: state.stepsCompleted == 3
+                  ? AppColors.pink
+                  : AppColors.gray,
             ),
             child: Text(AppStrings.showMap),
           ),
         ),
       ],
+    );
+  }
+
+  void _openMap(BuildContext context) {
+    final mapHeight = MediaQuery.sizeOf(context).height * 0.85;
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => SizedBox(
+        height: mapHeight,
+        child: BuyerLiveMapSheet(orderId: orderId),
+      ),
     );
   }
 
