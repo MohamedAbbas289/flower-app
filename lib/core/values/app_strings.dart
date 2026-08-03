@@ -225,4 +225,27 @@ abstract class AppStrings {
   static String get noCompletedOrders => 'noCompletedOrders'.tr();
   static String deliveredOnLabel(String date) => 'Delivered on $date';
   static String get searchForAnyProduct => 'searchForAnyProduct'.tr();
+  static String get trackOrderTitle => 'Track order';
+  static String get callLabel => 'callLabel'.tr();
+  static String get whatsappLabel => 'whatsappLabel'.tr();
+  static String get yes => 'yes'.tr();
+  static String get no => 'no'.tr();
+  static String get driverPlaceholder => 'driverPlaceholder'.tr();
+  static String get estimatedArrival => 'Estimated arrival';
+  static String get deliveryHeroText => 'Is your delivery hero for today';
+  static String get receivedYourOrder => 'Received your order';
+  static String get preparingYourOrder => 'Preparing your order';
+  static String get outForDelivery => 'Out for delivery';
+  static String get delivered => 'Delivered';
+  static String get showMap => 'Show map';
+  static String get orderDelivered => 'Order Delivered';
+  static String get confirmDeliveryTitle => 'Confirm Delivery';
+  static String get confirmDeliveryDescription => 'Have you received your order?';
+  static String get orderConfirmed => 'Order confirmed ✓';
+  static String get comingSoon => 'Coming soon';
+  static String get orderReceivedTitle => 'orderReceivedTitle'.tr();
+  static String get orderReceivedBody => 'orderReceivedBody'.tr();
+  static String get backToHome => 'backToHome'.tr();
+  static String get noNotificationsYet => 'noNotificationsYet'.tr();
+  static String get searchingForDriver => 'searchingForDriver'.tr();
 }

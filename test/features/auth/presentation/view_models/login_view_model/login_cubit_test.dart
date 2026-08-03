@@ -8,17 +8,18 @@ import 'package:flower_app/features/auth/presentation/view_models/login_view_mod
 import 'package:flower_app/features/auth/presentation/view_models/login_view_model/login_state.dart';
 import 'package:flower_app/features/auth/presentation/view_models/login_view_model/login_view_model.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
-class MockLoginUseCase extends Mock implements LoginUseCase {}
+import 'login_cubit_test.mocks.dart';
 
-
+@GenerateMocks([LoginUseCase])
 void main() {
   late MockLoginUseCase loginUseCase;
 
   setUpAll(() {
-    registerFallbackValue(
-      LoginRequestModel(email: '', password: '', rememberMe: false),
+    provideDummy<BaseResponse<AuthResponseEntity>>(
+      ErrorBaseResponse<AuthResponseEntity>(exception: Exception('dummy')),
     );
   });
 
@@ -59,10 +60,8 @@ void main() {
       'emits loading then success state on valid credentials',
       build: buildViewModel,
       setUp: () {
-
         when(
-              () =>
-              loginUseCase.execute(requestModel: any(named: 'requestModel')),
+          loginUseCase.execute(requestModel: anyNamed('requestModel')),
         ).thenAnswer((_) async => SuccessBaseResponse(data: validEntity));
       },
       act: (vm) => vm.doEvent(loginEvent()),
@@ -80,8 +79,7 @@ void main() {
       build: buildViewModel,
       setUp: () {
         when(
-              () =>
-              loginUseCase.execute(requestModel: any(named: 'requestModel')),
+          loginUseCase.execute(requestModel: anyNamed('requestModel')),
         ).thenAnswer(
           (_) async => ErrorBaseResponse(exception: Exception('Unauthorized')),
         );
@@ -101,17 +99,13 @@ void main() {
       build: buildViewModel,
       setUp: () {
         when(
-              () =>
-              loginUseCase.execute(requestModel: any(named: 'requestModel')),
+          loginUseCase.execute(requestModel: anyNamed('requestModel')),
         ).thenAnswer((_) async => SuccessBaseResponse(data: validEntity));
       },
       act: (vm) => vm.doEvent(loginEvent(rememberMe: true)),
       verify: (_) {
         verify(
-              () =>
-              loginUseCase.execute(
-                requestModel: any(named: 'requestModel'),
-          ),
+          loginUseCase.execute(requestModel: anyNamed('requestModel')),
         ).called(1);
       },
     );

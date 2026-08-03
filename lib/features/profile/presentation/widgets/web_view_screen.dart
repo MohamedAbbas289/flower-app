@@ -59,13 +59,24 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
-      body: Column(
-        children: [
-          if (progress < 100) LinearProgressIndicator(value: progress / 100),
-          Expanded(child: WebViewWidget(controller: controller)),
-        ],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        if (await controller.canGoBack()) {
+          await controller.goBack();
+        } else {
+          if (context.mounted) Navigator.pop(context);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: Text(widget.title)),
+        body: Column(
+          children: [
+            if (progress < 100) LinearProgressIndicator(value: progress / 100),
+            Expanded(child: WebViewWidget(controller: controller)),
+          ],
+        ),
       ),
     );
   }

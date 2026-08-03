@@ -214,5 +214,15 @@
   "reorder": "إعادة الطلب",
   "noActiveOrders": "لا توجد طلبات نشطة",
   "noCompletedOrders": "لا توجد طلبات مكتملة",
-  "searchForAnyProduct": "ابحث عن أي منتج تريده"
+  "searchForAnyProduct": "ابحث عن أي منتج تريده",
+  "callLabel": "اتصال",
+  "whatsappLabel": "واتساب",
+  "yes": "نعم",
+  "no": "لا",
+  "driverPlaceholder": "—",
+  "orderReceivedTitle": "شكراً لك!",
+  "orderReceivedBody": "نتمنى أن تكون تجربتك رائعة. نراك قريباً! 🌸",
+  "backToHome": "العودة للرئيسية",
+  "noNotificationsYet": "لا توجد إشعارات بعد",
+  "searchingForDriver": "جاري البحث عن سائق..."
 }

@@ -5,6 +5,7 @@ import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/auth/presentation/screens/logout_dialog.dart';
 import 'package:flower_app/features/profile/presentation/widgets/language_bottom_sheet.dart';
+import 'package:flower_app/features/profile/presentation/widgets/notification_toggle.dart';
 import 'package:flower_app/features/profile/presentation/widgets/row_section.dart';
 import 'package:flower_app/features/profile/presentation/widgets/web_view_screen.dart';
 import 'package:flutter/material.dart';
@@ -143,12 +144,7 @@ class ProfileDetails extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Divider(color: AppColors.gray, thickness: 1, height: 1),
-            RowSection.toggle(
-              title: AppStrings.notification,
-              value: true,
-              onTap: () {},
-              onToggle: (value) {},
-            ),
+            const NotificationToggle(),
             const Divider(color: AppColors.gray, thickness: 1, height: 1),
             const SizedBox(height: 16),
             Column(

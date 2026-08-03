@@ -31,4 +31,5 @@ class ApiParam {
   static const String sortPrice = "price";
   static const String sortDate = "date";
   static const String sortDiscounted = "discounted";
+  static const String state = 'state';
 }

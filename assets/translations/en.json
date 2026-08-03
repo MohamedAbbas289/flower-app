@@ -216,5 +216,15 @@
   "noCompletedOrders": "No completed orders",
   "city": "City",
   "area": "Area",
-  "searchForAnyProduct": "Search For Any Product You Want"
+  "searchForAnyProduct": "Search For Any Product You Want",
+  "callLabel": "Call",
+  "whatsappLabel": "WhatsApp",
+  "yes": "Yes",
+  "no": "No",
+  "driverPlaceholder": "—",
+  "orderReceivedTitle": "Thank You!",
+  "orderReceivedBody": "We hope you enjoyed your order. See you again soon! 🌸",
+  "backToHome": "Back to Home",
+  "noNotificationsYet": "No notifications yet",
+  "searchingForDriver": "Searching for a driver..."
 }

@@ -5,6 +5,7 @@ import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/features/auth/presentation/view_models/logout_view_model/logout_view_model.dart';
+import 'package:flower_app/features/home/data/services/notification_service.dart';
 import 'package:flower_app/features/profile/presentation/view_models/profile_view_model/profile_view_model.dart';
 import 'package:flower_app/features/profile/presentation/view_models/profile_view_model/get_profile_events.dart';
 import 'package:flower_app/features/profile/presentation/view_models/profile_view_model/get_profile_state.dart';
@@ -53,31 +54,38 @@ class _ProfileViewContent extends StatelessWidget {
               const SizedBox(width: 4),
               Text(AppStrings.appName, style: TextStyles.appNameTextStyle),
               Spacer(),
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  SvgPicture.asset(Assets.assetsIconsNotification),
-                  Positioned(
-                    right: -2,
-                    top: -6,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: AppColors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          '3',
-                          style: TextStyles.bodyRegular11.copyWith(
-                            color: AppColors.white,
+              StreamBuilder<int>(
+                  stream: getIt<NotificationService>().unreadCountStream,
+                  initialData: getIt<NotificationService>().unreadCount,
+                  builder: (context, snapshot) {
+                    final count = snapshot.data ?? 0;
+                    return Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        SvgPicture.asset(Assets.assetsIconsNotification),
+                        if (count > 0)
+                          Positioned(
+                            right: -2,
+                            top: -6,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: AppColors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                '$count',
+                                style: TextStyles.bodyRegular11.copyWith(
+                                  color: AppColors.white,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                      ],
+                    );
+                  },
+                ),
+              
               SizedBox(width: 4),
             ],
           ),

@@ -5,12 +5,20 @@ import 'package:flower_app/features/auth/presentation/view_models/logout_view_mo
 import 'package:flower_app/features/auth/presentation/view_models/logout_view_model/logout_state.dart';
 import 'package:flower_app/features/auth/presentation/view_models/logout_view_model/logout_view_model.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
-class MockLogoutUseCase extends Mock implements LogoutUseCase {}
+import 'logout_view_model_test.mocks.dart';
 
+@GenerateMocks([LogoutUseCase])
 void main() {
   late MockLogoutUseCase logoutUseCase;
+
+  setUpAll(() {
+    provideDummy<BaseResponse<void>>(
+      ErrorBaseResponse<void>(exception: Exception('dummy')),
+    );
+  });
 
   setUp(() {
     logoutUseCase = MockLogoutUseCase();
@@ -28,7 +36,7 @@ void main() {
       build: buildViewModel,
       setUp: () {
         when(
-          () => logoutUseCase.execute(),
+          logoutUseCase.execute(),
         ).thenAnswer((_) async => SuccessBaseResponse<void>(data: null));
       },
       act: (vm) => vm.doEvent(LogoutRequestEvent()),
@@ -48,7 +56,7 @@ void main() {
       'emits loading then error when logout API fails',
       build: buildViewModel,
       setUp: () {
-        when(() => logoutUseCase.execute()).thenAnswer(
+        when(logoutUseCase.execute()).thenAnswer(
           (_) async =>
               ErrorBaseResponse<void>(exception: Exception('Server error')),
         );
@@ -71,12 +79,12 @@ void main() {
       build: buildViewModel,
       setUp: () {
         when(
-          () => logoutUseCase.execute(),
+          logoutUseCase.execute(),
         ).thenAnswer((_) async => SuccessBaseResponse<void>(data: null));
       },
       act: (vm) => vm.doEvent(LogoutRequestEvent()),
       verify: (_) {
-        verify(() => logoutUseCase.execute()).called(1);
+        verify(logoutUseCase.execute()).called(1);
       },
     );
 
@@ -85,7 +93,7 @@ void main() {
       build: buildViewModel,
       setUp: () {
         when(
-          () => logoutUseCase.execute(),
+          logoutUseCase.execute(),
         ).thenAnswer((_) async => SuccessBaseResponse<void>(data: null));
       },
       act: (vm) => vm.doEvent(LogoutRequestEvent()),
@@ -99,7 +107,7 @@ void main() {
       'error state has non-null msg and is not loading',
       build: buildViewModel,
       setUp: () {
-        when(() => logoutUseCase.execute()).thenAnswer(
+        when(logoutUseCase.execute()).thenAnswer(
           (_) async =>
               ErrorBaseResponse<void>(exception: Exception('Unauthorized')),
         );

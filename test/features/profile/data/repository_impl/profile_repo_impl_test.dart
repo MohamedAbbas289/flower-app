@@ -1,6 +1,10 @@
 import 'dart:io';
 
+import 'package:flower_app/config/auth/auth_manager.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/config/firebase/fcm_service.dart';
+import 'package:flower_app/config/firebase/firestore_service.dart';
+import 'package:flower_app/config/secure_storage/secure_storage_service.dart';
 import 'package:flower_app/core/entities/auth_response_entity.dart';
 import 'package:flower_app/core/models/auth_response.dart';
 import 'package:flower_app/core/models/user_model.dart';
@@ -15,9 +19,19 @@ import 'package:mockito/mockito.dart';
 
 import 'profile_repo_impl_test.mocks.dart';
 
-@GenerateMocks([ProfileRemoteDataSourceContract])
+@GenerateMocks([
+  ProfileRemoteDataSourceContract,
+  SecureStorageService,
+  AuthManager,
+  FirestoreService,
+  FcmService,
+])
 void main() {
   late MockProfileRemoteDataSourceContract mockDataSource;
+  late MockSecureStorageService mockStorageService;
+  late MockAuthManager mockAuthManager;
+  late MockFirestoreService mockFirestoreService;
+  late MockFcmService mockFcmService;
   late ProfileRepoImpl repo;
 
   final tUser = User(
@@ -35,7 +49,17 @@ void main() {
 
   setUp(() {
     mockDataSource = MockProfileRemoteDataSourceContract();
-    repo = ProfileRepoImpl(mockDataSource);
+    mockStorageService = MockSecureStorageService();
+    mockAuthManager = MockAuthManager();
+    mockFirestoreService = MockFirestoreService();
+    mockFcmService = MockFcmService();
+    repo = ProfileRepoImpl(
+      mockDataSource,
+      mockStorageService,
+      mockAuthManager,
+      mockFirestoreService,
+      mockFcmService,
+    );
     provideDummy<BaseResponse<AuthResponse>>(
       SuccessBaseResponse<AuthResponse>(data: tAuthResponse),
     );
@@ -191,6 +215,95 @@ void main() {
         expect(result, isA<ErrorBaseResponse<ChangePasswordEntity>>());
         final error = result as ErrorBaseResponse<ChangePasswordEntity>;
         expect(error.errorMessage, isNotEmpty);
+      });
+    });
+
+    group('updateLanguage', () {
+      test('writes language and updates firestore when userId is present', () async {
+        when(mockStorageService.writeLanguage('ar')).thenAnswer((_) async {});
+        when(mockAuthManager.userId).thenReturn('user_1');
+        when(
+          mockFirestoreService.updateUserLanguage(
+            userId: 'user_1',
+            language: 'ar',
+          ),
+        ).thenAnswer((_) async {});
+
+        await repo.updateLanguage('ar');
+
+        verify(mockStorageService.writeLanguage('ar')).called(1);
+        verify(
+          mockFirestoreService.updateUserLanguage(
+            userId: 'user_1',
+            language: 'ar',
+          ),
+        ).called(1);
+      });
+
+      test('skips firestore update when userId is null', () async {
+        when(mockStorageService.writeLanguage('ar')).thenAnswer((_) async {});
+        when(mockAuthManager.userId).thenReturn(null);
+
+        await repo.updateLanguage('ar');
+
+        verify(mockStorageService.writeLanguage('ar')).called(1);
+        verifyNever(
+          mockFirestoreService.updateUserLanguage(
+            userId: anyNamed('userId'),
+            language: anyNamed('language'),
+          ),
+        );
+      });
+    });
+
+    group('getNotificationsEnabled', () {
+      test('returns value from storage', () async {
+        when(mockStorageService.readNotificationsEnabled())
+            .thenAnswer((_) async => false);
+
+        final result = await repo.getNotificationsEnabled();
+
+        expect(result, false);
+      });
+    });
+
+    group('toggleNotifications', () {
+      test('saves fcm data when enabling with valid userId and token', () async {
+        when(mockStorageService.writeNotificationsEnabled(true))
+            .thenAnswer((_) async {});
+        when(mockStorageService.readUserId())
+            .thenAnswer((_) async => 'user_1');
+        when(mockFcmService.getFcmToken())
+            .thenAnswer((_) async => 'token_1');
+        when(
+          mockFcmService.saveFcmDataForUser(
+            userId: 'user_1',
+            fcmToken: 'token_1',
+            language: 'en',
+          ),
+        ).thenAnswer((_) async {});
+
+        await repo.toggleNotifications(true, 'en');
+
+        verify(mockStorageService.writeNotificationsEnabled(true)).called(1);
+        verify(
+          mockFcmService.saveFcmDataForUser(
+            userId: 'user_1',
+            fcmToken: 'token_1',
+            language: 'en',
+          ),
+        ).called(1);
+      });
+
+      test('deletes token when disabling', () async {
+        when(mockStorageService.writeNotificationsEnabled(false))
+            .thenAnswer((_) async {});
+        when(mockFcmService.deleteToken()).thenAnswer((_) async {});
+
+        await repo.toggleNotifications(false, 'en');
+
+        verify(mockStorageService.writeNotificationsEnabled(false)).called(1);
+        verify(mockFcmService.deleteToken()).called(1);
       });
     });
   });

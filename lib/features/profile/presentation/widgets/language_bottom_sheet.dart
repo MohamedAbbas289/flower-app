@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/features/profile/domain/use_cases/update_language_use_case.dart';
 import 'package:flutter/material.dart';
 
 class LanguageBottomSheet extends StatefulWidget {
@@ -13,11 +15,20 @@ class LanguageBottomSheet extends StatefulWidget {
 
 class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
   late String _selectedLanguage;
+  final UpdateLanguageUseCase _updateLanguageUseCase =
+      getIt<UpdateLanguageUseCase>();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _selectedLanguage = context.locale.languageCode;
+  }
+
+  Future<void> _changeLanguage(String languageCode) async {
+    setState(() => _selectedLanguage = languageCode);
+    context.setLocale(Locale(languageCode));
+    if (context.mounted) Navigator.pop(context);
+    await _updateLanguageUseCase.execute(languageCode);
   }
 
   @override
@@ -30,11 +41,7 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
       ),
       child: RadioGroup<String>(
         groupValue: _selectedLanguage,
-        onChanged: (v) {
-          setState(() => _selectedLanguage = v!);
-          context.setLocale(Locale(v!));
-          Navigator.pop(context);
-        },
+        onChanged: (v) => _changeLanguage(v!),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,11 +74,7 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
 
   Widget _buildLanguageOption({required String label, required String value}) {
     return InkWell(
-      onTap: () {
-        setState(() => _selectedLanguage = value);
-        context.setLocale(Locale(value));
-        Navigator.pop(context);
-      },
+      onTap: () => _changeLanguage(value),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: Row(

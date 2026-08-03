@@ -19,4 +19,10 @@ abstract interface class ProfileRepoContract {
     required String password,
     required String newPassword,
   });
+
+  Future<void> updateLanguage(String languageCode);
+
+  Future<bool> getNotificationsEnabled();
+
+  Future<void> toggleNotifications(bool value, String languageCode);
 }

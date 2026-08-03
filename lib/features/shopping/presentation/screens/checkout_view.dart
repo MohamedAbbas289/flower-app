@@ -102,7 +102,8 @@ class _CheckoutBodyState extends State<_CheckoutBody> {
               ),
             );
 
-            if (isSuccess == true && context.mounted) {
+            if (!context.mounted) return;
+            if (isSuccess == true) {
               getIt<CartViewModel>().doEvent(const ClearCartEvent());
               getIt<CartViewModel>().doEvent(const LoadCartEvent());
               AppSnackBar.showSuccess(
@@ -115,8 +116,12 @@ class _CheckoutBodyState extends State<_CheckoutBody> {
                 (route) => false,
               );
               Navigator.pushNamed(context, AppRoutesName.myOrders);
-            } else if (isSuccess == false && context.mounted) {
+            } else if (isSuccess == false) {
               Navigator.pop(context);
+            } else {
+              context
+                  .read<CheckoutViewModel>()
+                  .doEvent(const ResetPlaceOrderStateEvent());
             }
         }
       },

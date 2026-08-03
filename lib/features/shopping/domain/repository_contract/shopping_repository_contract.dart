@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/shopping/api/request_models/cart_request_model.dart';
 import 'package:flower_app/features/shopping/api/request_models/payment_request_model.dart';
@@ -33,4 +34,8 @@ abstract interface class ShoppingRepositoryContract {
   Future<BaseResponse<ProductDetailsEntity>> getProductDetails({
     required String productId,
   });
+
+  Stream<DocumentSnapshot> orderStream(String orderId);
+
+  Future<void> confirmDelivery(String orderId);
 }

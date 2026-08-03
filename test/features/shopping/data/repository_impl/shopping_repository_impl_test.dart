@@ -1,6 +1,7 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/features/shopping/api/request_models/cart_request_model.dart';
 import 'package:flower_app/features/shopping/api/request_models/payment_request_model.dart';
+import 'package:flower_app/features/shopping/data/data_sources_contract/shopping_firestore_data_source_contract.dart';
 import 'package:flower_app/features/shopping/data/data_sources_contract/shopping_remote_data_source_contract.dart';
 import 'package:flower_app/features/shopping/data/models/cart_model.dart';
 import 'package:flower_app/features/shopping/data/models/cart_response_model.dart';
@@ -21,9 +22,10 @@ import 'package:mockito/mockito.dart';
 
 import 'shopping_repository_impl_test.mocks.dart';
 
-@GenerateMocks([ShoppingRemoteDataSourceContract])
+@GenerateMocks([ShoppingRemoteDataSourceContract, ShoppingFirestoreDataSourceContract])
 void main() {
   late MockShoppingRemoteDataSourceContract mockDataSource;
+  late MockShoppingFirestoreDataSourceContract mockFirestoreDataSource;
   late ShoppingRepositoryImpl repo;
 
   setUpAll(() {
@@ -58,7 +60,8 @@ void main() {
 
   setUp(() {
     mockDataSource = MockShoppingRemoteDataSourceContract();
-    repo = ShoppingRepositoryImpl(mockDataSource);
+    mockFirestoreDataSource = MockShoppingFirestoreDataSourceContract();
+    repo = ShoppingRepositoryImpl(mockDataSource, mockFirestoreDataSource);
   });
 
   group('cart', () {

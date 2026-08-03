@@ -4,6 +4,7 @@ import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
 import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/core/values/app_routes_name.dart';
 import 'package:flower_app/features/shopping/domain/entities/order_entity.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/orders_view_model/orders_state.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/orders_view_model/orders_view_model.dart';
@@ -172,7 +173,15 @@ class _ActiveOrderCard extends StatelessWidget {
       price: order.totalPrice?.toInt() ?? 0,
       subtitle: 'Order number ${order.orderNumber ?? ''}',
       buttonLabel: AppStrings.trackOrder,
-      onButtonPressed: () {},
+      onButtonPressed: () {
+        final orderId = order.id;
+        if (orderId == null || orderId.isEmpty) return;
+        Navigator.pushNamed(
+          context,
+          AppRoutesName.trackOrder,
+          arguments: orderId,
+        );
+      },
     );
   }
 }
