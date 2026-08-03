@@ -226,5 +226,7 @@
   "orderReceivedBody": "We hope you enjoyed your order. See you again soon! 🌸",
   "backToHome": "Back to Home",
   "noNotificationsYet": "No notifications yet",
-  "searchingForDriver": "Searching for a driver..."
+  "searchingForDriver": "Searching for a driver...",
+  "orderCanceled": "Order canceled",
+  "orderNumber": "Order number# {}"
 }

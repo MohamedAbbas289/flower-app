@@ -3,13 +3,16 @@ import 'package:flower_app/config/di/di.dart';
 import 'package:flower_app/core/reusable_widgets/app_snack_bar.dart';
 import 'package:flower_app/core/theme/app_colors.dart';
 import 'package:flower_app/core/theme/text_styles.dart';
-import 'package:flower_app/core/values/app_strings.dart';
 import 'package:flower_app/core/values/app_routes_name.dart';
+import 'package:flower_app/core/values/app_strings.dart';
+import 'package:flower_app/core/values/images_paths.dart';
+import 'package:flower_app/core/values/order_status.dart';
 import 'package:flower_app/features/shopping/domain/entities/order_entity.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/orders_view_model/orders_state.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/orders_view_model/orders_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class OrdersScreen extends StatelessWidget {
   const OrdersScreen({super.key});
@@ -171,7 +174,7 @@ class _ActiveOrderCard extends StatelessWidget {
       imageUrl: firstItem?.product?.imgCover ?? '',
       title: firstItem?.product?.title ?? '',
       price: order.totalPrice?.toInt() ?? 0,
-      subtitle: 'Order number ${order.orderNumber ?? ''}',
+      subtitle: AppStrings.orderNumberLabel(order.orderNumber ?? ''),
       buttonLabel: AppStrings.trackOrder,
       onButtonPressed: () {
         final orderId = order.id;
@@ -220,14 +223,24 @@ class _CompletedOrderCard extends StatelessWidget {
     final firstItem = order.orderItems?.isNotEmpty == true
         ? order.orderItems!.first
         : null;
+    final isCanceled = order.state == OrderStatus.canceled;
 
     return _OrderCard(
       imageUrl: firstItem?.product?.imgCover ?? '',
       title: firstItem?.product?.title ?? '',
       price: order.totalPrice?.toInt() ?? 0,
-      subtitle: AppStrings.deliveredOnLabel(_formatDate(order.updatedAt)),
-      buttonLabel: AppStrings.reorder,
-      onButtonPressed: () {},
+      subtitle: isCanceled
+          ? AppStrings.orderCanceled
+          : AppStrings.deliveredOnLabel(_formatDate(order.updatedAt)),
+      trailingWidget: SvgPicture.asset(
+        isCanceled ? Assets.assetsIconsCancel : Assets.assetsIconsCheckCircle,
+        width: 24,
+        height: 24,
+        colorFilter: ColorFilter.mode(
+          isCanceled ? AppColors.red : AppColors.green,
+          BlendMode.srcIn,
+        ),
+      ),
     );
   }
 }
@@ -238,16 +251,18 @@ class _OrderCard extends StatelessWidget {
     required this.title,
     required this.price,
     required this.subtitle,
-    required this.buttonLabel,
-    required this.onButtonPressed,
+    this.buttonLabel,
+    this.onButtonPressed,
+    this.trailingWidget,
   });
 
   final String imageUrl;
   final String title;
   final int price;
   final String subtitle;
-  final String buttonLabel;
-  final VoidCallback onButtonPressed;
+  final String? buttonLabel;
+  final VoidCallback? onButtonPressed;
+  final Widget? trailingWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -291,22 +306,28 @@ class _OrderCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: onButtonPressed,
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 8,
+                    if (trailingWidget != null)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: trailingWidget!,
+                      )
+                    else if (buttonLabel != null && onButtonPressed != null)
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: onButtonPressed,
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 8,
+                            ),
+                            textStyle: TextStyles.bodyRegular12.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                          textStyle: TextStyles.bodyRegular12.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          child: Text(buttonLabel!),
                         ),
-                        child: Text(buttonLabel),
                       ),
-                    ),
                   ],
                 ),
               ),

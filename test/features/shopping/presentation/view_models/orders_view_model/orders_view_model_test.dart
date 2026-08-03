@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flower_app/config/base_response/base_response.dart';
+import 'package:flower_app/core/values/order_status.dart';
 import 'package:flower_app/features/shopping/domain/entities/order_entity.dart';
 import 'package:flower_app/features/shopping/domain/use_cases/get_orders_use_case.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/orders_view_model/orders_state.dart';
@@ -15,6 +16,7 @@ const _tActiveOrder = OrderEntity(
   orderNumber: '#111',
   totalPrice: 300,
   isDelivered: false,
+  state: OrderStatus.accepted,
 );
 
 const _tCompletedOrder = OrderEntity(
@@ -22,6 +24,15 @@ const _tCompletedOrder = OrderEntity(
   orderNumber: '#222',
   totalPrice: 600,
   isDelivered: true,
+  state: OrderStatus.delivered,
+);
+
+const _tCanceledOrder = OrderEntity(
+  id: 'order3',
+  orderNumber: '#333',
+  totalPrice: 150,
+  isDelivered: false,
+  state: OrderStatus.canceled,
 );
 
 @GenerateMocks([GetOrdersUseCase])
@@ -47,10 +58,8 @@ void main() {
 
   group('OrdersViewModel', () {
     test(
-      'state after construction has ordersState with data (constructor fetches on init)',
+      'state after construction has ordersState with data',
       () async {
-        // The constructor triggers GetOrdersEvent immediately.
-        // setUp stubs execute() to return []; wait for it to settle.
         await Future.delayed(Duration.zero);
         expect(viewModel.state.ordersState.isLoading, isFalse);
         expect(viewModel.state.ordersState.data, equals(const <OrderEntity>[]));
@@ -63,7 +72,7 @@ void main() {
       build: () {
         when(mockGetOrdersUseCase.execute()).thenAnswer(
           (_) async => SuccessBaseResponse(
-            data: const [_tActiveOrder, _tCompletedOrder],
+            data: const [_tActiveOrder, _tCompletedOrder, _tCanceledOrder],
           ),
         );
         return OrdersViewModel(mockGetOrdersUseCase);
@@ -72,7 +81,7 @@ void main() {
         isA<OrdersState>().having(
           (s) => s.ordersState.data,
           'orders loaded',
-          containsAll([_tActiveOrder, _tCompletedOrder]),
+          containsAll([_tActiveOrder, _tCompletedOrder, _tCanceledOrder]),
         ),
       ],
     );
@@ -94,32 +103,31 @@ void main() {
       ],
     );
 
-    test('activeOrders getter returns only non-delivered orders', () async {
+    test('activeOrders getter returns only active non-canceled orders', () async {
       when(mockGetOrdersUseCase.execute()).thenAnswer(
-        (_) async =>
-            SuccessBaseResponse(data: const [_tActiveOrder, _tCompletedOrder]),
+        (_) async => SuccessBaseResponse(
+          data: const [_tActiveOrder, _tCompletedOrder, _tCanceledOrder],
+        ),
       );
       final vm = OrdersViewModel(mockGetOrdersUseCase);
-      // Wait for the initial fetch triggered in the constructor to complete
       await Future.delayed(Duration.zero);
 
       expect(vm.activeOrders, hasLength(1));
       expect(vm.activeOrders.first.id, 'order1');
-      expect(vm.activeOrders.first.isDelivered, isFalse);
       await vm.close();
     });
 
-    test('completedOrders getter returns only delivered orders', () async {
+    test('completedOrders getter returns delivered and canceled orders', () async {
       when(mockGetOrdersUseCase.execute()).thenAnswer(
-        (_) async =>
-            SuccessBaseResponse(data: const [_tActiveOrder, _tCompletedOrder]),
+        (_) async => SuccessBaseResponse(
+          data: const [_tActiveOrder, _tCompletedOrder, _tCanceledOrder],
+        ),
       );
       final vm = OrdersViewModel(mockGetOrdersUseCase);
       await Future.delayed(Duration.zero);
 
-      expect(vm.completedOrders, hasLength(1));
-      expect(vm.completedOrders.first.id, 'order2');
-      expect(vm.completedOrders.first.isDelivered, isTrue);
+      expect(vm.completedOrders, hasLength(2));
+      expect(vm.completedOrders.map((o) => o.id), containsAll(['order2', 'order3']));
       await vm.close();
     });
 

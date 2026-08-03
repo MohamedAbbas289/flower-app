@@ -1,5 +1,6 @@
 import 'package:flower_app/config/base_response/base_response.dart';
 import 'package:flower_app/config/base_state/base_state.dart';
+import 'package:flower_app/core/values/order_status.dart';
 import 'package:flower_app/features/shopping/domain/entities/order_entity.dart';
 import 'package:flower_app/features/shopping/domain/use_cases/get_orders_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,11 +25,19 @@ class OrdersViewModel extends Cubit<OrdersState> {
   }
 
   List<OrderEntity> get activeOrders => (state.ordersState.data ?? [])
-      .where((order) => order.isDelivered == false)
+      .where((order) =>
+          order.isDelivered != true &&
+          order.state != OrderStatus.canceled &&
+          order.state != OrderStatus.delivered &&
+          order.state != OrderStatus.completed)
       .toList();
 
   List<OrderEntity> get completedOrders => (state.ordersState.data ?? [])
-      .where((order) => order.isDelivered == true)
+      .where((order) =>
+          order.isDelivered == true ||
+          order.state == OrderStatus.delivered ||
+          order.state == OrderStatus.completed ||
+          order.state == OrderStatus.canceled)
       .toList();
 
   Future<void> _fetchOrders() async {

@@ -10,14 +10,13 @@ import 'package:flutter/services.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FirebaseService.initialize();
-
   await EasyLocalization.ensureInitialized();
   await configureDependencies();
-  final authManager = getIt<AuthManager>();
-  await authManager.init();
-
-  await getIt<FcmService>().initNotification();
+  await getIt<AuthManager>().init();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  getIt<FcmService>().initNotification();
+
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('ar')],

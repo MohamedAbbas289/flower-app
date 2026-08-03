@@ -36,7 +36,7 @@ class ProductEntity extends Equatable implements ProductCardData {
   final int? discountPercent;
 
   @override
-  int? get availableQuantity => null; // not available in this entity
+  int? get availableQuantity => null;
 
   const ProductEntity({
     required this.id,
@@ -49,11 +49,11 @@ class ProductEntity extends Equatable implements ProductCardData {
 
   @override
   List<Object?> get props => [
-    id,
-    name,
-    imageUrl,
-    price,
-    originalPrice,
-    discountPercent,
-  ];
+        id,
+        name,
+        imageUrl,
+        price,
+        originalPrice,
+        discountPercent,
+      ];
 }

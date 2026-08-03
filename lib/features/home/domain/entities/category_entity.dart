@@ -20,10 +20,9 @@ class CategoryEntity extends Equatable implements TabItemData {
     this.createdAt,
     this.updatedAt,
     this.productsCount,
-  }) : rawId = id,
-       rawName = name;
+  })  : rawId = id,
+        rawName = name;
 
-  // TabItem implementation
   @override
   String get id => rawId ?? '';
 
@@ -32,13 +31,13 @@ class CategoryEntity extends Equatable implements TabItemData {
 
   @override
   List<Object?> get props => [
-    rawId,
-    rawName,
-    slug,
-    image,
-    isSuperAdmin,
-    createdAt,
-    updatedAt,
-    productsCount,
-  ];
+        rawId,
+        rawName,
+        slug,
+        image,
+        isSuperAdmin,
+        createdAt,
+        updatedAt,
+        productsCount,
+      ];
 }

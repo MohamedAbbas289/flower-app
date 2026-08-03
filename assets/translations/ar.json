@@ -224,5 +224,7 @@
   "orderReceivedBody": "نتمنى أن تكون تجربتك رائعة. نراك قريباً! 🌸",
   "backToHome": "العودة للرئيسية",
   "noNotificationsYet": "لا توجد إشعارات بعد",
-  "searchingForDriver": "جاري البحث عن سائق..."
+  "searchingForDriver": "جاري البحث عن سائق...",
+  "orderCanceled": "تم إلغاء الطلب",
+  "orderNumber": "رقم الطلب# {}"
 }

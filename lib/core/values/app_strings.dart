@@ -1,4 +1,4 @@
-﻿import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 abstract class AppStrings {
   static String get appName => 'appName'.tr();
@@ -248,4 +248,6 @@ abstract class AppStrings {
   static String get backToHome => 'backToHome'.tr();
   static String get noNotificationsYet => 'noNotificationsYet'.tr();
   static String get searchingForDriver => 'searchingForDriver'.tr();
+  static String get orderCanceled => 'orderCanceled'.tr();
+  static String orderNumberLabel(String number) => 'orderNumber'.tr(args: [number]);
 }

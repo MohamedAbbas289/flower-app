@@ -26,22 +26,27 @@ class AppTabBarWidget extends StatefulWidget {
 class _AppTabBarWidgetState extends State<AppTabBarWidget> {
   late int _selectedIndex;
   final ScrollController _scrollController = ScrollController();
-  late final List<GlobalKey> _tabKeys;
+  late List<GlobalKey> _tabKeys;
 
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.initialIndex;
-    _tabKeys = List.generate(widget.tabs.length, (_) => GlobalKey());
+    _selectedIndex = _clampIndex(widget.initialIndex);
+    _syncTabKeys();
     _scrollController.addListener(_onScroll);
 
-    if (widget.initialIndex > 0) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (mounted) _scrollToTab(widget.initialIndex);
-        });
-      });
+    if (_selectedIndex > 0) {
+      _scheduleScrollToTab(_selectedIndex);
     }
+  }
+
+  int _clampIndex(int index) {
+    if (widget.tabs.isEmpty) return 0;
+    return index.clamp(0, widget.tabs.length - 1);
+  }
+
+  void _syncTabKeys() {
+    _tabKeys = List.generate(widget.tabs.length, (_) => GlobalKey());
   }
 
   void _onScroll() {
@@ -55,47 +60,45 @@ class _AppTabBarWidgetState extends State<AppTabBarWidget> {
     }
   }
 
-  //TODO: show it to eng.Loay
-
   @override
   void didUpdateWidget(covariant AppTabBarWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.tabs.length != widget.tabs.length) {
-      final newKeys = List.generate(
-        widget.tabs.length - oldWidget.tabs.length,
-        (_) => GlobalKey(),
-      );
-      _tabKeys.addAll(newKeys);
+    final bool tabsLengthChanged = oldWidget.tabs.length != widget.tabs.length;
+    final bool initialIndexChanged = oldWidget.initialIndex != widget.initialIndex;
+    final bool tabsListChanged = oldWidget.tabs != widget.tabs;
+
+    if (tabsLengthChanged) {
+      _syncTabKeys();
     }
 
-    if (oldWidget.initialIndex != widget.initialIndex) {
-      setState(() {
-        _selectedIndex = widget.initialIndex;
-      });
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (mounted) _scrollToTab(widget.initialIndex);
+    if (initialIndexChanged ||
+        (oldWidget.tabs.isEmpty && widget.tabs.isNotEmpty) ||
+        tabsListChanged) {
+      final newIndex = _clampIndex(widget.initialIndex);
+      if (_selectedIndex != newIndex || initialIndexChanged) {
+        setState(() {
+          _selectedIndex = newIndex;
         });
-      });
-    }
-
-    if (oldWidget.tabs.isEmpty && widget.tabs.isNotEmpty ||
-        (oldWidget.tabs != widget.tabs &&
-            _selectedIndex != widget.initialIndex)) {
-      setState(() {
-        _selectedIndex = widget.initialIndex;
-      });
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (mounted) _scrollToTab(widget.initialIndex);
+        _scheduleScrollToTab(newIndex);
+      }
+    } else {
+      final clamped = _clampIndex(_selectedIndex);
+      if (clamped != _selectedIndex) {
+        setState(() {
+          _selectedIndex = clamped;
         });
-      });
+      }
     }
   }
 
+  void _scheduleScrollToTab(int index) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _scrollToTab(index);
+    });
+  }
+
   void _scrollToTab(int index) {
-    //>>>>>>>>>>>>>
     if (index < 0 || index >= _tabKeys.length) return;
     final BuildContext? context = _tabKeys[index].currentContext;
     if (context != null) {

@@ -50,9 +50,7 @@ class _EditAddressScreenState extends State<EditAddressScreen>
     super.initState();
     addressController = TextEditingController(text: widget.address.street);
     phoneController = TextEditingController(text: widget.address.phone);
-    recipientNameController = TextEditingController(
-      text: widget.address.username,
-    );
+    recipientNameController = TextEditingController(text: widget.address.username);
 
     selectedPosition = LatLng(
       double.tryParse(widget.address.lat ?? '') ?? 30.08525452318584,
@@ -70,10 +68,8 @@ class _EditAddressScreenState extends State<EditAddressScreen>
     String? streetText,
     bool areaNotAvailable = false,
   }) {
-    final nextGovernorateId = governorateId ?? selectedGovernorateId;
-    final available = cities
-        .where((city) => city.governorateId == nextGovernorateId)
-        .toList();
+    final nextGovId = governorateId ?? selectedGovernorateId;
+    final available = cities.where((city) => city.governorateId == nextGovId).toList();
     final nextCityId = cityId ?? selectedCityId;
     final resolvedCityId = available.any((city) => city.id == nextCityId)
         ? nextCityId
@@ -81,7 +77,7 @@ class _EditAddressScreenState extends State<EditAddressScreen>
 
     setState(() {
       if (position != null) selectedPosition = position;
-      selectedGovernorateId = nextGovernorateId;
+      selectedGovernorateId = nextGovId;
       selectedCityId = resolvedCityId;
       if (streetText != null) addressController.text = streetText;
     });
@@ -110,37 +106,25 @@ class _EditAddressScreenState extends State<EditAddressScreen>
           return;
         }
       }
-    } catch (e) {
-      debugPrint('Location permission check failed: $e');
-    }
+    } catch (_) {}
   }
 
   Future<void> _loadLocations() async {
     final languageCode = Localizations.localeOf(context).languageCode;
-
-    final loadedGovernorates = await AddressLocationJsonParser.loadGovernorates(
-      languageCode,
-    );
+    final loadedGovernorates = await AddressLocationJsonParser.loadGovernorates(languageCode);
     if (!mounted) return;
-    final loadedCities = await AddressLocationJsonParser.loadCities(
-      languageCode,
-    );
+    final loadedCities = await AddressLocationJsonParser.loadCities(languageCode);
 
     setState(() {
       governorates = loadedGovernorates;
       cities = loadedCities;
-
-      final matchedCity = cities
-          .where((c) => c.name == widget.address.city)
-          .firstOrNull;
+      final matchedCity = cities.where((c) => c.name == widget.address.city).firstOrNull;
 
       if (matchedCity != null) {
         selectedCityId = matchedCity.id;
         selectedGovernorateId = matchedCity.governorateId;
       } else {
-        selectedGovernorateId = governorates.isEmpty
-            ? null
-            : governorates.first.id;
+        selectedGovernorateId = governorates.isEmpty ? null : governorates.first.id;
         final available = filteredCities;
         selectedCityId = available.isEmpty ? null : available.first.id;
       }
@@ -155,6 +139,55 @@ class _EditAddressScreenState extends State<EditAddressScreen>
       if (city.id == selectedCityId) return city.name;
     }
     return null;
+  }
+
+  void _onGovernorateChanged(String? value) {
+    addressController.clear();
+    setState(() {
+      selectedGovernorateId = value;
+      final available = filteredCities;
+      selectedCityId = available.isEmpty ? null : available.first.id;
+    });
+    onLocationDropdownChanged();
+  }
+
+  void _onCityChanged(String? value) {
+    addressController.clear();
+    setState(() => selectedCityId = value);
+    onLocationDropdownChanged();
+  }
+
+  void _onSubmitAddress(BuildContext context) {
+    final addressId = widget.address.id;
+    if (addressId == null) {
+      AppSnackBar.showError(context, AppStrings.somethingWentWrong);
+      return;
+    }
+    if (formKey.currentState!.validate()) {
+      context.read<EditAddressViewModel>().doEvent(
+            SubmitEditAddressEvent(
+              id: addressId,
+              request: AddAddressRequestModel(
+                street: addressController.text.trim(),
+                phone: phoneController.text.trim(),
+                city: selectedCityName,
+                lat: selectedPosition.latitude.toString(),
+                long: selectedPosition.longitude.toString(),
+                username: recipientNameController.text.trim(),
+              ),
+            ),
+          );
+    }
+  }
+
+  void _onListener(BuildContext context, EditAddressStates state) {
+    if (state.editAddressState.msg != null) {
+      AppSnackBar.showError(context, state.editAddressState.msg!);
+    }
+    if (state.editAddressState.data != null) {
+      AppSnackBar.showSuccess(context, AppStrings.addressUpdatedSuccess);
+      Navigator.pop(context, true);
+    }
   }
 
   @override
@@ -173,87 +206,39 @@ class _EditAddressScreenState extends State<EditAddressScreen>
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: BlocConsumer<EditAddressViewModel, EditAddressStates>(
-          listenWhen: (previous, current) =>
-              previous.editAddressState != current.editAddressState,
-          listener: (context, state) {
-            if (state.editAddressState.msg != null) {
-              AppSnackBar.showError(context, state.editAddressState.msg!);
-            }
-            if (state.editAddressState.data != null) {
-              AppSnackBar.showSuccess(context, AppStrings.addressUpdatedSuccess);
-              Navigator.pop(context, true);
-            }
-          },
-          builder: (context, state) {
-            return Form(
-              key: formKey,
-              child: SingleChildScrollView(
-                child: Column(
-                  spacing: 16,
-                  children: [
-                    AddressFormFields(
-                      addressController: addressController,
-                      phoneController: phoneController,
-                      recipientNameController: recipientNameController,
-                      governorates: governorates,
-                      filteredCities: filteredCities,
-                      selectedGovernorateId: selectedGovernorateId,
-                      selectedCityId: selectedCityId,
-                      selectedPosition: selectedPosition,
-                      onLocationSelected: (position) {
-                        selectedPosition = position;
-                        onMapPositionChanged(position);
-                      },
-                      onGovernorateChanged: (value) {
-                        addressController.clear();
-                        setState(() {
-                          selectedGovernorateId = value;
-                          final available = filteredCities;
-                          selectedCityId =
-                              available.isEmpty ? null : available.first.id;
-                        });
-                        onLocationDropdownChanged();
-                      },
-                      onCityChanged: (value) {
-                        addressController.clear();
-                        setState(() => selectedCityId = value);
-                        onLocationDropdownChanged();
-                      },
-                    ),
-                    SaveAddressButton(
-                      isLoading: state.editAddressState.isLoading,
-                      label: AppStrings.updateAddress,
-                      onPressed: () {
-                        final addressId = widget.address.id;
-                        if (addressId == null) {
-                          AppSnackBar.showError(
-                            context,
-                            AppStrings.somethingWentWrong,
-                          );
-                          return;
-                        }
-                        if (formKey.currentState!.validate()) {
-                          context.read<EditAddressViewModel>().doEvent(
-                            SubmitEditAddressEvent(
-                              id: addressId,
-                              request: AddAddressRequestModel(
-                                street: addressController.text.trim(),
-                                phone: phoneController.text.trim(),
-                                city: selectedCityName,
-                                lat: selectedPosition.latitude.toString(),
-                                long: selectedPosition.longitude.toString(),
-                                username: recipientNameController.text.trim(),
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ],
-                ),
+          listenWhen: (prev, curr) => prev.editAddressState != curr.editAddressState,
+          listener: _onListener,
+          builder: (context, state) => Form(
+            key: formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                spacing: 16,
+                children: [
+                  AddressFormFields(
+                    addressController: addressController,
+                    phoneController: phoneController,
+                    recipientNameController: recipientNameController,
+                    governorates: governorates,
+                    filteredCities: filteredCities,
+                    selectedGovernorateId: selectedGovernorateId,
+                    selectedCityId: selectedCityId,
+                    selectedPosition: selectedPosition,
+                    onLocationSelected: (pos) {
+                      selectedPosition = pos;
+                      onMapPositionChanged(pos);
+                    },
+                    onGovernorateChanged: _onGovernorateChanged,
+                    onCityChanged: _onCityChanged,
+                  ),
+                  SaveAddressButton(
+                    isLoading: state.editAddressState.isLoading,
+                    label: AppStrings.updateAddress,
+                    onPressed: () => _onSubmitAddress(context),
+                  ),
+                ],
               ),
-            );
-          },
+            ),
+          ),
         ),
       ),
     );

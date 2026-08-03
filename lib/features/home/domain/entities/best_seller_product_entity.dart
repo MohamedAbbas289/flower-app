@@ -27,6 +27,7 @@ class BestSellerProductEntity extends Equatable implements ProductCardData {
     this.quantity,
     this.productId,
   });
+
   @override
   int? get discountPercent => discount;
 
@@ -50,20 +51,19 @@ class BestSellerProductEntity extends Equatable implements ProductCardData {
 
   @override
   List<Object?> get props => [
-    title,
-    slug,
-    description,
-    imgCover,
-    images,
-    productPrice,
-    priceAfterDiscount,
-    discount,
-    sold,
-    quantity,
-    productId,
-  ];
+        title,
+        slug,
+        description,
+        imgCover,
+        images,
+        productPrice,
+        priceAfterDiscount,
+        discount,
+        sold,
+        quantity,
+        productId,
+      ];
 
-  // copyWith method to create a new instance with modified fields
   BestSellerProductEntity copyWith({
     String? title,
     String? slug,

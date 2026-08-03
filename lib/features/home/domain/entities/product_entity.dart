@@ -38,10 +38,9 @@ class ProductEntity extends Equatable implements ProductCardData {
     this.occasionId,
     this.isInWishlist,
     this.favoriteId,
-  }) : rawId = id,
-       rawPrice = price;
+  })  : rawId = id,
+        rawPrice = price;
 
-  // ProductCardData implementation
   @override
   String get id => rawId ?? '';
 
@@ -66,22 +65,22 @@ class ProductEntity extends Equatable implements ProductCardData {
 
   @override
   List<Object?> get props => [
-    rawId,
-    title,
-    slug,
-    description,
-    imgCover,
-    images,
-    rawPrice,
-    priceAfterDiscount,
-    discount,
-    rateAvg,
-    rateCount,
-    sold,
-    quantity,
-    categoryId,
-    occasionId,
-    isInWishlist,
-    favoriteId,
-  ];
+        rawId,
+        title,
+        slug,
+        description,
+        imgCover,
+        images,
+        rawPrice,
+        priceAfterDiscount,
+        discount,
+        rateAvg,
+        rateCount,
+        sold,
+        quantity,
+        categoryId,
+        occasionId,
+        isInWishlist,
+        favoriteId,
+      ];
 }

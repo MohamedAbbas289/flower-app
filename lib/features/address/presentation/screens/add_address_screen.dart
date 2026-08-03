@@ -58,21 +58,14 @@ class _AddAddressScreenState extends State<AddAddressScreen>
 
   Future<void> _loadLocations() async {
     final languageCode = Localizations.localeOf(context).languageCode;
-
-    final loadedGovernorates = await AddressLocationJsonParser.loadGovernorates(
-      languageCode,
-    );
-
-    final loadedCities = await AddressLocationJsonParser.loadCities(
-      languageCode,
-    );
+    final loadedGovernorates = await AddressLocationJsonParser.loadGovernorates(languageCode);
+    final loadedCities = await AddressLocationJsonParser.loadCities(languageCode);
 
     if (!mounted) return;
 
     setState(() {
       governorates = loadedGovernorates;
       cities = loadedCities;
-
       final initialCities = filteredCities;
       selectedCityId = initialCities.isEmpty ? null : initialCities.first.id;
     });
@@ -91,10 +84,8 @@ class _AddAddressScreenState extends State<AddAddressScreen>
     String? streetText,
     bool areaNotAvailable = false,
   }) {
-    final nextGovernorateId = governorateId ?? selectedGovernorateId;
-    final available = cities
-        .where((city) => city.governorateId == nextGovernorateId)
-        .toList();
+    final nextGovId = governorateId ?? selectedGovernorateId;
+    final available = cities.where((city) => city.governorateId == nextGovId).toList();
     final nextCityId = cityId ?? selectedCityId;
     final resolvedCityId = available.any((city) => city.id == nextCityId)
         ? nextCityId
@@ -102,7 +93,7 @@ class _AddAddressScreenState extends State<AddAddressScreen>
 
     setState(() {
       if (position != null) selectedPosition = position;
-      selectedGovernorateId = nextGovernorateId;
+      selectedGovernorateId = nextGovId;
       selectedCityId = resolvedCityId;
       if (streetText != null) addressController.text = streetText;
     });
@@ -112,17 +103,48 @@ class _AddAddressScreenState extends State<AddAddressScreen>
     }
   }
 
-  List<LocationEntity> get filteredCities {
-    return cities.where((city) {
-      return city.governorateId == selectedGovernorateId;
-    }).toList();
-  }
+  List<LocationEntity> get filteredCities =>
+      cities.where((city) => city.governorateId == selectedGovernorateId).toList();
 
   String? get selectedCityName {
     for (final city in cities) {
       if (city.id == selectedCityId) return city.name;
     }
     return null;
+  }
+
+  void _onGovernorateChanged(String? governorateId) {
+    addressController.clear();
+    setState(() {
+      selectedGovernorateId = governorateId;
+      final citiesForGov = filteredCities;
+      if (!citiesForGov.any((city) => city.id == selectedCityId)) {
+        selectedCityId = citiesForGov.isEmpty ? null : citiesForGov.first.id;
+      }
+    });
+    onLocationDropdownChanged();
+  }
+
+  void _onCityChanged(String? cityId) {
+    addressController.clear();
+    setState(() => selectedCityId = cityId);
+    onLocationDropdownChanged();
+  }
+
+  void _onSubmit(BuildContext innerContext) {
+    if (!formKey.currentState!.validate()) return;
+    innerContext.read<AddAddressViewModel>().doEvent(
+          AddAddressDataEvent(
+            AddAddressRequestModel(
+              street: addressController.text.trim(),
+              phone: phoneNumberController.text.trim(),
+              city: selectedCityName,
+              lat: selectedPosition.latitude.toString(),
+              long: selectedPosition.longitude.toString(),
+              username: recipientNameController.text.trim(),
+            ),
+          ),
+        );
   }
 
   @override
@@ -149,48 +171,13 @@ class _AddAddressScreenState extends State<AddAddressScreen>
           selectedGovernorateId: selectedGovernorateId,
           selectedCityId: selectedCityId,
           selectedPosition: selectedPosition,
-          onLocationSelected: (position) {
-            selectedPosition = position;
-            onMapPositionChanged(position);
+          onLocationSelected: (pos) {
+            selectedPosition = pos;
+            onMapPositionChanged(pos);
           },
-          onGovernorateChanged: (governorateId) {
-            addressController.clear();
-            setState(() {
-              selectedGovernorateId = governorateId;
-              final citiesForGovernorate = filteredCities;
-              if (!citiesForGovernorate.any(
-                (city) => city.id == selectedCityId,
-              )) {
-                selectedCityId = citiesForGovernorate.isEmpty
-                    ? null
-                    : citiesForGovernorate.first.id;
-              }
-            });
-            onLocationDropdownChanged();
-          },
-          onCityChanged: (cityId) {
-            addressController.clear();
-            setState(() {
-              selectedCityId = cityId;
-            });
-            onLocationDropdownChanged();
-          },
-          onSubmit: () {
-            if (formKey.currentState!.validate()) {
-              innerContext.read<AddAddressViewModel>().doEvent(
-                AddAddressDataEvent(
-                  AddAddressRequestModel(
-                    street: addressController.text.trim(),
-                    phone: phoneNumberController.text.trim(),
-                    city: selectedCityName,
-                    lat: selectedPosition.latitude.toString(),
-                    long: selectedPosition.longitude.toString(),
-                    username: recipientNameController.text.trim(),
-                  ),
-                ),
-              );
-            }
-          },
+          onGovernorateChanged: _onGovernorateChanged,
+          onCityChanged: _onCityChanged,
+          onSubmit: () => _onSubmit(innerContext),
         ),
       ),
     );

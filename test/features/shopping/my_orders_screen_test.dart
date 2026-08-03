@@ -9,6 +9,7 @@ import 'package:flower_app/features/shopping/presentation/screens/orders_screen.
 import 'package:flower_app/features/shopping/presentation/view_models/orders_view_model/orders_state.dart';
 import 'package:flower_app/features/shopping/presentation/view_models/orders_view_model/orders_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -16,8 +17,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'my_orders_screen_test.mocks.dart';
 
-// Reads translations synchronously from disk so tests don't depend on
-// rootBundle's asynchronous asset channel (which needs real I/O to resolve).
 class _SyncFileAssetLoader extends AssetLoader {
   const _SyncFileAssetLoader();
 
@@ -30,14 +29,14 @@ class _SyncFileAssetLoader extends AssetLoader {
 
 const _tActiveOrder = OrderEntity(
   id: 'order1',
-  orderNumber: '#111',
+  orderNumber: '111',
   totalPrice: 300,
   isDelivered: false,
 );
 
 const _tCompletedOrder = OrderEntity(
   id: 'order2',
-  orderNumber: '#222',
+  orderNumber: '222',
   totalPrice: 600,
   isDelivered: true,
 );
@@ -114,7 +113,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.text('Track order'), findsNothing);
-    expect(find.text('Reorder'), findsOneWidget);
+    expect(find.byType(SvgPicture), findsWidgets);
   });
 
   testWidgets('shows empty state when no active orders', (tester) async {
